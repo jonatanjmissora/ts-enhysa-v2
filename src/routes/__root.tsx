@@ -11,6 +11,7 @@ import TanStackQueryDevtools from '../integrations/tanstack-query/devtools'
 import appCss from '../styles.css?url'
 
 import type { QueryClient } from '@tanstack/react-query'
+import { DefaultCatchBoundary } from '#/components/DefaultCatchBoundary'
 
 interface MyRouterContext {
   queryClient: QueryClient
@@ -27,7 +28,7 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
         content: 'width=device-width, initial-scale=1',
       },
       {
-        title: 'TanStack Start Starter',
+        title: 'Enhysa v2',
       },
     ],
     links: [
@@ -38,6 +39,8 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
     ],
   }),
   shellComponent: RootDocument,
+  errorComponent: DefaultCatchBoundary,
+  notFoundComponent: ()=>(<h1>404 - No encontrado</h1>)
 })
 
 function RootDocument({ children }: { children: React.ReactNode }) {

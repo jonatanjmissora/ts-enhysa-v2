@@ -30,8 +30,8 @@ Vamos a crear una aplicacion con el siguiente stack:
 		VITE_BETTER_AUTH_BASE_URL=http://localhost:3000 
 		BETTER_AUTH_BASE_URL=http://localhost:3000 
 		DATABASE_URL=
-    GOOGLE_CLIENT_ID=
-    GOOGLE_CLIENT_SECRET=
+		GOOGLE_CLIENT_ID=
+		GOOGLE_CLIENT_SECRET=
 
 BACKEND
 =======
@@ -151,25 +151,25 @@ BACKEND
 	vite.config.ts:
 
 		import { defineConfig } from 'vite'
-    import { devtools } from '@tanstack/devtools-vite'
+		import { devtools } from '@tanstack/devtools-vite'
 
-    import { tanstackStart } from '@tanstack/react-start/plugin/vite'
+		import { tanstackStart } from '@tanstack/react-start/plugin/vite'
 
-    import viteReact from '@vitejs/plugin-react'
-    import tailwindcss from '@tailwindcss/vite'
-    import netlify from '@netlify/vite-plugin-tanstack-start'
-    import neon from './neon-vite-plugin.ts'
+		import viteReact from '@vitejs/plugin-react'
+		import tailwindcss from '@tailwindcss/vite'
+		import netlify from '@netlify/vite-plugin-tanstack-start'
+		import neon from './neon-vite-plugin.ts'
 
-    const config = defineConfig({
-      resolve: { tsconfigPaths: true },
-      plugins: [
-        devtools(),
-        netlify(),
-        tailwindcss(),
-        tanstackStart(),
-        viteReact(),
-      ],
-    })
+		const config = defineConfig({
+			resolve: { tsconfigPaths: true },
+			plugins: [
+			devtools(),
+			netlify(),
+			tailwindcss(),
+			tanstackStart(),
+			viteReact(),
+			],
+		})
 
     export default config
 		
@@ -206,22 +206,179 @@ BACKEND
 			dotEnvKey: 'VITE_DATABASE_URL',
 		})
 
-5 - borramos src/db para que tome a db/schema.ts
+5 - borramos src/db y src/db.ts para que tome a db/schema.ts
 
 6 - de neon, obtenemos las variables de entorno y hacemos el push
 
 		npx drizzle-kit push
 	
 	
+6 - hacemos el primer commit
+
 NETLIFY
 =======
-7 - hacemos el deploy a netlify
+7 - hacemos el deploy a netlify. Vamos a Netlify, nuevo proyecto, seleccionamos el repositorio de Github, dejamos todo por defecto, y colocamos las variables de entorno.
 
+8 - copiamos imagenes a /public y modificamos el titulo en /src/routes/__root.tsx 
 
 FRONTEND
 ========
-6 - hacemos el primer commit
 
-7 - hacemos el deploy a netlify
+9 - creamos los archivos auth.ts y auth-client donde me muestra mensajes si estoy bien conectado a better-auth y neon
+	auth.ts:
+		
+		import { betterAuth } from "better-auth"
+		import { tanstackStartCookies } from "better-auth/tanstack-start"
+		import { drizzleAdapter } from "better-auth/adapters/drizzle"
+		import { neon } from "@neondatabase/serverless"
+		import { drizzle } from "drizzle-orm/neon-http"
+		import * as schema from "../../db/schema"
 
-8 - creamos los archivos auth.ts y auth-client
+		// Get base URL from environment variables
+		const baseURL = process.env.BETTER_AUTH_BASE_URL
+
+		interface AuthOptions {
+			baseURL?: string
+			emailAndPassword: {
+				enabled: boolean
+			}
+			plugins: any[]
+			database?: any
+			socialProviders?: {
+				google: {
+					clientId: string
+					clientSecret: string
+				}
+			}
+		}
+
+		const authOptions: AuthOptions = {
+			baseURL,
+			socialProviders: {
+				google: {
+					clientId: process.env.GOOGLE_CLIENT_ID as string,
+					clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+				},
+			},
+			emailAndPassword: {
+				enabled: true,
+			},
+			plugins: [tanstackStartCookies()],
+		}
+
+		// Only add database configuration if DATABASE_URL is available
+		if (databaseUrl) {
+			try {
+				const client = neon(databaseUrl)
+				const db = drizzle(client, { schema })
+
+				authOptions.database = drizzleAdapter(db, {
+					provider: "pg",
+					schema: {
+						user: schema.user,
+						account: schema.account,
+						session: schema.session,
+						verification: schema.verification,
+					},
+				})
+
+				console.log("✅ Better Auth: Base de datos configurada correctamente")
+			} catch (error) {
+				console.error("❌ Better Auth: Error configurando la base de datos:", error)
+				console.warn("⚠️ Better Auth: Funcionará sin persistencia de datos")
+			}
+		} else {
+			console.warn(
+				"⚠️ Better Auth: DATABASE_URL no configurada. Funcionará sin persistencia de datos."
+			)
+			console.info(
+				"💡 Para habilitar la persistencia, configura DATABASE_URL en tu archivo .env"
+			)
+		}
+
+		export const auth = betterAuth(authOptions)
+
+	auth-client.ts:
+	
+		import { createAuthClient } from "better-auth/react"
+
+		// Check if Better Auth base URL is configured
+		const checkBetterAuthConfig = () => {
+			const baseURL = import.meta.env.VITE_BETTER_AUTH_BASE_URL
+
+			if (!baseURL) {
+				const warningMessage =
+					"⚠️ Better Auth: Base URL no configurada. Por favor, configura VITE_BETTER_AUTH_BASE_URL en tu archivo .env para que los callbacks y redirecciones funcionen correctamente."
+
+				// Also log to console for developers
+				console.warn(warningMessage)
+				console.info("Ejemplo: VITE_BETTER_AUTH_BASE_URL=http://localhost:3000")
+
+				alert(warningMessage)
+
+				return false
+			}
+
+			return true
+		}
+
+		export const authClient = createAuthClient({
+			baseURL: process.env.VITE_BETTER_AUTH_BASE_URL,
+		})
+
+		// Check configuration on module load
+		checkBetterAuthConfig()
+
+
+10 - en __root.tsx agregamos los notFoundComponent y el errorComponent
+	src/components/DefaultCatchBoundary.tsx
+
+		import { ErrorComponent,Link, rootRouteId,useMatch,useRouter,} from "@tanstack/react-router"
+		import type { ErrorComponentProps } from "@tanstack/react-router"
+
+		export function DefaultCatchBoundary({ error }: ErrorComponentProps) {
+			const router = useRouter()
+			const isRoot = useMatch({
+				strict: false,
+				select: state => state.id === rootRouteId,
+			})
+
+			console.error("DefaultCatchBoundary Error:", error)
+
+			return (
+				<div className="min-w-0 flex-1 p-4 flex flex-col items-center justify-center gap-6">
+					<ErrorComponent error={error} />
+					<div className="flex gap-2 items-center flex-wrap">
+						<button
+							onClick={() => {
+								router.invalidate()
+							}}
+							className={`px-2 py-1 bg-gray-600 dark:bg-gray-700 rounded-sm text-white uppercase font-extrabold my-shadow`}
+						>
+							Try Again
+						</button>
+						{isRoot ? (
+							<Link
+								to="/"
+								className={`px-2 py-1 bg-gray-600 dark:bg-gray-700 rounded-sm text-white uppercase font-extrabold my-shadow`}
+							>
+								Home
+							</Link>
+						) : (
+							<Link
+								to="/"
+								className={`px-2 py-1 bg-gray-600 dark:bg-gray-700 rounded-sm text-white uppercase font-extrabold`}
+								onClick={e => {
+									e.preventDefault()
+									if (typeof window !== "undefined") {
+										window.history.back()
+									}
+								}}
+							>
+								Go Back
+							</Link>
+						)}
+					</div>
+				</div>
+			)
+		}

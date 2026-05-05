@@ -1,3 +1,28 @@
-import { createAuthClient } from 'better-auth/react'
+import { createAuthClient } from "better-auth/react"
 
-export const authClient = createAuthClient()
+// Check if Better Auth base URL is configured
+const checkBetterAuthConfig = () => {
+	const baseURL = import.meta.env.VITE_BETTER_AUTH_BASE_URL
+
+	if (!baseURL) {
+		const warningMessage =
+			"⚠️ Better Auth: Base URL no configurada. Por favor, configura VITE_BETTER_AUTH_BASE_URL en tu archivo .env para que los callbacks y redirecciones funcionen correctamente."
+
+		// Also log to console for developers
+		console.warn(warningMessage)
+		console.info("Ejemplo: VITE_BETTER_AUTH_BASE_URL=http://localhost:3000")
+
+		alert(warningMessage)
+
+		return false
+	}
+
+	return true
+}
+
+export const authClient = createAuthClient({
+	baseURL: process.env.VITE_BETTER_AUTH_BASE_URL,
+})
+
+// Check configuration on module load
+checkBetterAuthConfig()
