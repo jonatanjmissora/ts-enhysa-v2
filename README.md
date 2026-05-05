@@ -17,9 +17,11 @@ Vamos a crear una aplicacion con el siguiente stack:
 
 1 - Con el siguiente comando crear el proyecto y añadimos dependencias.
 
-    pnpm create @tanstack/start@latest 
+    		pnpm create @tanstack/start@latest 
 
 		pnpm dlx @tanstack/cli create . --add-ons netlify,drizzle,form,shadcn,better-auth,tanstack-query,biome,neon --yes
+
+1.1 - Colocamos nuestro archivo de biome.jsonl en la raiz del proyecto.
 
 2 - creamos un archivo .env en la raiz del proyecto con el siguiente contenido:
 
@@ -144,38 +146,32 @@ BACKEND
 			}),
 		}))
 
-4 - de neon, obtenemos las variables de entorno y hacemos el push
 
-		npx drizzle-kit push
-
-5 - creamos/modificamos los archivos: vite.config.ts drizzle.config.ts y neon-vite-plugins.ts
+4 - creamos/modificamos los archivos: vite.config.ts drizzle.config.ts y neon-vite-plugins.ts
 	vite.config.ts:
 
-		import { defineConfig } from "vite"
-		import { devtools } from "@tanstack/devtools-vite"
-		import { tanstackStart } from "@tanstack/react-start/plugin/vite"
-		import viteReact from "@vitejs/plugin-react"
-		import viteTsConfigPaths from "vite-tsconfig-paths"
-		import netlify from "@netlify/vite-plugin-tanstack-start"
+		import { defineConfig } from 'vite'
+    import { devtools } from '@tanstack/devtools-vite'
 
-		import tailwindcss from "@tailwindcss/vite"
+    import { tanstackStart } from '@tanstack/react-start/plugin/vite'
 
-		export default defineConfig({
-			base: "/",
-			build: {
-				outDir: "dist",
-			},
-			plugins: [
-				devtools(),
-				viteTsConfigPaths({
-					projects: ["./tsconfig.json"],
-				}),
-				tailwindcss(),
-				tanstackStart(),
-				netlify(),
-				viteReact(),
-			],
-		})
+    import viteReact from '@vitejs/plugin-react'
+    import tailwindcss from '@tailwindcss/vite'
+    import netlify from '@netlify/vite-plugin-tanstack-start'
+    import neon from './neon-vite-plugin.ts'
+
+    const config = defineConfig({
+      resolve: { tsconfigPaths: true },
+      plugins: [
+        devtools(),
+        netlify(),
+        tailwindcss(),
+        tanstackStart(),
+        viteReact(),
+      ],
+    })
+
+    export default config
 		
 	drizzle.config.ts:
 	
@@ -209,8 +205,19 @@ BACKEND
 			referrer: 'create-tanstack',
 			dotEnvKey: 'VITE_DATABASE_URL',
 		})
+
+5 - borramos src/db para que tome a db/schema.ts
+
+6 - de neon, obtenemos las variables de entorno y hacemos el push
+
+		npx drizzle-kit push
 	
 	
+NETLIFY
+=======
+7 - hacemos el deploy a netlify
+
+
 FRONTEND
 ========
 6 - hacemos el primer commit
