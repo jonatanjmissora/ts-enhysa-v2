@@ -15,15 +15,15 @@ Vamos a crear una aplicacion con el siguiente stack:
 - Netlify deploy platform
 - Biome linter and formatter
 
-1 - Con el siguiente comando crear el proyecto y añadimos dependencias.
+* 1 - Con el siguiente comando crear el proyecto y añadimos dependencias.
 
     		pnpm create @tanstack/start@latest 
 
 		pnpm dlx @tanstack/cli create . --add-ons netlify,drizzle,form,shadcn,better-auth,tanstack-query,biome,neon --yes
 
-1.1 - Colocamos nuestro archivo de biome.jsonl en la raiz del proyecto.
+* 1.1 - Colocamos nuestro archivo de biome.jsonl en la raiz del proyecto.
 
-2 - creamos un archivo .env en la raiz del proyecto con el siguiente contenido:
+* 2 - creamos un archivo .env en la raiz del proyecto con el siguiente contenido:
 
 		BETTER_AUTH_SECRET=
 		BETTER_AUTH_URL=http://localhost:3000 
@@ -35,8 +35,9 @@ Vamos a crear una aplicacion con el siguiente stack:
 
 BACKEND
 =======
-3 - creamos los archivos de configuracion de neon y drizzle en la raiz del proyecto, en la carpeta /db
+* 3 - creamos los archivos de configuracion de neon y drizzle en la raiz del proyecto, en la carpeta /db
 	en db/index.ts
+	----------------
 
 		import { drizzle } from "drizzle-orm/node-postgres"
 		import * as schema from "./schema.ts"
@@ -46,11 +47,13 @@ BACKEND
 		})
 
 	en db/schema.ts
+	------------------
 
 		// Users / Better Auth
 		export * from "./users/schema"
 
 	en db/users/schema.ts
+	-------------------------
 
 		import { relations } from "drizzle-orm"
 		import { pgTable, text, timestamp, boolean, index } from "drizzle-orm/pg-core"
@@ -147,8 +150,9 @@ BACKEND
 		}))
 
 
-4 - creamos/modificamos los archivos: vite.config.ts drizzle.config.ts y neon-vite-plugins.ts
+* 4 - creamos/modificamos los archivos: vite.config.ts drizzle.config.ts y neon-vite-plugins.ts
 	vite.config.ts:
+	---------------
 
 		import { defineConfig } from 'vite'
 		import { devtools } from '@tanstack/devtools-vite'
@@ -174,6 +178,7 @@ BACKEND
     export default config
 		
 	drizzle.config.ts:
+	-------------------
 	
 		import { config } from "dotenv"
 		import { defineConfig } from "drizzle-kit"
@@ -193,7 +198,7 @@ BACKEND
 		})
 
 	neon-vite-plugins.ts:
-	
+	---------------------
 	
 		import { postgres } from 'vite-plugin-db'
 
@@ -206,36 +211,40 @@ BACKEND
 			dotEnvKey: 'VITE_DATABASE_URL',
 		})
 
-5 - borramos src/db y src/db.ts para que tome a db/schema.ts
+* 5 - borramos src/db y src/db.ts para que tome a db/schema.ts
 
-6 - de neon, obtenemos las variables de entorno y hacemos el push
+* 6 - de neon, obtenemos las variables de entorno y hacemos el push
 
 		npx drizzle-kit push
 	
 	
-6 - hacemos el primer commit
+* 7 - hacemos el primer commit
 
 NETLIFY
 =======
-7 - hacemos el deploy a netlify. Vamos a Netlify, nuevo proyecto, seleccionamos el repositorio de Github, dejamos todo por defecto, y colocamos las variables de entorno.
+* 8 - hacemos el deploy a netlify. Vamos a Netlify, nuevo proyecto, seleccionamos el repositorio de Github, dejamos todo por defecto, y colocamos las variables de entorno.
 
-8 - copiamos imagenes a /public y modificamos el titulo en /src/routes/__root.tsx 
+* 9 - copiamos imagenes a /public y modificamos el titulo en /src/routes/__root.tsx 
 
 FRONTEND
 ========
 
-9 - creamos los archivos auth.ts y auth-client donde me muestra mensajes si estoy bien conectado a better-auth y neon
+* 10 - creamos los archivos auth.ts y auth-client donde me muestra mensajes si estoy bien conectado a better-auth y neon
 	auth.ts:
+	--------------
 		
 		import { betterAuth } from "better-auth"
 		import { tanstackStartCookies } from "better-auth/tanstack-start"
 		import { drizzleAdapter } from "better-auth/adapters/drizzle"
-		import { neon } from "@neondatabase/serverless"
-		import { drizzle } from "drizzle-orm/neon-http"
+		import { drizzle } from "drizzle-orm/node-postgres"
+		import pg from "pg"
 		import * as schema from "../../db/schema"
 
 		// Get base URL from environment variables
 		const baseURL = process.env.BETTER_AUTH_BASE_URL
+
+		// Database configuration
+		const databaseUrl = process.env.DATABASE_URL || process.env.VITE_DATABASE_URL
 
 		interface AuthOptions {
 			baseURL?: string
@@ -269,8 +278,11 @@ FRONTEND
 		// Only add database configuration if DATABASE_URL is available
 		if (databaseUrl) {
 			try {
-				const client = neon(databaseUrl)
-				const db = drizzle(client, { schema })
+				const pool = new pg.Pool({
+					connectionString: databaseUrl,
+					ssl: databaseUrl.includes("sslmode=require") || databaseUrl.includes("sslmode=verify-full") ? { rejectUnauthorized: false } : false,
+				})
+				const db = drizzle(pool, { schema })
 
 				authOptions.database = drizzleAdapter(db, {
 					provider: "pg",
@@ -299,6 +311,7 @@ FRONTEND
 		export const auth = betterAuth(authOptions)
 
 	auth-client.ts:
+	-----------------
 	
 		import { createAuthClient } from "better-auth/react"
 
@@ -314,8 +327,6 @@ FRONTEND
 				console.warn(warningMessage)
 				console.info("Ejemplo: VITE_BETTER_AUTH_BASE_URL=http://localhost:3000")
 
-				alert(warningMessage)
-
 				return false
 			}
 
@@ -323,15 +334,17 @@ FRONTEND
 		}
 
 		export const authClient = createAuthClient({
-			baseURL: process.env.VITE_BETTER_AUTH_BASE_URL,
+			baseURL: import.meta.env.VITE_BETTER_AUTH_BASE_URL,
 		})
 
 		// Check configuration on module load
-		checkBetterAuthConfig()
+checkBetterAuthConfig()
 
+* 9.1 - eliminamos el archivo .env.local sino no va a funcionar
 
-10 - en __root.tsx agregamos los notFoundComponent y el errorComponent
+* 10 - en __root.tsx agregamos los notFoundComponent y el errorComponent
 	src/components/DefaultCatchBoundary.tsx
+	---------------------------------------
 
 		import { ErrorComponent,Link, rootRouteId,useMatch,useRouter,} from "@tanstack/react-router"
 		import type { ErrorComponentProps } from "@tanstack/react-router"
@@ -380,5 +393,50 @@ FRONTEND
 						)}
 					</div>
 				</div>
+			)
+		}
+
+* 11 - instalamos login03 de shadcn
+                
+		npx shadcn@latest add login-03
+
+* 12 - google client
+dentro de https://console.cloud.google.com/apis/dashboard?project=ts-better-auth-neon
+viendo el video https://www.youtube.com/watch?v=xqd51D3O53k&list=LL&index=8        minuto 35
+incluimos las rutas, tanto de desarrollo, como la de netlify
+
+* 13 - agregamos el entorno .env, las claves de GOOGLE_CLIENT_ID y GOOGLE_CLIENT_SECRET y a las variables de netlify
+
+* 14 - creamos los login-form.ts y register-form.ts en donde consumimos el auth-client.ts
+
+* 15 - creamos src/routes/login/index.ts
+
+		import { LoginForm } from "@/components/login-form"
+		import { RegisterForm } from "@/components/register-form"
+		import { createFileRoute } from "@tanstack/react-router"
+		import { useState } from "react"
+
+		export const Route = createFileRoute("/login/")({
+			component: RouteComponent,
+		})
+
+		function RouteComponent() {
+			const [activeForm, setActiveForm] = useState<"login" | "register">("login")
+			const authPosition =
+				activeForm === "login" ? "translate-x-[0px]" : "-translate-x-[100dvw]"
+
+			return (
+				<section className="w-screen h-screen overflow-hidden">
+					<section
+						className={`${authPosition} w-[200dvw] min-h-screen flex items-center justify-between gap-10 relative transition-transform duration-500`}
+					>
+						<div className="absolute left-0 top-1/2 -translate-y-1/2 w-screen flex justify-center items-center px-6">
+							<LoginForm setActiveForm={setActiveForm} />
+						</div>
+						<div className="absolute right-0 top-1/2 -translate-y-1/2 w-screen flex justify-center items-center px-6">
+							<RegisterForm setActiveForm={setActiveForm} />
+						</div>
+					</section>
+				</section>
 			)
 		}

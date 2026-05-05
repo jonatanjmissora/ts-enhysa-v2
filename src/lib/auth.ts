@@ -1,15 +1,15 @@
 import { betterAuth } from "better-auth"
 import { tanstackStartCookies } from "better-auth/tanstack-start"
 import { drizzleAdapter } from "better-auth/adapters/drizzle"
-import { neon } from "@neondatabase/serverless"
-import { drizzle } from "drizzle-orm/neon-http"
+import { drizzle } from "drizzle-orm/node-postgres"
+import pg from "pg"
 import * as schema from "../../db/schema"
 
 // Get base URL from environment variables
 const baseURL = process.env.BETTER_AUTH_BASE_URL
 
 // Database configuration
-const databaseUrl = process.env.DATABASE_URL
+const databaseUrl = process.env.DATABASE_URL || process.env.VITE_DATABASE_URL
 
 interface AuthOptions {
 	baseURL?: string
@@ -43,8 +43,11 @@ const authOptions: AuthOptions = {
 // Only add database configuration if DATABASE_URL is available
 if (databaseUrl) {
 	try {
-		const client = neon(databaseUrl)
-		const db = drizzle(client, { schema })
+		const pool = new pg.Pool({
+			connectionString: databaseUrl,
+			ssl: databaseUrl.includes("sslmode=require") || databaseUrl.includes("sslmode=verify-full") ? { rejectUnauthorized: false } : false,
+		})
+		const db = drizzle(pool, { schema })
 
 		authOptions.database = drizzleAdapter(db, {
 			provider: "pg",

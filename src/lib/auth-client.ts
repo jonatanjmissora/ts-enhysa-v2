@@ -12,8 +12,6 @@ const checkBetterAuthConfig = () => {
 		console.warn(warningMessage)
 		console.info("Ejemplo: VITE_BETTER_AUTH_BASE_URL=http://localhost:3000")
 
-		alert(warningMessage)
-
 		return false
 	}
 
@@ -21,7 +19,7 @@ const checkBetterAuthConfig = () => {
 }
 
 export const authClient = createAuthClient({
-	baseURL: process.env.VITE_BETTER_AUTH_BASE_URL,
+	baseURL: import.meta.env.VITE_BETTER_AUTH_BASE_URL,
 })
 
 // Check configuration on module load
