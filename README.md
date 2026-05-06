@@ -222,7 +222,7 @@ BACKEND
 
 NETLIFY
 =======
-* 8 - hacemos el deploy a netlify. Vamos a Netlify, nuevo proyecto, seleccionamos el repositorio de Github, dejamos todo por defecto, y colocamos las variables de entorno.
+* 8 - hacemos el deploy a netlify. Vamos a Netlify, nuevo proyecto, seleccionamos el repositorio de Github, dejamos todo por defecto, y colocamos las variables de entorno tal cual como el .env.example con los valores del nuevo dominio de netlify: `https://ts-enhysa-v2.netlify.app`.
 
 * 9 - copiamos imagenes a /public y modificamos el titulo en /src/routes/__root.tsx 
 
@@ -440,3 +440,75 @@ incluimos las rutas, tanto de desarrollo, como la de netlify
 				</section>
 			)
 		}
+
+* 16 - ponemos el session en el context
+	en src/router.tsx (agregamos session: null)
+	------------------
+	. . .
+	const router = createTanStackRouter({
+		routeTree,
+		context: {
+			...context,
+			session: null,
+		},
+
+		defaultPendingMs: 0,
+		defaultPreload: "intent",
+		defaultPreloadStaleTime: 0,
+		scrollRestoration: true,
+	})
+	. . .
+
+	en src/routes/__root.tsx, 
+	--------------------------
+		interface MyRouterContext {
+		session: Session | null
+		queryClient: QueryClient
+		}
+
+		export const Route = createRootRouteWithContext<MyRouterContext>()({
+			head: () => ({
+				meta: [
+					{
+						charSet: "utf-8",
+					},
+					{
+						name: "viewport",
+						content: "width=device-width, initial-scale=1",
+					},
+					{
+						title: "Enhysa v2",
+					},
+				],
+				links: [
+					{
+						rel: "stylesheet",
+						href: appCss,
+					},
+				],
+			}),
+			loader: async () => {
+				const session = await getSession()
+				return { session }
+			},
+			shellComponent: RootDocument,
+			errorComponent: DefaultCatchBoundary,
+			notFoundComponent: () => <h1>404 - No encontrado</h1>,
+		})
+
+	en server/get-session.ts
+	-----------------------
+		import { auth } from "@/lib/auth"
+		import { createServerFn } from "@tanstack/react-start"
+		import { getRequest } from "@tanstack/react-start/server"
+
+		export const getSession = createServerFn({ method: "GET" }).handler(
+			async () => {
+				const request = getRequest()
+				return await auth.api.getSession({
+					headers: request.headers,
+				})
+			}
+		)
+
+* 17 - creamos un NavBar para obtener el session, y colocar el login-logout

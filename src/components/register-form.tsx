@@ -2,7 +2,6 @@ import { useForm } from "@tanstack/react-form"
 import * as z from "zod"
 import { Button } from "@/components/ui/button"
 import {
-	Card,
 	CardContent,
 	CardDescription,
 	CardHeader,
@@ -88,10 +87,10 @@ export function RegisterForm({
 
 	return (
 		<div className={cn("w-90 relative sm:mr-50", className)} {...props}>
-			<div className=" sm:hidden absolute top-4 left-4 right-4">
-				{/* <PreferencesMenu /> */}
-			</div>
-			<Card className="card bg-accent/90 rounded-lg  my-shadow items-stretch ring ring-foreground/30">
+			{/*<div className="absolute top-4 left-4 right-4">
+				 <PreferencesMenu /> 
+			</div>*/}
+			<div className="w-11/12 mx-auto">
 				<CardHeader className="text-center">
 					<div className="w-full sm:hidden flex flex-col items-center pb-4 relative">
 						<img
@@ -275,7 +274,7 @@ export function RegisterForm({
 						</FieldGroup>
 					</form>
 				</CardContent>
-			</Card>
+			</div>
 		</div>
 	)
 }
