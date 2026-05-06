@@ -17,9 +17,11 @@ function Navbar() {
 	return (
 		<header className="flex justify-between items-center p-4 w-full">
 			<span>Logo</span>
-			<button onClick={logout} className="cursor-pointer">
-				Logout
-			</button>
+			{session && (
+				<button onClick={logout} className="cursor-pointer">
+					Logout
+				</button>
+			)}
 			<span>{session ? session.user.name : "no user"}</span>
 		</header>
 	)

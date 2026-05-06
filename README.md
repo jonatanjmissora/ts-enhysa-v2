@@ -512,3 +512,4 @@ incluimos las rutas, tanto de desarrollo, como la de netlify
 		)
 
 * 17 - creamos un NavBar para obtener el session, y colocar el login-logout
+* 18 - protected-route
