@@ -336,6 +336,11 @@ a {
   * {
     @apply border-border outline-ring/50;
   }
+
+.bw {
+    @apply border border-foreground;
+  }
+
   body {
     background-color: var(--background);
     color: var(--foreground);
