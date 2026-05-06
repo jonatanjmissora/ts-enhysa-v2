@@ -12,6 +12,7 @@ import { DefaultCatchBoundary } from "#/components/DefaultCatchBoundary"
 import type { Session } from "better-auth"
 import { getSession } from "../../server/get-session"
 import NotFound from "#/components/not-found"
+import Loading from "#/components/loading"
 
 interface MyRouterContext {
 	session: Session | null
@@ -43,6 +44,7 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 		const session = await getSession()
 		return { session }
 	},
+	pendingComponent: () => <Loading />,
 	shellComponent: RootDocument,
 	errorComponent: DefaultCatchBoundary,
 	notFoundComponent: () => <NotFound />,

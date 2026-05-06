@@ -17,7 +17,7 @@ export default function Footer() {
 			<p className="textL">Mapa del sitio</p>
 			<ul className="p-4 flex flex-col gap-4">
 				<Link to="/">Inicio</Link>
-				<Link to="/perfil" search={{ from: pathname.split("/")[1] }}>
+				<Link to="/perfil/tecnicos" search={{ from: pathname.split("/")[1] }}>
 					Mi Perfil
 				</Link>
 				<Link to="/suscripcion" search={{ from: pathname.split("/")[1] }}>

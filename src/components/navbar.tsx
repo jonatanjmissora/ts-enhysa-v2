@@ -72,7 +72,7 @@ const MovilMenuContent = ({
 					Inicio
 				</Link>
 				<Link
-					to="/perfil"
+					to="/perfil/tecnicos"
 					search={{ from: pathname.split("/")[1] }}
 					onClick={() => setIsOpen(!isOpen)}
 					resetScroll={true}
@@ -122,7 +122,7 @@ function User() {
 						{fullName || "Usuario"}
 					</p>
 					<Link
-						to="/pricing"
+						to="/suscripcion"
 						className="sm:text-sm 2xl:text-base tracking-wider w-full flex items-end justify-end gap-1"
 					>
 						<Shield className="size-5 dark:text-amber-500/50 text-amber-700/70" />

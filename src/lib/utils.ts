@@ -3,6 +3,8 @@ import { clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
 import type { EmpresaType } from "../../db/empresas/schema"
 import type { InstrumentoType } from "../../db/instrumentos/schema"
+import type { TecnicoFormType } from "../../db/tecnicos/tecnico-validator"
+import type { TecnicoType } from "../../db/tecnicos/schema"
 
 export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs))
@@ -29,4 +31,20 @@ export const sortedByRazonSocial = (empresas: EmpresaType[]) => {
 
 export const sortedByNombre = (instrumentos: InstrumentoType[]) => {
 	return instrumentos.sort((a, b) => a.nombre.localeCompare(b.nombre))
+}
+
+export const checkTecnicoDiference = (
+	formValues: TecnicoFormType,
+	tecnico: TecnicoType
+) => {
+	return (
+		formValues.nombre === tecnico.nombre &&
+		formValues.telefono === tecnico.telefono &&
+		formValues.localidad === tecnico.localidad &&
+		formValues.cargo === tecnico.cargo &&
+		formValues.matricula === tecnico.matricula &&
+		formValues.matriculaImg === tecnico.matriculaImg &&
+		formValues.firmaImg === tecnico.firmaImg &&
+		formValues.membrete === tecnico.membrete
+	)
 }
