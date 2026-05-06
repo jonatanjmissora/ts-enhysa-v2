@@ -40,15 +40,9 @@ export default function EditTecnico({
 						<Pencil size={14} className="text-foreground/70" />
 						Editar
 					</Button>
-					<div className="sm:block hidden my-10 w-1/4 ml-auto">
-						<button className="card bg-background sm:bg-accent rounded-lg cursor-pointer textM text-sm sm:text-base py-2 w-full justify-center gap-4 ml-auto">
-							<Pencil className="size-6 text-foreground/70" />
-							Editar
-						</button>
-					</div>
 				</div>
 			</AlertDialogTrigger>
-			<AlertDialogContent className="p-6 sm:px-20 py-15 sm:py-6 bg-accent/80 backdrop-blur-xl w-full sm:w-1/2 h-screen sm:h-[95dvh] overflow-auto">
+			<AlertDialogContent className="bg-background sm:px-20 py-15 sm:py-6 w-full sm:w-1/2 h-screen sm:h-[95dvh] overflow-auto border-none rounded-none max-w-screen">
 				<AlertDialogTitle>
 					<Title text="Editar Técnico" />
 				</AlertDialogTitle>
