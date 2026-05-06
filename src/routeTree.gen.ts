@@ -14,6 +14,8 @@ import { Route as ProtectedRouteRouteImport } from './routes/_protected/route'
 import { Route as LoginIndexRouteImport } from './routes/login/index'
 import { Route as ProtectedIndexRouteImport } from './routes/_protected/index'
 import { Route as ProtectedSuscripcionRouteImport } from './routes/_protected/suscripcion'
+import { Route as ProtectedPerfilRouteRouteImport } from './routes/_protected/perfil/route'
+import { Route as ProtectedPerfilIndexRouteImport } from './routes/_protected/perfil/index'
 import { Route as ProtectedIluminacionIndexRouteImport } from './routes/_protected/iluminacion/index'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 
@@ -41,6 +43,16 @@ const ProtectedSuscripcionRoute = ProtectedSuscripcionRouteImport.update({
   path: '/suscripcion',
   getParentRoute: () => ProtectedRouteRoute,
 } as any)
+const ProtectedPerfilRouteRoute = ProtectedPerfilRouteRouteImport.update({
+  id: '/perfil',
+  path: '/perfil',
+  getParentRoute: () => ProtectedRouteRoute,
+} as any)
+const ProtectedPerfilIndexRoute = ProtectedPerfilIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => ProtectedPerfilRouteRoute,
+} as any)
 const ProtectedIluminacionIndexRoute =
   ProtectedIluminacionIndexRouteImport.update({
     id: '/iluminacion/',
@@ -56,10 +68,12 @@ const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof ProtectedIndexRoute
   '/loading': typeof LoadingRoute
+  '/perfil': typeof ProtectedPerfilRouteRouteWithChildren
   '/suscripcion': typeof ProtectedSuscripcionRoute
   '/login/': typeof LoginIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/iluminacion/': typeof ProtectedIluminacionIndexRoute
+  '/perfil/': typeof ProtectedPerfilIndexRoute
 }
 export interface FileRoutesByTo {
   '/loading': typeof LoadingRoute
@@ -68,26 +82,31 @@ export interface FileRoutesByTo {
   '/login': typeof LoginIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/iluminacion': typeof ProtectedIluminacionIndexRoute
+  '/perfil': typeof ProtectedPerfilIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_protected': typeof ProtectedRouteRouteWithChildren
   '/loading': typeof LoadingRoute
+  '/_protected/perfil': typeof ProtectedPerfilRouteRouteWithChildren
   '/_protected/suscripcion': typeof ProtectedSuscripcionRoute
   '/_protected/': typeof ProtectedIndexRoute
   '/login/': typeof LoginIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/_protected/iluminacion/': typeof ProtectedIluminacionIndexRoute
+  '/_protected/perfil/': typeof ProtectedPerfilIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/loading'
+    | '/perfil'
     | '/suscripcion'
     | '/login/'
     | '/api/auth/$'
     | '/iluminacion/'
+    | '/perfil/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/loading'
@@ -96,15 +115,18 @@ export interface FileRouteTypes {
     | '/login'
     | '/api/auth/$'
     | '/iluminacion'
+    | '/perfil'
   id:
     | '__root__'
     | '/_protected'
     | '/loading'
+    | '/_protected/perfil'
     | '/_protected/suscripcion'
     | '/_protected/'
     | '/login/'
     | '/api/auth/$'
     | '/_protected/iluminacion/'
+    | '/_protected/perfil/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -151,6 +173,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProtectedSuscripcionRouteImport
       parentRoute: typeof ProtectedRouteRoute
     }
+    '/_protected/perfil': {
+      id: '/_protected/perfil'
+      path: '/perfil'
+      fullPath: '/perfil'
+      preLoaderRoute: typeof ProtectedPerfilRouteRouteImport
+      parentRoute: typeof ProtectedRouteRoute
+    }
+    '/_protected/perfil/': {
+      id: '/_protected/perfil/'
+      path: '/'
+      fullPath: '/perfil/'
+      preLoaderRoute: typeof ProtectedPerfilIndexRouteImport
+      parentRoute: typeof ProtectedPerfilRouteRoute
+    }
     '/_protected/iluminacion/': {
       id: '/_protected/iluminacion/'
       path: '/iluminacion'
@@ -168,13 +204,26 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface ProtectedPerfilRouteRouteChildren {
+  ProtectedPerfilIndexRoute: typeof ProtectedPerfilIndexRoute
+}
+
+const ProtectedPerfilRouteRouteChildren: ProtectedPerfilRouteRouteChildren = {
+  ProtectedPerfilIndexRoute: ProtectedPerfilIndexRoute,
+}
+
+const ProtectedPerfilRouteRouteWithChildren =
+  ProtectedPerfilRouteRoute._addFileChildren(ProtectedPerfilRouteRouteChildren)
+
 interface ProtectedRouteRouteChildren {
+  ProtectedPerfilRouteRoute: typeof ProtectedPerfilRouteRouteWithChildren
   ProtectedSuscripcionRoute: typeof ProtectedSuscripcionRoute
   ProtectedIndexRoute: typeof ProtectedIndexRoute
   ProtectedIluminacionIndexRoute: typeof ProtectedIluminacionIndexRoute
 }
 
 const ProtectedRouteRouteChildren: ProtectedRouteRouteChildren = {
+  ProtectedPerfilRouteRoute: ProtectedPerfilRouteRouteWithChildren,
   ProtectedSuscripcionRoute: ProtectedSuscripcionRoute,
   ProtectedIndexRoute: ProtectedIndexRoute,
   ProtectedIluminacionIndexRoute: ProtectedIluminacionIndexRoute,

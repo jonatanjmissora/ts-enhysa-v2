@@ -1,6 +1,8 @@
 import type { ClassValue } from "clsx"
 import { clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
+import type { EmpresaType } from "../../db/empresas/schema"
+import type { InstrumentoType } from "../../db/instrumentos/schema"
 
 export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs))
@@ -19,4 +21,12 @@ export const delay = async (ms = 3000) => {
 	if (!import.meta.env.DEV) return
 
 	await new Promise(r => setTimeout(r, ms))
+}
+
+export const sortedByRazonSocial = (empresas: EmpresaType[]) => {
+	return empresas.sort((a, b) => a.razonSocial.localeCompare(b.razonSocial))
+}
+
+export const sortedByNombre = (instrumentos: InstrumentoType[]) => {
+	return instrumentos.sort((a, b) => a.nombre.localeCompare(b.nombre))
 }
