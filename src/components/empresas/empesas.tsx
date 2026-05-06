@@ -25,13 +25,13 @@ function HayEmpresas({ empresas }: { empresas: EmpresaType[] }) {
 				type="single"
 				collapsible
 				defaultValue=""
-				className="flex flex-col gap-2 w-11/12 mx-auto py-4"
+				className="flex flex-col gap-2 w-11/12 mx-auto py-20"
 			>
 				{empresas.map(empresa => (
 					<AccordionItem
 						key={empresa.id}
 						value={empresa.id}
-						className="border-b border-foreground/10 last:border-b-0  my-6 py-2"
+						className="border-b border-foreground/10 last:border-b-0 py-2"
 					>
 						<AccordionTrigger className="flex px-5 w-11/12 sm:w-full flex-wrap items-center">
 							<div className="flex items-center gap-2 text-sm tracking-wider w-60 sm:w-max truncate">
