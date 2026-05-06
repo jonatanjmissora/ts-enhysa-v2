@@ -1,7 +1,10 @@
 import { Link } from "@tanstack/react-router"
 import { Button } from "./ui/button"
+import useScrollTop from "#/hooks/scroll-top"
 
 export default function NotFound() {
+	useScrollTop()
+
 	return (
 		<section className="flex items-center flex-col mt-[70px] h-svh relative overflow-visible">
 			<p className="text-xl font-semibold text-center tracking-wider text-pretty dark:text-shadow-lg">
@@ -13,8 +16,8 @@ export default function NotFound() {
 				alt="logo EnHySa"
 				className="absolute opacity-75 top-20 left-0 w-screen object-contain h-[300px] bottom-0 -z-10 max-w-none mask-t-from-50% mask-b-from-80%"
 			/>
-			<Link to="/">
-				<Button variant={"outline"} className="mt-[40svh]">
+			<Link to="/" className="w-5/6">
+				<Button variant={"secondary"} className="mt-[40svh] w-full">
 					Volver
 				</Button>
 			</Link>

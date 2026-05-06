@@ -13,6 +13,7 @@ import { Route as LoadingRouteImport } from './routes/loading'
 import { Route as ProtectedRouteRouteImport } from './routes/_protected/route'
 import { Route as LoginIndexRouteImport } from './routes/login/index'
 import { Route as ProtectedIndexRouteImport } from './routes/_protected/index'
+import { Route as ProtectedSuscripcionRouteImport } from './routes/_protected/suscripcion'
 import { Route as ProtectedIluminacionIndexRouteImport } from './routes/_protected/iluminacion/index'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 
@@ -35,6 +36,11 @@ const ProtectedIndexRoute = ProtectedIndexRouteImport.update({
   path: '/',
   getParentRoute: () => ProtectedRouteRoute,
 } as any)
+const ProtectedSuscripcionRoute = ProtectedSuscripcionRouteImport.update({
+  id: '/suscripcion',
+  path: '/suscripcion',
+  getParentRoute: () => ProtectedRouteRoute,
+} as any)
 const ProtectedIluminacionIndexRoute =
   ProtectedIluminacionIndexRouteImport.update({
     id: '/iluminacion/',
@@ -50,12 +56,14 @@ const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof ProtectedIndexRoute
   '/loading': typeof LoadingRoute
+  '/suscripcion': typeof ProtectedSuscripcionRoute
   '/login/': typeof LoginIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/iluminacion/': typeof ProtectedIluminacionIndexRoute
 }
 export interface FileRoutesByTo {
   '/loading': typeof LoadingRoute
+  '/suscripcion': typeof ProtectedSuscripcionRoute
   '/': typeof ProtectedIndexRoute
   '/login': typeof LoginIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
@@ -65,6 +73,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_protected': typeof ProtectedRouteRouteWithChildren
   '/loading': typeof LoadingRoute
+  '/_protected/suscripcion': typeof ProtectedSuscripcionRoute
   '/_protected/': typeof ProtectedIndexRoute
   '/login/': typeof LoginIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
@@ -72,13 +81,26 @@ export interface FileRoutesById {
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/loading' | '/login/' | '/api/auth/$' | '/iluminacion/'
+  fullPaths:
+    | '/'
+    | '/loading'
+    | '/suscripcion'
+    | '/login/'
+    | '/api/auth/$'
+    | '/iluminacion/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/loading' | '/' | '/login' | '/api/auth/$' | '/iluminacion'
+  to:
+    | '/loading'
+    | '/suscripcion'
+    | '/'
+    | '/login'
+    | '/api/auth/$'
+    | '/iluminacion'
   id:
     | '__root__'
     | '/_protected'
     | '/loading'
+    | '/_protected/suscripcion'
     | '/_protected/'
     | '/login/'
     | '/api/auth/$'
@@ -122,6 +144,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProtectedIndexRouteImport
       parentRoute: typeof ProtectedRouteRoute
     }
+    '/_protected/suscripcion': {
+      id: '/_protected/suscripcion'
+      path: '/suscripcion'
+      fullPath: '/suscripcion'
+      preLoaderRoute: typeof ProtectedSuscripcionRouteImport
+      parentRoute: typeof ProtectedRouteRoute
+    }
     '/_protected/iluminacion/': {
       id: '/_protected/iluminacion/'
       path: '/iluminacion'
@@ -140,11 +169,13 @@ declare module '@tanstack/react-router' {
 }
 
 interface ProtectedRouteRouteChildren {
+  ProtectedSuscripcionRoute: typeof ProtectedSuscripcionRoute
   ProtectedIndexRoute: typeof ProtectedIndexRoute
   ProtectedIluminacionIndexRoute: typeof ProtectedIluminacionIndexRoute
 }
 
 const ProtectedRouteRouteChildren: ProtectedRouteRouteChildren = {
+  ProtectedSuscripcionRoute: ProtectedSuscripcionRoute,
   ProtectedIndexRoute: ProtectedIndexRoute,
   ProtectedIluminacionIndexRoute: ProtectedIluminacionIndexRoute,
 }

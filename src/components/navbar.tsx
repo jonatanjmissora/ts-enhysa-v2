@@ -54,7 +54,7 @@ const MovilMenuContent = ({
 
 	return (
 		<div
-			className={`bg-background flex flex-col justify-between items-center fixed inset-0 w-screen h-svh  ${isOpen ? "translate-y-0" : "-translate-y-full"} transition-transform duration-500 text-gray-50`}
+			className={` flex flex-col justify-between items-center fixed z-10 inset-0 bg-background w-screen h-svh  ${isOpen ? "translate-y-0" : "-translate-y-full"} transition-transform duration-500 text-gray-50`}
 		>
 			<div className="h-25 w-full flex items-center justify-end p-8">
 				<button onClick={() => setIsOpen(!isOpen)}>

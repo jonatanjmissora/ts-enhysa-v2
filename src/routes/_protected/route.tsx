@@ -1,3 +1,4 @@
+import Footer from "#/components/footer"
 import Navbar from "#/components/navbar"
 import { protectedRoute } from "#/lib/protected-route"
 import { Outlet } from "@tanstack/react-router"
@@ -10,11 +11,10 @@ export const Route = createFileRoute("/_protected")({
 
 function RouteComponent() {
 	return (
-		<section className="w-screen min-h-svh flex flex-col items-center justify-center">
+		<section className="w-screen flex flex-col items-center justify-center">
 			<Navbar />
-			<article className="w-full flex-1 flex flex-col items-center justify-center">
-				<Outlet />
-			</article>
+			<Outlet />
+			<Footer />
 		</section>
 	)
 }
