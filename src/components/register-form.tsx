@@ -121,7 +121,7 @@ export function RegisterForm({
 						<FieldGroup>
 							<Field>
 								<Button
-									// variant="theme"
+									variant="outline"
 									type="button"
 									onClick={signIn}
 									className="my-shadow"

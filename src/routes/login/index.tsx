@@ -1,3 +1,4 @@
+import { Button } from "#/components/ui/button"
 import { LoginForm } from "@/components/login-form"
 import { RegisterForm } from "@/components/register-form"
 import { createFileRoute, Link } from "@tanstack/react-router"
@@ -18,7 +19,7 @@ function RouteComponent() {
 				className={`${authPosition} w-[200dvw] min-h-screen flex items-center justify-between gap-10 relative transition-transform duration-500`}
 			>
 				<Link to="/" className="absolute top-4 left-4">
-					Home
+					<Button variant={"outline"}>Home</Button>
 				</Link>
 				<div className="absolute left-0 top-1/2 -translate-y-1/2 w-screen flex justify-center items-center px-6">
 					<LoginForm setActiveForm={setActiveForm} />

@@ -115,7 +115,7 @@ export function LoginForm({
 						<FieldGroup className="">
 							<Field>
 								<Button
-									// variant="theme"
+									variant="outline"
 									type="button"
 									onClick={signIn}
 									className="my-shadow"

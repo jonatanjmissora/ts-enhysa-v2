@@ -1,5 +1,6 @@
 import { authClient } from "#/lib/auth-client"
 import { useLoaderData, useNavigate } from "@tanstack/react-router"
+import { Button } from "./ui/button"
 
 function Navbar() {
 	const { session } = useLoaderData({ from: "__root__" })
@@ -18,9 +19,9 @@ function Navbar() {
 		<header className="flex justify-between items-center p-4 w-full">
 			<span>Logo</span>
 			{session && (
-				<button onClick={logout} className="cursor-pointer">
+				<Button variant={"outline"} onClick={logout}>
 					Logout
-				</button>
+				</Button>
 			)}
 			<span>{session ? session.user.name : "no user"}</span>
 		</header>

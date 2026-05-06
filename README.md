@@ -512,4 +512,56 @@ incluimos las rutas, tanto de desarrollo, como la de netlify
 		)
 
 * 17 - creamos un NavBar para obtener el session, y colocar el login-logout
+	components/navbar.tsx
+	--------------------------
+
+		function Navbar() {
+			const { session } = useLoaderData({ from: "__root__" })
+			const navigate = useNavigate()
+			const logout = async () => {
+				await authClient.signOut({
+					fetchOptions: {
+						onSuccess: () => {
+							// Redirect to home page after successful logout
+							navigate({ to: "/login" })
+						},
+					},
+				})
+			}
+			return (
+				<header className="flex justify-between items-center p-4 w-full">
+					<span>Logo</span>
+					{session && (
+						<Button variant={"outline"} onClick={logout}>
+							Logout
+						</Button>
+					)}
+					<span>{session ? session.user.name : "no user"}</span>
+				</header>
+			)
+		}
+
 * 18 - protected-route
+	src/lib/protected-route.ts
+	------------------------------
+
+		export async function protectedRoute() {
+			const session = await getSession()
+
+			if (!session) {
+				throw redirect({ to: "/" })
+			}
+
+			return session
+		}
+
+
+EN RESUMEN 
+=========
+
+better-auth
+signIn con mail / google
+signUp con mail / google
+signOut
+session en context
+protected-route
