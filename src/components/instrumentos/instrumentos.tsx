@@ -125,14 +125,14 @@ function Instrumento({ instrumento }: { instrumento: InstrumentoType }) {
 				</div>
 				<div className="flex flex-col gap-1">
 					<Label>Imágenes</Label>
-					<div className="card bg-background sm:bg-accent py-2 px-4 rounded-lg flex items-center justify-center">
+					<div className="bg-accent ring-[1px] ring-foreground/10 rounded-md sm:bg-accent flex items-center justify-center">
 						<img src="/luxometro.jpg" alt="luxometro" className="size-20" />
 					</div>
 				</div>
 
 				<div className="flex flex-col gap-1">
 					<Label>Certificado</Label>
-					<div className="card bg-background sm:bg-accent py-2 px-4 rounded-lg flex items-center justify-center">
+					<div className="bg-accent ring-[1px] ring-foreground/10 rounded-md sm:bg-accent flex items-center justify-center">
 						<img src="/calibracion.webp" alt="luxometro" className="size-20" />
 					</div>
 				</div>

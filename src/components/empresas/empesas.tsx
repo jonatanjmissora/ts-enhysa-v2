@@ -155,7 +155,7 @@ function Empresa({ empresa }: { empresa: EmpresaType }) {
 				</div>
 				<div className="flex flex-col gap-1">
 					<Label>Logo</Label>
-					<div className="card bg-background sm:bg-accent py-2 px-4 rounded-lg flex items-center justify-center">
+					<div className="bg-accent ring-[1px] ring-foreground/10 rounded-md sm:bg-accent flex items-center justify-center">
 						<img src="/telefonica.png" alt="luxometro" className="size-20" />
 					</div>
 				</div>

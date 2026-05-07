@@ -17,7 +17,7 @@ export default function Navbar() {
 	const [isOpen, setIsOpen] = useState(false)
 	return (
 		<header
-			className={`w-full relative h-18 flex items-center justify-between p-4 bg-background text-gray-50`}
+			className={`w-full relative h-18 flex items-center justify-between p-4 text-gray-50`}
 		>
 			<Link to="/" className="flex items-center gap-3">
 				<img

@@ -94,12 +94,12 @@ function HayTecnico({ tecnico }: { tecnico: TecnicoType }) {
 				</div>
 				<div className="flex flex-col gap-1">
 					<Label>Matrícula Digital</Label>
-					<div className="card p-2 bg-background sm:bg-accent text-sm h-full min-h-9"></div>
+					<div className="bg-accent ring-[1px] ring-foreground/10 rounded-md w-full h-full min-h-9"></div>
 				</div>
 
 				<div className="flex-1 flex flex-col gap-1">
 					<Label>Firma Digital</Label>
-					<div className="card p-2 bg-background sm:bg-accent text-sm h-full min-h-9"></div>
+					<div className="bg-accent ring-[1px] ring-foreground/10 rounded-md w-full h-full min-h-9"></div>
 				</div>
 
 				<div className="flex-1 flex flex-col gap-1">
@@ -108,7 +108,7 @@ function HayTecnico({ tecnico }: { tecnico: TecnicoType }) {
 						<Input
 							placeholder="Nombre Completo..."
 							readOnly
-							className="bg-background sm:bg-accent text-center"
+							className="w-full"
 						/>
 
 						<Input

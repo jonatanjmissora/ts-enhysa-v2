@@ -26,7 +26,7 @@ export const InputFiles = ({
 }) => {
 	if (maxFiles === 1) {
 		return (
-			<article className="w-full">
+			<article className="w-full bg-accent ring-[1px] ring-foreground/10 rounded-md">
 				{files.length < maxFiles && (
 					<FileUpload
 						maxFiles={maxFiles}
@@ -40,7 +40,7 @@ export const InputFiles = ({
 							<FileUploadTrigger asChild disabled={!editMode}>
 								<div className="flex items-center justify-center flex-wrap gap-0 w-full cursor-pointer">
 									<CloudUpload className="size-6 mx-2 text-foreground/20 pointer-events-none" />
-									<span className="text-foreground/20 sm:text-sm 2xl:text-lg text-pretty">
+									<span className="text-foreground/20 sm:text-sm 2xl:text-lg text-pretty p-2">
 										{text}
 									</span>
 								</div>
@@ -79,7 +79,7 @@ export const InputFiles = ({
 	}
 
 	return (
-		<article className="w-full">
+		<article className="w-full bg-accent ring-[1px] ring-foreground/10 rounded-md">
 			{files.length < maxFiles && (
 				<FileUpload
 					maxFiles={maxFiles}

@@ -19,6 +19,7 @@ import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 import { Route as ProtectedPerfilTecnicosIndexRouteImport } from './routes/_protected/perfil/tecnicos/index'
 import { Route as ProtectedPerfilInstrumentosIndexRouteImport } from './routes/_protected/perfil/instrumentos/index'
 import { Route as ProtectedPerfilEmpresasIndexRouteImport } from './routes/_protected/perfil/empresas/index'
+import { Route as ProtectedIluminacionNuevoInformeIndexRouteImport } from './routes/_protected/iluminacion/nuevo-informe/index'
 
 const ProtectedRouteRoute = ProtectedRouteRouteImport.update({
   id: '/_protected',
@@ -73,6 +74,12 @@ const ProtectedPerfilEmpresasIndexRoute =
     path: '/empresas/',
     getParentRoute: () => ProtectedPerfilRouteRoute,
   } as any)
+const ProtectedIluminacionNuevoInformeIndexRoute =
+  ProtectedIluminacionNuevoInformeIndexRouteImport.update({
+    id: '/iluminacion/nuevo-informe/',
+    path: '/iluminacion/nuevo-informe/',
+    getParentRoute: () => ProtectedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof ProtectedIndexRoute
@@ -81,6 +88,7 @@ export interface FileRoutesByFullPath {
   '/login/': typeof LoginIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/iluminacion/': typeof ProtectedIluminacionIndexRoute
+  '/iluminacion/nuevo-informe/': typeof ProtectedIluminacionNuevoInformeIndexRoute
   '/perfil/empresas/': typeof ProtectedPerfilEmpresasIndexRoute
   '/perfil/instrumentos/': typeof ProtectedPerfilInstrumentosIndexRoute
   '/perfil/tecnicos/': typeof ProtectedPerfilTecnicosIndexRoute
@@ -92,6 +100,7 @@ export interface FileRoutesByTo {
   '/login': typeof LoginIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/iluminacion': typeof ProtectedIluminacionIndexRoute
+  '/iluminacion/nuevo-informe': typeof ProtectedIluminacionNuevoInformeIndexRoute
   '/perfil/empresas': typeof ProtectedPerfilEmpresasIndexRoute
   '/perfil/instrumentos': typeof ProtectedPerfilInstrumentosIndexRoute
   '/perfil/tecnicos': typeof ProtectedPerfilTecnicosIndexRoute
@@ -105,6 +114,7 @@ export interface FileRoutesById {
   '/login/': typeof LoginIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/_protected/iluminacion/': typeof ProtectedIluminacionIndexRoute
+  '/_protected/iluminacion/nuevo-informe/': typeof ProtectedIluminacionNuevoInformeIndexRoute
   '/_protected/perfil/empresas/': typeof ProtectedPerfilEmpresasIndexRoute
   '/_protected/perfil/instrumentos/': typeof ProtectedPerfilInstrumentosIndexRoute
   '/_protected/perfil/tecnicos/': typeof ProtectedPerfilTecnicosIndexRoute
@@ -118,6 +128,7 @@ export interface FileRouteTypes {
     | '/login/'
     | '/api/auth/$'
     | '/iluminacion/'
+    | '/iluminacion/nuevo-informe/'
     | '/perfil/empresas/'
     | '/perfil/instrumentos/'
     | '/perfil/tecnicos/'
@@ -129,6 +140,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/api/auth/$'
     | '/iluminacion'
+    | '/iluminacion/nuevo-informe'
     | '/perfil/empresas'
     | '/perfil/instrumentos'
     | '/perfil/tecnicos'
@@ -141,6 +153,7 @@ export interface FileRouteTypes {
     | '/login/'
     | '/api/auth/$'
     | '/_protected/iluminacion/'
+    | '/_protected/iluminacion/nuevo-informe/'
     | '/_protected/perfil/empresas/'
     | '/_protected/perfil/instrumentos/'
     | '/_protected/perfil/tecnicos/'
@@ -224,6 +237,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProtectedPerfilEmpresasIndexRouteImport
       parentRoute: typeof ProtectedPerfilRouteRoute
     }
+    '/_protected/iluminacion/nuevo-informe/': {
+      id: '/_protected/iluminacion/nuevo-informe/'
+      path: '/iluminacion/nuevo-informe'
+      fullPath: '/iluminacion/nuevo-informe/'
+      preLoaderRoute: typeof ProtectedIluminacionNuevoInformeIndexRouteImport
+      parentRoute: typeof ProtectedRouteRoute
+    }
   }
 }
 
@@ -247,6 +267,7 @@ interface ProtectedRouteRouteChildren {
   ProtectedSuscripcionRoute: typeof ProtectedSuscripcionRoute
   ProtectedIndexRoute: typeof ProtectedIndexRoute
   ProtectedIluminacionIndexRoute: typeof ProtectedIluminacionIndexRoute
+  ProtectedIluminacionNuevoInformeIndexRoute: typeof ProtectedIluminacionNuevoInformeIndexRoute
 }
 
 const ProtectedRouteRouteChildren: ProtectedRouteRouteChildren = {
@@ -254,6 +275,8 @@ const ProtectedRouteRouteChildren: ProtectedRouteRouteChildren = {
   ProtectedSuscripcionRoute: ProtectedSuscripcionRoute,
   ProtectedIndexRoute: ProtectedIndexRoute,
   ProtectedIluminacionIndexRoute: ProtectedIluminacionIndexRoute,
+  ProtectedIluminacionNuevoInformeIndexRoute:
+    ProtectedIluminacionNuevoInformeIndexRoute,
 }
 
 const ProtectedRouteRouteWithChildren = ProtectedRouteRoute._addFileChildren(

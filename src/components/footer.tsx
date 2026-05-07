@@ -11,7 +11,7 @@ export default function Footer() {
 				alt="logo EnHySa"
 				className="absolute z-10 -bottom-20 -right-20 size-80 -rotate-15 opacity-20"
 			/>
-			<p className="textL">Mapa del sitio</p>
+			<p className="textL py-2 border-b border-foreground/20">Mapa del sitio</p>
 			<ul className="p-4 flex flex-col gap-4">
 				<Link to="/">Inicio</Link>
 				<Link to="/perfil/tecnicos">Mi Perfil</Link>
