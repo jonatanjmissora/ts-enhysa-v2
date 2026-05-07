@@ -5,6 +5,8 @@ import type { EmpresaType } from "../../db/empresas/schema"
 import type { InstrumentoType } from "../../db/instrumentos/schema"
 import type { TecnicoFormType } from "../../db/tecnicos/tecnico-validator"
 import type { TecnicoType } from "../../db/tecnicos/schema"
+import type { InstrumentoFormType } from "../../db/instrumentos/instrumento-validator"
+import type { EmpresaFormType } from "../../db/empresas/empresa-validator"
 
 export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs))
@@ -46,5 +48,35 @@ export const checkTecnicoDiference = (
 		formValues.matriculaImg === tecnico.matriculaImg &&
 		formValues.firmaImg === tecnico.firmaImg &&
 		formValues.membrete === tecnico.membrete
+	)
+}
+
+export const checkEmpresaDiference = (
+	formValues: EmpresaFormType,
+	empresa: EmpresaType
+) => {
+	return (
+		formValues.cuit === empresa.cuit &&
+		formValues.razonSocial === empresa.razonSocial &&
+		formValues.direccion === empresa.direccion &&
+		formValues.localidad === empresa.localidad &&
+		formValues.provincia === empresa.provincia &&
+		formValues.codigoPostal === empresa.codigoPostal &&
+		formValues.horarios === empresa.horarios &&
+		formValues.logo === empresa.logo
+	)
+}
+
+export const checkInstrumentoDiference = (
+	formValues: InstrumentoFormType,
+	instrumento: InstrumentoType
+) => {
+	return (
+		formValues.nombre === instrumento.nombre &&
+		formValues.marca === instrumento.marca &&
+		formValues.modelo === instrumento.modelo &&
+		formValues.serie === instrumento.serie &&
+		formValues.fechaCalibracion === instrumento.fechaCalibracion &&
+		formValues.imagenes === instrumento.imagenes
 	)
 }

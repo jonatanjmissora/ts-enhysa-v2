@@ -10,6 +10,18 @@ import {
 	AccordionItem,
 	AccordionTrigger,
 } from "../ui/accordion"
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuGroup,
+	DropdownMenuSeparator,
+	DropdownMenuTrigger,
+} from "../ui/dropdown-menu"
+import { Button } from "../ui/button"
+import { Ellipsis } from "lucide-react"
+import { useState } from "react"
+import { EditEmpresa } from "./edit-empresa"
+import DeleteEmpresa from "./delete-empresa"
 
 export default function Empresas() {
 	const { data: empresas } = useSuspenseQuery(empresasQueryOptions)
@@ -54,13 +66,10 @@ function HayEmpresas({ empresas }: { empresas: EmpresaType[] }) {
 
 function Empresa({ empresa }: { empresa: EmpresaType }) {
 	return (
-		<div className="bg-accent sm:bg-background py-10 sm:p-10 flex items-center justify-center flex-col relative">
-			{/* <div className="hidden sm:block">
-				<DeleteEmpresa empresa={empresa} />
-			</div>
-			<div className="sm:hidden block absolute top-6 right-6">
+		<div className="bg-accent sm:bg-background py-20 flex items-center justify-center flex-col relative">
+			<div className="sm:hidden block absolute top-10 right-6">
 				<EmpresaDropdownMenu empresa={empresa} />
-			</div> */}
+			</div>
 			<div className="grid-cols-1 grid sm:grid-cols-2 gap-8 w-5/6 my-10">
 				<div className="flex flex-col gap-1">
 					<Label className="tracking-wider" htmlFor="razon-social">
@@ -160,11 +169,31 @@ function Empresa({ empresa }: { empresa: EmpresaType }) {
 
 function EmpresasVacias() {
 	return (
-		<div className="w-5/6 h-[30svh] flex flex-col gap-4 items-center justify-center mx-auto my-12">
+		<div className="w-5/6 h-[30svh] flex flex-col gap-8 items-center justify-center mx-auto my-12">
 			<span className="text-sm font-medium text-gray-500 italic text-center text-pretty">
 				¡Ups! Parece que no tienes empresas registradas
 			</span>
 			<CreateEmpresa />
 		</div>
+	)
+}
+
+function EmpresaDropdownMenu({ empresa }: { empresa: EmpresaType }) {
+	const [isMenuOpen, setIsMenuOpen] = useState(false)
+	return (
+		<DropdownMenu open={isMenuOpen} onOpenChange={setIsMenuOpen}>
+			<DropdownMenuTrigger asChild>
+				<Button variant="ghost" className="cursor-pointer">
+					<Ellipsis className="size-7 text-foreground/50" />
+				</Button>
+			</DropdownMenuTrigger>
+			<DropdownMenuContent className="p-6" align="end">
+				<DropdownMenuGroup className="flex flex-col bg-accent ring-[1px] ring-foreground/20 rounded-lg p-2">
+					<EditEmpresa empresa={empresa} setIsMenuOpen={setIsMenuOpen} />
+					<DropdownMenuSeparator className="bg-foreground/20 w-5/6 mx-auto" />
+					<DeleteEmpresa empresa={empresa} setIsMenuOpen={setIsMenuOpen} />
+				</DropdownMenuGroup>
+			</DropdownMenuContent>
+		</DropdownMenu>
 	)
 }

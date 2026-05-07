@@ -56,7 +56,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 			<head>
 				<HeadContent />
 			</head>
-			<body className="dark">
+			<body className="dark overflow-x-hidden w-screen">
 				{children}
 				<TanStackDevtools
 					config={{

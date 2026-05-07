@@ -5,6 +5,16 @@ import CreateTecnico from "./create-tecnico"
 import { Label } from "../ui/label"
 import { Input } from "../ui/input"
 import EditTecnico from "./edit-tecnico"
+import { useState } from "react"
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuGroup,
+	DropdownMenuTrigger,
+} from "../ui/dropdown-menu"
+import { Button } from "../ui/button"
+import { Ellipsis } from "lucide-react"
+import useScrollTop from "#/hooks/scroll-top"
 
 export default function Tecnico() {
 	const { data: tecnico } = useSuspenseQuery(tecnicoQueryOptions)
@@ -14,8 +24,13 @@ export default function Tecnico() {
 }
 
 function HayTecnico({ tecnico }: { tecnico: TecnicoType }) {
+	useScrollTop()
+
 	return (
-		<div className="w-5/6 mx-auto my-12 mb-80">
+		<div className="w-5/6 mx-auto my-12 mb-80 relative pt-10">
+			<div className="absolute top-0 right-6">
+				<TecnicoDropdownMenu tecnico={tecnico} />
+			</div>
 			<div className="grid-cols-1 grid sm:grid-cols-2 gap-8 w-5/6 my-10 mx-auto">
 				<div className="flex flex-col gap-1">
 					<Label className="tracking-wider" htmlFor="nombre">
@@ -104,18 +119,35 @@ function HayTecnico({ tecnico }: { tecnico: TecnicoType }) {
 					</div>
 				</div>
 			</div>
-			<EditTecnico tecnico={tecnico} />
 		</div>
 	)
 }
 
 function TecnicoVacio() {
 	return (
-		<div className="w-5/6 h-[30svh] flex flex-col gap-4 items-center justify-center mx-auto my-12">
+		<div className="w-5/6 h-[30svh] flex flex-col gap-8 items-center justify-center mx-auto my-12">
 			<span className="text-sm font-medium text-gray-500 italic">
 				No has cargado tus datos aun.
 			</span>
 			<CreateTecnico />
 		</div>
+	)
+}
+
+function TecnicoDropdownMenu({ tecnico }: { tecnico: TecnicoType }) {
+	const [isMenuOpen, setIsMenuOpen] = useState(false)
+	return (
+		<DropdownMenu open={isMenuOpen} onOpenChange={setIsMenuOpen}>
+			<DropdownMenuTrigger asChild>
+				<Button variant="ghost" className="cursor-pointer">
+					<Ellipsis className="size-7 text-foreground/50" />
+				</Button>
+			</DropdownMenuTrigger>
+			<DropdownMenuContent className="" align="end">
+				<DropdownMenuGroup className="flex flex-col gap-4 p-6">
+					<EditTecnico tecnico={tecnico} setIsMenuOpen={setIsMenuOpen} />
+				</DropdownMenuGroup>
+			</DropdownMenuContent>
+		</DropdownMenu>
 	)
 }

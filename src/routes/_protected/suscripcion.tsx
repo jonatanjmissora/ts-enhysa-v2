@@ -17,11 +17,10 @@ export const Route = createFileRoute("/_protected/suscripcion")({
 
 function RouteComponent() {
 	const [actualPlan, setActualPlan] = useState<0 | 1 | 2>(1)
-	const { from } = Route.useSearch()
 
 	return (
 		<div className="min-h-svh flex flex-col relative">
-			<BackChevron to={from ? `/${from}` : "/"} className="top-4 left-4" />
+			<BackChevron className="top-4 left-4" />
 
 			<div className="flex-1 flex justify-center items-center flex-col gap-6 pt-20 sm:py-10 2xl:py-20">
 				<div className="flex items-center gap-2 text-5xl 2xl:text-6xl font-bold tracking-wildest relative">

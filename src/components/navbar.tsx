@@ -9,12 +9,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { authClient } from "@/lib/auth-client"
 import { getUserInfo } from "@/lib/utils"
-import {
-	Link,
-	useLoaderData,
-	useLocation,
-	useNavigate,
-} from "@tanstack/react-router"
+import { Link, useLoaderData, useNavigate } from "@tanstack/react-router"
 import { LogOut, Shield } from "lucide-react"
 import { useState } from "react"
 
@@ -48,10 +43,6 @@ const MovilMenuContent = ({
 	isOpen: boolean
 	setIsOpen: (open: boolean) => void
 }) => {
-	const pathname = useLocation({
-		select: location => location.pathname,
-	})
-
 	return (
 		<div
 			className={` flex flex-col justify-between items-center fixed z-10 inset-0 bg-background w-screen h-svh  ${isOpen ? "translate-y-0" : "-translate-y-full"} transition-transform duration-500 text-gray-50`}
@@ -73,7 +64,6 @@ const MovilMenuContent = ({
 				</Link>
 				<Link
 					to="/perfil/tecnicos"
-					search={{ from: pathname.split("/")[1] }}
 					onClick={() => setIsOpen(!isOpen)}
 					resetScroll={true}
 					className="w-full py-2 text-center"
@@ -82,7 +72,6 @@ const MovilMenuContent = ({
 				</Link>
 				<Link
 					to="/suscripcion"
-					search={{ from: pathname.split("/")[1] }}
 					onClick={() => setIsOpen(!isOpen)}
 					resetScroll={true}
 					className="w-full py-2 text-center"

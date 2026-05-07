@@ -1,11 +1,8 @@
-import { Link, useLocation } from "@tanstack/react-router"
+import { Link } from "@tanstack/react-router"
 // import { PreferencesMenu } from "../layout/preferences-menu"
 
 export default function Footer() {
 	const actualYear = new Date().getFullYear()
-	const pathname = useLocation({
-		select: location => location.pathname,
-	})
 
 	return (
 		<article className="w-full p-6 flex flex-col justify-center gap-10 relative overflow-hidden text-shadow-lg/50 text-gray-50">
@@ -17,12 +14,8 @@ export default function Footer() {
 			<p className="textL">Mapa del sitio</p>
 			<ul className="p-4 flex flex-col gap-4">
 				<Link to="/">Inicio</Link>
-				<Link to="/perfil/tecnicos" search={{ from: pathname.split("/")[1] }}>
-					Mi Perfil
-				</Link>
-				<Link to="/suscripcion" search={{ from: pathname.split("/")[1] }}>
-					Suscripción
-				</Link>
+				<Link to="/perfil/tecnicos">Mi Perfil</Link>
+				<Link to="/suscripcion">Suscripción</Link>
 			</ul>
 			<p className="text-xs w-full text-center">
 				© {actualYear} Enhysa. Todos los derechos reservados.

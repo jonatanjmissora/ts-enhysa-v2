@@ -31,7 +31,7 @@ export default function CreateTecnico() {
 			<AlertDialogTrigger asChild className="hover:bg-accent">
 				<Button
 					variant="secondary"
-					className="w-1/2 ring-[1px] ring-foreground/25 py-5"
+					className="w-1/2 mx-auto ring-[1px] ring-foreground/25 py-5"
 				>
 					Cargar datos
 				</Button>
@@ -325,13 +325,13 @@ export function CreateTecnicoForm({
 					</span>
 				</div>
 
-				<Field className="flex flex-row justify-center gap-2 sm:gap-10 items-center w-full mt-10">
+				<Field className="flex flex-col justify-center gap-4 items-center w-full mt-10">
 					<Button
 						variant="outline"
 						onClick={() => setOpen(false)}
 						type="button"
 						disabled={isPending}
-						className="flex-1"
+						className="flex-1 py-4"
 					>
 						Cancelar
 					</Button>
@@ -339,7 +339,7 @@ export function CreateTecnicoForm({
 						variant="secondary"
 						type="submit"
 						disabled={isPending}
-						className="flex-1 ring-[1px] ring-foreground/25 py-5"
+						className="flex-1 ring-[1px] ring-foreground/25 py-4"
 					>
 						{isPending ? (
 							<div className="flex gap-2 w-full justify-center items-center">

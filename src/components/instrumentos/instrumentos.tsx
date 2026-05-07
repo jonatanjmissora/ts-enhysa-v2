@@ -136,9 +136,9 @@ function Instrumento({ instrumento }: { instrumento: InstrumentoType }) {
 
 function InstrumentosVacios() {
 	return (
-		<div className="w-5/6 h-[30svh] flex flex-col gap-4 items-center justify-center mx-auto my-12">
+		<div className="w-5/6 h-[30svh] flex flex-col gap-8 items-center justify-center mx-auto my-12">
 			<span className="text-sm font-medium text-gray-500 italic text-center text-pretty">
-				¡Ups! Parece que no tienes instrumentos registrados.
+				¡Ups! Parece que no tienes instrumentos registrados
 			</span>
 			{/* <CreateInstrumento /> */}
 		</div>

@@ -4,6 +4,7 @@ import { instrumentosQueryOptions } from "../../../../queries/instrumentos/instr
 import { tecnicoQueryOptions } from "../../../../queries/tecnico/tecnico-query"
 import Title from "#/components/title"
 import { Cpu, UserRound, Warehouse } from "lucide-react"
+import BackChevron from "#/components/back-chevron"
 
 export const Route = createFileRoute("/_protected/perfil")({
 	loader: ({ context }) => {
@@ -17,14 +18,16 @@ export const Route = createFileRoute("/_protected/perfil")({
 
 function RouteComponent() {
 	return (
-		<article className="w-full">
+		<article className="w-full relative pt-10">
+			<BackChevron />
+
 			<Title text="Mi Perfil" />
 
 			<nav className="flex items-center justify-between gap-2 w-11/12 mx-auto">
 				<Link
 					to="/perfil/tecnicos"
 					activeProps={{
-						className: "bg-secondary ring-[1px] ring-foreground/10",
+						className: "bg-secondary ring-[1px] ring-foreground/25",
 					}}
 					className="flex-1 h-20 flex flex-col gap-2 items-center justify-center text-sm rounded-lg bg-accent"
 				>
@@ -34,7 +37,7 @@ function RouteComponent() {
 				<Link
 					to="/perfil/empresas"
 					activeProps={{
-						className: "bg-secondary ring-[1px] ring-foreground/10",
+						className: "bg-secondary ring-[1px] ring-foreground/25",
 					}}
 					className="flex-1 h-20 flex flex-col gap-2 items-center justify-center text-sm rounded-lg bg-accent"
 				>
@@ -44,7 +47,7 @@ function RouteComponent() {
 				<Link
 					to="/perfil/instrumentos"
 					activeProps={{
-						className: "bg-secondary ring-[1px] ring-foreground/10",
+						className: "bg-secondary ring-[1px] ring-foreground/25",
 					}}
 					className="flex-1 h-20 flex flex-col gap-2 items-center justify-center text-sm rounded-lg bg-accent"
 				>
