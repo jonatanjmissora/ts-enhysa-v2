@@ -17,7 +17,10 @@ export default function NotFound() {
 				className="absolute opacity-75 top-20 left-0 w-screen object-contain h-[300px] bottom-0 -z-10 max-w-none mask-t-from-50% mask-b-from-80%"
 			/>
 			<Link to="/" className="w-5/6">
-				<Button variant={"secondary"} className="mt-[40svh] w-full">
+				<Button
+					variant={"secondary"}
+					className="mt-[40svh] w-full ring-[1px] ring-foreground/30 py-5 dark:bg-secondary bg-secondary"
+				>
 					Volver
 				</Button>
 			</Link>

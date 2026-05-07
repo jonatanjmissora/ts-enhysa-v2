@@ -161,7 +161,7 @@ function Empresa({ empresa }: { empresa: EmpresaType }) {
 function EmpresasVacias() {
 	return (
 		<div className="w-5/6 h-[30svh] flex flex-col gap-4 items-center justify-center mx-auto my-12">
-			<span className="text-sm font-medium text-gray-500 italic">
+			<span className="text-sm font-medium text-gray-500 italic text-center text-pretty">
 				¡Ups! Parece que no tienes empresas registradas
 			</span>
 			<CreateEmpresa />

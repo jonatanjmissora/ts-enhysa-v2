@@ -36,7 +36,10 @@ export default function EditTecnico({
 		<AlertDialog open={open} onOpenChange={setOpen}>
 			<AlertDialogTrigger asChild>
 				<div className="w-5/6 mx-auto flex justify-end">
-					<Button variant="secondary" className="w-1/2">
+					<Button
+						variant="secondary"
+						className="w-1/2 ring-[1px] ring-foreground/25 py-5"
+					>
 						<Pencil size={14} className="text-foreground/70" />
 						Editar
 					</Button>
@@ -349,7 +352,7 @@ export function EditTecnicoForm({
 							variant="secondary"
 							type="submit"
 							disabled={isPending}
-							className="flex-1"
+							className="flex-1 ring-[1px] ring-foreground/25 py-5"
 						>
 							{isPending ? (
 								<div className="flex gap-2 w-full justify-center">

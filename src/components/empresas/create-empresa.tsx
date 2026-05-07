@@ -28,7 +28,12 @@ export default function CreateEmpresa() {
 	return (
 		<AlertDialog open={open} onOpenChange={setOpen}>
 			<AlertDialogTrigger asChild className="hover:bg-accent">
-				<Button variant={"secondary"}>Cargar Datos</Button>
+				<Button
+					variant={"secondary"}
+					className="ring-[1px] ring-foreground/25 py-5"
+				>
+					Cargar Datos
+				</Button>
 			</AlertDialogTrigger>
 			<AlertDialogContent className="bg-background sm:px-20 py-15 sm:py-6 w-full sm:w-1/2 h-screen sm:h-[95dvh] overflow-auto border-none rounded-none max-w-screen">
 				<AlertDialogTitle>

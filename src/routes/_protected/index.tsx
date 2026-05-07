@@ -24,15 +24,15 @@ function Home() {
 					className="absolute opacity-75 top-6 left-0 w-screen h-[500px] bottom-0 -z-10 max-w-none mask-t-from-50% mask-b-from-80%"
 				/>
 				<Select>
-					<SelectTrigger className="flex items-center justify-between gap-6 p-6 textM font-semibold rounded-xl themeBtnAccent  my-shadow w-full sm:w-auto dark:text-shadow-lg/50">
+					<SelectTrigger className="w-11/12 ring-[1px] ring-foreground/30 py-5 dark:bg-secondary bg-secondary">
 						<SelectValue placeholder="Selecciona un protocolo" />
 					</SelectTrigger>
-					<SelectContent>
+					<SelectContent className="w-80 mx-auto truncate">
 						{PROTOCOLOS.map(protocolo => (
 							<SelectItem
 								key={protocolo.id}
 								value={protocolo.id}
-								className="text-right! text-nowrap! flex justify-start! py-2 truncate"
+								className="text-right! text-nowrap! flex justify-start! py-2"
 							>
 								<Link to={protocolo.link} resetScroll={true}>
 									{protocolo.title}

@@ -23,15 +23,19 @@ function RouteComponent() {
 			<nav className="flex items-center justify-between gap-2 w-11/12 mx-auto">
 				<Link
 					to="/perfil/tecnicos"
-					activeProps={{ className: "bg-secondary" }}
-					className="flex-1 h-20 flex flex-col gap-2 items-center justify-center text-sm rounded-lg bg-accent ring ring-accent"
+					activeProps={{
+						className: "bg-secondary ring-[1px] ring-foreground/10",
+					}}
+					className="flex-1 h-20 flex flex-col gap-2 items-center justify-center text-sm rounded-lg bg-accent"
 				>
 					<UserRound className="size-10 text-foreground/70" />
 					Técnico
 				</Link>
 				<Link
 					to="/perfil/empresas"
-					activeProps={{ className: "bg-secondary" }}
+					activeProps={{
+						className: "bg-secondary ring-[1px] ring-foreground/10",
+					}}
 					className="flex-1 h-20 flex flex-col gap-2 items-center justify-center text-sm rounded-lg bg-accent"
 				>
 					<Warehouse className="size-10 text-foreground/70" />
@@ -39,7 +43,9 @@ function RouteComponent() {
 				</Link>
 				<Link
 					to="/perfil/instrumentos"
-					activeProps={{ className: "bg-secondary" }}
+					activeProps={{
+						className: "bg-secondary ring-[1px] ring-foreground/10",
+					}}
 					className="flex-1 h-20 flex flex-col gap-2 items-center justify-center text-sm rounded-lg bg-accent"
 				>
 					<Cpu className="size-10 text-foreground/70" />

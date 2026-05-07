@@ -1,8 +1,8 @@
 import BackChevron from "#/components/back-chevron"
 import { Button } from "#/components/ui/button"
 import { PLANS } from "@/lib/constants"
-import { createFileRoute, Link } from "@tanstack/react-router"
-import { ArrowRight, Check, ChevronLeft, Shield } from "lucide-react"
+import { createFileRoute } from "@tanstack/react-router"
+import { ArrowRight, Check, Shield } from "lucide-react"
 import { useState } from "react"
 import { z } from "zod"
 
@@ -102,7 +102,7 @@ const Plan = ({
 
 			<Button
 				variant={actualPlan !== index ? "default" : "secondary"}
-				className="w-full py-6"
+				className="w-full ring-[1px] ring-foreground/15 py-5"
 				onClick={() => setActualPlan(index as 0 | 1 | 2)}
 			>
 				{actualPlan === index ? (

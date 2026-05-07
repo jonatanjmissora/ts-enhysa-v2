@@ -341,6 +341,16 @@ a {
     @apply border border-foreground;
   }
 
+.btn {
+  @apply ring-[0.3px] ring-foreground/50 py-5 dark:bg-secondary;
+}
+
+.btn1 {
+  outline: 1px solid red;
+  background-color: blue;
+  padding: 20px
+}
+
   body {
     background-color: var(--background);
     color: var(--foreground);
