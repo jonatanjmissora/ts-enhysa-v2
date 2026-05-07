@@ -357,7 +357,7 @@ export function EditEmpresaForm({
 					/>
 				</div>
 
-				<div className="flex justify-end items-center gap-2 w-full text-destructive">
+				<div className="flex justify-end items-center gap-2 w-11/12 mcx-auto text-destructive">
 					<Asterisk className="text-destructive size-3" />
 					<span className="text-xs 2xl:text-sm italic tracking-wide">
 						campo obligatorio

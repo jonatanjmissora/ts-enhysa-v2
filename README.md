@@ -1,3 +1,6 @@
+
+npx drizzle-kit push
+
 Vamos a crear una aplicacion con el siguiente stack:
 - Pnpm package manager
 - Vite build tool 

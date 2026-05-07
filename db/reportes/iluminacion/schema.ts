@@ -1,0 +1,41 @@
+import { pgTable, text, timestamp } from "drizzle-orm/pg-core"
+import { user } from "../../users/schema"
+import { tecnicos } from "../../tecnicos/schema"
+import { empresas } from "../../empresas/schema"
+import { instrumentos } from "../../instrumentos/schema"
+
+export const reportes_iluminacion = pgTable("reportes_iluminacion", {
+	id: text("id").primaryKey(),
+
+	tecnicoId: text("tecnico_id")
+		.notNull()
+		.references(() => tecnicos.id, { onDelete: "cascade" }),
+
+	empresaId: text("empresa_id")
+		.notNull()
+		.references(() => empresas.id, { onDelete: "cascade" }),
+
+	instrumentoId: text("instrumento_id")
+		.notNull()
+		.references(() => instrumentos.id, { onDelete: "cascade" }),
+
+	createdAt: timestamp("created_at").notNull(),
+
+	finishedAt: timestamp("finished_at"),
+
+	areasId: text("areas_id").array().notNull(),
+
+	clima: text("clima").notNull(),
+
+	observacion: text("observacion").notNull(),
+
+	conclusion: text("conclusion").notNull(),
+
+	recomendacion: text("recomendacion").notNull(),
+
+	userId: text("user_id")
+		.notNull()
+		.references(() => user.id, { onDelete: "cascade" }),
+})
+
+export type ReporteIluminacionType = typeof reportes_iluminacion.$inferSelect

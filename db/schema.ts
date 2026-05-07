@@ -9,3 +9,6 @@ export * from "./empresas/schema"
 
 // Instrumentos
 export * from "./instrumentos/schema"
+
+// Iluminacion Reports
+export * from "./reportes/iluminacion/schema"

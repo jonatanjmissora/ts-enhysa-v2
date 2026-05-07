@@ -84,7 +84,7 @@ function Instrumento({ instrumento }: { instrumento: InstrumentoType }) {
 						placeholder="Marca"
 						value={instrumento.marca.toUpperCase()}
 						readOnly
-						className="bg-background sm:bg-accent"
+						className="bg-background sm:bg-accent text-right"
 					/>
 				</div>
 				<div className="flex flex-col gap-1">
@@ -96,7 +96,7 @@ function Instrumento({ instrumento }: { instrumento: InstrumentoType }) {
 						placeholder="Modelo"
 						value={instrumento.modelo.toUpperCase()}
 						readOnly
-						className="bg-background sm:bg-accent"
+						className="bg-background sm:bg-accent text-right"
 					/>
 				</div>
 				<div className="flex flex-col gap-1">
@@ -108,7 +108,7 @@ function Instrumento({ instrumento }: { instrumento: InstrumentoType }) {
 						placeholder="Serie"
 						value={instrumento.serie}
 						readOnly
-						className="bg-background sm:bg-accent"
+						className="bg-background sm:bg-accent text-right"
 					/>
 				</div>
 				<div className="flex flex-col gap-1">
@@ -120,7 +120,7 @@ function Instrumento({ instrumento }: { instrumento: InstrumentoType }) {
 						placeholder="Calibracion"
 						value={instrumento.fechaCalibracion}
 						readOnly
-						className="bg-background sm:bg-accent"
+						className="bg-background sm:bg-accent text-right"
 					/>
 				</div>
 				<div className="flex flex-col gap-1">

@@ -1,11 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router"
 import {
 	AlignEndHorizontal,
+	Calendar,
 	ChartPie,
-	Clock,
 	FileChartColumn,
 	Handshake,
-	Shield,
 } from "lucide-react"
 
 export const Route = createFileRoute("/_protected/iluminacion/")({
@@ -88,7 +87,7 @@ function RouteComponent() {
 
 					<div className="">
 						<div className="shapeRight flex items-center justify-center flex-col gap-2 bg-secondary/50 ring-[1px] ring-foreground/10 rounded-md p-4 ml-4">
-							<Clock size={30} />
+							<Calendar size={30} />
 							Validez
 						</div>
 						<p className="text-sm tracking-wider italic text-foreground/60">

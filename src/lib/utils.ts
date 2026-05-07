@@ -7,6 +7,7 @@ import type { TecnicoFormType } from "../../db/tecnicos/tecnico-validator"
 import type { TecnicoType } from "../../db/tecnicos/schema"
 import type { InstrumentoFormType } from "../../db/instrumentos/instrumento-validator"
 import type { EmpresaFormType } from "../../db/empresas/empresa-validator"
+import type { ReporteIluminacionType } from "../../db/reportes/iluminacion/schema"
 
 export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs))
@@ -79,4 +80,12 @@ export const checkInstrumentoDiference = (
 		formValues.fechaCalibracion === instrumento.fechaCalibracion &&
 		formValues.imagenes === instrumento.imagenes
 	)
+}
+
+export const sortedByDate = (reportes: ReporteIluminacionType[]) => {
+	return reportes.sort((a, b) => {
+		const dateA = new Date(a.createdAt).getTime()
+		const dateB = new Date(b.createdAt).getTime()
+		return dateB - dateA
+	})
 }
