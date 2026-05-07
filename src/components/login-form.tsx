@@ -215,18 +215,19 @@ export function LoginForm({
 							/>
 
 							<Field>
-								<button
+								<Button
+									variant="secondary"
 									type="submit"
-									className="themeBtnAccent tracking-wider font-semibold  my-shadow cursor-pointer rounded-xl py-2 dark:text-shadow-sm/50 ring ring-green-500/30"
+									className="p-5 text-center tracking-widest ring-[1px] ring-foreground/20"
 								>
 									Ingresar
-								</button>
+								</Button>
 								<FieldDescription className="text-center">
 									No tiene cuenta ?{" "}
 									<button
 										onClick={() => setActiveForm("register")}
 										// viewTransition={{ types: ["rotateZ"] }}
-										className="cursor-pointer dark:hover:text-green-400 underline dark:text-shadow-sm/50 my-shadow"
+										className="underline"
 										type="button"
 									>
 										Registrate

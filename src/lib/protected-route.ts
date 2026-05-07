@@ -5,7 +5,7 @@ export async function protectedRoute() {
 	const session = await getSession()
 
 	if (!session) {
-		throw redirect({ to: "/" })
+		throw redirect({ to: "/login" })
 	}
 
 	return session

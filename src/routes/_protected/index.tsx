@@ -42,11 +42,16 @@ function Home() {
 					</SelectContent>
 				</Select>
 			</div>
-			<span className="text-pretty w-5/6 text-base tracking-wider italic text-foreground/60 mt-20 h-[40svh]">
-				Elige entre un monton de nuestros protocolos y genera tu informe en
+			<span className="text-pretty w-5/6 text-sm tracking-wider italic text-foreground/60 mt-20 h-[40svh]">
+				... Elige entre un monton de nuestros protocolos y genera tu informe en
 				minutos. Te permitira tomar datos en obra para generar tus informes de
-				calculo y planos. Listos para entregar y guardar en la nube.
+				calculo y planos. Listos para entregar y guardar en la nube...
 			</span>
+
+			<span className="text-pretty w-5/6 text-base tracking-wider italic text-foreground/60 mt-20 h-[40svh]">
+			... (Lugar para explayarse y contar en que consiste la aplicacion y sus protocolos)
+			</span>
+
 			<Plan />
 		</article>
 	)
