@@ -57,7 +57,7 @@ function HayEmpresas({ empresas }: { empresas: EmpresaType[] }) {
 					</AccordionItem>
 				))}
 			</Accordion>
-			<div className="w-5/6 mx-auto flex justify-end">
+			<div className="w-5/6 mx-auto flex justify-end mb-80">
 				<CreateEmpresa />
 			</div>
 		</div>
@@ -159,9 +159,6 @@ function Empresa({ empresa }: { empresa: EmpresaType }) {
 						<img src="/telefonica.png" alt="luxometro" className="size-20" />
 					</div>
 				</div>
-			</div>
-			<div className="hidden sm:block">
-				{/* <EditEmpresa empresa={empresa} /> */}
 			</div>
 		</div>
 	)

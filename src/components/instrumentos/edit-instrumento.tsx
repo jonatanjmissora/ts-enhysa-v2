@@ -6,8 +6,16 @@ import {
 	FieldLabel,
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
-import { Asterisk, Loader } from "lucide-react"
+import { Asterisk, Loader, Pencil } from "lucide-react"
 import { useForm } from "@tanstack/react-form"
+import { checkInstrumentoDiference } from "@/lib/utils"
+import {
+	Popover,
+	PopoverContent,
+	PopoverTrigger,
+} from "@/components/ui/popover"
+import { format, parse } from "date-fns"
+import { Calendar } from "@/components/ui/calendar"
 import {
 	AlertDialog,
 	AlertDialogTrigger,
@@ -15,20 +23,18 @@ import {
 	AlertDialogTitle,
 	AlertDialogDescription,
 } from "@/components/ui/alert-dialog"
-import { Pencil } from "lucide-react"
-import type { EmpresaType } from "../../../db/empresas/schema"
-import { useUpdateEmpresa } from "../../../queries/empresas/use-update-empresa"
-import { empresaFormValidator } from "../../../db/empresas/empresa-validator"
-import { checkEmpresaDiference } from "#/lib/utils"
+import Title from "../title"
+import type { InstrumentoType } from "../../../db/instrumentos/schema"
+import { useUpdateInstrumento } from "../../../queries/instrumentos/use-update-instrumento"
+import { instrumentoFormValidator } from "../../../db/instrumentos/instrumento-validator"
 import { InputFiles } from "../input-files"
 import { Button } from "../ui/button"
-import Title from "../title"
 
-export function EditEmpresa({
-	empresa,
+export function EditInstrumento({
+	instrumento,
 	setIsMenuOpen,
 }: {
-	empresa: EmpresaType
+	instrumento: InstrumentoType
 	setIsMenuOpen?: (open: boolean) => void
 }) {
 	const [open, setOpen] = useState(false)
@@ -42,11 +48,11 @@ export function EditEmpresa({
 			</AlertDialogTrigger>
 			<AlertDialogContent className="bg-background sm:px-20 py-15 sm:py-6 w-full sm:w-1/2 h-screen sm:h-[95dvh] overflow-auto border-none rounded-none max-w-screen">
 				<AlertDialogTitle>
-					<Title text="Editar Empresa" />
+					<Title text="Editar Instrumento" />
 				</AlertDialogTitle>
 				<AlertDialogDescription className="text-center">
-					<EditEmpresaForm
-						empresa={empresa}
+					<EditInstrumentoForm
+						instrumento={instrumento}
 						setOpen={setOpen}
 						setIsMenuOpen={setIsMenuOpen}
 					/>
@@ -56,54 +62,64 @@ export function EditEmpresa({
 	)
 }
 
-export function EditEmpresaForm({
-	empresa,
+export function EditInstrumentoForm({
+	instrumento,
 	setOpen,
 	setIsMenuOpen,
 }: {
-	empresa: EmpresaType
+	instrumento: InstrumentoType
 	setOpen: (open: boolean) => void
 	setIsMenuOpen?: (open: boolean) => void
 }) {
-	const [logoFiles, setLogoFiles] = useState<File[]>([])
+	const [openPopover, setOpenPopover] = useState(false)
+	const [calibrationDate, setCalibrationDate] = useState<Date | undefined>(
+		instrumento.fechaCalibracion
+			? parse(instrumento.fechaCalibracion, "dd-MM-yyyy", new Date())
+			: undefined
+	)
+	const [instrumentoFiles, setInstrumentoFiles] = useState<File[]>([])
 	const {
-		mutateAsync: updateEmpresaMutation,
+		mutateAsync: updateInstrumentoMutation,
 		isPending,
 		error,
-	} = useUpdateEmpresa()
+	} = useUpdateInstrumento()
 
 	const form = useForm({
 		defaultValues: {
-			cuit: empresa.cuit || "",
-			razonSocial: empresa.razonSocial || "",
-			direccion: empresa.direccion || "",
-			localidad: empresa.localidad || "",
-			provincia: empresa.provincia || "",
-			codigoPostal: empresa.codigoPostal || "",
-			horarios: empresa.horarios || "",
-			logo: empresa.logo || "",
+			nombre: instrumento.nombre || "",
+			marca: instrumento.marca || "",
+			modelo: instrumento.modelo || "",
+			serie: instrumento.serie || "",
+			fechaCalibracion: instrumento.fechaCalibracion || "",
+			imagenes: instrumento.imagenes || [],
 		},
 		validators: {
-			onSubmit: empresaFormValidator,
+			onSubmit: instrumentoFormValidator,
 		},
 		onSubmit: async ({ value }) => {
-			if (checkEmpresaDiference(value, empresa)) {
+			const updateInstrumento = {
+				...value,
+				id: instrumento.id,
+				userId: instrumento.userId,
+				fechaCalibracion: calibrationDate
+					? format(calibrationDate, "dd-MM-yyyy")
+					: "",
+			}
+
+			if (checkInstrumentoDiference(updateInstrumento, instrumento)) {
 				setOpen(false)
 				return
 			}
 
-			const updateEmpresa = {
-				...value,
-				id: empresa.id,
-				userId: empresa.userId,
-			}
-			const result = await updateEmpresaMutation({ data: updateEmpresa })
+			const result = await updateInstrumentoMutation({
+				data: updateInstrumento,
+			})
 			if (!result) {
-				console.error("Error al actualizar la empresa", error)
+				console.error("Error al actualizar el instrumento", error)
 			}
 			if (setIsMenuOpen) setIsMenuOpen(false)
 			setOpen(false)
-			console.log("Empresa actualizada exitosamente")
+			console.log("Instrumento actualizado exitosamente")
 		},
 	})
 
@@ -117,16 +133,16 @@ export function EditEmpresaForm({
 			}}
 		>
 			<FieldGroup className="gap-5">
-				<div className="grid grid-cols-1 sm:grid-cols-2 gap-7 sm:gap-y-4 sm:gap-x-10 justify-center items-center w-5/6 sm:w-full mx-auto">
+				<div className="grid grid-cols-1 sm:grid-cols-2 gap-7 sm:gap-y-4 sm:gap-x-10 justify-center items-start w-5/6 sm:w-full mx-auto">
 					<form.Field
-						name="razonSocial"
+						name="nombre"
 						children={field => {
 							const isInvalid =
 								field.state.meta.isTouched && !field.state.meta.isValid
 							return (
 								<Field data-invalid={isInvalid} className="relative gap-1">
 									<FieldLabel htmlFor={field.name}>
-										Razón Social
+										Nombre
 										<Asterisk className="text-destructive size-3" />
 									</FieldLabel>
 									<Input
@@ -136,7 +152,7 @@ export function EditEmpresaForm({
 										onBlur={field.handleBlur}
 										onChange={e => field.handleChange(e.target.value)}
 										aria-invalid={isInvalid}
-										placeholder="Ej. Teléfonica"
+										placeholder="Ej. Luxómetro"
 										className="bg-background sm:bg-accent text-right"
 									/>
 									{isInvalid && (
@@ -151,24 +167,24 @@ export function EditEmpresaForm({
 					/>
 
 					<form.Field
-						name="cuit"
+						name="marca"
 						children={field => {
 							const isInvalid =
 								field.state.meta.isTouched && !field.state.meta.isValid
 							return (
 								<Field data-invalid={isInvalid} className="relative gap-1">
 									<FieldLabel htmlFor={field.name}>
-										CUIT
+										Marca
 										<Asterisk className="text-destructive size-3" />
 									</FieldLabel>
 									<Input
 										id={field.name}
 										name={field.name}
-										value={field.state.value}
+										value={field.state.value.toUpperCase()}
 										onBlur={field.handleBlur}
 										onChange={e => field.handleChange(e.target.value)}
 										aria-invalid={isInvalid}
-										placeholder="Ej. 00-00000000-0"
+										placeholder="Ej. DataLogger"
 										className="bg-background sm:bg-accent text-right"
 									/>
 									{isInvalid && (
@@ -183,13 +199,13 @@ export function EditEmpresaForm({
 					/>
 
 					<form.Field
-						name="direccion"
+						name="modelo"
 						children={field => {
 							const isInvalid =
 								field.state.meta.isTouched && !field.state.meta.isValid
 							return (
 								<Field data-invalid={isInvalid} className="relative gap-1">
-									<FieldLabel htmlFor={field.name}>Dirección</FieldLabel>
+									<FieldLabel htmlFor={field.name}>Modelo</FieldLabel>
 									<Input
 										id={field.name}
 										name={field.name}
@@ -197,7 +213,7 @@ export function EditEmpresaForm({
 										onBlur={field.handleBlur}
 										onChange={e => field.handleChange(e.target.value)}
 										aria-invalid={isInvalid}
-										placeholder="Ej. Villa Verde"
+										placeholder="Ej. DT-8809A"
 										className="bg-background sm:bg-accent text-right"
 									/>
 									{isInvalid && (
@@ -210,112 +226,26 @@ export function EditEmpresaForm({
 							)
 						}}
 					/>
-
 					<form.Field
-						name="localidad"
-						children={field => {
-							const isInvalid =
-								field.state.meta.isTouched && !field.state.meta.isValid
-							return (
-								<Field data-invalid={isInvalid} className="relative gap-1">
-									<FieldLabel htmlFor={field.name}>Localidad</FieldLabel>
-									<Input
-										id={field.name}
-										name={field.name}
-										value={field.state.value.toUpperCase()}
-										onBlur={field.handleBlur}
-										onChange={e => field.handleChange(e.target.value)}
-										aria-invalid={isInvalid}
-										placeholder="Ej. Andorra"
-										className="bg-background sm:bg-accent text-right"
-									/>
-									{isInvalid && (
-										<FieldError
-											errors={field.state.meta.errors}
-											className="text-xs 2xl:text-sm absolute -bottom-4 left-0"
-										/>
-									)}
-								</Field>
-							)
-						}}
-					/>
-
-					<form.Field
-						name="codigoPostal"
-						children={field => {
-							const isInvalid =
-								field.state.meta.isTouched && !field.state.meta.isValid
-							return (
-								<Field data-invalid={isInvalid} className="relative gap-1">
-									<FieldLabel htmlFor={field.name}>Código Postal</FieldLabel>
-									<Input
-										id={field.name}
-										name={field.name}
-										value={field.state.value}
-										onBlur={field.handleBlur}
-										onChange={e => field.handleChange(e.target.value)}
-										aria-invalid={isInvalid}
-										placeholder="Ej. 5000"
-										className="bg-background sm:bg-accent text-right"
-									/>
-									{isInvalid && (
-										<FieldError
-											errors={field.state.meta.errors}
-											className="text-xs 2xl:text-sm absolute -bottom-4 left-0"
-										/>
-									)}
-								</Field>
-							)
-						}}
-					/>
-
-					<form.Field
-						name="provincia"
-						children={field => {
-							const isInvalid =
-								field.state.meta.isTouched && !field.state.meta.isValid
-							return (
-								<Field data-invalid={isInvalid} className="relative gap-1">
-									<FieldLabel htmlFor={field.name}>Provincia</FieldLabel>
-									<Input
-										id={field.name}
-										name={field.name}
-										value={field.state.value.toUpperCase()}
-										onBlur={field.handleBlur}
-										onChange={e => field.handleChange(e.target.value)}
-										aria-invalid={isInvalid}
-										placeholder="Ej. Pr. Andorra"
-										className="bg-background sm:bg-accent text-right"
-									/>
-									{isInvalid && (
-										<FieldError
-											errors={field.state.meta.errors}
-											className="text-xs 2xl:text-sm absolute -bottom-4 left-0"
-										/>
-									)}
-								</Field>
-							)
-						}}
-					/>
-
-					<form.Field
-						name="horarios"
+						name="serie"
 						children={field => {
 							const isInvalid =
 								field.state.meta.isTouched && !field.state.meta.isValid
 							return (
 								<Field data-invalid={isInvalid} className="relative gap-1">
 									<FieldLabel htmlFor={field.name}>
-										Horarios de trabajo
+										Nro de serie
+										<Asterisk className="text-destructive size-3" />
 									</FieldLabel>
 									<Input
 										id={field.name}
 										name={field.name}
-										value={field.state.value}
+										value={field.state.value.toUpperCase()}
 										onBlur={field.handleBlur}
 										onChange={e => field.handleChange(e.target.value)}
 										aria-invalid={isInvalid}
-										placeholder="Ej. Lun a Vie de 08:00 a 18:00"
+										placeholder="Ej. 32451"
+										className="bg-background sm:bg-accent text-right"
 									/>
 									{isInvalid && (
 										<FieldError
@@ -329,22 +259,67 @@ export function EditEmpresaForm({
 					/>
 
 					<form.Field
-						name="logo"
+						name="fechaCalibracion"
 						children={field => {
 							const isInvalid =
 								field.state.meta.isTouched && !field.state.meta.isValid
 							return (
 								<Field data-invalid={isInvalid} className="relative gap-1">
-									<FieldLabel htmlFor={field.name}>Logo Empresarial</FieldLabel>
-									<div className="w-full bg-foreground/5 h-9 sm:py-[5px] 2xl:py-[4px] rounded-lg border border-foreground/7 flex items-center justify-center">
-										<InputFiles
-											files={logoFiles}
-											setFiles={setLogoFiles}
-											text="Imágen Logo digital"
-											maxFiles={1}
-											editMode={true}
+									<FieldLabel htmlFor="date-picker-simple">
+										Fecha de calibración
+									</FieldLabel>
+									<Popover open={openPopover} onOpenChange={setOpenPopover}>
+										<PopoverTrigger asChild>
+											<button
+												id="date-picker-simple"
+												className="card py-2 bg-background justify-center textXS"
+											>
+												{calibrationDate ? (
+													format(calibrationDate, "dd-MM-yyyy")
+												) : (
+													<span className="text-foreground/30">
+														Ej. 12-10-2025
+													</span>
+												)}
+											</button>
+										</PopoverTrigger>
+										<PopoverContent className="w-auto p-0" align="start">
+											<Calendar
+												mode="single"
+												selected={calibrationDate}
+												onSelect={date => {
+													setCalibrationDate(date)
+													setOpenPopover(false)
+												}}
+												defaultMonth={calibrationDate}
+											/>
+										</PopoverContent>
+									</Popover>
+									{isInvalid && (
+										<FieldError
+											errors={field.state.meta.errors}
+											className="text-xs 2xl:text-sm absolute -bottom-4 left-0"
 										/>
-									</div>
+									)}
+								</Field>
+							)
+						}}
+					/>
+					<form.Field
+						name="imagenes"
+						children={field => {
+							const isInvalid =
+								field.state.meta.isTouched && !field.state.meta.isValid
+							return (
+								<Field data-invalid={isInvalid} className="relative gap-1">
+									<FieldLabel htmlFor={field.name}>Imagenes</FieldLabel>
+									<InputFiles
+										files={instrumentoFiles}
+										setFiles={setInstrumentoFiles}
+										text="Imágen del instrumento"
+										maxFiles={3}
+										editMode={true}
+									/>
 									{isInvalid && (
 										<FieldError
 											errors={field.state.meta.errors}
@@ -357,7 +332,7 @@ export function EditEmpresaForm({
 					/>
 				</div>
 
-				<div className="flex justify-end items-center gap-2 w-full text-destructive">
+				<div className="flex justify-end items-center gap-2 w-11/12 mx auto text-destructive">
 					<Asterisk className="text-destructive size-3" />
 					<span className="text-xs 2xl:text-sm italic tracking-wide">
 						campo obligatorio

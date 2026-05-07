@@ -9,6 +9,19 @@ import { Label } from "../ui/label"
 import { Input } from "../ui/input"
 import { useSuspenseQuery } from "@tanstack/react-query"
 import { instrumentosQueryOptions } from "../../../queries/instrumentos/instrumentos-query"
+import { CreateInstrumento } from "./create-instrumento"
+import { useState } from "react"
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuGroup,
+	DropdownMenuSeparator,
+	DropdownMenuTrigger,
+} from "../ui/dropdown-menu"
+import { Button } from "../ui/button"
+import { Ellipsis } from "lucide-react"
+import DeleteInstrumento from "./delete-instrumento"
+import { EditInstrumento } from "./edit-instrumento"
 
 export default function Instrumentos() {
 	const { data: instrumentos } = useSuspenseQuery(instrumentosQueryOptions)
@@ -39,7 +52,7 @@ function HayInstrumentos({
 						<AccordionTrigger className="flex px-5 w-11/12 sm:w-full flex-wrap items-center">
 							<div className="flex items-center gap-2 text-sm tracking-wider w-60 sm:w-max truncate">
 								{instrumento.nombre.toUpperCase()} -{" "}
-								{instrumento.modelo.toUpperCase()}
+								{instrumento.marca.toUpperCase()}
 							</div>
 						</AccordionTrigger>
 						<AccordionContent>
@@ -48,8 +61,8 @@ function HayInstrumentos({
 					</AccordionItem>
 				))}
 			</Accordion>
-			<div className="w-5/6 mx-auto flex justify-end">
-				{/* <CreateInstrumento /> */}
+			<div className="w-5/6 mx-auto flex justify-end mb-80">
+				<CreateInstrumento />
 			</div>
 		</div>
 	)
@@ -57,13 +70,10 @@ function HayInstrumentos({
 
 function Instrumento({ instrumento }: { instrumento: InstrumentoType }) {
 	return (
-		<div className="bg-accent py-10 sm:p-10 flex items-center justify-center flex-col relative">
-			{/* <div className="hidden sm:block">
-				<DeleteInstrumento instrumento={instrumento} />
-			</div>
-			<div className="sm:hidden block absolute top-6 right-6">
+		<div className="bg-accent py-20 flex items-center justify-center flex-col relative">
+			<div className="sm:hidden block absolute top-10 right-6">
 				<InstrumentoDropdownMenu instrumento={instrumento} />
-			</div> */}
+			</div>
 			<div className="grid-cols-1 grid sm:grid-cols-2 gap-8 w-5/6 my-10">
 				<div className="flex flex-col gap-1">
 					<Label className="tracking-wider" htmlFor="marca">
@@ -140,7 +150,37 @@ function InstrumentosVacios() {
 			<span className="text-sm font-medium text-gray-500 italic text-center text-pretty">
 				¡Ups! Parece que no tienes instrumentos registrados
 			</span>
-			{/* <CreateInstrumento /> */}
+			<CreateInstrumento />
 		</div>
+	)
+}
+
+function InstrumentoDropdownMenu({
+	instrumento,
+}: {
+	instrumento: InstrumentoType
+}) {
+	const [isMenuOpen, setIsMenuOpen] = useState(false)
+	return (
+		<DropdownMenu open={isMenuOpen} onOpenChange={setIsMenuOpen}>
+			<DropdownMenuTrigger asChild>
+				<Button variant="ghost" className="cursor-pointer">
+					<Ellipsis className="size-7 text-foreground/50" />
+				</Button>
+			</DropdownMenuTrigger>
+			<DropdownMenuContent className="p-6" align="end">
+				<DropdownMenuGroup className="flex flex-col bg-accent ring-[1px] ring-foreground/20 rounded-lg p-2">
+					<EditInstrumento
+						instrumento={instrumento}
+						setIsMenuOpen={setIsMenuOpen}
+					/>
+					<DropdownMenuSeparator className="bg-foreground/20 w-5/6 mx-auto" />
+					<DeleteInstrumento
+						instrumento={instrumento}
+						setIsMenuOpen={setIsMenuOpen}
+					/>
+				</DropdownMenuGroup>
+			</DropdownMenuContent>
+		</DropdownMenu>
 	)
 }
