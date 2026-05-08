@@ -1,4 +1,4 @@
-import { pgTable, text } from "drizzle-orm/pg-core"
+import { pgTable, text, timestamp } from "drizzle-orm/pg-core"
 import { user } from "../users/schema"
 
 export const instrumentos = pgTable("instrumentos", {
@@ -12,7 +12,9 @@ export const instrumentos = pgTable("instrumentos", {
 
 	serie: text("serie").notNull(),
 
-	fechaCalibracion: text("fechaCalibracion").notNull(),
+	fechaCalibracion: timestamp("fecha_calibracion").notNull(),
+
+	imagenCalibracion: text("imagen_calibracion").notNull(),
 
 	imagenes: text("imagenes").array().notNull(),
 

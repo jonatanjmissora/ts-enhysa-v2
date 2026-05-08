@@ -2,10 +2,11 @@ import { z } from "zod"
 
 export const instrumentoFormValidator = z.object({
 	nombre: z.string().min(3, "Mínimo 3 caracteres"),
-	marca: z.string(),
-	modelo: z.string(),
+	marca: z.string().min(3, "Mínimo 3 caracteres"),
+	modelo: z.string().min(3, "Mínimo 3 caracteres"),
 	serie: z.string().min(3, "Mínimo 3 caracteres"),
-	fechaCalibracion: z.string(),
+	fechaCalibracion: z.date(),
+	imagenCalibracion: z.string(),
 	imagenes: z.array(z.string()),
 })
 
@@ -23,3 +24,13 @@ export const updateInstrumentoValidator = instrumentoFormValidator.extend({
 })
 
 export type UpdateInstrumentoType = z.infer<typeof updateInstrumentoValidator>
+
+export const defaultInstrumento: InstrumentoFormType = {
+	nombre: "",
+	marca: "",
+	modelo: "",
+	serie: "",
+	fechaCalibracion: new Date(),
+	imagenCalibracion: "",
+	imagenes: [],
+}

@@ -18,7 +18,7 @@ import {
 import { Pencil } from "lucide-react"
 import type { EmpresaType } from "../../../db/empresas/schema"
 import { useUpdateEmpresa } from "../../../queries/empresas/use-update-empresa"
-import { empresaFormValidator } from "../../../db/empresas/empresa-validator"
+import { updateEmpresaValidator } from "../../../db/empresas/empresa-validator"
 import { checkEmpresaDiference } from "#/lib/utils"
 import { InputFiles } from "../input-files"
 import { Button } from "../ui/button"
@@ -44,12 +44,14 @@ export function EditEmpresa({
 				<AlertDialogTitle>
 					<Title text="Editar Empresa" />
 				</AlertDialogTitle>
-				<AlertDialogDescription className="text-center">
-					<EditEmpresaForm
-						empresa={empresa}
-						setOpen={setOpen}
-						setIsMenuOpen={setIsMenuOpen}
-					/>
+				<AlertDialogDescription asChild>
+					<div className="text-center">
+						<EditEmpresaForm
+							empresa={empresa}
+							setOpen={setOpen}
+							setIsMenuOpen={setIsMenuOpen}
+						/>
+					</div>
 				</AlertDialogDescription>
 			</AlertDialogContent>
 		</AlertDialog>
@@ -73,18 +75,9 @@ export function EditEmpresaForm({
 	} = useUpdateEmpresa()
 
 	const form = useForm({
-		defaultValues: {
-			cuit: empresa.cuit || "",
-			razonSocial: empresa.razonSocial || "",
-			direccion: empresa.direccion || "",
-			localidad: empresa.localidad || "",
-			provincia: empresa.provincia || "",
-			codigoPostal: empresa.codigoPostal || "",
-			horarios: empresa.horarios || "",
-			logo: empresa.logo || "",
-		},
+		defaultValues: { ...empresa },
 		validators: {
-			onSubmit: empresaFormValidator,
+			onSubmit: updateEmpresaValidator,
 		},
 		onSubmit: async ({ value }) => {
 			if (checkEmpresaDiference(value, empresa)) {

@@ -1,6 +1,6 @@
-export const CLIMA = ["soleado", "nublado", "templado", "lluvioso"] as const
+export const ESTADO = ["soleado", "nublado", "templado", "lluvioso"] as const
 
-export type ClimaType = (typeof CLIMA)[number]
+export type EstadoType = (typeof ESTADO)[number]
 
 export const HUMEDAD = ["60", "70", "80", "90"] as const
 
@@ -9,6 +9,8 @@ export type HumedadType = (typeof HUMEDAD)[number]
 export const TEMPERATURA = ["10", "20", "30", "40"] as const
 
 export type TemperaturaType = (typeof TEMPERATURA)[number]
+
+export type ClimaType = [EstadoType, HumedadType, TemperaturaType]
 
 export const MUESTREO = [
 	"A",

@@ -20,6 +20,8 @@ import { Route as ProtectedPerfilTecnicosIndexRouteImport } from './routes/_prot
 import { Route as ProtectedPerfilInstrumentosIndexRouteImport } from './routes/_protected/perfil/instrumentos/index'
 import { Route as ProtectedPerfilEmpresasIndexRouteImport } from './routes/_protected/perfil/empresas/index'
 import { Route as ProtectedIluminacionNuevoInformeIndexRouteImport } from './routes/_protected/iluminacion/nuevo-informe/index'
+import { Route as ProtectedIluminacionNuevoInformeAreasIndexRouteImport } from './routes/_protected/iluminacion/nuevo-informe/areas/index'
+import { Route as ProtectedIluminacionNuevoInformeEnCursoTsxIndexRouteImport } from './routes/_protected/iluminacion/nuevo-informe/en-curso.tsx/index'
 
 const ProtectedRouteRoute = ProtectedRouteRouteImport.update({
   id: '/_protected',
@@ -80,6 +82,18 @@ const ProtectedIluminacionNuevoInformeIndexRoute =
     path: '/iluminacion/nuevo-informe/',
     getParentRoute: () => ProtectedRouteRoute,
   } as any)
+const ProtectedIluminacionNuevoInformeAreasIndexRoute =
+  ProtectedIluminacionNuevoInformeAreasIndexRouteImport.update({
+    id: '/iluminacion/nuevo-informe/areas/',
+    path: '/iluminacion/nuevo-informe/areas/',
+    getParentRoute: () => ProtectedRouteRoute,
+  } as any)
+const ProtectedIluminacionNuevoInformeEnCursoTsxIndexRoute =
+  ProtectedIluminacionNuevoInformeEnCursoTsxIndexRouteImport.update({
+    id: '/iluminacion/nuevo-informe/en-curso/tsx/',
+    path: '/iluminacion/nuevo-informe/en-curso/tsx/',
+    getParentRoute: () => ProtectedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof ProtectedIndexRoute
@@ -92,6 +106,8 @@ export interface FileRoutesByFullPath {
   '/perfil/empresas/': typeof ProtectedPerfilEmpresasIndexRoute
   '/perfil/instrumentos/': typeof ProtectedPerfilInstrumentosIndexRoute
   '/perfil/tecnicos/': typeof ProtectedPerfilTecnicosIndexRoute
+  '/iluminacion/nuevo-informe/areas/': typeof ProtectedIluminacionNuevoInformeAreasIndexRoute
+  '/iluminacion/nuevo-informe/en-curso/tsx/': typeof ProtectedIluminacionNuevoInformeEnCursoTsxIndexRoute
 }
 export interface FileRoutesByTo {
   '/perfil': typeof ProtectedPerfilRouteRouteWithChildren
@@ -104,6 +120,8 @@ export interface FileRoutesByTo {
   '/perfil/empresas': typeof ProtectedPerfilEmpresasIndexRoute
   '/perfil/instrumentos': typeof ProtectedPerfilInstrumentosIndexRoute
   '/perfil/tecnicos': typeof ProtectedPerfilTecnicosIndexRoute
+  '/iluminacion/nuevo-informe/areas': typeof ProtectedIluminacionNuevoInformeAreasIndexRoute
+  '/iluminacion/nuevo-informe/en-curso/tsx': typeof ProtectedIluminacionNuevoInformeEnCursoTsxIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -118,6 +136,8 @@ export interface FileRoutesById {
   '/_protected/perfil/empresas/': typeof ProtectedPerfilEmpresasIndexRoute
   '/_protected/perfil/instrumentos/': typeof ProtectedPerfilInstrumentosIndexRoute
   '/_protected/perfil/tecnicos/': typeof ProtectedPerfilTecnicosIndexRoute
+  '/_protected/iluminacion/nuevo-informe/areas/': typeof ProtectedIluminacionNuevoInformeAreasIndexRoute
+  '/_protected/iluminacion/nuevo-informe/en-curso/tsx/': typeof ProtectedIluminacionNuevoInformeEnCursoTsxIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -132,6 +152,8 @@ export interface FileRouteTypes {
     | '/perfil/empresas/'
     | '/perfil/instrumentos/'
     | '/perfil/tecnicos/'
+    | '/iluminacion/nuevo-informe/areas/'
+    | '/iluminacion/nuevo-informe/en-curso/tsx/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/perfil'
@@ -144,6 +166,8 @@ export interface FileRouteTypes {
     | '/perfil/empresas'
     | '/perfil/instrumentos'
     | '/perfil/tecnicos'
+    | '/iluminacion/nuevo-informe/areas'
+    | '/iluminacion/nuevo-informe/en-curso/tsx'
   id:
     | '__root__'
     | '/_protected'
@@ -157,6 +181,8 @@ export interface FileRouteTypes {
     | '/_protected/perfil/empresas/'
     | '/_protected/perfil/instrumentos/'
     | '/_protected/perfil/tecnicos/'
+    | '/_protected/iluminacion/nuevo-informe/areas/'
+    | '/_protected/iluminacion/nuevo-informe/en-curso/tsx/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -244,6 +270,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProtectedIluminacionNuevoInformeIndexRouteImport
       parentRoute: typeof ProtectedRouteRoute
     }
+    '/_protected/iluminacion/nuevo-informe/areas/': {
+      id: '/_protected/iluminacion/nuevo-informe/areas/'
+      path: '/iluminacion/nuevo-informe/areas'
+      fullPath: '/iluminacion/nuevo-informe/areas/'
+      preLoaderRoute: typeof ProtectedIluminacionNuevoInformeAreasIndexRouteImport
+      parentRoute: typeof ProtectedRouteRoute
+    }
+    '/_protected/iluminacion/nuevo-informe/en-curso/tsx/': {
+      id: '/_protected/iluminacion/nuevo-informe/en-curso/tsx/'
+      path: '/iluminacion/nuevo-informe/en-curso/tsx'
+      fullPath: '/iluminacion/nuevo-informe/en-curso/tsx/'
+      preLoaderRoute: typeof ProtectedIluminacionNuevoInformeEnCursoTsxIndexRouteImport
+      parentRoute: typeof ProtectedRouteRoute
+    }
   }
 }
 
@@ -268,6 +308,8 @@ interface ProtectedRouteRouteChildren {
   ProtectedIndexRoute: typeof ProtectedIndexRoute
   ProtectedIluminacionIndexRoute: typeof ProtectedIluminacionIndexRoute
   ProtectedIluminacionNuevoInformeIndexRoute: typeof ProtectedIluminacionNuevoInformeIndexRoute
+  ProtectedIluminacionNuevoInformeAreasIndexRoute: typeof ProtectedIluminacionNuevoInformeAreasIndexRoute
+  ProtectedIluminacionNuevoInformeEnCursoTsxIndexRoute: typeof ProtectedIluminacionNuevoInformeEnCursoTsxIndexRoute
 }
 
 const ProtectedRouteRouteChildren: ProtectedRouteRouteChildren = {
@@ -277,6 +319,10 @@ const ProtectedRouteRouteChildren: ProtectedRouteRouteChildren = {
   ProtectedIluminacionIndexRoute: ProtectedIluminacionIndexRoute,
   ProtectedIluminacionNuevoInformeIndexRoute:
     ProtectedIluminacionNuevoInformeIndexRoute,
+  ProtectedIluminacionNuevoInformeAreasIndexRoute:
+    ProtectedIluminacionNuevoInformeAreasIndexRoute,
+  ProtectedIluminacionNuevoInformeEnCursoTsxIndexRoute:
+    ProtectedIluminacionNuevoInformeEnCursoTsxIndexRoute,
 }
 
 const ProtectedRouteRouteWithChildren = ProtectedRouteRoute._addFileChildren(

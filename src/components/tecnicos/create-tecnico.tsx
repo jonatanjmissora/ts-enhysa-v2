@@ -18,7 +18,10 @@ import {
 	AlertDialogDescription,
 } from "@/components/ui/alert-dialog"
 import { useCreateTecnico } from "../../../queries/tecnico/use-create-tecnico"
-import { tecnicoFormValidator } from "../../../db/tecnicos/tecnico-validator"
+import {
+	defaultTecnico,
+	tecnicoFormValidator,
+} from "../../../db/tecnicos/tecnico-validator"
 import { InputFiles } from "../input-files"
 import { Button } from "../ui/button"
 import Title from "../title"
@@ -40,8 +43,10 @@ export default function CreateTecnico() {
 				<AlertDialogTitle>
 					<Title text="Tecnico Datos" className="mt-0" />
 				</AlertDialogTitle>
-				<AlertDialogDescription className="text-center">
-					<CreateTecnicoForm setOpen={setOpen} />
+				<AlertDialogDescription asChild>
+					<div className="text-center">
+						<CreateTecnicoForm setOpen={setOpen} />
+					</div>
 				</AlertDialogDescription>
 			</AlertDialogContent>
 		</AlertDialog>
@@ -64,16 +69,7 @@ export function CreateTecnicoForm({
 	} = useCreateTecnico()
 
 	const form = useForm({
-		defaultValues: {
-			nombre: "",
-			telefono: "",
-			localidad: "",
-			cargo: "",
-			matricula: "",
-			matriculaImg: "",
-			firmaImg: "",
-			membrete: "",
-		},
+		defaultValues: defaultTecnico,
 		validators: {
 			onSubmit: tecnicoFormValidator,
 		},
@@ -276,80 +272,49 @@ export function CreateTecnicoForm({
 							/>
 						</div>
 					</div>
+				</div>
 
-					<div className="flex-1 flex flex-col gap-1">
-						<Label>Pie de Página</Label>
-						<div className="flex flex-col gap-[0.5px]">
-							<form.Field
-								name="nombre"
-								children={field => (
-									<Input
-										value={field.state.value?.toUpperCase() || ""}
-										placeholder="Nombre Completo..."
-										readOnly
-										className="bg-background sm:bg-accent text-center"
-									/>
-								)}
-							/>
-
-							<form.Field
-								name="matricula"
-								children={field => (
-									<Input
-										value={
-											field.state.value?.toUpperCase()
-												? `MAT ${field.state.value?.toUpperCase()}`
-												: ""
-										}
-										placeholder="Matricula..."
-										readOnly
-										className="bg-background sm:bg-accent text-center"
-									/>
-								)}
-							/>
-						</div>
+				<div className="flex flex-col gap-10 w-5/6 mx-auto">
+					<div className="flex justify-end items-center gap-2 w-full text-destructive">
+						<Asterisk className="text-destructive size-3" />
+						<span className="text-xs 2xl:text-sm italic tracking-wide">
+							campo obligatorio
+						</span>
 					</div>
-				</div>
 
-				<div className="flex justify-end items-center gap-2 w-full text-destructive">
-					<Asterisk className="text-destructive size-3" />
-					<span className="text-xs 2xl:text-sm italic tracking-wide">
-						campo obligatorio
-					</span>
-				</div>
+					<div className="flex items-center gap-2">
+						<CircleAlert className="size-3 sm:size-4 text-amber-500/50" />
+						<span className="text-xs sm:text-sm italic text-foreground/25">
+							Completa tus datos para los reportes.
+						</span>
+					</div>
 
-				<div className="flex items-center gap-2">
-					<CircleAlert className="size-3 sm:size-4 text-amber-500/50" />
-					<span className="text-xs sm:text-sm italic text-foreground/25">
-						Completa tus datos para los reportes.
-					</span>
+					<Field className="flex flex-col justify-center gap-4 items-center w-full mt-10">
+						<Button
+							variant="outline"
+							onClick={() => setOpen(false)}
+							type="button"
+							disabled={isPending}
+							className="flex-1 py-4"
+						>
+							Cancelar
+						</Button>
+						<Button
+							variant="secondary"
+							type="submit"
+							disabled={isPending}
+							className="flex-1 ring-[1px] ring-foreground/25 py-4"
+						>
+							{isPending ? (
+								<div className="flex gap-2 w-full justify-center items-center">
+									Guardando... <Loader className="animate-spin size-4"></Loader>
+								</div>
+							) : (
+								"Guardar"
+							)}
+						</Button>
+					</Field>
 				</div>
-
-				<Field className="flex flex-col justify-center gap-4 items-center w-full mt-10">
-					<Button
-						variant="outline"
-						onClick={() => setOpen(false)}
-						type="button"
-						disabled={isPending}
-						className="flex-1 py-4"
-					>
-						Cancelar
-					</Button>
-					<Button
-						variant="secondary"
-						type="submit"
-						disabled={isPending}
-						className="flex-1 ring-[1px] ring-foreground/25 py-4"
-					>
-						{isPending ? (
-							<div className="flex gap-2 w-full justify-center items-center">
-								Guardando... <Loader className="animate-spin size-4"></Loader>
-							</div>
-						) : (
-							"Guardar"
-						)}
-					</Button>
-				</Field>
 
 				{error && <p>{error.message}</p>}
 			</FieldGroup>

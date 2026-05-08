@@ -4,7 +4,9 @@ import Title from "#/components/title"
 import { useSuspenseQuery } from "@tanstack/react-query"
 import { createFileRoute } from "@tanstack/react-router"
 import { Suspense } from "react"
-import { reportesQueryOptions } from "../../../../../queries/reportes/iluminacion/reportes-query"
+import { reporteNuevoQueryOptions } from "../../../../../queries/reportes/iluminacion/reportes-query"
+import ReporteNuevoIluminacion from "#/components/reportes/iluminacion/reporte-nuevo"
+import ReporteEnCurso from "#/components/reportes/iluminacion/reporte-en-curso"
 
 export const Route = createFileRoute("/_protected/iluminacion/nuevo-informe/")({
 	component: RouteComponent,
@@ -12,8 +14,8 @@ export const Route = createFileRoute("/_protected/iluminacion/nuevo-informe/")({
 
 function RouteComponent() {
 	return (
-		<article className="w-full min-h-svh flex flex-col items-center gap-20 relative">
-			<BackChevron />
+		<article className="w-full min-h-svh flex flex-col items-center gap-10 relative mb-60">
+			<BackChevron to="/iluminacion" />
 			<Title text="Nuevo Informe" className="mt-15" />
 			<IluminacionData />
 		</article>
@@ -23,7 +25,12 @@ function RouteComponent() {
 function IluminacionData() {
 	return (
 		<Suspense
-			fallback={<Loading className="scale-50 justify-start  max-h-[50svh] " />}
+			fallback={
+				<Loading
+					text="verificando reporte en curso..."
+					className="scale-50 justify-start  max-h-[50svh] "
+				/>
+			}
 		>
 			<Data />
 		</Suspense>
@@ -31,25 +38,9 @@ function IluminacionData() {
 }
 
 function Data() {
-	const { data: reportes } = useSuspenseQuery(reportesQueryOptions)
+	const { data: reporteNuevo } = useSuspenseQuery(reporteNuevoQueryOptions)
 
-	if (!reportes || reportes.length === 0) return <ReporteIluminacionNuevo />
+	if (!reporteNuevo) return <ReporteNuevoIluminacion />
 
 	return <ReporteEnCurso />
-}
-
-function ReporteEnCurso() {
-	return (
-		<div className="w-full h-full flex flex-col items-center justify-center gap-20 relative">
-			<h1>Informe en Curso</h1>
-		</div>
-	)
-}
-
-function ReporteIluminacionNuevo() {
-	return (
-		<div className="w-full h-full flex flex-col items-center justify-center gap-20 relative">
-			<h1>Nuevo Informe</h1>
-		</div>
-	)
 }

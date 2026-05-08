@@ -25,3 +25,14 @@ export const updateEmpresaValidator = empresaFormValidator.extend({
 })
 
 export type UpdateEmpresaType = z.infer<typeof updateEmpresaValidator>
+
+export const defaultEmpresa = {
+	cuit: "",
+	razonSocial: "",
+	direccion: "",
+	localidad: "",
+	provincia: "",
+	codigoPostal: "",
+	horarios: "",
+	logo: "",
+}

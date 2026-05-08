@@ -101,23 +101,6 @@ function HayTecnico({ tecnico }: { tecnico: TecnicoType }) {
 					<Label>Firma Digital</Label>
 					<div className="bg-accent ring-[1px] ring-foreground/10 rounded-md w-full h-full min-h-9"></div>
 				</div>
-
-				<div className="flex-1 flex flex-col gap-1">
-					<Label>Pie de Página</Label>
-					<div className="flex flex-col gap-[0.5px]">
-						<Input
-							placeholder="Nombre Completo..."
-							readOnly
-							className="w-full"
-						/>
-
-						<Input
-							placeholder="Matricula..."
-							readOnly
-							className="bg-background sm:bg-accent text-center"
-						/>
-					</div>
-				</div>
 			</div>
 		</div>
 	)

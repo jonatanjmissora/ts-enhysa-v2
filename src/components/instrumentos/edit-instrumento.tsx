@@ -26,7 +26,7 @@ import {
 import Title from "../title"
 import type { InstrumentoType } from "../../../db/instrumentos/schema"
 import { useUpdateInstrumento } from "../../../queries/instrumentos/use-update-instrumento"
-import { instrumentoFormValidator } from "../../../db/instrumentos/instrumento-validator"
+import { updateInstrumentoValidator } from "../../../db/instrumentos/instrumento-validator"
 import { InputFiles } from "../input-files"
 import { Button } from "../ui/button"
 
@@ -50,12 +50,14 @@ export function EditInstrumento({
 				<AlertDialogTitle>
 					<Title text="Editar Instrumento" />
 				</AlertDialogTitle>
-				<AlertDialogDescription className="text-center">
-					<EditInstrumentoForm
-						instrumento={instrumento}
-						setOpen={setOpen}
-						setIsMenuOpen={setIsMenuOpen}
-					/>
+				<AlertDialogDescription asChild>
+					<div className="text-center">
+						<EditInstrumentoForm
+							instrumento={instrumento}
+							setOpen={setOpen}
+							setIsMenuOpen={setIsMenuOpen}
+						/>
+					</div>
 				</AlertDialogDescription>
 			</AlertDialogContent>
 		</AlertDialog>
@@ -74,10 +76,15 @@ export function EditInstrumentoForm({
 	const [openPopover, setOpenPopover] = useState(false)
 	const [calibrationDate, setCalibrationDate] = useState<Date | undefined>(
 		instrumento.fechaCalibracion
-			? parse(instrumento.fechaCalibracion, "dd-MM-yyyy", new Date())
+			? parse(
+					instrumento.fechaCalibracion.toLocaleDateString("es-AR"),
+					"dd-MM-yyyy",
+					new Date()
+				)
 			: undefined
 	)
 	const [instrumentoFiles, setInstrumentoFiles] = useState<File[]>([])
+	const [imagenCalibracion, setImagenCalibracion] = useState<File[]>([])
 	const {
 		mutateAsync: updateInstrumentoMutation,
 		isPending,
@@ -85,25 +92,15 @@ export function EditInstrumentoForm({
 	} = useUpdateInstrumento()
 
 	const form = useForm({
-		defaultValues: {
-			nombre: instrumento.nombre || "",
-			marca: instrumento.marca || "",
-			modelo: instrumento.modelo || "",
-			serie: instrumento.serie || "",
-			fechaCalibracion: instrumento.fechaCalibracion || "",
-			imagenes: instrumento.imagenes || [],
-		},
+		defaultValues: { ...instrumento },
 		validators: {
-			onSubmit: instrumentoFormValidator,
+			onSubmit: updateInstrumentoValidator,
 		},
 		onSubmit: async ({ value }) => {
 			const updateInstrumento = {
 				...value,
 				id: instrumento.id,
 				userId: instrumento.userId,
-				fechaCalibracion: calibrationDate
-					? format(calibrationDate, "dd-MM-yyyy")
-					: "",
 			}
 
 			if (checkInstrumentoDiference(updateInstrumento, instrumento)) {
@@ -305,6 +302,7 @@ export function EditInstrumentoForm({
 							)
 						}}
 					/>
+
 					<form.Field
 						name="imagenes"
 						children={field => {
@@ -318,6 +316,32 @@ export function EditInstrumentoForm({
 										setFiles={setInstrumentoFiles}
 										text="Imágen del instrumento"
 										maxFiles={3}
+										editMode={true}
+									/>
+									{isInvalid && (
+										<FieldError
+											errors={field.state.meta.errors}
+											className="text-xs 2xl:text-sm absolute -bottom-4 left-0"
+										/>
+									)}
+								</Field>
+							)
+						}}
+					/>
+
+					<form.Field
+						name="imagenCalibracion"
+						children={field => {
+							const isInvalid =
+								field.state.meta.isTouched && !field.state.meta.isValid
+							return (
+								<Field data-invalid={isInvalid} className="relative gap-1">
+									<FieldLabel htmlFor={field.name}>Imagenes</FieldLabel>
+									<InputFiles
+										files={imagenCalibracion}
+										setFiles={setImagenCalibracion}
+										text="Certificado de calibración"
+										maxFiles={1}
 										editMode={true}
 									/>
 									{isInvalid && (

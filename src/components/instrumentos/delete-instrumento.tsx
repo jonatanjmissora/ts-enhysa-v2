@@ -36,12 +36,14 @@ export default function DeleteInstrumento({
 				<AlertDialogTitle>
 					<Title text="Eliminar Instrumento" />
 				</AlertDialogTitle>
-				<AlertDialogDescription className="text-center">
-					<DeleteInstrumentoForm
-						instrumento={instrumento}
-						setOpen={setOpen}
-						setIsMenuOpen={setIsMenuOpen}
-					/>
+				<AlertDialogDescription asChild>
+					<div className="text-center">
+						<DeleteInstrumentoForm
+							instrumento={instrumento}
+							setOpen={setOpen}
+							setIsMenuOpen={setIsMenuOpen}
+						/>
+					</div>
 				</AlertDialogDescription>
 			</AlertDialogContent>
 		</AlertDialog>

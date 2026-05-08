@@ -3,6 +3,7 @@ import { user } from "../../users/schema"
 import { tecnicos } from "../../tecnicos/schema"
 import { empresas } from "../../empresas/schema"
 import { instrumentos } from "../../instrumentos/schema"
+import type { ClimaType } from "#/lib/constants"
 
 export const reportes_iluminacion = pgTable("reportes_iluminacion", {
 	id: text("id").primaryKey(),
@@ -21,21 +22,21 @@ export const reportes_iluminacion = pgTable("reportes_iluminacion", {
 
 	createdAt: timestamp("created_at").notNull(),
 
-	finishedAt: timestamp("finished_at"),
+	clima: text("clima").array().notNull().$type<ClimaType>(),
 
-	areasId: text("areas_id").array().notNull(),
+	areasId: text("areas_id").array(),
 
-	clima: text("clima").notNull(),
+	observacion: text("observacion"),
 
-	observacion: text("observacion").notNull(),
+	conclusion: text("conclusion"),
 
-	conclusion: text("conclusion").notNull(),
-
-	recomendacion: text("recomendacion").notNull(),
+	recomendacion: text("recomendacion"),
 
 	userId: text("user_id")
 		.notNull()
 		.references(() => user.id, { onDelete: "cascade" }),
+
+	finishedAt: timestamp("finished_at"),
 })
 
 export type ReporteIluminacionType = typeof reportes_iluminacion.$inferSelect

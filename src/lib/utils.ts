@@ -78,6 +78,7 @@ export const checkInstrumentoDiference = (
 		formValues.modelo === instrumento.modelo &&
 		formValues.serie === instrumento.serie &&
 		formValues.fechaCalibracion === instrumento.fechaCalibracion &&
+		formValues.imagenCalibracion === instrumento.imagenCalibracion &&
 		formValues.imagenes === instrumento.imagenes
 	)
 }

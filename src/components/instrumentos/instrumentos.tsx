@@ -118,22 +118,26 @@ function Instrumento({ instrumento }: { instrumento: InstrumentoType }) {
 					<Input
 						id="calibracion"
 						placeholder="Calibracion"
-						value={instrumento.fechaCalibracion}
+						value={instrumento.fechaCalibracion.toLocaleDateString("es-AR", {
+							day: "2-digit",
+							month: "2-digit",
+							year: "numeric",
+						})}
 						readOnly
 						className="bg-background sm:bg-accent text-right"
 					/>
 				</div>
 				<div className="flex flex-col gap-1">
-					<Label>Imágenes</Label>
+					<Label>Imagen de Certificado</Label>
 					<div className="bg-accent ring-[1px] ring-foreground/10 rounded-md sm:bg-accent flex items-center justify-center">
-						<img src="/luxometro.jpg" alt="luxometro" className="size-20" />
+						<img src="/calibracion.webp" alt="luxometro" className="size-20" />
 					</div>
 				</div>
 
 				<div className="flex flex-col gap-1">
-					<Label>Certificado</Label>
+					<Label>Imágenes</Label>
 					<div className="bg-accent ring-[1px] ring-foreground/10 rounded-md sm:bg-accent flex items-center justify-center">
-						<img src="/calibracion.webp" alt="luxometro" className="size-20" />
+						<img src="/luxometro.jpg" alt="luxometro" className="size-20" />
 					</div>
 				</div>
 			</div>

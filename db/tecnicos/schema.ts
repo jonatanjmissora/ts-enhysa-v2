@@ -18,8 +18,6 @@ export const tecnicos = pgTable("tecnicos", {
 
 	firmaImg: text("firmaImg").notNull(),
 
-	membrete: text("membrete").notNull(),
-
 	userId: text("userId")
 		.notNull()
 		.references(() => user.id, { onDelete: "cascade" }),

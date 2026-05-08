@@ -1,4 +1,10 @@
-export default function Loading({ className }: { className?: string }) {
+export default function Loading({
+	text,
+	className,
+}: {
+	text?: string
+	className?: string
+}) {
 	return (
 		<div
 			className={`h-svh w-screen flex items-center justify-center flex-col gap-4 opacity-50 ${className}`}
@@ -17,6 +23,12 @@ export default function Loading({ className }: { className?: string }) {
 				<span className="animate-bounce delay-250">S</span>
 				<span className="animate-bounce delay-300">a</span>
 			</div>
+
+			{text && (
+				<span className="w-11/12 mx-auto text-center text-2xl my-12 italic tracking-wider">
+					{text}
+				</span>
+			)}
 		</div>
 	)
 }

@@ -12,7 +12,10 @@ function RouteComponent() {
 		<article className="flex flex-col items-start justify-start min-h-svh w-full">
 			<Suspense
 				fallback={
-					<Loading className="scale-50 justify-start  max-h-[50svh] " />
+					<Loading
+						text="cargando empresas..."
+						className="scale-50 justify-start  max-h-[50svh] "
+					/>
 				}
 			>
 				<Empresas />

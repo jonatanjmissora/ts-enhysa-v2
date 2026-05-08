@@ -47,12 +47,14 @@ export default function EditTecnico({
 				<AlertDialogTitle>
 					<Title text="Editar Técnico" />
 				</AlertDialogTitle>
-				<AlertDialogDescription className="text-center">
-					<EditTecnicoForm
-						tecnico={tecnico}
-						setOpen={setOpen}
-						setIsMenuOpen={setIsMenuOpen}
-					/>
+				<AlertDialogDescription asChild>
+					<div className="text-center">
+						<EditTecnicoForm
+							tecnico={tecnico}
+							setOpen={setOpen}
+							setIsMenuOpen={setIsMenuOpen}
+						/>
+					</div>
 				</AlertDialogDescription>
 			</AlertDialogContent>
 		</AlertDialog>
@@ -78,18 +80,7 @@ export function EditTecnicoForm({
 	} = useUpdateTecnico()
 
 	const form = useForm({
-		defaultValues: {
-			id: tecnico.id,
-			nombre: tecnico.nombre,
-			telefono: tecnico.telefono,
-			localidad: tecnico.localidad,
-			cargo: tecnico.cargo,
-			matricula: tecnico.matricula,
-			matriculaImg: tecnico.matriculaImg,
-			firmaImg: tecnico.firmaImg,
-			membrete: tecnico.membrete,
-			userId: tecnico.userId,
-		},
+		defaultValues: { ...tecnico },
 		validators: {
 			onSubmit: updateTecnicoValidator,
 		},
@@ -295,25 +286,6 @@ export function EditTecnicoForm({
 									text="Imágen Firma Digital"
 									maxFiles={1}
 									editMode={true}
-								/>
-							</div>
-						</div>
-
-						<div className="flex-1 flex flex-col gap-1">
-							<Label>Pie de Página</Label>
-							<div className="flex flex-col gap-[0.5px]">
-								<Input
-									value={tecnico.nombre?.toUpperCase() || ""}
-									placeholder="Nombre Completo..."
-									readOnly
-									className="bg-background sm:bg-accent text-center"
-								/>
-
-								<Input
-									value={`MAT ${tecnico.matricula?.toUpperCase()}` || ""}
-									placeholder="Matricula..."
-									readOnly
-									className="bg-background sm:bg-accent text-center"
 								/>
 							</div>
 						</div>

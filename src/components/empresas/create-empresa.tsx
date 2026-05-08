@@ -19,7 +19,10 @@ import { Loader } from "lucide-react"
 import { Button } from "../ui/button"
 import { InputFiles } from "../input-files"
 import { useCreateEmpresa } from "../../../queries/empresas/use-create-empresa"
-import { empresaFormValidator } from "../../../db/empresas/empresa-validator"
+import {
+	defaultEmpresa,
+	empresaFormValidator,
+} from "../../../db/empresas/empresa-validator"
 import Title from "../title"
 
 export default function CreateEmpresa() {
@@ -39,8 +42,10 @@ export default function CreateEmpresa() {
 				<AlertDialogTitle>
 					<Title text="Empresa Nueva" />
 				</AlertDialogTitle>
-				<AlertDialogDescription className="text-center">
-					<EmpresaForm setOpen={setOpen} />
+				<AlertDialogDescription asChild>
+					<div className="text-center">
+						<EmpresaForm setOpen={setOpen} />
+					</div>
 				</AlertDialogDescription>
 			</AlertDialogContent>
 		</AlertDialog>
@@ -56,16 +61,7 @@ const EmpresaForm = ({ setOpen }: { setOpen: (open: boolean) => void }) => {
 	} = useCreateEmpresa()
 
 	const form = useForm({
-		defaultValues: {
-			cuit: "",
-			razonSocial: "",
-			direccion: "",
-			localidad: "",
-			provincia: "",
-			codigoPostal: "",
-			horarios: "",
-			logo: "",
-		},
+		defaultValues: defaultEmpresa,
 		validators: {
 			onSubmit: empresaFormValidator,
 		},

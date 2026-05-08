@@ -35,12 +35,14 @@ export default function DeleteEmpresa({
 				<AlertDialogTitle className="h-max sm:text-lg 2xl:text-2xl font-semibold tracking-wider py-2 border-b border-foreground/20 w-full mb-10">
 					Eliminar Empresa
 				</AlertDialogTitle>
-				<AlertDialogDescription className="text-center">
-					<DeleteEmpresaForm
-						empresa={empresa}
-						setOpen={setOpen}
-						setIsMenuOpen={setIsMenuOpen}
-					/>
+				<AlertDialogDescription asChild>
+					<div className="text-center">
+						<DeleteEmpresaForm
+							empresa={empresa}
+							setOpen={setOpen}
+							setIsMenuOpen={setIsMenuOpen}
+						/>
+					</div>
 				</AlertDialogDescription>
 			</AlertDialogContent>
 		</AlertDialog>

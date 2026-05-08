@@ -24,7 +24,10 @@ import { Calendar } from "@/components/ui/calendar"
 import { format } from "date-fns"
 import Title from "../title"
 import { useCreateInstrumento } from "../../../queries/instrumentos/use-create-instrumento"
-import { instrumentoFormValidator } from "../../../db/instrumentos/instrumento-validator"
+import {
+	defaultInstrumento,
+	instrumentoFormValidator,
+} from "../../../db/instrumentos/instrumento-validator"
 import { InputFiles } from "../input-files"
 import { Button } from "../ui/button"
 
@@ -47,8 +50,10 @@ export function CreateInstrumento() {
 					<Title text="Instrumento Nuevo" />
 				</AlertDialogTitle>
 
-				<AlertDialogDescription className="text-center">
-					<InstrumentoForm setOpen={setOpen} />
+				<AlertDialogDescription asChild>
+					<div className="text-center">
+						<InstrumentoForm setOpen={setOpen} />
+					</div>
 				</AlertDialogDescription>
 			</AlertDialogContent>
 		</AlertDialog>
@@ -56,6 +61,7 @@ export function CreateInstrumento() {
 }
 
 const InstrumentoForm = ({ setOpen }: { setOpen: (open: boolean) => void }) => {
+	const [imagenCalibracion, setImagenCalibracion] = useState<File[]>([])
 	const [instrumentoFiles, setInstrumentoFiles] = useState<File[]>([])
 	const [calibrationDate, setCalibrationDate] = useState<Date>()
 	const [openPopover, setOpenPopover] = useState(false)
@@ -67,28 +73,14 @@ const InstrumentoForm = ({ setOpen }: { setOpen: (open: boolean) => void }) => {
 	} = useCreateInstrumento()
 
 	const form = useForm({
-		defaultValues: {
-			nombre: "",
-			marca: "",
-			modelo: "",
-			serie: "",
-			fechaCalibracion: "",
-			imagenes: [] as string[],
-		},
+		defaultValues: defaultInstrumento,
 
 		validators: {
 			onSubmit: instrumentoFormValidator,
 		},
 
 		onSubmit: async ({ value }) => {
-			const newInstrimento = {
-				...value,
-				fechaCalibracion: calibrationDate
-					? format(calibrationDate, "dd-MM-yyyy")
-					: "",
-			}
-
-			const result = await createInstrumentoMutation({ data: newInstrimento })
+			const result = await createInstrumentoMutation({ data: value })
 
 			if (!result) {
 				console.error("Error al crear el instrumento", error)
@@ -263,7 +255,7 @@ const InstrumentoForm = ({ setOpen }: { setOpen: (open: boolean) => void }) => {
 										<PopoverTrigger asChild>
 											<button
 												id="date-picker-simple"
-												className="card p-[8px] bg-background justify-center"
+												className="card p-[8px] bg-accent rounded-sm ring-[1px] ring-foreground/10 justify-center"
 											>
 												{calibrationDate ? (
 													format(calibrationDate, "dd-MM-yyyy")
@@ -299,6 +291,37 @@ const InstrumentoForm = ({ setOpen }: { setOpen: (open: boolean) => void }) => {
 					/>
 
 					<form.Field
+						name="imagenCalibracion"
+						children={field => {
+							const isInvalid =
+								field.state.meta.isTouched && !field.state.meta.isValid
+
+							return (
+								<Field data-invalid={isInvalid} className="relative gap-1">
+									<FieldLabel htmlFor={field.name}>
+										Imágen del certificado de calibración
+									</FieldLabel>
+
+									<InputFiles
+										files={imagenCalibracion}
+										setFiles={setImagenCalibracion}
+										text="Imágen del certificado de calibración"
+										maxFiles={1}
+										editMode={true}
+									/>
+
+									{isInvalid && (
+										<FieldError
+											errors={field.state.meta.errors}
+											className="text-xs 2xl:text-sm absolute -bottom-4 left-0"
+										/>
+									)}
+								</Field>
+							)
+						}}
+					/>
+
+					<form.Field
 						name="imagenes"
 						children={field => {
 							const isInvalid =
@@ -311,7 +334,7 @@ const InstrumentoForm = ({ setOpen }: { setOpen: (open: boolean) => void }) => {
 									<InputFiles
 										files={instrumentoFiles}
 										setFiles={setInstrumentoFiles}
-										text="Imágen del certificado de calibración e instrumento"
+										text="Imágen del instrumento"
 										maxFiles={3}
 										editMode={true}
 									/>
