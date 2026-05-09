@@ -14,7 +14,7 @@ import {
 	PopoverContent,
 	PopoverTrigger,
 } from "@/components/ui/popover"
-import { format, parse } from "date-fns"
+import { format } from "date-fns"
 import { Calendar } from "@/components/ui/calendar"
 import {
 	AlertDialog,
@@ -74,14 +74,8 @@ export function EditInstrumentoForm({
 	setIsMenuOpen?: (open: boolean) => void
 }) {
 	const [openPopover, setOpenPopover] = useState(false)
-	const [calibrationDate, setCalibrationDate] = useState<Date | undefined>(
+	const [calibrationDate, setCalibrationDate] = useState<Date>(
 		instrumento.fechaCalibracion
-			? parse(
-					instrumento.fechaCalibracion.toLocaleDateString("es-AR"),
-					"dd-MM-yyyy",
-					new Date()
-				)
-			: undefined
 	)
 	const [instrumentoFiles, setInstrumentoFiles] = useState<File[]>([])
 	const [imagenCalibracion, setImagenCalibracion] = useState<File[]>([])
@@ -101,6 +95,9 @@ export function EditInstrumentoForm({
 				...value,
 				id: instrumento.id,
 				userId: instrumento.userId,
+				fechaCalibracion: calibrationDate,
+				imageCalibracion: imagenCalibracion,
+				imageInstrumento: instrumentoFiles,
 			}
 
 			if (checkInstrumentoDiference(updateInstrumento, instrumento)) {
@@ -269,7 +266,7 @@ export function EditInstrumentoForm({
 										<PopoverTrigger asChild>
 											<button
 												id="date-picker-simple"
-												className="card py-2 bg-background justify-center textXS"
+												className="card p-[8px] bg-accent rounded-sm ring-[1px] ring-foreground/10 justify-center"
 											>
 												{calibrationDate ? (
 													format(calibrationDate, "dd-MM-yyyy")
@@ -285,7 +282,7 @@ export function EditInstrumentoForm({
 												mode="single"
 												selected={calibrationDate}
 												onSelect={date => {
-													setCalibrationDate(date)
+													setCalibrationDate(date || new Date())
 													setOpenPopover(false)
 												}}
 												defaultMonth={calibrationDate}

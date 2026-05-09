@@ -34,7 +34,7 @@ import {
 } from "#/lib/constants"
 import { Button } from "#/components/ui/button"
 import Loading from "#/components/loading"
-import { Link } from "@tanstack/react-router"
+import { Link, useNavigate } from "@tanstack/react-router"
 import useScrollTop from "#/hooks/scroll-top"
 import { useCreateNuevoReporte } from "../../../../queries/reportes/iluminacion/use-create-reporte"
 
@@ -58,6 +58,7 @@ function ReporteNuevo() {
 	const { data: tecnico } = useSuspenseQuery(tecnicoQueryOptions)
 	const { data: empresas } = useSuspenseQuery(empresasQueryOptions)
 	const { data: instrumentos } = useSuspenseQuery(instrumentosQueryOptions)
+	const navigate = useNavigate()
 
 	const {
 		mutateAsync: createNewReport,
@@ -77,6 +78,7 @@ function ReporteNuevo() {
 				console.error("Error al crear el reporte", error)
 			}
 			console.log("Reporte creado exitosamente")
+			navigate({ to: "/iluminacion/nuevo-informe/areas" })
 		},
 	})
 	if (!tecnico || !empresas?.length || !instrumentos?.length)
@@ -104,7 +106,7 @@ function ReporteNuevo() {
 				e.preventDefault()
 				form.handleSubmit()
 			}}
-			className="w-5/6 mx-auto flex flex-col gap-8 relative"
+			className="w-3/4 mx-auto flex flex-col gap-8 relative"
 		>
 			<FieldGroup className="gap-5">
 				<form.Field
@@ -399,7 +401,7 @@ function ReporteNuevo() {
 					}}
 				/>
 
-				<Field className="flex flex-col justify-center gap-4 sm:gap-10 items-center w-5/6 sm:w-full mx-auto mt-10">
+				<Field className="flex flex-col justify-center gap-4 sm:gap-10 items-center w-full mx-auto mt-10">
 					<Link to="/iluminacion" disabled={isPending} className="flex-1">
 						<Button
 							variant="outline"

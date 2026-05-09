@@ -30,6 +30,14 @@ export const reporteServerValidator = z.object({
 
 export type ReporteServerType = z.infer<typeof reporteServerValidator>
 
+export const reporteIluminacionIdValidator = z.object({
+	id: z.string().min(1, "Id requerido"),
+})
+
+export type ReporteIluminacionIdType = z.infer<
+	typeof reporteIluminacionIdValidator
+>
+
 export const defaultReporteData: ReporteFormType = {
 	empresaId: "",
 	instrumentoId: "",

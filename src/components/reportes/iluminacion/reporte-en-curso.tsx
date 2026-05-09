@@ -1,11 +1,19 @@
 import { Button } from "#/components/ui/button"
-import { Link } from "@tanstack/react-router"
-import { TriangleAlert } from "lucide-react"
+import { Loader, TriangleAlert } from "lucide-react"
 import { useState } from "react"
-import ReporteNuevoIluminacion from "./reporte-nuevo"
 import ReporteNuevoEdit from "./reporte-nuevo-edit"
+import useScrollTop from "#/hooks/scroll-top"
+import { useDeleteReporteNuevo } from "../../../../queries/reportes/iluminacion/use-delete-reporte-nuevo"
+import type { ReporteIluminacionType } from "../../../../db/reportes/iluminacion/schema"
+import { useForm } from "@tanstack/react-form"
+import { reporteIluminacionIdValidator } from "../../../../db/reportes/iluminacion/reporte-validator"
 
-export default function ReporteEnCurso() {
+export default function ReporteEnCurso({
+	reporteNuevo,
+}: {
+	reporteNuevo: ReporteIluminacionType
+}) {
+	useScrollTop()
 	const [newReportWarning, setNewReportWarning] = useState(true)
 
 	if (newReportWarning) {
@@ -27,23 +35,83 @@ export default function ReporteEnCurso() {
 					<Button
 						variant="outline"
 						className="py-6 w-full"
-						onClick={() => setNewReportWarning(false)}
+						onClick={() => {
+							setNewReportWarning(false)
+							window.scroll({ top: 0 })
+						}}
 					>
 						Continuar Reporte
 					</Button>
-					TODO: Hacer un formulario para borrar el nuevo reporte en curso
-					<Link to="/iluminacion/nuevo-informe/areas" className="w-full">
-						<Button
-							variant="secondary"
-							className="py-6 w-full ring-[1px] ring-foreground/20"
-						>
-							Nuevo Reporte
-						</Button>
-					</Link>
+					<BorrarReporteEnCurso reporteNuevo={reporteNuevo} />
 				</div>
 			</article>
 		)
 	}
 
-	return <ReporteNuevoEdit />
+	return <ReporteNuevoEdit reporteNuevo={reporteNuevo} />
+}
+
+function BorrarReporteEnCurso({
+	reporteNuevo,
+}: {
+	reporteNuevo: ReporteIluminacionType
+}) {
+	const {
+		mutateAsync: deleteReporteNuevoMutation,
+		error,
+		isPending,
+	} = useDeleteReporteNuevo(reporteNuevo.id)
+
+	const form = useForm({
+		defaultValues: {
+			id: reporteNuevo.id,
+		},
+		validators: {
+			onSubmit: reporteIluminacionIdValidator,
+		},
+		onSubmit: async ({ value }) => {
+			const result = await deleteReporteNuevoMutation({
+				data: { id: value.id },
+			})
+
+			if (!result) {
+				console.error("Error al eliminar el nuevo reporte", error)
+			}
+
+			console.log("Nuevo reporte eliminado exitosamente")
+		},
+	})
+
+	return (
+		<form
+			id="create-form"
+			className="flex flex-col items-center justify-center gap-6"
+			onSubmit={e => {
+				e.preventDefault()
+				form.handleSubmit()
+			}}
+		>
+			<div className="flex justify-center items-center gap-2 w-full">
+				<Button
+					variant="secondary"
+					type="submit"
+					disabled={isPending}
+					className="flex-1 py-6"
+				>
+					{isPending ? (
+						<div className="flex gap-2 items-center justify-center">
+							Eliminando... <Loader className="animate-spin size-4"></Loader>
+						</div>
+					) : (
+						"Crear Nuevo"
+					)}
+				</Button>
+			</div>
+			{error && (
+				<p className="text-red-500 text-xs">
+					Error al eliminar el nuevo reporte
+				</p>
+			)}
+		</form>
+	)
 }

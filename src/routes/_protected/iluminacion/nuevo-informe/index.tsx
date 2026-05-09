@@ -7,12 +7,15 @@ import { Suspense } from "react"
 import { reporteNuevoQueryOptions } from "../../../../../queries/reportes/iluminacion/reportes-query"
 import ReporteNuevoIluminacion from "#/components/reportes/iluminacion/reporte-nuevo"
 import ReporteEnCurso from "#/components/reportes/iluminacion/reporte-en-curso"
+import useScrollTop from "#/hooks/scroll-top"
 
 export const Route = createFileRoute("/_protected/iluminacion/nuevo-informe/")({
 	component: RouteComponent,
 })
 
 function RouteComponent() {
+	useScrollTop()
+
 	return (
 		<article className="w-full min-h-svh flex flex-col items-center gap-10 relative mb-60">
 			<BackChevron to="/iluminacion" />
@@ -42,5 +45,5 @@ function Data() {
 
 	if (!reporteNuevo) return <ReporteNuevoIluminacion />
 
-	return <ReporteEnCurso />
+	return <ReporteEnCurso reporteNuevo={reporteNuevo} />
 }
