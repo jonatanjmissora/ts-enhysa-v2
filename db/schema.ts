@@ -12,3 +12,6 @@ export * from "./instrumentos/schema"
 
 // Iluminacion Reports
 export * from "./reportes/iluminacion/schema"
+
+// Iluminacion Areas
+export * from "./reportes/iluminacion/areas/schema"

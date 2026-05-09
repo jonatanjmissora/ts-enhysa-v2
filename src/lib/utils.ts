@@ -90,3 +90,23 @@ export const sortedByDate = (reportes: ReporteIluminacionType[]) => {
 		return dateB - dateA
 	})
 }
+
+export const sortedByName = (items: { nombre: string }[]) => {
+	return items.sort((a, b) => a.nombre.localeCompare(b.nombre))
+}
+
+export const getIndiceDeLocal = (
+	cantidadFilas: number,
+	cantidadColumnas: number,
+	cantidadAltura: number
+) => {
+	return (
+		(cantidadFilas * cantidadColumnas) /
+		(cantidadAltura * (cantidadFilas + cantidadColumnas))
+	)
+}
+
+export const getIndiceRedondeo = (indiceDeLocal: number) =>
+	Math.abs(indiceDeLocal % 1) > 0
+		? Math.trunc(indiceDeLocal) + 1
+		: Math.trunc(indiceDeLocal)

@@ -1,5 +1,5 @@
 import { useForm } from "@tanstack/react-form"
-import { reporteFormValidator } from "../../../../db/reportes/iluminacion/reporte-validator"
+import { updateReporteFormValidator } from "../../../../db/reportes/iluminacion/reporte-validator"
 import {
 	Field,
 	FieldError,
@@ -32,6 +32,7 @@ import { Button } from "#/components/ui/button"
 import { Link, useNavigate } from "@tanstack/react-router"
 import useScrollTop from "#/hooks/scroll-top"
 import type { ReporteIluminacionType } from "../../../../db/reportes/iluminacion/schema"
+import { useUpdateReporteNuevo } from "../../../../queries/reportes/iluminacion/use-update-reporte-nuevo"
 
 export default function ReporteNuevoEdit({
 	reporteNuevo,
@@ -44,15 +45,40 @@ export default function ReporteNuevoEdit({
 	const { data: instrumentos } = useSuspenseQuery(instrumentosQueryOptions)
 	const navigate = useNavigate()
 
-	const { mutateAsync: editNewReport, isPending, error } = useEditNuevoReporte()
+	const {
+		mutateAsync: editNewReport,
+		isPending,
+		error,
+	} = useUpdateReporteNuevo()
 	const form = useForm({
-		defaultValues: { ...reporteNuevo },
+		defaultValues: {
+			empresaId: reporteNuevo.empresaId,
+			instrumentoId: reporteNuevo.instrumentoId,
+			clima: reporteNuevo.clima,
+		},
 		validators: {
-			onSubmit: reporteFormValidator,
+			onSubmit: updateReporteFormValidator,
 		},
 		onSubmit: async ({ value }) => {
 			if (!tecnico || !empresas || !instrumentos) return
-			const newReport = { ...value, tecnicoId: tecnico.id }
+			const newReport = {
+				...reporteNuevo,
+				empresaId: value.empresaId,
+				instrumentoId: value.instrumentoId,
+				clima: value.clima,
+			}
+
+			if (
+				reporteNuevo.empresaId === value.empresaId &&
+				reporteNuevo.instrumentoId === value.instrumentoId &&
+				reporteNuevo.clima[0] === value.clima[0] &&
+				reporteNuevo.clima[1] === value.clima[1] &&
+				reporteNuevo.clima[2] === value.clima[2]
+			) {
+				navigate({ to: "/iluminacion/nuevo-informe/areas" })
+				return
+			}
+
 			const result = await editNewReport({ data: newReport })
 			if (!result) {
 				console.error("Error al editar el reporte", error)

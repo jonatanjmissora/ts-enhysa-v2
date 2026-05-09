@@ -49,7 +49,7 @@ function HayInstrumentos({
 						value={instrumento.id}
 						className="border-b border-foreground/10 last:border-b-0 py-2"
 					>
-						<AccordionTrigger className="flex px-5 w-11/12 sm:w-full flex-wrap items-center">
+						<AccordionTrigger className="flex px-5 w-11/12 sm:w-full flex-wrap items-center bg-accent ring-[1px] ring-foreground/10">
 							<div className="flex items-center gap-2 text-sm tracking-wider w-60 sm:w-max truncate">
 								{instrumento.nombre.toUpperCase()} -{" "}
 								{instrumento.marca.toUpperCase()}
