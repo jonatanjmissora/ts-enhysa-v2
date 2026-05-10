@@ -100,8 +100,8 @@ const Plan = ({
 			</div>
 
 			<Button
-				variant={actualPlan !== index ? "default" : "secondary"}
-				className="w-full ring-[1px] ring-foreground/15 py-5"
+				variant={actualPlan !== index ? "default" : "outline"}
+				className="w-full py-5"
 				onClick={() => setActualPlan(index as 0 | 1 | 2)}
 			>
 				{actualPlan === index ? (

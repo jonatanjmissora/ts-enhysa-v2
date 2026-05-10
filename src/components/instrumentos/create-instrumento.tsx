@@ -37,12 +37,7 @@ export function CreateInstrumento() {
 	return (
 		<AlertDialog open={open} onOpenChange={setOpen}>
 			<AlertDialogTrigger asChild className="hover:bg-accent">
-				<Button
-					variant="secondary"
-					className="w-1/2 mx-auto ring-[1px] ring-foreground/25 py-5"
-				>
-					Cargar datos
-				</Button>
+				<Button className="w-1/2 mx-auto py-5">Cargar datos</Button>
 			</AlertDialogTrigger>
 
 			<AlertDialogContent className="bg-background sm:px-20 py-15 sm:py-6 w-full sm:w-1/2 h-screen sm:h-[95dvh] overflow-auto border-none rounded-none max-w-screen">
@@ -369,12 +364,7 @@ const InstrumentoForm = ({ setOpen }: { setOpen: (open: boolean) => void }) => {
 						Cancelar
 					</Button>
 
-					<Button
-						variant="secondary"
-						type="submit"
-						disabled={isPending}
-						className="flex-1 p-4 ring-[1px] ring-foreground/20"
-					>
+					<Button type="submit" disabled={isPending} className="flex-1 p-5">
 						{isPending ? (
 							<div className="flex gap-2 w-full justify-center items-center">
 								Guardando... <Loader className="animate-spin size-4"></Loader>

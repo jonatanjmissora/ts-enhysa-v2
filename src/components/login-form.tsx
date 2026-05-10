@@ -216,9 +216,8 @@ export function LoginForm({
 
 							<Field>
 								<Button
-									variant="secondary"
 									type="submit"
-									className="p-5 text-center tracking-widest ring-[1px] ring-foreground/20"
+									className="p-5 text-center ring-foreground/20"
 								>
 									Ingresar
 								</Button>

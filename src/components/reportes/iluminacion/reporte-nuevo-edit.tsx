@@ -401,12 +401,7 @@ export default function ReporteNuevoEdit({
 							<ChevronLeft className="size-6" /> Volver
 						</Button>
 					</Link>
-					<Button
-						variant="secondary"
-						type="submit"
-						disabled={isPending}
-						className="flex-1 ring-[1px] ring-foreground/25 py-3"
-					>
+					<Button type="submit" disabled={isPending} className="flex-1 py-3">
 						{isPending ? (
 							<div className="flex gap-2 w-full justify-center items-center">
 								Guardando... <Loader className="animate-spin size-4"></Loader>

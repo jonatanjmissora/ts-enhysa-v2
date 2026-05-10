@@ -32,12 +32,7 @@ export default function CreateTecnico() {
 	return (
 		<AlertDialog open={open} onOpenChange={setOpen}>
 			<AlertDialogTrigger asChild className="hover:bg-accent">
-				<Button
-					variant="secondary"
-					className="w-1/2 mx-auto ring-[1px] ring-foreground/25 py-5"
-				>
-					Cargar datos
-				</Button>
+				<Button className="w-1/2 mx-auto py-5">Cargar datos</Button>
 			</AlertDialogTrigger>
 			<AlertDialogContent className="bg-background sm:px-20 py-15 sm:py-6 w-full sm:w-1/2 h-screen sm:h-[95dvh] overflow-auto border-none rounded-none max-w-screen">
 				<AlertDialogTitle>
@@ -299,12 +294,7 @@ export function CreateTecnicoForm({
 						>
 							Cancelar
 						</Button>
-						<Button
-							variant="secondary"
-							type="submit"
-							disabled={isPending}
-							className="flex-1 ring-[1px] ring-foreground/25 py-4"
-						>
+						<Button type="submit" disabled={isPending} className="flex-1 py-4">
 							{isPending ? (
 								<div className="flex gap-2 w-full justify-center items-center">
 									Guardando... <Loader className="animate-spin size-4"></Loader>

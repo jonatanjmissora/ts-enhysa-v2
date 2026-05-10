@@ -253,11 +253,7 @@ export function RegisterForm({
 							/>
 
 							<Field>
-								<Button
-									variant="secondary"
-									type="submit"
-									className="p-5 text-center tracking-widest ring-[1px] ring-foreground/20"
-								>
+								<Button type="submit" className="p-5 text-center">
 									Registrar
 								</Button>
 								<FieldDescription className="text-center">

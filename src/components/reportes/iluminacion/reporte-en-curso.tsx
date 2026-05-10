@@ -92,12 +92,7 @@ function BorrarReporteEnCurso({
 			}}
 		>
 			<div className="flex justify-center items-center gap-2 w-full">
-				<Button
-					variant="secondary"
-					type="submit"
-					disabled={isPending}
-					className="flex-1 py-6"
-				>
+				<Button type="submit" disabled={isPending} className="flex-1 py-6">
 					{isPending ? (
 						<div className="flex gap-2 items-center justify-center">
 							Eliminando... <Loader className="animate-spin size-4"></Loader>

@@ -89,12 +89,7 @@ function ReporteNuevo() {
 					perfil primero.
 				</span>
 				<Link to="/perfil/tecnicos" className="w-1/2 mx-auto">
-					<Button
-						variant="secondary"
-						className="w-full py-4 ring-[1px] ring-foreground/20"
-					>
-						Ir al perfil
-					</Button>
+					<Button className="w-full py-4">Ir al perfil</Button>
 				</Link>
 			</article>
 		)
@@ -412,12 +407,7 @@ function ReporteNuevo() {
 							<ChevronLeft className="size-6" /> Volver
 						</Button>
 					</Link>
-					<Button
-						variant="secondary"
-						type="submit"
-						disabled={isPending}
-						className="flex-1 ring-[1px] ring-foreground/25 py-3"
-					>
+					<Button type="submit" disabled={isPending} className="flex-1 py-3">
 						{isPending ? (
 							<div className="flex gap-2 w-full justify-center items-center">
 								Guardando... <Loader className="animate-spin size-4"></Loader>

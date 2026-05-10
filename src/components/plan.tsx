@@ -40,10 +40,7 @@ export default function Plan() {
 				search={{ from: pathname.split("/")[1] }}
 				className="w-full"
 			>
-				<Button
-					variant="secondary"
-					className="w-full ring-[1px] ring-foreground/25 py-5"
-				>
+				<Button className="w-full ring-foreground/25 py-5">
 					Gestionar Plan
 				</Button>
 			</Link>
