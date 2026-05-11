@@ -24,6 +24,17 @@ export const areaFormValidator = z.object({
 
 export type AreaFormType = z.infer<typeof areaFormValidator>
 
+export const areaIdValidator = z.object({
+	id: z.string().min(1, "Id requerido"),
+})
+
+export const updateAreaValidator = areaFormValidator.extend({
+	id: z.string().min(1, "Id requerido"),
+	userId: z.string().min(1, "Usuario requerido"),
+})
+
+export type UpdateAreaType = z.infer<typeof updateAreaValidator>
+
 export const defaultAreaData: AreaFormType = {
 	nombre: "",
 	tipo: "",

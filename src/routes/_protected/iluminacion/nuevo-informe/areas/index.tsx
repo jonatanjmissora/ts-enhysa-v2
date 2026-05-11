@@ -2,7 +2,7 @@ import BackChevron from "#/components/back-chevron"
 import Loading from "#/components/loading"
 import Title from "#/components/title"
 import { useSuspenseQuery } from "@tanstack/react-query"
-import { createFileRoute } from "@tanstack/react-router"
+import { createFileRoute, Link } from "@tanstack/react-router"
 import { Suspense } from "react"
 import { areasQueryOptions } from "../../../../../../queries/reportes/iluminacion/areas/areas-query"
 import { Button } from "#/components/ui/button"
@@ -15,6 +15,18 @@ import {
 } from "#/components/ui/accordion"
 import type { AreaIluminacionType } from "../../../../../../db/reportes/iluminacion/areas/schema"
 import { Label } from "#/components/ui/label"
+import { ChevronLeft, ChevronRight, RulerDimensionLine } from "lucide-react"
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuGroup,
+	DropdownMenuSeparator,
+	DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import { Ellipsis } from "lucide-react"
+import { useState } from "react"
+import DeleteAreaAlert from "#/components/reportes/iluminacion/areas/delete-area"
+import EditAreaAlert from "#/components/reportes/iluminacion/areas/edit-area"
 
 export const Route = createFileRoute(
 	"/_protected/iluminacion/nuevo-informe/areas/"
@@ -27,8 +39,9 @@ function RouteComponent() {
 		<article className="w-full min-h-svh flex flex-col items-center gap-0 relative mb-60">
 			<BackChevron to="/iluminacion" />
 			<Title text="Nuevo Informe" className="mt-15" />
-			<div className="flex items-center justify-end w-full">
-				<Title text="Areas" className="text-end px-6" />
+			<div className="flex items-center justify-between px-6 py-1 border-b border-foreground/50 mt-10 mb-4 w-5/6 mx-auto">
+				<RulerDimensionLine className="size-6" />
+				<span className="text-lg">Areas</span>
 			</div>
 			<IluminacionAreas />
 		</article>
@@ -56,7 +69,7 @@ function Areas() {
 	if (!areas || areas.length === 0) return <NoAreas />
 
 	return (
-		<>
+		<div className="w-full flex flex-col gap-10 items-center justify-center">
 			<Accordion
 				type="single"
 				collapsible
@@ -80,8 +93,22 @@ function Areas() {
 					</AccordionItem>
 				))}
 			</Accordion>
-			<Button>Agregar Area</Button>
-		</>
+
+			<CreateAreaAlert />
+
+			<div className="flex flex-col justify-center items-center gap-4 w-5/6 mt-30">
+				<Link to="/iluminacion/nuevo-informe" className="flex-1 w-full">
+					<Button variant="outline" type="button" className="w-full py-6">
+						<ChevronLeft className="size-6" /> Volver
+					</Button>
+				</Link>
+				<Link to="/iluminacion/nuevo-informe/opinon" className="flex-1 w-full">
+					<Button type="submit" className="w-full py-6">
+						Siguiente <ChevronRight className="size-6" />
+					</Button>
+				</Link>
+			</div>
+		</div>
 	)
 }
 
@@ -94,7 +121,11 @@ function Area({ area }: { area: AreaIluminacionType }) {
 	)
 
 	return (
-		<div className="w-full mx-auto rounded-lg border-0 bg-accent sm:bg-background flex flex-col justify-center items-center p-0 py-10">
+		<div className="w-full mx-auto rounded-lg border-0 bg-accent sm:bg-background flex flex-col justify-center items-center p-0 py-10 pt-30 relative">
+			<div className="absolute top-10 right-4">
+				<AreaDropdownMenu area={area} />
+			</div>
+
 			<div className="w-5/6 grid grid-cols-2 gap-3 border-b border-foreground/10 pb-2">
 				<Label className="textL text-sm place-content-end">Nombre : </Label>
 				<span className="textL text-sm">{area.nombre.toUpperCase()}</span>
@@ -179,10 +210,6 @@ function Area({ area }: { area: AreaIluminacionType }) {
 				</span>
 				<span className="text-left textL text-sm font-bold">{uniformidad}</span>
 			</div>
-
-			<div className="w-5/6 flex gap-4 justify-betwen items-center h-20 mt-10">
-				MENU
-			</div>
 		</div>
 	)
 }
@@ -195,5 +222,29 @@ function NoAreas() {
 			</span>
 			<CreateAreaAlert />
 		</div>
+	)
+}
+
+export default function AreaDropdownMenu({
+	area,
+}: {
+	area: AreaIluminacionType
+}) {
+	const [isMenuOpen, setIsMenuOpen] = useState(false)
+	return (
+		<DropdownMenu open={isMenuOpen} onOpenChange={setIsMenuOpen}>
+			<DropdownMenuTrigger asChild>
+				<Button variant="ghost" className="cursor-pointer">
+					<Ellipsis className="size-7" />
+				</Button>
+			</DropdownMenuTrigger>
+			<DropdownMenuContent className="p-6" align="end">
+				<DropdownMenuGroup className="flex flex-col bg-accent ring-[1px] ring-foreground/20 rounded-lg p-2">
+					<EditAreaAlert area={area} setIsMenuOpen={setIsMenuOpen} />
+					<DropdownMenuSeparator />
+					<DeleteAreaAlert area={area} setIsMenuOpen={setIsMenuOpen} />
+				</DropdownMenuGroup>
+			</DropdownMenuContent>
+		</DropdownMenu>
 	)
 }

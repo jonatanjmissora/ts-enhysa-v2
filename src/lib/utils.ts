@@ -47,8 +47,7 @@ export const checkTecnicoDiference = (
 		formValues.cargo === tecnico.cargo &&
 		formValues.matricula === tecnico.matricula &&
 		formValues.matriculaImg === tecnico.matriculaImg &&
-		formValues.firmaImg === tecnico.firmaImg &&
-		formValues.membrete === tecnico.membrete
+		formValues.firmaImg === tecnico.firmaImg
 	)
 }
 
@@ -91,7 +90,7 @@ export const sortedByDate = (reportes: ReporteIluminacionType[]) => {
 	})
 }
 
-export const sortedByName = (items: { nombre: string }[]) => {
+export const sortedByName = <T extends { nombre: string }>(items: T[]): T[] => {
 	return items.sort((a, b) => a.nombre.localeCompare(b.nombre))
 }
 

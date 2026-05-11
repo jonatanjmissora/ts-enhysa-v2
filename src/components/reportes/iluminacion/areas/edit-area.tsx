@@ -16,29 +16,19 @@ import {
 	SelectValue,
 } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
-import type {
-	IluminacionFuenteType,
-	IluminacionTipoType,
-	IluminacionType,
-	ValoresRequeridosType,
-} from "@/lib/constants"
 import {
 	FECHA_1970,
 	ILUMINACION,
 	ILUMINACION_FUENTE,
 	ILUMINACION_TIPO,
 	VALORES_REQUERIDOS,
+	type IluminacionFuenteType,
+	type IluminacionTipoType,
+	type IluminacionType,
+	type ValoresRequeridosType,
 } from "@/lib/constants"
 import { useForm } from "@tanstack/react-form"
-
-import { Box, HardHat, Lightbulb, Loader, Trash2 } from "lucide-react"
-import {
-	AlertDialog,
-	AlertDialogTrigger,
-	AlertDialogContent,
-	AlertDialogTitle,
-	AlertDialogDescription,
-} from "@/components/ui/alert-dialog"
+import { Box, Edit, HardHat, Lightbulb, Loader, Trash2 } from "lucide-react"
 import {
 	useEffect,
 	useRef,
@@ -46,77 +36,97 @@ import {
 	type Dispatch,
 	type SetStateAction,
 } from "react"
-import { InputFiles } from "#/components/input-files"
 import Formula from "./formula"
-import { getIndiceDeLocal, getIndiceRedondeo } from "#/lib/utils"
+import { getIndiceDeLocal, getIndiceRedondeo } from "@/lib/utils"
 import {
-	areaFormValidator,
-	defaultAreaData,
-	type AreaFormType,
-} from "../../../../../db/reportes/iluminacion/areas/area-validator"
-import { useCreateArea } from "../../../../../queries/reportes/iluminacion/areas/use-create-area"
+	AlertDialog,
+	AlertDialogTrigger,
+	AlertDialogContent,
+	AlertDialogTitle,
+	AlertDialogDescription,
+} from "@/components/ui/alert-dialog"
+import type { AreaIluminacionType } from "../../../../../db/reportes/iluminacion/areas/schema"
+import { InputFiles } from "#/components/input-files"
+import { updateAreaValidator } from "../../../../../db/reportes/iluminacion/areas/area-validator"
+import { useUpdateArea } from "../../../../../queries/reportes/iluminacion/areas/use-update-area"
 import { Button } from "#/components/ui/button"
 import Title from "#/components/title"
 
-export default function CreateAreaAlert() {
+export default function EditAreaAlert({
+	area,
+	setIsMenuOpen,
+}: {
+	area: AreaIluminacionType
+	setIsMenuOpen: Dispatch<SetStateAction<boolean>>
+}) {
 	const [open, setOpen] = useState(false)
 	return (
 		<AlertDialog open={open} onOpenChange={setOpen}>
 			<AlertDialogTrigger asChild className="hover:bg-accent">
-				<Button className="w-1/2 mx-auto py-5">+ Nueva Area</Button>
+				<div className="w-full flex items-center gap-2 justify-center p-4">
+					<Edit className="size-4" />
+					Editar
+				</div>
 			</AlertDialogTrigger>
 			<AlertDialogContent className="bg-background sm:px-20 py-15 sm:py-6 w-full sm:w-1/2 h-screen sm:h-[95dvh] overflow-auto border-none rounded-none max-w-screen">
 				<AlertDialogTitle>
-					<Title text="Nueva Area" />
+					<Title text="Editar Area" />
 				</AlertDialogTitle>
-				<AlertDialogDescription asChild>
-					<div className="text-center">
-						<MovilCreateArea setOpen={setOpen} />
-					</div>
+				<AlertDialogDescription className="text-center">
+					<EditArea
+						area={area}
+						setOpen={setOpen}
+						setIsMenuOpen={setIsMenuOpen}
+					/>
 				</AlertDialogDescription>
 			</AlertDialogContent>
 		</AlertDialog>
 	)
 }
 
-function MovilCreateArea({
+function EditArea({
+	area,
 	setOpen,
+	setIsMenuOpen,
 }: {
-	setOpen: Dispatch<SetStateAction<boolean>>
+	area: AreaIluminacionType
+	setOpen: (open: boolean) => void
+	setIsMenuOpen: (open: boolean) => void
 }) {
-	const [puntos, setPuntos] = useState<number[]>([])
-	const [timestamps, setTimestamps] = useState<Date[]>([])
+	const [puntos, setPuntos] = useState<number[]>(area.puntos)
+	const [timestamps, setTimestamps] = useState<Date[]>(area.timestamps)
 	const [puntosError, setPuntosError] = useState<string | null>(null)
 	const [planoFiles, setPlanoFiles] = useState<File[]>([])
 
-	const { mutateAsync: createArea, isPending, error } = useCreateArea()
+	const { mutateAsync: updateNRpart2, isPending, error } = useUpdateArea()
 
 	const form = useForm({
-		defaultValues: defaultAreaData,
+		defaultValues: {
+			...area,
+		},
 		validators: {
-			onSubmit: areaFormValidator,
+			onSubmit: updateAreaValidator,
 		},
 		onSubmit: async ({ value }) => {
-			console.log("VALUES", value)
-			console.log("PUNTOS", puntos)
-			console.log("TIMESTAMPS", timestamps)
-
 			setPuntosError(null)
 			if (puntos.every(punto => punto === 0))
 				return setPuntosError("Debe agregar al menos un punto de medición")
-			const newArea: AreaFormType = {
+			const newArea: AreaIluminacionType = {
 				...value,
+				userId: area.userId,
+				id: area.id,
 				puntos,
 				timestamps,
 				imagenes: [],
 			}
-			const result = await createArea({ data: newArea })
+			const result = await updateNRpart2({ data: newArea })
 			if (!result) {
-				console.error("Error al crear area", error)
+				console.error("Error al actualizar area", error)
 				return
 			}
-			console.log("Área creada exitosamente")
+			console.log("Area actualizada exitosamente")
 			setOpen(false)
+			setIsMenuOpen(false)
 		},
 	})
 
@@ -232,7 +242,7 @@ function MovilCreateArea({
 											name={field.name}
 											onBlur={field.handleBlur}
 											aria-invalid={isInvalid}
-											className="w-full justify-end"
+											className="w-full"
 										>
 											<SelectValue placeholder="Seleccione Clima" />
 										</SelectTrigger>
@@ -291,7 +301,7 @@ function MovilCreateArea({
 											name={field.name}
 											onBlur={field.handleBlur}
 											aria-invalid={isInvalid}
-											className="w-full justify-end"
+											className="w-full"
 										>
 											<SelectValue placeholder="Seleccione Fuente" />
 										</SelectTrigger>
@@ -350,7 +360,7 @@ function MovilCreateArea({
 											name={field.name}
 											onBlur={field.handleBlur}
 											aria-invalid={isInvalid}
-											className="w-full justify-end"
+											className="w-full"
 										>
 											<SelectValue placeholder="Seleccione Iluminacion" />
 										</SelectTrigger>
@@ -409,7 +419,7 @@ function MovilCreateArea({
 											name={field.name}
 											onBlur={field.handleBlur}
 											aria-invalid={isInvalid}
-											className="w-full justify-end"
+											className="w-full"
 										>
 											<SelectValue placeholder="Seleccione Valor" />
 										</SelectTrigger>
@@ -458,7 +468,7 @@ function MovilCreateArea({
 									<Textarea
 										id={field.name}
 										name={field.name}
-										value={field.state.value || ""}
+										value={field.state.value}
 										onBlur={field.handleBlur}
 										onChange={e => field.handleChange(e.target.value)}
 										aria-invalid={isInvalid}
@@ -501,7 +511,6 @@ function MovilCreateArea({
 										aria-invalid={isInvalid}
 										placeholder="Ej. 4"
 										type="number"
-										className="text-center"
 									/>
 									{isInvalid && (
 										<FieldError
@@ -531,7 +540,6 @@ function MovilCreateArea({
 										aria-invalid={isInvalid}
 										placeholder="Ej. 5"
 										type="number"
-										className="text-center"
 									/>
 									{isInvalid && (
 										<FieldError
@@ -563,7 +571,6 @@ function MovilCreateArea({
 										aria-invalid={isInvalid}
 										placeholder="Ej. 2"
 										type="number"
-										className="text-center"
 									/>
 									{isInvalid && (
 										<FieldError
@@ -581,12 +588,14 @@ function MovilCreateArea({
 					<Label className="tracking-wider" htmlFor="largo">
 						Imágenes del Área
 					</Label>
-					<InputFiles
-						text="Imágenes del área a medir."
-						files={planoFiles}
-						setFiles={setPlanoFiles}
-						editMode={true}
-					/>
+					<div className="card p-2 bg-background ">
+						<InputFiles
+							text="Imágenes del área a medir."
+							files={planoFiles}
+							setFiles={setPlanoFiles}
+							editMode={true}
+						/>
+					</div>
 				</div>
 
 				<form.Subscribe
@@ -621,10 +630,13 @@ function MovilCreateArea({
 					}}
 				/>
 
-				<Field className="flex flex-col justify-center gap-4 sm:gap-10 items-center w-5/6 sm:w-full mx-auto mt-10">
+				<Field className="flex flex-col justify-center gap-4 sm:gap-10 items-center w-5/6 mx-auto sm:w-full mt-10">
 					<Button
 						variant="outline"
-						onClick={() => setOpen(false)}
+						onClick={() => {
+							setOpen(false)
+							if (setIsMenuOpen) setIsMenuOpen(false)
+						}}
 						type="button"
 						disabled={isPending}
 						className="flex-1 py-4"
@@ -633,8 +645,8 @@ function MovilCreateArea({
 					</Button>
 					<Button type="submit" disabled={isPending} className="flex-1 py-4">
 						{isPending ? (
-							<div className="flex gap-2 w-full justify-center items-center">
-								Guardando... <Loader className="animate-spin size-4"></Loader>
+							<div className="flex gap-2 w-full justify-center">
+								Editando... <Loader className="animate-spin size-4"></Loader>
 							</div>
 						) : (
 							"Guardar"
@@ -671,11 +683,11 @@ function MovilCreateArea({
 function Grilla({
 	puntos,
 	setPuntos,
-	timestamps,
-	setTimestamps,
 	ancho,
 	largo,
 	alto,
+	timestamps,
+	setTimestamps,
 }: {
 	ancho: number
 	largo: number
@@ -697,15 +709,6 @@ function Grilla({
 	const largoRatio = 150 * divisionesLargo
 	const anchoGrilla = `${(ancho / largo) * largoRatio}px`
 	const largoGrilla = `${150 * divisionesLargo}px`
-	useEffect(() => {
-		const newPuntos: number[] = Array.from({ length: celdas }, () => 0)
-		setPuntos(newPuntos)
-		const newTimestamps: Date[] = Array.from(
-			{ length: celdas },
-			() => FECHA_1970
-		)
-		setTimestamps(newTimestamps)
-	}, [celdas, setPuntos, setTimestamps])
 
 	return (
 		<>
@@ -794,7 +797,7 @@ function Punto({
 					setOpenInputMenu(true)
 					setActualPunto(index)
 				}}
-				className="w-15 text-xl font-semibold py-1 px-3 bg-accent text-foreground justify-center items-center min-h-9 rounded-sm ring-[1px] ring-foreground/15"
+				className="w-15 text-xl font-semibold py-1 px-3 card bg-accent sm:bg-accent text-foreground justify-center items-center min-h-9"
 			>
 				{puntos[index] !== 0 ? puntos[index] : "*"}
 			</button>
@@ -841,7 +844,7 @@ function InputMenu({
 		setActualPunto(null)
 	}
 	return (
-		<div className="min-h-[500px] bg-accent rounded-lg ring-[1px] ring-foreground/15 flex items-center justify-center gap-10 flex-col w-full p-10">
+		<div className="card bg-background items-center justify-center gap-10 flex-col w-full p-10">
 			<span className="textL border-b py-2 border-foreground/50 w-full text-left text-foreground/70">
 				Punto {actualPunto !== null ? actualPunto + 1 : ""}
 			</span>
@@ -858,18 +861,21 @@ function InputMenu({
 				className="dark:bg-foreground/50 bg-foreground/5 text-background/75 textXL text-4xl w-3/4 sm:w-1/2 p-4 h-20 text-center rounded-md"
 				onChange={e => setPuntoValue(e.currentTarget.value)}
 			/>
-			<div className="w-full flex flex-col justify-between gap-4">
-				<Button
+			<div className="w-full flex justify-between gap-2 textM">
+				<button
 					type="button"
-					variant="outline"
 					onClick={() => setOpenInputMenu(false)}
-					className="flex-1"
+					className="card p-2 my-shadow cursor-pointer bg-background justify-center flex-1"
 				>
 					Cancelar
-				</Button>
-				<Button type="button" className="flex-1" onClick={handleSetPunto}>
+				</button>
+				<button
+					type="button"
+					className="card p-2 bg-accent my-shadow cursor-pointer justify-center flex-1"
+					onClick={handleSetPunto}
+				>
 					Guardar
-				</Button>
+				</button>
 			</div>
 		</div>
 	)

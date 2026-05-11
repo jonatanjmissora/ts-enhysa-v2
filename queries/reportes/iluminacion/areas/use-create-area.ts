@@ -8,15 +8,15 @@ export function useCreateArea() {
 
 	return useMutation({
 		mutationFn: createAreaServer,
-		// onSuccess: data => {
-		// 	// queryClient.invalidateQueries({ queryKey: ["empresas"] })
-		// 	queryClient.setQueryData<AreaIluminacionType[]>(
-		// 		["areas_iluminacion"],
-		// 		oldData => {
-		// 			if (!oldData) return oldData
-		// 			return sortedByName([data, ...oldData])
-		// 		}
-		// 	)
-		// },
+		onSuccess: data => {
+			// queryClient.invalidateQueries({ queryKey: ["empresas"] })
+			queryClient.setQueryData<AreaIluminacionType[]>(
+				["areas_iluminacion"],
+				oldData => {
+					if (!oldData) return oldData
+					return sortedByName([data, ...oldData])
+				}
+			)
+		},
 	})
 }

@@ -390,7 +390,7 @@ export default function ReporteNuevoEdit({
 					}}
 				/>
 
-				<Field className="flex flex-col justify-center gap-4 sm:gap-10 items-center w-full mx-auto mt-10">
+				<Field className="flex flex-col justify-center gap-4 sm:gap-10 items-center w-full mx-auto mt-30">
 					<Link to="/iluminacion" disabled={isPending} className="flex-1">
 						<Button
 							variant="outline"
