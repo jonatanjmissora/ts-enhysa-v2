@@ -242,7 +242,7 @@ function EditArea({
 											name={field.name}
 											onBlur={field.handleBlur}
 											aria-invalid={isInvalid}
-											className="w-full"
+											className="w-full justify-end"
 										>
 											<SelectValue placeholder="Seleccione Clima" />
 										</SelectTrigger>
@@ -301,7 +301,7 @@ function EditArea({
 											name={field.name}
 											onBlur={field.handleBlur}
 											aria-invalid={isInvalid}
-											className="w-full"
+											className="w-full justify-end"
 										>
 											<SelectValue placeholder="Seleccione Fuente" />
 										</SelectTrigger>
@@ -360,7 +360,7 @@ function EditArea({
 											name={field.name}
 											onBlur={field.handleBlur}
 											aria-invalid={isInvalid}
-											className="w-full"
+											className="w-full justify-end"
 										>
 											<SelectValue placeholder="Seleccione Iluminacion" />
 										</SelectTrigger>
@@ -419,7 +419,7 @@ function EditArea({
 											name={field.name}
 											onBlur={field.handleBlur}
 											aria-invalid={isInvalid}
-											className="w-full"
+											className="w-full justify-end"
 										>
 											<SelectValue placeholder="Seleccione Valor" />
 										</SelectTrigger>
@@ -472,7 +472,7 @@ function EditArea({
 										onBlur={field.handleBlur}
 										onChange={e => field.handleChange(e.target.value)}
 										aria-invalid={isInvalid}
-										className="bg-background sm:bg-accent text-right text-sm"
+										className="bg-background sm:bg-accent text-sm"
 									/>
 									{isInvalid && (
 										<FieldError
@@ -511,6 +511,7 @@ function EditArea({
 										aria-invalid={isInvalid}
 										placeholder="Ej. 4"
 										type="number"
+										className="text-center"
 									/>
 									{isInvalid && (
 										<FieldError
@@ -540,6 +541,7 @@ function EditArea({
 										aria-invalid={isInvalid}
 										placeholder="Ej. 5"
 										type="number"
+										className="text-center"
 									/>
 									{isInvalid && (
 										<FieldError
@@ -571,6 +573,7 @@ function EditArea({
 										aria-invalid={isInvalid}
 										placeholder="Ej. 2"
 										type="number"
+										className="text-center"
 									/>
 									{isInvalid && (
 										<FieldError

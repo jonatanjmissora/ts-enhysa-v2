@@ -1,12 +1,11 @@
 import { useForm } from "@tanstack/react-form"
-import { updateReporteFormValidator } from "../../../../db/reportes/iluminacion/reporte-validator"
 import {
 	Field,
 	FieldError,
 	FieldGroup,
 	FieldLabel,
 } from "#/components/ui/field"
-import { ChevronLeft, ChevronRight, Cpu, Loader, Warehouse } from "lucide-react"
+import { ChevronRight, Cpu, Loader, Warehouse } from "lucide-react"
 import {
 	Select,
 	SelectContent,
@@ -29,10 +28,11 @@ import {
 	type TemperaturaType,
 } from "#/lib/constants"
 import { Button } from "#/components/ui/button"
-import { Link, useNavigate } from "@tanstack/react-router"
+import { useNavigate } from "@tanstack/react-router"
 import useScrollTop from "#/hooks/scroll-top"
 import type { ReporteIluminacionType } from "../../../../db/reportes/iluminacion/schema"
 import { useUpdateReporteNuevo } from "../../../../queries/reportes/iluminacion/use-update-reporte-nuevo"
+import { reporteNuevoFormValidator } from "../../../../db/reportes/iluminacion/reporte-validator"
 
 export default function ReporteNuevoEdit({
 	reporteNuevo,
@@ -57,7 +57,7 @@ export default function ReporteNuevoEdit({
 			clima: reporteNuevo.clima,
 		},
 		validators: {
-			onSubmit: updateReporteFormValidator,
+			onSubmit: reporteNuevoFormValidator,
 		},
 		onSubmit: async ({ value }) => {
 			if (!tecnico || !empresas || !instrumentos) return
@@ -391,16 +391,6 @@ export default function ReporteNuevoEdit({
 				/>
 
 				<Field className="flex flex-col justify-center gap-4 sm:gap-10 items-center w-full mx-auto mt-30">
-					<Link to="/iluminacion" disabled={isPending} className="flex-1">
-						<Button
-							variant="outline"
-							type="button"
-							disabled={isPending}
-							className="w-full py-6"
-						>
-							<ChevronLeft className="size-6" /> Volver
-						</Button>
-					</Link>
 					<Button type="submit" disabled={isPending} className="flex-1 py-3">
 						{isPending ? (
 							<div className="flex gap-2 w-full justify-center items-center">

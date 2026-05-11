@@ -49,8 +49,8 @@ function RouteComponent() {
 				</span>
 
 				<div className="flex flex-col gap-20">
-					<div className="">
-						<div className="shapeLeft flex items-center justify-center flex-col gap-2 bg-secondary/50 ring-[1px] ring-foreground/10 rounded-md p-4 mr-4">
+					<div className="text-amber-600">
+						<div className="shapeLeft flex items-center justify-center flex-col gap-2 bg-secondary/50 ring-[1px] ring-amber-500/20 rounded-md p-4 mr-4">
 							<AlignEndHorizontal size={30} />
 							Finalidad
 						</div>
@@ -62,7 +62,7 @@ function RouteComponent() {
 					</div>
 
 					<div className="">
-						<div className="shapeRight flex items-center justify-center flex-col gap-2 bg-secondary/50 ring-[1px] ring-foreground/10 rounded-md p-4 ml-4">
+						<div className="shapeRight flex items-center justify-center flex-col gap-2 bg-secondary/50 ring-[1px] ring-amber-500/20 rounded-md p-4 ml-4 text-amber-600">
 							<Handshake size={30} />
 							Obligatorio
 						</div>
@@ -73,7 +73,7 @@ function RouteComponent() {
 					</div>
 
 					<div className="">
-						<div className="shapeLeft flex items-center justify-center flex-col gap-2 bg-secondary/50 ring-[1px] ring-foreground/10 rounded-md p-4 mr-4">
+						<div className="shapeLeft flex items-center justify-center flex-col gap-2 bg-secondary/50 ring-[1px] ring-amber-500/20 rounded-md p-4 mr-4 text-amber-600">
 							<ChartPie size={30} />
 							Metodo
 						</div>
@@ -86,7 +86,7 @@ function RouteComponent() {
 					</div>
 
 					<div className="">
-						<div className="shapeRight flex items-center justify-center flex-col gap-2 bg-secondary/50 ring-[1px] ring-foreground/10 rounded-md p-4 ml-4">
+						<div className="shapeRight flex items-center justify-center flex-col gap-2 bg-secondary/50 ring-[1px] ring-amber-500/20 rounded-md p-4 ml-4 text-amber-600">
 							<Calendar size={30} />
 							Validez
 						</div>

@@ -1,7 +1,7 @@
 import { useForm } from "@tanstack/react-form"
 import {
 	defaultReporteData,
-	reporteFormValidator,
+	reporteNuevoFormValidator,
 } from "../../../../db/reportes/iluminacion/reporte-validator"
 import {
 	Field,
@@ -68,7 +68,7 @@ function ReporteNuevo() {
 	const form = useForm({
 		defaultValues: defaultReporteData,
 		validators: {
-			onSubmit: reporteFormValidator,
+			onSubmit: reporteNuevoFormValidator,
 		},
 		onSubmit: async ({ value }) => {
 			if (!tecnico || !empresas || !instrumentos) return
@@ -396,17 +396,7 @@ function ReporteNuevo() {
 					}}
 				/>
 
-				<Field className="flex flex-col justify-center gap-4 sm:gap-10 items-center w-full mx-auto mt-10">
-					<Link to="/iluminacion" disabled={isPending} className="flex-1">
-						<Button
-							variant="outline"
-							type="button"
-							disabled={isPending}
-							className="w-full py-6"
-						>
-							<ChevronLeft className="size-6" /> Volver
-						</Button>
-					</Link>
+				<Field className="flex flex-col justify-center gap-4 sm:gap-10 items-center w-full mx-auto mt-20">
 					<Button type="submit" disabled={isPending} className="flex-1 py-3">
 						{isPending ? (
 							<div className="flex gap-2 w-full justify-center items-center">

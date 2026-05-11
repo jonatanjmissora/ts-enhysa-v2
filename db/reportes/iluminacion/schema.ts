@@ -24,13 +24,13 @@ export const reportes_iluminacion = pgTable("reportes_iluminacion", {
 
 	clima: text("clima").array().notNull().$type<ClimaType>(),
 
-	areasId: text("areas_id").array(),
+	areasId: text("areas_id").array().notNull(),
 
-	observacion: text("observacion"),
+	observacion: text("observacion").default("").notNull(),
 
-	conclusion: text("conclusion"),
+	conclusion: text("conclusion").default("").notNull(),
 
-	recomendacion: text("recomendacion"),
+	recomendacion: text("recomendacion").default("").notNull(),
 
 	userId: text("user_id")
 		.notNull()

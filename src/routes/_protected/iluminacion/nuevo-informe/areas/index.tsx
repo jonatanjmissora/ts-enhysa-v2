@@ -37,7 +37,7 @@ export const Route = createFileRoute(
 function RouteComponent() {
 	return (
 		<article className="w-full min-h-svh flex flex-col items-center gap-0 relative mb-60">
-			<BackChevron to="/iluminacion" />
+			<BackChevron to="/iluminacion/nuevo-informe" />
 			<Title text="Nuevo Informe" className="mt-15" />
 			<div className="flex items-center justify-between px-6 py-1 border-b border-foreground/50 mt-10 mb-4 w-5/6 mx-auto">
 				<RulerDimensionLine className="size-6" />
@@ -97,11 +97,6 @@ function Areas() {
 			<CreateAreaAlert />
 
 			<div className="flex flex-col justify-center items-center gap-4 w-5/6 mt-30">
-				<Link to="/iluminacion/nuevo-informe" className="flex-1 w-full">
-					<Button variant="outline" type="button" className="w-full py-6">
-						<ChevronLeft className="size-6" /> Volver
-					</Button>
-				</Link>
 				<Link to="/iluminacion/nuevo-informe/opinon" className="flex-1 w-full">
 					<Button type="submit" className="w-full py-6">
 						Siguiente <ChevronRight className="size-6" />

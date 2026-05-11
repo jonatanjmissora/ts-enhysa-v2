@@ -63,7 +63,9 @@ export default function CreateAreaAlert() {
 	return (
 		<AlertDialog open={open} onOpenChange={setOpen}>
 			<AlertDialogTrigger asChild className="hover:bg-accent">
-				<Button className="w-1/2 mx-auto py-5">+ Nueva Area</Button>
+				<Button className="w-1/2 mx-auto py-5 bg-primary/50 ring-foreground/5">
+					+ Nueva Area
+				</Button>
 			</AlertDialogTrigger>
 			<AlertDialogContent className="bg-background sm:px-20 py-15 sm:py-6 w-full sm:w-1/2 h-screen sm:h-[95dvh] overflow-auto border-none rounded-none max-w-screen">
 				<AlertDialogTitle>
@@ -97,10 +99,6 @@ function MovilCreateArea({
 			onSubmit: areaFormValidator,
 		},
 		onSubmit: async ({ value }) => {
-			console.log("VALUES", value)
-			console.log("PUNTOS", puntos)
-			console.log("TIMESTAMPS", timestamps)
-
 			setPuntosError(null)
 			if (puntos.every(punto => punto === 0))
 				return setPuntosError("Debe agregar al menos un punto de medición")
@@ -116,6 +114,14 @@ function MovilCreateArea({
 				return
 			}
 			console.log("Área creada exitosamente")
+			// const result2 = await updateReporteNuevoArea({
+			// 	data: {
+			// 		areasId: result.id,
+			// 	},
+			// })
+			// if (!result2) {
+			// 	console.error("Error al actualizar reporte nuevo", error)
+			// }
 			setOpen(false)
 		},
 	})

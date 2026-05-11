@@ -55,7 +55,7 @@ function Home() {
 
 			<div className="flex flex-col gap-20 w-5/6 mx-auto my-20">
 				<div className="">
-					<div className="shapeLeft flex items-center justify-center flex-col gap-2 bg-secondary/50 ring-[1px] ring-foreground/10 rounded-md p-4 mr-4">
+					<div className="shapeLeft flex items-center justify-center flex-col gap-2 bg-secondary/50 ring-[1px] ring-amber-500/20 rounded-md p-4 mr-4 text-amber-600">
 						<ShieldCheck size={30} />
 						Protocolo
 					</div>
@@ -69,7 +69,7 @@ function Home() {
 				</div>
 
 				<div className="">
-					<div className="shapeRight flex items-center justify-center flex-col gap-2 bg-secondary/50 ring-[1px] ring-foreground/10 rounded-md p-4 ml-4">
+					<div className="shapeRight flex items-center justify-center flex-col gap-2 bg-secondary/50 ring-[1px] ring-amber-500/20 rounded-md p-4 ml-4 text-amber-600">
 						<HeartPulse size={30} />
 						Saludable
 					</div>
@@ -83,7 +83,7 @@ function Home() {
 				</div>
 
 				<div className="">
-					<div className="shapeLeft flex items-center justify-center flex-col gap-2 bg-secondary/50 ring-[1px] ring-foreground/10 rounded-md p-4 mr-4">
+					<div className="shapeLeft flex items-center justify-center flex-col gap-2 bg-secondary/50 ring-[1px] ring-amber-500/20 rounded-md p-4 mr-4 text-amber-600">
 						<FileCheck size={30} />
 						Cumplir
 					</div>
@@ -96,7 +96,7 @@ function Home() {
 				</div>
 
 				<div className="">
-					<div className="shapeRight flex items-center justify-center flex-col gap-2 bg-secondary/50 ring-[1px] ring-foreground/10 rounded-md p-4 ml-4">
+					<div className="shapeRight flex items-center justify-center flex-col gap-2 bg-secondary/50 ring-[1px] ring-amber-500/20 rounded-md p-4 ml-4 text-amber-600">
 						<Factory size={30} />
 						Empresa
 					</div>
@@ -110,7 +110,7 @@ function Home() {
 				</div>
 
 				<div className="">
-					<div className="shapeLeft flex items-center justify-center flex-col gap-2 bg-secondary/50 ring-[1px] ring-foreground/10 rounded-md p-4 mr-4">
+					<div className="shapeLeft flex items-center justify-center flex-col gap-2 bg-secondary/50 ring-[1px] ring-amber-500/20 rounded-md p-4 mr-4 text-amber-600">
 						<ClipboardList size={30} />
 						Seguimiento
 					</div>
