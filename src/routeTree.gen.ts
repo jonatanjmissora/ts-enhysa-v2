@@ -19,7 +19,9 @@ import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 import { Route as ProtectedPerfilTecnicosIndexRouteImport } from './routes/_protected/perfil/tecnicos/index'
 import { Route as ProtectedPerfilInstrumentosIndexRouteImport } from './routes/_protected/perfil/instrumentos/index'
 import { Route as ProtectedPerfilEmpresasIndexRouteImport } from './routes/_protected/perfil/empresas/index'
+import { Route as ProtectedIluminacionReportesIndexRouteImport } from './routes/_protected/iluminacion/reportes/index'
 import { Route as ProtectedIluminacionNuevoInformeIndexRouteImport } from './routes/_protected/iluminacion/nuevo-informe/index'
+import { Route as ProtectedIluminacionReportesChar91idChar93IndexRouteImport } from './routes/_protected/iluminacion/reportes/[$id]/index'
 import { Route as ProtectedIluminacionNuevoInformeResumenIndexRouteImport } from './routes/_protected/iluminacion/nuevo-informe/resumen/index'
 import { Route as ProtectedIluminacionNuevoInformeOpinonIndexRouteImport } from './routes/_protected/iluminacion/nuevo-informe/opinon/index'
 import { Route as ProtectedIluminacionNuevoInformeAreasIndexRouteImport } from './routes/_protected/iluminacion/nuevo-informe/areas/index'
@@ -77,10 +79,22 @@ const ProtectedPerfilEmpresasIndexRoute =
     path: '/empresas/',
     getParentRoute: () => ProtectedPerfilRouteRoute,
   } as any)
+const ProtectedIluminacionReportesIndexRoute =
+  ProtectedIluminacionReportesIndexRouteImport.update({
+    id: '/iluminacion/reportes/',
+    path: '/iluminacion/reportes/',
+    getParentRoute: () => ProtectedRouteRoute,
+  } as any)
 const ProtectedIluminacionNuevoInformeIndexRoute =
   ProtectedIluminacionNuevoInformeIndexRouteImport.update({
     id: '/iluminacion/nuevo-informe/',
     path: '/iluminacion/nuevo-informe/',
+    getParentRoute: () => ProtectedRouteRoute,
+  } as any)
+const ProtectedIluminacionReportesChar91idChar93IndexRoute =
+  ProtectedIluminacionReportesChar91idChar93IndexRouteImport.update({
+    id: '/iluminacion/reportes/$id/',
+    path: '/iluminacion/reportes/$id/',
     getParentRoute: () => ProtectedRouteRoute,
   } as any)
 const ProtectedIluminacionNuevoInformeResumenIndexRoute =
@@ -110,12 +124,14 @@ export interface FileRoutesByFullPath {
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/iluminacion/': typeof ProtectedIluminacionIndexRoute
   '/iluminacion/nuevo-informe/': typeof ProtectedIluminacionNuevoInformeIndexRoute
+  '/iluminacion/reportes/': typeof ProtectedIluminacionReportesIndexRoute
   '/perfil/empresas/': typeof ProtectedPerfilEmpresasIndexRoute
   '/perfil/instrumentos/': typeof ProtectedPerfilInstrumentosIndexRoute
   '/perfil/tecnicos/': typeof ProtectedPerfilTecnicosIndexRoute
   '/iluminacion/nuevo-informe/areas/': typeof ProtectedIluminacionNuevoInformeAreasIndexRoute
   '/iluminacion/nuevo-informe/opinon/': typeof ProtectedIluminacionNuevoInformeOpinonIndexRoute
   '/iluminacion/nuevo-informe/resumen/': typeof ProtectedIluminacionNuevoInformeResumenIndexRoute
+  '/iluminacion/reportes/$id/': typeof ProtectedIluminacionReportesChar91idChar93IndexRoute
 }
 export interface FileRoutesByTo {
   '/perfil': typeof ProtectedPerfilRouteRouteWithChildren
@@ -125,12 +141,14 @@ export interface FileRoutesByTo {
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/iluminacion': typeof ProtectedIluminacionIndexRoute
   '/iluminacion/nuevo-informe': typeof ProtectedIluminacionNuevoInformeIndexRoute
+  '/iluminacion/reportes': typeof ProtectedIluminacionReportesIndexRoute
   '/perfil/empresas': typeof ProtectedPerfilEmpresasIndexRoute
   '/perfil/instrumentos': typeof ProtectedPerfilInstrumentosIndexRoute
   '/perfil/tecnicos': typeof ProtectedPerfilTecnicosIndexRoute
   '/iluminacion/nuevo-informe/areas': typeof ProtectedIluminacionNuevoInformeAreasIndexRoute
   '/iluminacion/nuevo-informe/opinon': typeof ProtectedIluminacionNuevoInformeOpinonIndexRoute
   '/iluminacion/nuevo-informe/resumen': typeof ProtectedIluminacionNuevoInformeResumenIndexRoute
+  '/iluminacion/reportes/$id': typeof ProtectedIluminacionReportesChar91idChar93IndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -142,12 +160,14 @@ export interface FileRoutesById {
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/_protected/iluminacion/': typeof ProtectedIluminacionIndexRoute
   '/_protected/iluminacion/nuevo-informe/': typeof ProtectedIluminacionNuevoInformeIndexRoute
+  '/_protected/iluminacion/reportes/': typeof ProtectedIluminacionReportesIndexRoute
   '/_protected/perfil/empresas/': typeof ProtectedPerfilEmpresasIndexRoute
   '/_protected/perfil/instrumentos/': typeof ProtectedPerfilInstrumentosIndexRoute
   '/_protected/perfil/tecnicos/': typeof ProtectedPerfilTecnicosIndexRoute
   '/_protected/iluminacion/nuevo-informe/areas/': typeof ProtectedIluminacionNuevoInformeAreasIndexRoute
   '/_protected/iluminacion/nuevo-informe/opinon/': typeof ProtectedIluminacionNuevoInformeOpinonIndexRoute
   '/_protected/iluminacion/nuevo-informe/resumen/': typeof ProtectedIluminacionNuevoInformeResumenIndexRoute
+  '/_protected/iluminacion/reportes/$id/': typeof ProtectedIluminacionReportesChar91idChar93IndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -159,12 +179,14 @@ export interface FileRouteTypes {
     | '/api/auth/$'
     | '/iluminacion/'
     | '/iluminacion/nuevo-informe/'
+    | '/iluminacion/reportes/'
     | '/perfil/empresas/'
     | '/perfil/instrumentos/'
     | '/perfil/tecnicos/'
     | '/iluminacion/nuevo-informe/areas/'
     | '/iluminacion/nuevo-informe/opinon/'
     | '/iluminacion/nuevo-informe/resumen/'
+    | '/iluminacion/reportes/$id/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/perfil'
@@ -174,12 +196,14 @@ export interface FileRouteTypes {
     | '/api/auth/$'
     | '/iluminacion'
     | '/iluminacion/nuevo-informe'
+    | '/iluminacion/reportes'
     | '/perfil/empresas'
     | '/perfil/instrumentos'
     | '/perfil/tecnicos'
     | '/iluminacion/nuevo-informe/areas'
     | '/iluminacion/nuevo-informe/opinon'
     | '/iluminacion/nuevo-informe/resumen'
+    | '/iluminacion/reportes/$id'
   id:
     | '__root__'
     | '/_protected'
@@ -190,12 +214,14 @@ export interface FileRouteTypes {
     | '/api/auth/$'
     | '/_protected/iluminacion/'
     | '/_protected/iluminacion/nuevo-informe/'
+    | '/_protected/iluminacion/reportes/'
     | '/_protected/perfil/empresas/'
     | '/_protected/perfil/instrumentos/'
     | '/_protected/perfil/tecnicos/'
     | '/_protected/iluminacion/nuevo-informe/areas/'
     | '/_protected/iluminacion/nuevo-informe/opinon/'
     | '/_protected/iluminacion/nuevo-informe/resumen/'
+    | '/_protected/iluminacion/reportes/$id/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -276,11 +302,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProtectedPerfilEmpresasIndexRouteImport
       parentRoute: typeof ProtectedPerfilRouteRoute
     }
+    '/_protected/iluminacion/reportes/': {
+      id: '/_protected/iluminacion/reportes/'
+      path: '/iluminacion/reportes'
+      fullPath: '/iluminacion/reportes/'
+      preLoaderRoute: typeof ProtectedIluminacionReportesIndexRouteImport
+      parentRoute: typeof ProtectedRouteRoute
+    }
     '/_protected/iluminacion/nuevo-informe/': {
       id: '/_protected/iluminacion/nuevo-informe/'
       path: '/iluminacion/nuevo-informe'
       fullPath: '/iluminacion/nuevo-informe/'
       preLoaderRoute: typeof ProtectedIluminacionNuevoInformeIndexRouteImport
+      parentRoute: typeof ProtectedRouteRoute
+    }
+    '/_protected/iluminacion/reportes/$id/': {
+      id: '/_protected/iluminacion/reportes/$id/'
+      path: '/iluminacion/reportes/$id'
+      fullPath: '/iluminacion/reportes/$id/'
+      preLoaderRoute: typeof ProtectedIluminacionReportesChar91idChar93IndexRouteImport
       parentRoute: typeof ProtectedRouteRoute
     }
     '/_protected/iluminacion/nuevo-informe/resumen/': {
@@ -328,9 +368,11 @@ interface ProtectedRouteRouteChildren {
   ProtectedIndexRoute: typeof ProtectedIndexRoute
   ProtectedIluminacionIndexRoute: typeof ProtectedIluminacionIndexRoute
   ProtectedIluminacionNuevoInformeIndexRoute: typeof ProtectedIluminacionNuevoInformeIndexRoute
+  ProtectedIluminacionReportesIndexRoute: typeof ProtectedIluminacionReportesIndexRoute
   ProtectedIluminacionNuevoInformeAreasIndexRoute: typeof ProtectedIluminacionNuevoInformeAreasIndexRoute
   ProtectedIluminacionNuevoInformeOpinonIndexRoute: typeof ProtectedIluminacionNuevoInformeOpinonIndexRoute
   ProtectedIluminacionNuevoInformeResumenIndexRoute: typeof ProtectedIluminacionNuevoInformeResumenIndexRoute
+  ProtectedIluminacionReportesChar91idChar93IndexRoute: typeof ProtectedIluminacionReportesChar91idChar93IndexRoute
 }
 
 const ProtectedRouteRouteChildren: ProtectedRouteRouteChildren = {
@@ -340,12 +382,16 @@ const ProtectedRouteRouteChildren: ProtectedRouteRouteChildren = {
   ProtectedIluminacionIndexRoute: ProtectedIluminacionIndexRoute,
   ProtectedIluminacionNuevoInformeIndexRoute:
     ProtectedIluminacionNuevoInformeIndexRoute,
+  ProtectedIluminacionReportesIndexRoute:
+    ProtectedIluminacionReportesIndexRoute,
   ProtectedIluminacionNuevoInformeAreasIndexRoute:
     ProtectedIluminacionNuevoInformeAreasIndexRoute,
   ProtectedIluminacionNuevoInformeOpinonIndexRoute:
     ProtectedIluminacionNuevoInformeOpinonIndexRoute,
   ProtectedIluminacionNuevoInformeResumenIndexRoute:
     ProtectedIluminacionNuevoInformeResumenIndexRoute,
+  ProtectedIluminacionReportesChar91idChar93IndexRoute:
+    ProtectedIluminacionReportesChar91idChar93IndexRoute,
 }
 
 const ProtectedRouteRouteWithChildren = ProtectedRouteRoute._addFileChildren(

@@ -27,6 +27,7 @@ import { Ellipsis } from "lucide-react"
 import { useState } from "react"
 import DeleteAreaAlert from "#/components/reportes/iluminacion/areas/delete-area"
 import EditAreaAlert from "#/components/reportes/iluminacion/areas/edit-area"
+import { reporteNuevoQueryOptions } from "../../../../../../queries/reportes/iluminacion/reportes-query"
 
 export const Route = createFileRoute(
 	"/_protected/iluminacion/nuevo-informe/areas/"
@@ -64,7 +65,11 @@ function IluminacionAreas() {
 }
 
 function Areas() {
-	const { data: areas } = useSuspenseQuery(areasQueryOptions)
+	const { data: reporteNuevo } = useSuspenseQuery(reporteNuevoQueryOptions)
+
+	const { data: areas } = useSuspenseQuery(
+		areasQueryOptions({ reportId: reporteNuevo?.id ?? "" })
+	)
 
 	if (!areas || areas.length === 0) return <NoAreas />
 

@@ -1,13 +1,13 @@
 import { protectedServerFn } from "@/lib/protected-server-fn"
 import { createServerFn } from "@tanstack/react-start"
 import { getRequest } from "@tanstack/react-start/server"
-import { getAreasDB } from "../../../../db/reportes/iluminacion/areas/get-areas-db"
+import { getReporteDB } from "../../../db/reportes/iluminacion/get-reporte-db"
 
-export const getAreasServer = createServerFn()
-	.inputValidator((data: { reportId: string }) => data)
+export const getReporteServer = createServerFn()
+	.inputValidator((data: { id: string }) => data)
 	.handler(async ({ data }) => {
 		const request = getRequest()
 		const session = await protectedServerFn(request)
 
-		return await getAreasDB(session.user.id, data.reportId)
+		return await getReporteDB(session.user.id, data.id)
 	})
