@@ -2,8 +2,17 @@ import BackChevron from "#/components/back-chevron"
 import Title from "#/components/title"
 import { createFileRoute, Link, Outlet } from "@tanstack/react-router"
 import { File, RulerDimensionLine, UserRound } from "lucide-react"
+import { reporteQueryOptions } from "../../../../../../queries/reportes/iluminacion/reportes-query"
+import { areasQueryOptions } from "../../../../../../queries/reportes/iluminacion/areas/areas-query"
 
 export const Route = createFileRoute("/_protected/iluminacion/reportes/$id")({
+	loader: ({ context, params }) => {
+		context.queryClient.ensureQueryData(reporteQueryOptions({ id: params.id }))
+		context.queryClient.ensureQueryData(
+			areasQueryOptions({ reportId: params.id })
+		)
+		return null
+	},
 	component: RouteComponent,
 })
 

@@ -49,7 +49,7 @@ function ReportesIluminacion() {
 	if (!reportes || reportes.length === 0) return <NoReports />
 
 	return (
-		<article className="w-5/6 flex flex-col gap-2 mt-20">
+		<article className="w-5/6 flex flex-col gap-14 mt-20">
 			<div className="flex flex-col gap-4">
 				{reportes?.map(reporte => (
 					<div
@@ -67,17 +67,23 @@ function ReportesIluminacion() {
 								</p>
 							</div>
 						</div>
-						<div className="hidden sm:flex items-center gap-4">
-							<Eye className="sm:size-6 2xl:size-8 text-foreground/70 cursor-pointer hover:text-foreground transition-colors" />
-							<Download className="sm:size-6 2xl:size-8 text-foreground/70 cursor-pointer hover:text-foreground transition-colors" />
-							<Trash2 className="sm:size-6 2xl:size-8 text-red-700/70 cursor-pointer hover:text-foreground transition-colors" />
-						</div>
-						<Link to="/iluminacion/reportes/$id" params={{ id: reporte.id }}>
+						<Link
+							to="/iluminacion/reportes/$id/general"
+							params={{ id: reporte.id }}
+						>
 							<ChevronRight className="size-8 text-foreground/50" />
 						</Link>
 					</div>
 				))}
 			</div>
+
+			<Link
+				to="/iluminacion/nuevo-informe"
+				className="my-20 py-3 w-5/6 mx-auto tracking-widest font-semibold text-base bg-secondary rounded-lg flex gap-2 items-center justify-center ring-[1px] ring-foreground/25"
+			>
+				<FileChartColumn size={20} />
+				Nuevo Informe
+			</Link>
 		</article>
 	)
 }

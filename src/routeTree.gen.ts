@@ -27,6 +27,7 @@ import { Route as ProtectedIluminacionNuevoInformeAreasIndexRouteImport } from '
 import { Route as ProtectedIluminacionReportesChar91idChar93ResumenRouteImport } from './routes/_protected/iluminacion/reportes/[$id]/resumen'
 import { Route as ProtectedIluminacionReportesChar91idChar93GeneralRouteImport } from './routes/_protected/iluminacion/reportes/[$id]/general'
 import { Route as ProtectedIluminacionReportesChar91idChar93AreasRouteImport } from './routes/_protected/iluminacion/reportes/[$id]/areas'
+import { Route as ProtectedIluminacionReportesPdfChar91idChar93IndexRouteImport } from './routes/_protected/iluminacion/reportes/pdf/[$id]/index'
 
 const ProtectedRouteRoute = ProtectedRouteRouteImport.update({
   id: '/_protected',
@@ -129,6 +130,12 @@ const ProtectedIluminacionReportesChar91idChar93AreasRoute =
     path: '/areas',
     getParentRoute: () => ProtectedIluminacionReportesChar91idChar93RouteRoute,
   } as any)
+const ProtectedIluminacionReportesPdfChar91idChar93IndexRoute =
+  ProtectedIluminacionReportesPdfChar91idChar93IndexRouteImport.update({
+    id: '/iluminacion/reportes/pdf/$id/',
+    path: '/iluminacion/reportes/pdf/$id/',
+    getParentRoute: () => ProtectedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof ProtectedIndexRoute
@@ -148,6 +155,7 @@ export interface FileRoutesByFullPath {
   '/iluminacion/reportes/$id/resumen': typeof ProtectedIluminacionReportesChar91idChar93ResumenRoute
   '/iluminacion/nuevo-informe/areas/': typeof ProtectedIluminacionNuevoInformeAreasIndexRoute
   '/iluminacion/nuevo-informe/opinion/': typeof ProtectedIluminacionNuevoInformeOpinionIndexRoute
+  '/iluminacion/reportes/pdf/$id/': typeof ProtectedIluminacionReportesPdfChar91idChar93IndexRoute
 }
 export interface FileRoutesByTo {
   '/perfil': typeof ProtectedPerfilRouteRouteWithChildren
@@ -167,6 +175,7 @@ export interface FileRoutesByTo {
   '/iluminacion/reportes/$id/resumen': typeof ProtectedIluminacionReportesChar91idChar93ResumenRoute
   '/iluminacion/nuevo-informe/areas': typeof ProtectedIluminacionNuevoInformeAreasIndexRoute
   '/iluminacion/nuevo-informe/opinion': typeof ProtectedIluminacionNuevoInformeOpinionIndexRoute
+  '/iluminacion/reportes/pdf/$id': typeof ProtectedIluminacionReportesPdfChar91idChar93IndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -188,6 +197,7 @@ export interface FileRoutesById {
   '/_protected/iluminacion/reportes/$id/resumen': typeof ProtectedIluminacionReportesChar91idChar93ResumenRoute
   '/_protected/iluminacion/nuevo-informe/areas/': typeof ProtectedIluminacionNuevoInformeAreasIndexRoute
   '/_protected/iluminacion/nuevo-informe/opinion/': typeof ProtectedIluminacionNuevoInformeOpinionIndexRoute
+  '/_protected/iluminacion/reportes/pdf/$id/': typeof ProtectedIluminacionReportesPdfChar91idChar93IndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -209,6 +219,7 @@ export interface FileRouteTypes {
     | '/iluminacion/reportes/$id/resumen'
     | '/iluminacion/nuevo-informe/areas/'
     | '/iluminacion/nuevo-informe/opinion/'
+    | '/iluminacion/reportes/pdf/$id/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/perfil'
@@ -228,6 +239,7 @@ export interface FileRouteTypes {
     | '/iluminacion/reportes/$id/resumen'
     | '/iluminacion/nuevo-informe/areas'
     | '/iluminacion/nuevo-informe/opinion'
+    | '/iluminacion/reportes/pdf/$id'
   id:
     | '__root__'
     | '/_protected'
@@ -248,6 +260,7 @@ export interface FileRouteTypes {
     | '/_protected/iluminacion/reportes/$id/resumen'
     | '/_protected/iluminacion/nuevo-informe/areas/'
     | '/_protected/iluminacion/nuevo-informe/opinion/'
+    | '/_protected/iluminacion/reportes/pdf/$id/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -384,6 +397,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProtectedIluminacionReportesChar91idChar93AreasRouteImport
       parentRoute: typeof ProtectedIluminacionReportesChar91idChar93RouteRoute
     }
+    '/_protected/iluminacion/reportes/pdf/$id/': {
+      id: '/_protected/iluminacion/reportes/pdf/$id/'
+      path: '/iluminacion/reportes/pdf/$id'
+      fullPath: '/iluminacion/reportes/pdf/$id/'
+      preLoaderRoute: typeof ProtectedIluminacionReportesPdfChar91idChar93IndexRouteImport
+      parentRoute: typeof ProtectedRouteRoute
+    }
   }
 }
 
@@ -433,6 +453,7 @@ interface ProtectedRouteRouteChildren {
   ProtectedIluminacionReportesIndexRoute: typeof ProtectedIluminacionReportesIndexRoute
   ProtectedIluminacionNuevoInformeAreasIndexRoute: typeof ProtectedIluminacionNuevoInformeAreasIndexRoute
   ProtectedIluminacionNuevoInformeOpinionIndexRoute: typeof ProtectedIluminacionNuevoInformeOpinionIndexRoute
+  ProtectedIluminacionReportesPdfChar91idChar93IndexRoute: typeof ProtectedIluminacionReportesPdfChar91idChar93IndexRoute
 }
 
 const ProtectedRouteRouteChildren: ProtectedRouteRouteChildren = {
@@ -450,6 +471,8 @@ const ProtectedRouteRouteChildren: ProtectedRouteRouteChildren = {
     ProtectedIluminacionNuevoInformeAreasIndexRoute,
   ProtectedIluminacionNuevoInformeOpinionIndexRoute:
     ProtectedIluminacionNuevoInformeOpinionIndexRoute,
+  ProtectedIluminacionReportesPdfChar91idChar93IndexRoute:
+    ProtectedIluminacionReportesPdfChar91idChar93IndexRoute,
 }
 
 const ProtectedRouteRouteWithChildren = ProtectedRouteRoute._addFileChildren(

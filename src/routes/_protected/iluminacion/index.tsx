@@ -1,3 +1,4 @@
+import InformesRecientes from "#/components/reportes/iluminacion/recientes"
 import { createFileRoute, Link } from "@tanstack/react-router"
 import {
 	AlignEndHorizontal,
@@ -25,12 +26,15 @@ function RouteComponent() {
 				/>
 				<Link
 					to="/iluminacion/nuevo-informe"
-					className="py-3 w-5/6 mx-auto tracking-widest font-semibold text-base bg-secondary rounded-lg flex gap-2 items-center justify-center ring-[1px] ring-foreground/25"
+					className="py-3 w-11/12 mx-auto tracking-widest font-semibold text-base bg-secondary rounded-lg flex gap-2 items-center justify-center ring-[1px] ring-foreground/25"
 				>
 					<FileChartColumn size={20} />
 					Nuevo Informe
 				</Link>
 			</div>
+
+			<InformesRecientes />
+
 			<div className="flex flex-col gap-6 w-5/6 mx-auto  mt-10 mb-40">
 				<span className="text-pretty text-sm tracking-wider italic text-foreground/60">
 					El informe o Protocolo de Medición de Iluminación SRT 84/12 es un

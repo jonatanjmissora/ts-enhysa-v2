@@ -14,7 +14,14 @@ export const Route = createFileRoute(
 
 function RouteComponent() {
 	return (
-		<Suspense fallback={<Loading text="obteniendo reporte" />}>
+		<Suspense
+			fallback={
+				<Loading
+					text="obteniendo reporte"
+					className="scale-50 justify-start  max-h-[50svh]"
+				/>
+			}
+		>
 			<General />
 		</Suspense>
 	)

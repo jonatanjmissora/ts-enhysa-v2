@@ -13,6 +13,7 @@ import { Label } from "#/components/ui/label"
 import { Link } from "@tanstack/react-router"
 import { reporteQueryOptions } from "../../../../../../queries/reportes/iluminacion/reportes-query"
 import { areasQueryOptions } from "../../../../../../queries/reportes/iluminacion/areas/areas-query"
+import { ChartAreaInteractive } from "#/components/reportes/iluminacion/areas/chart"
 
 export const Route = createFileRoute(
 	"/_protected/iluminacion/reportes/$id/areas"
@@ -56,10 +57,10 @@ function Reporte() {
 	)
 
 	return (
-		<article className="flex flex-col justify-center items-center my-20 w-5/6 mx-auto">
+		<article className="flex flex-col justify-center items-center my-20 w-full mx-auto">
 			<Select value={areaId} onValueChange={setAreaId}>
 				<SelectTrigger
-					className="w-full rounded-lg gap-8 text-right justify-end"
+					className="w-5/6 mx-auto rounded-lg gap-8 text-right justify-between"
 					aria-label="Select a value"
 				>
 					<SelectValue placeholder="Seleccione Area" />
@@ -73,7 +74,7 @@ function Reporte() {
 				</SelectContent>
 			</Select>
 
-			{/* <ChartAreaInteractive puntos={area.puntos} /> */}
+			<ChartAreaInteractive puntos={area.puntos} />
 
 			<div className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-2 w-5/6 mx-aut my-10">
 				<span>Uniformidad : </span>
