@@ -22,5 +22,6 @@ export async function getReporteNuevoDB(userId: string) {
 			"ERROR leyendo instrumento:",
 			error instanceof Error ? error.message : error
 		)
+		return null
 	}
 }

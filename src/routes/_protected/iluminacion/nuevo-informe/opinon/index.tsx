@@ -68,7 +68,6 @@ function Opinion() {
 			onSubmit: reporteOpinionFormValidator,
 		},
 		onSubmit: async ({ value }) => {
-			console.log("VALUES: ", value)
 			if (
 				reporteNuevo &&
 				value.conclusion === reporteNuevo.conclusion &&
@@ -83,16 +82,19 @@ function Opinion() {
 				empresaId: reporteNuevo?.empresaId ?? "",
 				instrumentoId: reporteNuevo?.instrumentoId ?? "",
 				clima: reporteNuevo?.clima ?? ["soleado", "60", "10"],
-				areasId: reporteNuevo?.areasId ?? [],
 				createdAt: reporteNuevo?.createdAt ?? new Date(),
 				id: reporteNuevo?.id ?? "",
 				userId: reporteNuevo?.userId ?? "",
-				observacion: value.observacion ?? "Sin Observaciones",
-				recomendacion: value.recomendacion ?? "Sin Recomendaciones",
-				conclusion: value.conclusion ?? "Análisis Pendiente",
+				observacion:
+					value.observacion === "" ? "Sin Observaciones" : value.observacion,
+				recomendacion:
+					value.recomendacion === ""
+						? "Sin Recomendaciones"
+						: value.recomendacion,
+				conclusion:
+					value.conclusion === "" ? "Análisis Pendiente" : value.conclusion,
 			}
 
-			console.log("UPDATE REPORTE NUEVO: ", updateReporteNuevo)
 			const result = await updateOpinion({ data: updateReporteNuevo })
 			if (!result) {
 				console.error("Error al editar nuevo reporte", error)

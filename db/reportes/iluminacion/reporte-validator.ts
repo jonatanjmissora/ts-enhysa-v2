@@ -70,7 +70,6 @@ export const reporteNuevoFormValidator = z.object({
 	empresaId: z.string().min(1, "Id requerido"),
 	instrumentoId: z.string().min(1, "Id requerido"),
 	clima: z.tuple([z.enum(ESTADO), z.enum(HUMEDAD), z.enum(TEMPERATURA)]),
-	areasId: z.array(z.string()),
 })
 
 export type ReporteNuevoFormType = z.infer<typeof reporteNuevoFormValidator>
@@ -79,7 +78,6 @@ export const defaultReporteData: ReporteNuevoFormType = {
 	empresaId: "",
 	instrumentoId: "",
 	clima: ["soleado", "60", "10"],
-	areasId: [],
 }
 
 export const reporteOpinionFormValidator = z.object({

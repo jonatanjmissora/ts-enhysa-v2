@@ -2,10 +2,10 @@ import { protectedServerFn } from "@/lib/protected-server-fn"
 import { createServerFn } from "@tanstack/react-start"
 import { getRequest } from "@tanstack/react-start/server"
 import { createAreaDB } from "../../../../db/reportes/iluminacion/areas/crear-area-db"
-import { areaFormValidator } from "../../../../db/reportes/iluminacion/areas/area-validator"
+import { areaServerValidator } from "../../../../db/reportes/iluminacion/areas/area-validator"
 
 export const createAreaServer = createServerFn({ method: "POST" })
-	.inputValidator(areaFormValidator)
+	.inputValidator(areaServerValidator)
 	.handler(async ({ data }) => {
 		const request = getRequest()
 		const session = await protectedServerFn(request)

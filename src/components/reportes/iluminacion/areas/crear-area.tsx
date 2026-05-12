@@ -52,11 +52,12 @@ import { getIndiceDeLocal, getIndiceRedondeo } from "#/lib/utils"
 import {
 	areaFormValidator,
 	defaultAreaData,
-	type AreaFormType,
 } from "../../../../../db/reportes/iluminacion/areas/area-validator"
 import { useCreateArea } from "../../../../../queries/reportes/iluminacion/areas/use-create-area"
 import { Button } from "#/components/ui/button"
 import Title from "#/components/title"
+import { useSuspenseQuery } from "@tanstack/react-query"
+import { reporteNuevoQueryOptions } from "../../../../../queries/reportes/iluminacion/reportes-query"
 
 export default function CreateAreaAlert() {
 	const [open, setOpen] = useState(false)
@@ -73,7 +74,7 @@ export default function CreateAreaAlert() {
 				</AlertDialogTitle>
 				<AlertDialogDescription asChild>
 					<div className="text-center">
-						<MovilCreateArea setOpen={setOpen} />
+						<CreateArea setOpen={setOpen} />
 					</div>
 				</AlertDialogDescription>
 			</AlertDialogContent>
@@ -81,7 +82,7 @@ export default function CreateAreaAlert() {
 	)
 }
 
-function MovilCreateArea({
+function CreateArea({
 	setOpen,
 }: {
 	setOpen: Dispatch<SetStateAction<boolean>>
@@ -90,6 +91,7 @@ function MovilCreateArea({
 	const [timestamps, setTimestamps] = useState<Date[]>([])
 	const [puntosError, setPuntosError] = useState<string | null>(null)
 	const [planoFiles, setPlanoFiles] = useState<File[]>([])
+	const { data: reporteNuevo } = useSuspenseQuery(reporteNuevoQueryOptions)
 
 	const { mutateAsync: createArea, isPending, error } = useCreateArea()
 
@@ -102,8 +104,10 @@ function MovilCreateArea({
 			setPuntosError(null)
 			if (puntos.every(punto => punto === 0))
 				return setPuntosError("Debe agregar al menos un punto de medición")
-			const newArea: AreaFormType = {
+			if (!reporteNuevo) return
+			const newArea = {
 				...value,
+				reportId: reporteNuevo.id,
 				puntos,
 				timestamps,
 				imagenes: [],
@@ -114,14 +118,6 @@ function MovilCreateArea({
 				return
 			}
 			console.log("Área creada exitosamente")
-			// const result2 = await updateReporteNuevoArea({
-			// 	data: {
-			// 		areasId: result.id,
-			// 	},
-			// })
-			// if (!result2) {
-			// 	console.error("Error al actualizar reporte nuevo", error)
-			// }
 			setOpen(false)
 		},
 	})
@@ -655,7 +651,7 @@ function MovilCreateArea({
 				)}
 				{error && (
 					<p className="text-center italic textXS text-red-500/70">
-						{error.message}
+						{error?.message}
 					</p>
 				)}
 
@@ -848,7 +844,7 @@ function InputMenu({
 	}
 	return (
 		<div className="min-h-[500px] bg-accent rounded-lg ring-[1px] ring-foreground/15 flex items-center justify-center gap-10 flex-col w-full p-10">
-			<span className="textL border-b py-2 border-foreground/50 w-full text-left text-foreground/70">
+			<span className="border-b py-2 border-foreground/50 w-full text-left text-foreground/70">
 				Punto {actualPunto !== null ? actualPunto + 1 : ""}
 			</span>
 			<input

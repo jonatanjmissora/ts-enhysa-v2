@@ -6,9 +6,14 @@ import {
 } from "@/lib/constants"
 import { integer, pgTable, text, timestamp } from "drizzle-orm/pg-core"
 import { user } from "../../../users/schema"
+import { reportes_iluminacion } from "../schema"
 
 export const areas_iluminacion = pgTable("areas_iluminacion", {
 	id: text("id").primaryKey(),
+
+	reportId: text("report_id")
+		.notNull()
+		.references(() => reportes_iluminacion.id, { onDelete: "cascade" }),
 
 	nombre: text("nombre").notNull(),
 

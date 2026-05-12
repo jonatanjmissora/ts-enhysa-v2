@@ -15,7 +15,7 @@ import {
 } from "#/components/ui/accordion"
 import type { AreaIluminacionType } from "../../../../../../db/reportes/iluminacion/areas/schema"
 import { Label } from "#/components/ui/label"
-import { ChevronLeft, ChevronRight, RulerDimensionLine } from "lucide-react"
+import { ChevronRight, RulerDimensionLine } from "lucide-react"
 import {
 	DropdownMenu,
 	DropdownMenuContent,

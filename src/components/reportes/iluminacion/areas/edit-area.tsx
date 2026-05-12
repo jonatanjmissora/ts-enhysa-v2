@@ -72,12 +72,14 @@ export default function EditAreaAlert({
 				<AlertDialogTitle>
 					<Title text="Editar Area" />
 				</AlertDialogTitle>
-				<AlertDialogDescription className="text-center">
-					<EditArea
-						area={area}
-						setOpen={setOpen}
-						setIsMenuOpen={setIsMenuOpen}
-					/>
+				<AlertDialogDescription asChild>
+					<div className="text-center">
+						<EditArea
+							area={area}
+							setOpen={setOpen}
+							setIsMenuOpen={setIsMenuOpen}
+						/>
+					</div>
 				</AlertDialogDescription>
 			</AlertDialogContent>
 		</AlertDialog>
@@ -98,7 +100,7 @@ function EditArea({
 	const [puntosError, setPuntosError] = useState<string | null>(null)
 	const [planoFiles, setPlanoFiles] = useState<File[]>([])
 
-	const { mutateAsync: updateNRpart2, isPending, error } = useUpdateArea()
+	const { mutateAsync: updateArea, isPending, error } = useUpdateArea()
 
 	const form = useForm({
 		defaultValues: {
@@ -119,7 +121,7 @@ function EditArea({
 				timestamps,
 				imagenes: [],
 			}
-			const result = await updateNRpart2({ data: newArea })
+			const result = await updateArea({ data: newArea })
 			if (!result) {
 				console.error("Error al actualizar area", error)
 				return
@@ -800,7 +802,7 @@ function Punto({
 					setOpenInputMenu(true)
 					setActualPunto(index)
 				}}
-				className="w-15 text-xl font-semibold py-1 px-3 card bg-accent sm:bg-accent text-foreground justify-center items-center min-h-9"
+				className="w-15 text-xl font-semibold py-1 px-3 bg-accent text-foreground justify-center items-center min-h-9 rounded-sm ring-[1px] ring-foreground/15"
 			>
 				{puntos[index] !== 0 ? puntos[index] : "*"}
 			</button>
@@ -847,8 +849,8 @@ function InputMenu({
 		setActualPunto(null)
 	}
 	return (
-		<div className="card bg-background items-center justify-center gap-10 flex-col w-full p-10">
-			<span className="textL border-b py-2 border-foreground/50 w-full text-left text-foreground/70">
+		<div className="min-h-[500px] bg-accent rounded-lg ring-[1px] ring-foreground/15 flex items-center justify-center gap-10 flex-col w-full p-10">
+			<span className="border-b py-2 border-foreground/50 w-full text-left text-foreground/70">
 				Punto {actualPunto !== null ? actualPunto + 1 : ""}
 			</span>
 			<input
@@ -864,21 +866,18 @@ function InputMenu({
 				className="dark:bg-foreground/50 bg-foreground/5 text-background/75 textXL text-4xl w-3/4 sm:w-1/2 p-4 h-20 text-center rounded-md"
 				onChange={e => setPuntoValue(e.currentTarget.value)}
 			/>
-			<div className="w-full flex justify-between gap-2 textM">
-				<button
+			<div className="w-full flex flex-col justify-between gap-4">
+				<Button
 					type="button"
+					variant="outline"
 					onClick={() => setOpenInputMenu(false)}
-					className="card p-2 my-shadow cursor-pointer bg-background justify-center flex-1"
+					className="flex-1"
 				>
 					Cancelar
-				</button>
-				<button
-					type="button"
-					className="card p-2 bg-accent my-shadow cursor-pointer justify-center flex-1"
-					onClick={handleSetPunto}
-				>
+				</Button>
+				<Button type="button" className="flex-1" onClick={handleSetPunto}>
 					Guardar
-				</button>
+				</Button>
 			</div>
 		</div>
 	)

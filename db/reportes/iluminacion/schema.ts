@@ -24,8 +24,6 @@ export const reportes_iluminacion = pgTable("reportes_iluminacion", {
 
 	clima: text("clima").array().notNull().$type<ClimaType>(),
 
-	areasId: text("areas_id").array().notNull(),
-
 	observacion: text("observacion").default("").notNull(),
 
 	conclusion: text("conclusion").default("").notNull(),

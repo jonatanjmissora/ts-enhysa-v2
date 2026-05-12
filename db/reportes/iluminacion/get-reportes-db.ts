@@ -15,5 +15,6 @@ export async function getReportesDB(userId: string) {
 			"ERROR obteniendo reportes de iluminacion:",
 			error instanceof Error ? error.message : error
 		)
+		return []
 	}
 }
