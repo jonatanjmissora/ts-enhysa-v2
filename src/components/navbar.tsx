@@ -12,24 +12,25 @@ import { getUserInfo } from "@/lib/utils"
 import { Link, useLoaderData, useNavigate } from "@tanstack/react-router"
 import { LogOut, Shield } from "lucide-react"
 import { useState } from "react"
+import { Theme } from "./theme"
 
 export default function Navbar() {
 	const [isOpen, setIsOpen] = useState(false)
 	return (
 		<header
-			className={`w-full relative h-18 flex items-center justify-between p-4 text-gray-50`}
+			className={`w-full relative h-18 flex items-center justify-between p-4 text-foreground`}
 		>
 			<Link to="/" className="flex items-center gap-3">
 				<img
 					src="/EnHySa_logo.webp"
 					alt="logo EnHySa"
-					className="size-10 drop-shadow-sm/90"
+					className="size-10 dark:drop-shadow-sm/90"
 				/>
 
-				<p className="textXL text-shadow-lg/50">EnHySa App</p>
+				<p className="textXL dark:text-shadow-lg/50">EnHySa App</p>
 			</Link>
 			<button onClick={() => setIsOpen(!isOpen)}>
-				<Menu className="size-7 drop-shadow-md/90" />
+				<Menu className="size-7 dark:drop-shadow-md/90" />
 			</button>
 			<MovilMenuContent isOpen={isOpen} setIsOpen={setIsOpen} />
 		</header>
@@ -45,15 +46,15 @@ const MovilMenuContent = ({
 }) => {
 	return (
 		<div
-			className={` flex flex-col justify-between items-center fixed z-10 inset-0 bg-background w-screen h-svh  ${isOpen ? "translate-y-0" : "-translate-y-full"} transition-transform duration-500 text-gray-50`}
+			className={` flex flex-col justify-between items-center fixed z-10 inset-0 bg-background w-screen h-svh  ${isOpen ? "translate-y-0" : "-translate-y-full"} transition-transform duration-500 text-foreground`}
 		>
 			<div className="h-25 w-full flex items-center justify-end p-8">
 				<button onClick={() => setIsOpen(!isOpen)}>
-					<X className="size-7 drop-shadow-md/90" />
+					<X className="size-7 dark:drop-shadow-md/90" />
 				</button>
 			</div>
 
-			<ul className="flex flex-col gap-5 text-2xl tracking-widest font-semibold flex-1 items-center justify-center text-shadow-lg/50 w-5/6">
+			<ul className="flex flex-col gap-5 text-2xl tracking-widest font-semibold flex-1 items-center justify-center dark:text-shadow-lg/50 w-5/6">
 				<Link
 					to="/"
 					onClick={() => setIsOpen(!isOpen)}
@@ -91,14 +92,14 @@ function User() {
 	return (
 		<div className="flex flex-col sm:gap-2 2xl:gap-4 m-6 w-5/6">
 			<div
-				className={`gap-4 p-8 py-4 rounded-lg flex bg-gray-900/50 sm:bg-background sm:ring-foreground/5`}
+				className={`gap-4 p-8 py-4 rounded-lg flex bg-accent ring-[1px] ring-foreground/10`}
 			>
 				<div className="bg-accent rounded-full flex justify-center items-center">
 					{avatar ? (
 						<img
 							src={avatar}
 							alt="User avatar"
-							className="sm:size-10 2xl:size-14 rounded-full drop-shadow-lg/50"
+							className="sm:size-10 2xl:size-14 rounded-full dark:drop-shadow-lg/50"
 						/>
 					) : (
 						<div className="bg-accent p-2 rounded-full">
@@ -107,7 +108,7 @@ function User() {
 					)}
 				</div>
 				<div className="flex flex-col items-end w-full">
-					<p className="sm:text-base 2xl:text-lg font-semibold tracking-wider text-left w-full sm:text-shadow-none text-shadow-sm/50 dark:text-shadow-sm/50 ">
+					<p className="sm:text-base 2xl:text-lg font-semibold tracking-wider text-left w-full">
 						{fullName || "Usuario"}
 					</p>
 					<Link
@@ -121,7 +122,10 @@ function User() {
 					</Link>
 				</div>
 			</div>
-			<LogoutAlertDialog />
+			<div className="w-full flex itemx-center justify-between">
+				<Theme />
+				<LogoutAlertDialog />
+			</div>
 		</div>
 	)
 }
@@ -144,7 +148,10 @@ export function LogoutAlertDialog() {
 		<AlertDialog open={open} onOpenChange={setOpen}>
 			<AlertDialogTrigger asChild className="m-4 hover:bg-accent">
 				<span className="flex p-2 rounded-sm cursor-pointer items-center justify-end sm:justify-start gap-2 text-left">
-					<LogOut size={16} className="text-gray-50/50 sm:text-foreground/80" />{" "}
+					<LogOut
+						size={16}
+						className="text-foreground/90 sm:text-foreground/80"
+					/>{" "}
 					Cerrar sesion
 				</span>
 			</AlertDialogTrigger>

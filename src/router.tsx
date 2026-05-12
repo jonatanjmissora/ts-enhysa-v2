@@ -12,6 +12,7 @@ export function getRouter() {
 		context: {
 			...context,
 			session: null,
+			theme: "auto",
 		},
 
 		defaultPendingMs: 0,

@@ -13,10 +13,12 @@ import type { Session } from "better-auth"
 import { getSession } from "../../server/get-session"
 import NotFound from "#/components/not-found"
 import Loading from "#/components/loading"
+import { getThemeServerFn } from "../../server/theme"
 
 interface MyRouterContext {
 	session: Session | null
 	queryClient: QueryClient
+	theme: "light" | "dark" | "auto"
 }
 
 export const Route = createRootRouteWithContext<MyRouterContext>()({
@@ -40,6 +42,9 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 			},
 		],
 	}),
+	beforeLoad: async () => ({
+		theme: ((await getThemeServerFn()) ?? "auto") as "light" | "dark" | "auto",
+	}),
 	loader: async () => {
 		const session = await getSession()
 		return { session }
@@ -51,12 +56,13 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 })
 
 function RootDocument({ children }: { children: React.ReactNode }) {
+	const { theme } = Route.useRouteContext()
 	return (
-		<html lang="en">
+		<html lang="en" className={theme}>
 			<head>
 				<HeadContent />
 			</head>
-			<body className="dark overflow-x-hidden w-screen">
+			<body className="overflow-x-hidden w-screen">
 				{children}
 				<TanStackDevtools
 					config={{
