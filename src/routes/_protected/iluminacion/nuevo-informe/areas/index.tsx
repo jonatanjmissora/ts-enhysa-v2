@@ -102,7 +102,7 @@ function Areas() {
 			<CreateAreaAlert />
 
 			<div className="flex flex-col justify-center items-center gap-4 w-5/6 mt-30">
-				<Link to="/iluminacion/nuevo-informe/opinon" className="flex-1 w-full">
+				<Link to="/iluminacion/nuevo-informe/opinion" className="flex-1 w-full">
 					<Button type="submit" className="w-full py-6">
 						Siguiente <ChevronRight className="size-6" />
 					</Button>

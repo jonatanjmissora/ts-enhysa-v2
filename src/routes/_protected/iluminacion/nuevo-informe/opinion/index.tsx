@@ -18,7 +18,7 @@ import { Button } from "#/components/ui/button"
 import { reporteOpinionFormValidator } from "../../../../../../db/reportes/iluminacion/reporte-validator"
 
 export const Route = createFileRoute(
-	"/_protected/iluminacion/nuevo-informe/opinon/"
+	"/_protected/iluminacion/nuevo-informe/opinion/"
 )({
 	component: RouteComponent,
 })
@@ -85,6 +85,7 @@ function Opinion() {
 				createdAt: reporteNuevo?.createdAt ?? new Date(),
 				id: reporteNuevo?.id ?? "",
 				userId: reporteNuevo?.userId ?? "",
+				title: reporteNuevo?.title ?? "",
 				observacion:
 					value.observacion === "" ? "Sin Observaciones" : value.observacion,
 				recomendacion:
@@ -100,7 +101,7 @@ function Opinion() {
 				console.error("Error al editar nuevo reporte", error)
 			}
 			console.log("Reporte Actualizado Exitosamente")
-			navigate({ to: "/iluminacion/nuevo-informe/resumen" })
+			navigate({ to: `/iluminacion/reportes/${reporteNuevo?.id}/general` })
 		},
 	})
 

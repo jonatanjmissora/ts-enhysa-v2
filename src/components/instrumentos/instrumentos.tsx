@@ -118,7 +118,7 @@ function Instrumento({ instrumento }: { instrumento: InstrumentoType }) {
 					<Input
 						id="calibracion"
 						placeholder="Calibracion"
-						value={instrumento.fechaCalibracion.toLocaleDateString("es-AR", {
+						value={instrumento.fechaCalibracion.toLocaleDateString("it-IT", {
 							day: "2-digit",
 							month: "2-digit",
 							year: "numeric",

@@ -37,6 +37,7 @@ import Loading from "#/components/loading"
 import { Link, useNavigate } from "@tanstack/react-router"
 import useScrollTop from "#/hooks/scroll-top"
 import { useCreateNuevoReporte } from "../../../../queries/reportes/iluminacion/use-create-reporte"
+import type { EmpresaType } from "../../../../db/empresas/schema"
 
 export default function ReporteNuevoIluminacion() {
 	return (
@@ -72,7 +73,14 @@ function ReporteNuevo() {
 		},
 		onSubmit: async ({ value }) => {
 			if (!tecnico || !empresas || !instrumentos) return
-			const newReport = { ...value, tecnicoId: tecnico.id }
+
+			const title = getTitle(value.empresaId, empresas)
+
+			const newReport = {
+				...value,
+				tecnicoId: tecnico.id,
+				title,
+			}
 			const result = await createNewReport({ data: newReport })
 			if (!result) {
 				console.error("Error al crear el reporte", error)
@@ -425,4 +433,10 @@ function ReporteNuevo() {
 			</FieldGroup>
 		</form>
 	)
+}
+
+function getTitle(empresaId: string, empresas: EmpresaType[]) {
+	const empresa = empresas.find(e => e.id === empresaId)
+	if (!empresa) return ""
+	return `${empresa.razonSocial} - ${empresa.direccion}`
 }

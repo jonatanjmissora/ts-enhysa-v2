@@ -4,9 +4,12 @@ import { tecnicos } from "../../tecnicos/schema"
 import { empresas } from "../../empresas/schema"
 import { instrumentos } from "../../instrumentos/schema"
 import type { ClimaType } from "#/lib/constants"
+import { relations } from "drizzle-orm"
 
 export const reportes_iluminacion = pgTable("reportes_iluminacion", {
 	id: text("id").primaryKey(),
+
+	title: text("title").notNull(),
 
 	tecnicoId: text("tecnico_id")
 		.notNull()
@@ -38,3 +41,20 @@ export const reportes_iluminacion = pgTable("reportes_iluminacion", {
 })
 
 export type ReporteIluminacionType = typeof reportes_iluminacion.$inferSelect
+
+export const reportesRelations = relations(reportes_iluminacion, ({ one }) => ({
+	empresa: one(empresas, {
+		fields: [reportes_iluminacion.empresaId],
+		references: [empresas.id],
+	}),
+
+	instrumento: one(instrumentos, {
+		fields: [reportes_iluminacion.instrumentoId],
+		references: [instrumentos.id],
+	}),
+
+	tecnico: one(tecnicos, {
+		fields: [reportes_iluminacion.tecnicoId],
+		references: [tecnicos.id],
+	}),
+}))
