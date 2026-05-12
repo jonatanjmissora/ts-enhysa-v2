@@ -9,8 +9,6 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "#/components/ui/select"
-import { Label } from "#/components/ui/label"
-import { Link } from "@tanstack/react-router"
 import { reporteQueryOptions } from "../../../../../../queries/reportes/iluminacion/reportes-query"
 import { areasQueryOptions } from "../../../../../../queries/reportes/iluminacion/areas/areas-query"
 import { ChartAreaInteractive } from "#/components/reportes/iluminacion/areas/chart"

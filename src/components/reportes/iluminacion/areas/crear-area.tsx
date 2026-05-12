@@ -64,7 +64,7 @@ export default function CreateAreaAlert() {
 	return (
 		<AlertDialog open={open} onOpenChange={setOpen}>
 			<AlertDialogTrigger asChild className="hover:bg-accent">
-				<Button className="w-1/2 mx-auto py-5 bg-primary/50 ring-foreground/5">
+				<Button className="w-1/2 mx-auto py-5 bg-primary/50 ring-foreground/25">
 					+ Nueva Area
 				</Button>
 			</AlertDialogTrigger>

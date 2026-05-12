@@ -11,7 +11,7 @@ export function useCreateArea() {
 		onSuccess: data => {
 			// queryClient.invalidateQueries({ queryKey: ["empresas"] })
 			queryClient.setQueryData<AreaIluminacionType[]>(
-				["areas_iluminacion"],
+				["areas_iluminacion", data.reportId],
 				oldData => {
 					if (!oldData) return oldData
 					return sortedByName([data, ...oldData])
