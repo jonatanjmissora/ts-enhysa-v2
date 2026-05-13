@@ -109,3 +109,12 @@ export const getIndiceRedondeo = (indiceDeLocal: number) =>
 	Math.abs(indiceDeLocal % 1) > 0
 		? Math.trunc(indiceDeLocal) + 1
 		: Math.trunc(indiceDeLocal)
+
+export const setResetPuntos = (length: number) => {
+	const resetPuntos: number[] = Array.from({ length: length }, () => 0)
+	const resetTimestamps: Date[] = Array.from(
+		{ length: length },
+		() => new Date(1970, 0, 1, 0, 0, 0)
+	)
+	return { resetPuntos, resetTimestamps }
+}

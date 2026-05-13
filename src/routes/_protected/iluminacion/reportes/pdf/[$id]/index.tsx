@@ -44,22 +44,25 @@ function PDF() {
 		<article className="w-full flex flex-col gap-10 tracking-wider my-14">
 			<div className="min-h-svh w-full relative flex flex-col items-center gap-10">
 				<BackChevron to="/iluminacion/reportes" />
-				<Title text="Reporte Iluminación PDF" className="mt-15" />
-				<ClientComponent
+				<div className="flex flex-col gap-0 items-center justify-center w-full">
+					<Title text="Reporte Iluminación PDF" className="mt-15" />
+					<span className="text-amber-600">{`${reporte.empresa.razonSocial.toUpperCase()} - ${reporte.finishedAt?.toLocaleDateString("it-IT")}`}</span>
+				</div>
+				{/* <ClientComponent
 					fallback={
 						<span className="italic textL text-foreground/50 w-full h-[30svh] flex items-center justify-center">
 							Cargando visor de PDF...
 						</span>
 					}
-				>
-					<MyDocument
-						reporte={reporte}
-						areas={areas}
-						tecnico={reporte.tecnico}
-						empresa={reporte.empresa}
-						instrumento={reporte.instrumento}
-					/>
-				</ClientComponent>
+				> */}
+				<MyDocument
+					reporte={reporte}
+					areas={areas}
+					tecnico={reporte.tecnico}
+					empresa={reporte.empresa}
+					instrumento={reporte.instrumento}
+				/>
+				{/* </ClientComponent> */}
 			</div>
 		</article>
 	)

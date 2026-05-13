@@ -37,7 +37,11 @@ import {
 	type SetStateAction,
 } from "react"
 import Formula from "./formula"
-import { getIndiceDeLocal, getIndiceRedondeo } from "@/lib/utils"
+import {
+	getIndiceDeLocal,
+	getIndiceRedondeo,
+	setResetPuntos,
+} from "@/lib/utils"
 import {
 	AlertDialog,
 	AlertDialogTrigger,
@@ -714,6 +718,11 @@ function Grilla({
 	const largoRatio = 150 * divisionesLargo
 	const anchoGrilla = `${(ancho / largo) * largoRatio}px`
 	const largoGrilla = `${150 * divisionesLargo}px`
+	useEffect(() => {
+		const { resetPuntos, resetTimestamps } = setResetPuntos(celdas)
+		setPuntos(resetPuntos)
+		setTimestamps(resetTimestamps)
+	}, [celdas, setPuntos, setTimestamps])
 
 	return (
 		<>
@@ -904,19 +913,22 @@ function AreaPuntosList({
 	}
 
 	return (
-		<div className="grid grid-cols-2 sm:grid-cols-3 gap-4  textXS">
-			{puntos.map((punto, index) => (
-				<div
-					key={index}
-					className="flex items-center justify-between p-2 border-b border-foreground/20"
-				>
-					<span>punto-{index + 1}</span>
-					<span>{punto}</span>
-					<button type="button" onClick={() => handleSetPunto(index)}>
-						<Trash2 className="size-4 cursor-pointer text-red-700/50" />
-					</button>
-				</div>
-			))}
-		</div>
+		<>
+			{JSON.stringify(puntos)}
+			<div className="grid grid-cols-2 sm:grid-cols-3 gap-4  textXS">
+				{puntos.map((punto, index) => (
+					<div
+						key={index}
+						className="flex items-center justify-between p-2 border-b border-foreground/20"
+					>
+						<span>punto-{index + 1}</span>
+						<span>{punto}</span>
+						<button type="button" onClick={() => handleSetPunto(index)}>
+							<Trash2 className="size-4 cursor-pointer text-red-700/50" />
+						</button>
+					</div>
+				))}
+			</div>
+		</>
 	)
 }

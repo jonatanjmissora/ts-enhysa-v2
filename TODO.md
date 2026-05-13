@@ -10,3 +10,5 @@ si es un reporte nuevo, sin nada previo, que no haya Suspense ni query para area
 ordenar areas cuando las creo (alfabeticamente)
 
 no se refresca area cuando creo, porque el query es ["areas_iluminacion", id]
+
+limitar el alto, ancho y largo a numero positivos.

@@ -48,7 +48,11 @@ import {
 } from "react"
 import { InputFiles } from "#/components/input-files"
 import Formula from "./formula"
-import { getIndiceDeLocal, getIndiceRedondeo } from "#/lib/utils"
+import {
+	getIndiceDeLocal,
+	getIndiceRedondeo,
+	setResetPuntos,
+} from "#/lib/utils"
 import {
 	areaFormValidator,
 	defaultAreaData,
@@ -700,13 +704,9 @@ function Grilla({
 	const anchoGrilla = `${(ancho / largo) * largoRatio}px`
 	const largoGrilla = `${150 * divisionesLargo}px`
 	useEffect(() => {
-		const newPuntos: number[] = Array.from({ length: celdas }, () => 0)
-		setPuntos(newPuntos)
-		const newTimestamps: Date[] = Array.from(
-			{ length: celdas },
-			() => FECHA_1970
-		)
-		setTimestamps(newTimestamps)
+		const { resetPuntos, resetTimestamps } = setResetPuntos(celdas)
+		setPuntos(resetPuntos)
+		setTimestamps(resetTimestamps)
 	}, [celdas, setPuntos, setTimestamps])
 
 	return (
