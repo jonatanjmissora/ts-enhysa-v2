@@ -7,13 +7,7 @@ import { Suspense } from "react"
 import { reporteQueryOptions } from "../../../../../../../queries/reportes/iluminacion/reportes-query"
 import { ClientComponent } from "#/components/client-component"
 import { MyDocument } from "#/components/reportes/iluminacion/pdf/my-document"
-
-// const PDFViewLazy = lazy(
-// 	() =>
-// 		import(
-// 			"../../../../../../components/reportes/iluminacion/pdf/pdf-view-lazy.tsx"
-// 		)
-// )
+import { areasQueryOptions } from "../../../../../../../queries/reportes/iluminacion/areas/areas-query"
 
 export const Route = createFileRoute(
 	"/_protected/iluminacion/reportes/pdf/$id/"
@@ -39,12 +33,15 @@ function RouteComponent() {
 function PDF() {
 	const { id } = Route.useParams()
 	const { data: reporte } = useSuspenseQuery(reporteQueryOptions({ id }))
+	const { data: areas } = useSuspenseQuery(
+		areasQueryOptions({ reportId: reporte?.id || "" })
+	)
 
 	if (!reporte)
 		return <span className="text-red-500">Reporte no encontrado</span>
 
 	return (
-		<article className="min-h-screen w-5/6 mx-auto flex flex-col gap-10 tracking-wider my-14">
+		<article className="w-full flex flex-col gap-10 tracking-wider my-14">
 			<div className="min-h-svh w-full relative flex flex-col items-center gap-10">
 				<BackChevron to="/iluminacion/reportes" />
 				<Title text="Reporte Iluminación PDF" className="mt-15" />
@@ -55,10 +52,13 @@ function PDF() {
 						</span>
 					}
 				>
-					<MyDocument reporte={reporte} />
-					{/* <Suspense fallback={<span>Cargando PDF...</span>}>
-						<PDFViewLazy reporte={reporte} />
-					</Suspense> */}
+					<MyDocument
+						reporte={reporte}
+						areas={areas}
+						tecnico={reporte.tecnico}
+						empresa={reporte.empresa}
+						instrumento={reporte.instrumento}
+					/>
 				</ClientComponent>
 			</div>
 		</article>

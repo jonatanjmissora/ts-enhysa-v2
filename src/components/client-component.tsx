@@ -15,5 +15,5 @@ export function ClientComponent({
 
 	if (!isClient) return fallback
 
-	return <section className="my-25">{children}</section>
+	return <>{children}</>
 }
