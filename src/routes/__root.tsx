@@ -49,16 +49,17 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 		const session = await getSession()
 		return { session }
 	},
-	pendingComponent: () => <Loading />,
 	shellComponent: RootDocument,
 	errorComponent: DefaultCatchBoundary,
 	notFoundComponent: () => <NotFound />,
 })
 
 function RootDocument({ children }: { children: React.ReactNode }) {
-	const { theme } = Route.useRouteContext()
+	const theme = Route.useRouteContext({
+		select: (s) => s.theme,
+	})
 	return (
-		<html lang="en" className={theme}>
+		<html lang="en" className={theme === "auto" ? "dark" : theme}>
 			<head>
 				<HeadContent />
 			</head>

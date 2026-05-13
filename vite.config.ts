@@ -9,6 +9,9 @@ import netlify from '@netlify/vite-plugin-tanstack-start'
 
 const config = defineConfig({
   resolve: { tsconfigPaths: true },
+  optimizeDeps: {
+    include: ['@react-pdf/renderer'],
+  },
   plugins: [
     devtools(),
     netlify(),
