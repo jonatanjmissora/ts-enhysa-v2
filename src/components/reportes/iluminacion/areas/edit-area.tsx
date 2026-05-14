@@ -103,6 +103,11 @@ function EditArea({
 	const [timestamps, setTimestamps] = useState<Date[]>(area.timestamps)
 	const [puntosError, setPuntosError] = useState<string | null>(null)
 	const [planoFiles, setPlanoFiles] = useState<File[]>([])
+	const [indiceRedondeo, setIndiceRedondeo] = useState<number>(() => {
+		const indiceDeLocal = getIndiceDeLocal(area.largo, area.ancho, area.alto)
+		const oldIndiceRedondeo = getIndiceRedondeo(indiceDeLocal)
+		return oldIndiceRedondeo
+	})
 
 	const { mutateAsync: updateArea, isPending, error } = useUpdateArea()
 
@@ -608,12 +613,21 @@ function EditArea({
 				</div>
 
 				<form.Subscribe
-					selector={state => [
-						state.values.largo,
-						state.values.ancho,
-						state.values.alto,
-					]}
-					children={([largo, ancho, alto]) => {
+					selector={state =>
+						`${state.values.largo}-${state.values.ancho}-${state.values.alto}`
+					}
+					children={values => {
+						const [largo, ancho, alto] = values.split("-").map(Number)
+						if (largo * ancho * alto === 0) return null
+						const indiceDeLocal = getIndiceDeLocal(largo, ancho, alto)
+						const newIndiceRedondeo = getIndiceRedondeo(indiceDeLocal)
+						if (indiceRedondeo !== newIndiceRedondeo) {
+							setIndiceRedondeo(newIndiceRedondeo)
+							const newCeldas = (newIndiceRedondeo + 2) ** 2
+							const { resetPuntos, resetTimestamps } = setResetPuntos(newCeldas)
+							setPuntos(resetPuntos)
+							setTimestamps(resetTimestamps)
+						}
 						return (
 							largo > 0 &&
 							ancho > 0 &&
@@ -623,6 +637,8 @@ function EditArea({
 										alto={Number(alto)}
 										ancho={Number(ancho)}
 										largo={Number(largo)}
+										indiceDeLocal={indiceDeLocal}
+										indiceRedondeo={newIndiceRedondeo}
 									/>
 									<Grilla
 										puntos={puntos}
@@ -631,7 +647,7 @@ function EditArea({
 										setTimestamps={setTimestamps}
 										ancho={Number(ancho)}
 										largo={Number(largo)}
-										alto={Number(alto)}
+										indiceRedondeo={newIndiceRedondeo}
 									/>
 								</>
 							)
@@ -694,23 +710,20 @@ function Grilla({
 	setPuntos,
 	ancho,
 	largo,
-	alto,
 	timestamps,
 	setTimestamps,
+	indiceRedondeo,
 }: {
 	ancho: number
 	largo: number
-	alto: number
 	puntos: number[]
 	setPuntos: Dispatch<SetStateAction<number[]>>
 	timestamps: Date[]
 	setTimestamps: Dispatch<SetStateAction<Date[]>>
+	indiceRedondeo: number
 }) {
 	const [openInputMenu, setOpenInputMenu] = useState<boolean>(false)
 	const [actualPunto, setActualPunto] = useState<number | null>(null)
-
-	const indiceDeLocal = getIndiceDeLocal(largo, ancho, alto)
-	const indiceRedondeo = getIndiceRedondeo(indiceDeLocal)
 	const celdas = (indiceRedondeo + 2) ** 2
 	const div = Math.sqrt(celdas).toFixed(0)
 	const divisionesLargo = Number(div)
@@ -718,11 +731,6 @@ function Grilla({
 	const largoRatio = 150 * divisionesLargo
 	const anchoGrilla = `${(ancho / largo) * largoRatio}px`
 	const largoGrilla = `${150 * divisionesLargo}px`
-	useEffect(() => {
-		const { resetPuntos, resetTimestamps } = setResetPuntos(celdas)
-		setPuntos(resetPuntos)
-		setTimestamps(resetTimestamps)
-	}, [celdas, setPuntos, setTimestamps])
 
 	return (
 		<>
@@ -913,22 +921,19 @@ function AreaPuntosList({
 	}
 
 	return (
-		<>
-			{JSON.stringify(puntos)}
-			<div className="grid grid-cols-2 sm:grid-cols-3 gap-4  textXS">
-				{puntos.map((punto, index) => (
-					<div
-						key={index}
-						className="flex items-center justify-between p-2 border-b border-foreground/20"
-					>
-						<span>punto-{index + 1}</span>
-						<span>{punto}</span>
-						<button type="button" onClick={() => handleSetPunto(index)}>
-							<Trash2 className="size-4 cursor-pointer text-red-700/50" />
-						</button>
-					</div>
-				))}
-			</div>
-		</>
+		<div className="grid grid-cols-2 sm:grid-cols-3 gap-4  textXS">
+			{puntos.map((punto, index) => (
+				<div
+					key={index}
+					className="flex items-center justify-between p-2 border-b border-foreground/20"
+				>
+					<span>punto-{index + 1}</span>
+					<span>{punto}</span>
+					<button type="button" onClick={() => handleSetPunto(index)}>
+						<Trash2 className="size-4 cursor-pointer text-red-700/50" />
+					</button>
+				</div>
+			))}
+		</div>
 	)
 }

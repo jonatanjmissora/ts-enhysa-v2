@@ -1,17 +1,19 @@
-import { getIndiceDeLocal, getIndiceRedondeo } from "@/lib/utils"
+import { getIndiceDeLocal, getIndiceRedondeo } from "#/lib/utils"
 import { Equal, EqualApproximately } from "lucide-react"
 
 export default function Formula({
 	alto,
 	ancho,
 	largo,
+	indiceDeLocal,
+	indiceRedondeo,
 }: {
 	alto: number
 	ancho: number
 	largo: number
+	indiceDeLocal: number
+	indiceRedondeo: number
 }) {
-	const indiceDeLocal = getIndiceDeLocal(largo, ancho, alto)
-	const indiceRedondeo = getIndiceRedondeo(indiceDeLocal)
 	return (
 		<div className="w-5/6 sm:w-full mx-auto flex flex-col items-stretch justify-between gap-3">
 			<span className="w-full italic font-semibold text-foreground/50 tracking-widest border-b border-foreground/10 text-left">

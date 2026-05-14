@@ -1,7 +1,7 @@
 import { Button } from "#/components/ui/button"
 import { useSuspenseQuery } from "@tanstack/react-query"
 import { Link } from "@tanstack/react-router"
-import { FileChartColumn } from "lucide-react"
+import { Calendar, FileChartColumn } from "lucide-react"
 import { Suspense } from "react"
 import { reportesQueryOptions } from "../../../../queries/reportes/iluminacion/reportes-query"
 
@@ -46,8 +46,12 @@ function Reportes() {
 					}}
 					className="p-4 bg-secondary/50 rounded-lg ring-[1px] ring-foreground/15 justify-between w-full"
 				>
-					<div className="flex gap-4 items-center relative">
-						<FileChartColumn className="size-8 absolute -top-2 -right-2 text-blue-600" />
+					<div className="flex gap-4 items-center">
+						{reporte.finishedAt ? (
+							<FileChartColumn className="size-8 text-blue-600" />
+						) : (
+							<Calendar className="size-8 text-amber-600" />
+						)}
 						<div className="flex flex-col gap-1">
 							<span className="textM font-semibold w-60 truncate">
 								{reporte.title.toUpperCase()}

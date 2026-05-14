@@ -6,6 +6,7 @@ import { createFileRoute, Link } from "@tanstack/react-router"
 import { Suspense } from "react"
 import { reportesQueryOptions } from "../../../../../queries/reportes/iluminacion/reportes-query"
 import {
+	Calendar,
 	ChevronRight,
 	Download,
 	Eye,
@@ -57,18 +58,31 @@ function ReportesIluminacion() {
 						className="px-2 py-4 rounded-lg ring-[1px] ring-foreground/10 bg-accent flex justify-between w-full"
 					>
 						<div className="flex gap-2 items-center">
-							<FileChartColumn className="size-8 text-blue-700/70" />
+							{reporte.finishedAt ? (
+								<FileChartColumn className="size-8 text-blue-600" />
+							) : (
+								<Calendar className="size-8 text-amber-600" />
+							)}
 							<div className="flex flex-col gap-0">
 								<span className="text-base font-semibold w-55 truncate">
 									{reporte.title.toUpperCase()}
 								</span>
-								<p className="text-xs text-foreground/50">
-									Realizado el {reporte.finishedAt?.toLocaleDateString("it-IT")}
-								</p>
+								{reporte.finishedAt ? (
+									<span className="text-xs text-foreground/50">
+										Realizado el{" "}
+										{reporte.finishedAt?.toLocaleDateString("it-IT")}
+									</span>
+								) : (
+									<span className="text-xs text-amber-600">Pendiente</span>
+								)}
 							</div>
 						</div>
 						<Link
-							to="/iluminacion/reportes/$id/general"
+							to={
+								reporte.finishedAt
+									? "/iluminacion/reportes/$id/general"
+									: "/iluminacion/nuevo-informe"
+							}
 							params={{ id: reporte.id }}
 						>
 							<ChevronRight className="size-8 text-foreground/50" />

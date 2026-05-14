@@ -96,6 +96,7 @@ function CreateArea({
 	const [puntosError, setPuntosError] = useState<string | null>(null)
 	const [planoFiles, setPlanoFiles] = useState<File[]>([])
 	const { data: reporteNuevo } = useSuspenseQuery(reporteNuevoQueryOptions)
+	const [indiceRedondeo, setIndiceRedondeo] = useState<number>(0)
 
 	const { mutateAsync: createArea, isPending, error } = useCreateArea()
 
@@ -596,12 +597,21 @@ function CreateArea({
 				</div>
 
 				<form.Subscribe
-					selector={state => [
-						state.values.largo,
-						state.values.ancho,
-						state.values.alto,
-					]}
-					children={([largo, ancho, alto]) => {
+					selector={state =>
+						`${state.values.largo}-${state.values.ancho}-${state.values.alto}`
+					}
+					children={values => {
+						const [largo, ancho, alto] = values.split("-").map(Number)
+						if (largo * ancho * alto === 0) return null
+						const indiceDeLocal = getIndiceDeLocal(largo, ancho, alto)
+						const newIndiceRedondeo = getIndiceRedondeo(indiceDeLocal)
+						if (indiceRedondeo !== newIndiceRedondeo) {
+							setIndiceRedondeo(newIndiceRedondeo)
+							const newCeldas = (newIndiceRedondeo + 2) ** 2
+							const { resetPuntos, resetTimestamps } = setResetPuntos(newCeldas)
+							setPuntos(resetPuntos)
+							setTimestamps(resetTimestamps)
+						}
 						return (
 							largo > 0 &&
 							ancho > 0 &&
@@ -611,6 +621,8 @@ function CreateArea({
 										alto={Number(alto)}
 										ancho={Number(ancho)}
 										largo={Number(largo)}
+										indiceDeLocal={indiceDeLocal}
+										indiceRedondeo={newIndiceRedondeo}
 									/>
 									<Grilla
 										puntos={puntos}
@@ -619,7 +631,7 @@ function CreateArea({
 										setTimestamps={setTimestamps}
 										ancho={Number(ancho)}
 										largo={Number(largo)}
-										alto={Number(alto)}
+										indiceRedondeo={newIndiceRedondeo}
 									/>
 								</>
 							)
@@ -681,21 +693,19 @@ function Grilla({
 	setTimestamps,
 	ancho,
 	largo,
-	alto,
+	indiceRedondeo,
 }: {
 	ancho: number
 	largo: number
-	alto: number
 	puntos: number[]
 	setPuntos: Dispatch<SetStateAction<number[]>>
 	timestamps: Date[]
 	setTimestamps: Dispatch<SetStateAction<Date[]>>
+	indiceRedondeo: number
 }) {
 	const [openInputMenu, setOpenInputMenu] = useState<boolean>(false)
 	const [actualPunto, setActualPunto] = useState<number | null>(null)
 
-	const indiceDeLocal = getIndiceDeLocal(largo, ancho, alto)
-	const indiceRedondeo = getIndiceRedondeo(indiceDeLocal)
 	const celdas = (indiceRedondeo + 2) ** 2
 	const div = Math.sqrt(celdas).toFixed(0)
 	const divisionesLargo = Number(div)

@@ -12,3 +12,5 @@ ordenar areas cuando las creo (alfabeticamente)
 no se refresca area cuando creo, porque el query es ["areas_iluminacion", id]
 
 limitar el alto, ancho y largo a numero positivos.
+
+cuando modifico alto algo o largo, en resumen, celdas, resetear puntos
