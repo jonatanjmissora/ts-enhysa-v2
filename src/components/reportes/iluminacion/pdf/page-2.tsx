@@ -4,7 +4,6 @@ import MembreteInferior from "./membrete-inferior"
 import { MUESTREO } from "@/lib/constants"
 import type { EmpresaType } from "../../../../../db/empresas/schema"
 import type { TecnicoType } from "../../../../../db/tecnicos/schema"
-import type { ReporteIluminacionType } from "../../../../../db/reportes/iluminacion/schema"
 import type { AreaIluminacionType } from "../../../../../db/reportes/iluminacion/areas/schema"
 
 // Create styles
@@ -64,12 +63,10 @@ const styles = StyleSheet.create({
 const COLUMNWIDTH = [6, 5, 16, 16, 10, 11, 10, 10, 6, 10]
 
 export default function Page2({
-	reporte,
 	areas,
 	tecnico,
 	empresa,
 }: {
-	reporte: ReporteIluminacionType
 	areas: AreaIluminacionType[]
 	empresa: EmpresaType
 	tecnico: TecnicoType
@@ -77,10 +74,16 @@ export default function Page2({
 	return (
 		<>
 			{areas.map(area => {
-				return (
-					<AreaTable
+				return area.puntos.length <= 14 ? (
+					<AreaTableOnePage
 						key={area.id}
-						reporte={reporte}
+						area={area}
+						tecnico={tecnico}
+						empresa={empresa}
+					/>
+				) : (
+					<AreaTableMultiplePages
+						key={area.id}
 						area={area}
 						tecnico={tecnico}
 						empresa={empresa}
@@ -91,13 +94,11 @@ export default function Page2({
 	)
 }
 
-function AreaTable({
-	reporte,
+function AreaTableOnePage({
 	area,
 	tecnico,
 	empresa,
 }: {
-	reporte: ReporteIluminacionType
 	area: AreaIluminacionType
 	tecnico: TecnicoType
 	empresa: EmpresaType
@@ -416,5 +417,30 @@ function TablaDePuntos({ area }: { area: AreaIluminacionType }) {
 				</View>
 			))}
 		</>
+	)
+}
+function AreaTableMultiplePages({
+	area,
+	tecnico,
+	empresa,
+}: {
+	area: AreaIluminacionType
+	tecnico: TecnicoType
+	empresa: EmpresaType
+}) {
+	const chunkResult = chunk(area.puntos, 12)
+	return chunkResult.map((chunk, index) => (
+		<AreaTableOnePage
+			key={index}
+			area={{ ...area, puntos: chunk }}
+			tecnico={tecnico}
+			empresa={empresa}
+		/>
+	))
+}
+
+function chunk(array: number[], size: number) {
+	return Array.from({ length: Math.ceil(array.length / size) }, (_, i) =>
+		array.slice(i * size, i * size + size)
 	)
 }

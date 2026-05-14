@@ -110,12 +110,7 @@ function MyDocument2({
 				empresa={empresa}
 				instrumento={instrumento}
 			/>
-			<Page2
-				reporte={reporte}
-				areas={areas}
-				tecnico={tecnico}
-				empresa={empresa}
-			/>
+			<Page2 areas={areas} tecnico={tecnico} empresa={empresa} />
 			<Page3 reporte={reporte} tecnico={tecnico} empresa={empresa} />
 		</Document>
 	)
