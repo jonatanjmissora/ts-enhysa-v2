@@ -31,7 +31,7 @@ export const MyDocument = ({
 		<>
 			<PDFDownloadLink
 				document={
-					<MyDocument2
+					<MyDocumentData
 						reporte={reporte}
 						areas={areas}
 						tecnico={tecnico}
@@ -59,7 +59,7 @@ export const MyDocument = ({
 				className="min-h-svh w-full"
 				showToolbar={false}
 			>
-				<MyDocument2
+				<MyDocumentData
 					reporte={reporte}
 					areas={areas}
 					tecnico={tecnico}
@@ -68,28 +68,10 @@ export const MyDocument = ({
 				/>
 			</PDFViewer>
 		</>
-
-		// <PDFViewer width="100%" height="100%" className="min-h-svh w-full">
-		// 	<Document title={reporte.title}>
-		// 		<Page1
-		// 			reporte={reporte}
-		// 			tecnico={tecnico}
-		// 			empresa={empresa}
-		// 			instrumento={instrumento}
-		// 		/>
-		// 		<Page2
-		// 			reporte={reporte}
-		// 			areas={areas}
-		// 			tecnico={tecnico}
-		// 			empresa={empresa}
-		// 		/>
-		// 		<Page3 reporte={reporte} tecnico={tecnico} empresa={empresa} />
-		// 	</Document>
-		// </PDFViewer>
 	)
 }
 
-function MyDocument2({
+function MyDocumentData({
 	reporte,
 	areas,
 	tecnico,

@@ -10,8 +10,10 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as ProtectedRouteRouteImport } from './routes/_protected/route'
+import { Route as TestIndexRouteImport } from './routes/test/index'
 import { Route as LoginIndexRouteImport } from './routes/login/index'
 import { Route as ProtectedIndexRouteImport } from './routes/_protected/index'
+import { Route as ApiUploadthingRouteImport } from './routes/api/uploadthing'
 import { Route as ProtectedSuscripcionRouteImport } from './routes/_protected/suscripcion'
 import { Route as ProtectedPerfilRouteRouteImport } from './routes/_protected/perfil/route'
 import { Route as ProtectedIluminacionIndexRouteImport } from './routes/_protected/iluminacion/index'
@@ -33,6 +35,11 @@ const ProtectedRouteRoute = ProtectedRouteRouteImport.update({
   id: '/_protected',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TestIndexRoute = TestIndexRouteImport.update({
+  id: '/test/',
+  path: '/test/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LoginIndexRoute = LoginIndexRouteImport.update({
   id: '/login/',
   path: '/login/',
@@ -42,6 +49,11 @@ const ProtectedIndexRoute = ProtectedIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => ProtectedRouteRoute,
+} as any)
+const ApiUploadthingRoute = ApiUploadthingRouteImport.update({
+  id: '/api/uploadthing',
+  path: '/api/uploadthing',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const ProtectedSuscripcionRoute = ProtectedSuscripcionRouteImport.update({
   id: '/suscripcion',
@@ -141,7 +153,9 @@ export interface FileRoutesByFullPath {
   '/': typeof ProtectedIndexRoute
   '/perfil': typeof ProtectedPerfilRouteRouteWithChildren
   '/suscripcion': typeof ProtectedSuscripcionRoute
+  '/api/uploadthing': typeof ApiUploadthingRoute
   '/login/': typeof LoginIndexRoute
+  '/test/': typeof TestIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/iluminacion/': typeof ProtectedIluminacionIndexRoute
   '/iluminacion/reportes/$id': typeof ProtectedIluminacionReportesChar91idChar93RouteRouteWithChildren
@@ -160,8 +174,10 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/perfil': typeof ProtectedPerfilRouteRouteWithChildren
   '/suscripcion': typeof ProtectedSuscripcionRoute
+  '/api/uploadthing': typeof ApiUploadthingRoute
   '/': typeof ProtectedIndexRoute
   '/login': typeof LoginIndexRoute
+  '/test': typeof TestIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/iluminacion': typeof ProtectedIluminacionIndexRoute
   '/iluminacion/reportes/$id': typeof ProtectedIluminacionReportesChar91idChar93RouteRouteWithChildren
@@ -182,8 +198,10 @@ export interface FileRoutesById {
   '/_protected': typeof ProtectedRouteRouteWithChildren
   '/_protected/perfil': typeof ProtectedPerfilRouteRouteWithChildren
   '/_protected/suscripcion': typeof ProtectedSuscripcionRoute
+  '/api/uploadthing': typeof ApiUploadthingRoute
   '/_protected/': typeof ProtectedIndexRoute
   '/login/': typeof LoginIndexRoute
+  '/test/': typeof TestIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/_protected/iluminacion/': typeof ProtectedIluminacionIndexRoute
   '/_protected/iluminacion/reportes/$id': typeof ProtectedIluminacionReportesChar91idChar93RouteRouteWithChildren
@@ -205,7 +223,9 @@ export interface FileRouteTypes {
     | '/'
     | '/perfil'
     | '/suscripcion'
+    | '/api/uploadthing'
     | '/login/'
+    | '/test/'
     | '/api/auth/$'
     | '/iluminacion/'
     | '/iluminacion/reportes/$id'
@@ -224,8 +244,10 @@ export interface FileRouteTypes {
   to:
     | '/perfil'
     | '/suscripcion'
+    | '/api/uploadthing'
     | '/'
     | '/login'
+    | '/test'
     | '/api/auth/$'
     | '/iluminacion'
     | '/iluminacion/reportes/$id'
@@ -245,8 +267,10 @@ export interface FileRouteTypes {
     | '/_protected'
     | '/_protected/perfil'
     | '/_protected/suscripcion'
+    | '/api/uploadthing'
     | '/_protected/'
     | '/login/'
+    | '/test/'
     | '/api/auth/$'
     | '/_protected/iluminacion/'
     | '/_protected/iluminacion/reportes/$id'
@@ -265,7 +289,9 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   ProtectedRouteRoute: typeof ProtectedRouteRouteWithChildren
+  ApiUploadthingRoute: typeof ApiUploadthingRoute
   LoginIndexRoute: typeof LoginIndexRoute
+  TestIndexRoute: typeof TestIndexRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
 }
 
@@ -276,6 +302,13 @@ declare module '@tanstack/react-router' {
       path: ''
       fullPath: '/'
       preLoaderRoute: typeof ProtectedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/test/': {
+      id: '/test/'
+      path: '/test'
+      fullPath: '/test/'
+      preLoaderRoute: typeof TestIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login/': {
@@ -291,6 +324,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof ProtectedIndexRouteImport
       parentRoute: typeof ProtectedRouteRoute
+    }
+    '/api/uploadthing': {
+      id: '/api/uploadthing'
+      path: '/api/uploadthing'
+      fullPath: '/api/uploadthing'
+      preLoaderRoute: typeof ApiUploadthingRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/_protected/suscripcion': {
       id: '/_protected/suscripcion'
@@ -481,7 +521,9 @@ const ProtectedRouteRouteWithChildren = ProtectedRouteRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   ProtectedRouteRoute: ProtectedRouteRouteWithChildren,
+  ApiUploadthingRoute: ApiUploadthingRoute,
   LoginIndexRoute: LoginIndexRoute,
+  TestIndexRoute: TestIndexRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
 }
 export const routeTree = rootRouteImport
