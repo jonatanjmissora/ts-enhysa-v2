@@ -23,6 +23,7 @@ import { updateTecnicoValidator } from "../../../db/tecnicos/tecnico-validator"
 import { InputFiles } from "../input-files"
 import { Button } from "../ui/button"
 import Title from "../title"
+import { FileDropzone } from "../upload-button"
 
 export default function EditTecnico({
 	tecnico,
@@ -67,8 +68,8 @@ export function EditTecnicoForm({
 	setOpen: (open: boolean) => void
 	setIsMenuOpen?: (open: boolean) => void
 }) {
-	const [matriculaFiles, setMatriculaFiles] = useState<File[]>([])
-	const [firmaFiles, setFirmaFiles] = useState<File[]>([])
+	const [matriculaFile, setMatriculaFile] = useState<string>("")
+	const [firmaFile, setFirmaFile] = useState<string>("")
 
 	const {
 		mutateAsync: editTecnicoMutation,
@@ -82,17 +83,23 @@ export function EditTecnicoForm({
 			onSubmit: updateTecnicoValidator,
 		},
 		onSubmit: async ({ value }) => {
-			if (checkTecnicoDiference(value, tecnico)) {
-				setOpen(false)
-				return
+			const newTecnico = {
+				...value,
+				firmaImg: firmaFile,
+				matriculaImg: matriculaFile,
 			}
-			const result = await editTecnicoMutation({ data: value })
-			if (!result) {
-				console.error("Error al editar técnico", error)
-			}
-			if (setIsMenuOpen) setIsMenuOpen(false)
-			setOpen(false)
-			console.log("Técnico editado exitosamente")
+			console.log("NEW TECNICO", newTecnico)
+			// if (checkTecnicoDiference(newTecnico, tecnico)) {
+			// 	setOpen(false)
+			// 	return
+			// }
+			// const result = await editTecnicoMutation({ data: newTecnico })
+			// if (!result) {
+			// 	console.error("Error al editar técnico", error)
+			// }
+			// if (setIsMenuOpen) setIsMenuOpen(false)
+			// setOpen(false)
+			// console.log("Técnico editado exitosamente")
 		},
 	})
 
@@ -263,7 +270,7 @@ export function EditTecnicoForm({
 						/>
 						<div className="flex flex-col gap-1">
 							<Label>Matrícula Digital</Label>
-							<div className="card p-2 bg-background sm:bg-accent text-sm">
+							{/* <div className="card p-2 bg-background sm:bg-accent text-sm">
 								<InputFiles
 									files={matriculaFiles}
 									setFiles={setMatriculaFiles}
@@ -271,12 +278,20 @@ export function EditTecnicoForm({
 									maxFiles={1}
 									editMode={true}
 								/>
-							</div>
+							</div> */}
+							<FileDropzone
+								text="Imágen matrícula"
+								onUploaded={url => {
+									console.log("URL matricula", url)
+									setMatriculaFile(url)
+								}}
+							/>
+							{matriculaFile}
 						</div>
 
 						<div className="flex-1 flex flex-col gap-1">
 							<Label>Firma Digital</Label>
-							<div className="card p-2 bg-background sm:bg-accent text-sm h-full">
+							{/* <div className="card p-2 bg-background sm:bg-accent text-sm h-full">
 								<InputFiles
 									files={firmaFiles}
 									setFiles={setFirmaFiles}
@@ -284,7 +299,14 @@ export function EditTecnicoForm({
 									maxFiles={1}
 									editMode={true}
 								/>
-							</div>
+							</div> */}
+							<FileDropzone
+								text="Imágen Firma Digital"
+								onUploaded={url => {
+									// console.log("URL", url)
+									setFirmaFile(url)
+								}}
+							/>
 						</div>
 					</div>
 

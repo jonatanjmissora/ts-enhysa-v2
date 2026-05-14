@@ -2,23 +2,67 @@ import { useState } from "react"
 import { UploadDropzone } from "@uploadthing/react"
 import type { OurFileRouter, OurFilesRouter } from "../../server/uploadthing"
 import { CloudUpload } from "lucide-react"
+import { deleteUploadthingFile } from "../../server/upload-file-delete"
 
 interface FileDropzoneProps {
-	filesNumber?: number
+	text?: string
+	onUploaded?: (urls: string) => void
+}
+
+interface FilesDropzoneProps {
 	text?: string
 	onUploaded?: (urls: string[]) => void
 }
 
 export function FileDropzone({
-	filesNumber = 1,
 	text = "Arrastra archivos aqui",
 	onUploaded,
 }: FileDropzoneProps) {
-	const [files, setFiles] = useState<string[]>([])
+	const [file, setFile] = useState<string>("")
 
-	if (filesNumber === 1) {
-		return (
-			<div className="w-5/6 mx-auto">
+	const deleteImage = async () => {
+		const fileKey = file.split("/").pop()
+		if (!fileKey) return
+		const res = await deleteUploadthingFile({ data: { fileKey } })
+		if (!res.success) {
+			console.log("Error al eliminar archivo")
+			alert("Error al eliminar archivo")
+			return
+		}
+		setFile("")
+	}
+
+	return (
+		<div className="w-full">
+			{file ? (
+				<div className="w-1/2 mx-auto relative h-20">
+					{file &&
+						(file?.includes(".pdf") ? (
+							<a
+								href={file}
+								target="_blank"
+								className="border rounded p-4 flex items-center justify-center bg-accent hover:bg-accent/80 transition-colors"
+							>
+								Ver PDF
+							</a>
+						) : (
+							<>
+								<img
+									src={file}
+									alt=""
+									className="object-contain w-full h-full border border-foreground/10"
+								/>
+								<button
+									type="button"
+									className="absolute top-2 right-2"
+									onClick={deleteImage}
+								>
+									X
+								</button>
+							</>
+						))}
+				</div>
+			) : (
 				<UploadDropzone<OurFileRouter, "imageUploader">
 					endpoint="imageUploader"
 					config={{ mode: "auto" }}
@@ -34,17 +78,11 @@ export function FileDropzone({
 							return "Cargando..."
 						},
 					}}
-					// onUploadBegin={name => {
-					// 	console.log("Iniciando subida de:", name)
-					// }}
-					// onUploadProgress={progress => {
-					// 	console.log(`Progreso: ${progress}%`)
-					// }}
 					onClientUploadComplete={res => {
 						if (res) {
-							const urls = res.map(x => x.ufsUrl)
-							setFiles(prev => [...prev, ...urls])
-							if (onUploaded) onUploaded(urls)
+							const url = res[0]?.ufsUrl
+							if (url) setFile(url)
+							if (onUploaded) onUploaded(url)
 						}
 					}}
 					onUploadError={error => {
@@ -59,36 +97,15 @@ export function FileDropzone({
 						uploadIcon: "hidden",
 					}}
 				/>
-				<div className="grid grid-cols-2 gap-4">
-					{files.map(url => {
-						const isPdf = url.includes(".pdf")
-
-						if (isPdf) {
-							return (
-								<a
-									key={url}
-									href={url}
-									target="_blank"
-									className="border rounded p-4 flex items-center justify-center bg-accent hover:bg-accent/80 transition-colors"
-								>
-									Ver PDF
-								</a>
-							)
-						}
-
-						return (
-							<img
-								key={url}
-								src={url}
-								alt=""
-								className="w-full h-40 object-cover rounded shadow-md border border-foreground/10"
-							/>
-						)
-					})}
-				</div>
-			</div>
-		)
-	}
+			)}
+		</div>
+	)
+}
+export function FilesDropzone({
+	text = "Arrastra archivos aqui",
+	onUploaded,
+}: FilesDropzoneProps) {
+	const [files, setFiles] = useState<string[]>([])
 
 	return (
 		<div className="w-5/6 mx-auto">
@@ -96,7 +113,7 @@ export function FileDropzone({
 				endpoint="mixedUploader"
 				config={{ mode: "auto" }}
 				content={{
-					label: "Arrastra archivos aquí",
+					label: text,
 					allowedContent: "Imágenes hasta 2MB",
 					button({ ready, isUploading, uploadProgress }) {
 						if (isUploading) return `Subiendo ${uploadProgress}%`
@@ -161,7 +178,7 @@ export function FileDropzone({
 	)
 }
 
-export function ImageUploader({ onUploaded }: FileDropzoneProps) {
+export function ImageUploader({ onUploaded }: FilesDropzoneProps) {
 	const [images, setImages] = useState<{ url: string; name: string }[]>([])
 
 	return (
@@ -195,7 +212,7 @@ export function ImageUploader({ onUploaded }: FileDropzoneProps) {
 								alt={img.name}
 								className="w-full h-full object-cover"
 							/>
-							<div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-3">
+							<div className="absolute inset-0 from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-3">
 								<p className="text-white text-xs truncate w-full">{img.name}</p>
 							</div>
 						</div>
