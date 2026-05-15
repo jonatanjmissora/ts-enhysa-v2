@@ -50,11 +50,11 @@ import {
 	AlertDialogDescription,
 } from "@/components/ui/alert-dialog"
 import type { AreaIluminacionType } from "../../../../../db/reportes/iluminacion/areas/schema"
-import { InputFiles } from "#/components/input-files"
 import { updateAreaValidator } from "../../../../../db/reportes/iluminacion/areas/area-validator"
 import { useUpdateArea } from "../../../../../queries/reportes/iluminacion/areas/use-update-area"
 import { Button } from "#/components/ui/button"
 import Title from "#/components/title"
+import { FilesDropzone } from "#/components/upload-button"
 
 export default function EditAreaAlert({
 	area,
@@ -102,7 +102,7 @@ function EditArea({
 	const [puntos, setPuntos] = useState<number[]>(area.puntos)
 	const [timestamps, setTimestamps] = useState<Date[]>(area.timestamps)
 	const [puntosError, setPuntosError] = useState<string | null>(null)
-	const [planoFiles, setPlanoFiles] = useState<File[]>([])
+	const [planoFiles, setPlanoFiles] = useState<string[]>([])
 	const [indiceRedondeo, setIndiceRedondeo] = useState<number>(() => {
 		const indiceDeLocal = getIndiceDeLocal(area.largo, area.ancho, area.alto)
 		const oldIndiceRedondeo = getIndiceRedondeo(indiceDeLocal)
@@ -128,7 +128,7 @@ function EditArea({
 				id: area.id,
 				puntos,
 				timestamps,
-				imagenes: [],
+				imagenes: planoFiles,
 			}
 			const result = await updateArea({ data: newArea })
 			if (!result) {
@@ -602,14 +602,16 @@ function EditArea({
 					<Label className="tracking-wider" htmlFor="largo">
 						Imágenes del Área
 					</Label>
-					<div className="card p-2 bg-background ">
-						<InputFiles
-							text="Imágenes del área a medir."
-							files={planoFiles}
-							setFiles={setPlanoFiles}
-							editMode={true}
-						/>
-					</div>
+					<FilesDropzone
+						text="Imágenes Area"
+						defaultValue={planoFiles}
+						onUploaded={url => {
+							// console.log("URL matricula", url)
+							if (url.length > 0 && url !== planoFiles) {
+								setPlanoFiles(url)
+							} else setPlanoFiles([])
+						}}
+					/>
 				</div>
 
 				<form.Subscribe

@@ -97,6 +97,24 @@ function Reporte() {
 						: "NO"}
 				</span>
 			</div>
+
+			{area.imagenes[0] !== "" && (
+				<div className="w-11/12 my-10">
+					<div className="flex w-full grid-cols-4 gap-1 content-center">
+						{area.imagenes.map(url => {
+							return (
+								<div className="relative w-full h-20 " key={url}>
+									<img
+										src={url}
+										alt=""
+										className="h-full w-full object-contain rounded shadow-md border border-foreground/10"
+									/>
+								</div>
+							)
+						})}
+					</div>
+				</div>
+			)}
 		</article>
 	)
 }

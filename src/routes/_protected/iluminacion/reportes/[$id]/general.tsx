@@ -31,6 +31,8 @@ function General() {
 	const { id } = Route.useParams()
 	const { data: reporte } = useSuspenseQuery(reporteQueryOptions({ id }))
 
+	if (!reporte) return <span>No existe reporte</span>
+
 	return (
 		<article className="min-h-screen w-5/6 mx-auto flex flex-col gap-10 tracking-wider my-14">
 			<div className="grid grid-cols-2 gap-2">
@@ -47,6 +49,17 @@ function General() {
 				<span>{reporte?.empresa.provincia.toUpperCase()}</span>
 				<Label className="text-right ml-auto">Horarios : </Label>
 				<span>{reporte?.empresa.horarios.toUpperCase()}</span>
+				{reporte.empresa.logo && (
+					<div className="col-span-2">
+						<div className="h-20 w-full flex items-center justify-center">
+							<img
+								src={reporte.empresa.logo}
+								alt="logo"
+								className="h-full w-full object-contain"
+							/>
+						</div>
+					</div>
+				)}
 			</div>
 
 			<div className="grid grid-cols-2 gap-2">
@@ -63,6 +76,26 @@ function General() {
 				<span>
 					{reporte?.instrumento.fechaCalibracion.toLocaleDateString("it-IT")}
 				</span>
+				{(reporte.instrumento.imagenCalibracion ||
+					reporte.instrumento.imagenes) && (
+					<div className="col-span-2 flex gap-2 items-center justify-center">
+						{[
+							reporte.instrumento.imagenCalibracion,
+							reporte.instrumento.imagenes[0],
+						].map((img, idx) => (
+							<div
+								key={idx}
+								className="h-20 w-max flex items-center justify-center"
+							>
+								<img
+									src={img}
+									alt="logo"
+									className="h-full w-full object-contain"
+								/>
+							</div>
+						))}
+					</div>
+				)}
 			</div>
 
 			<div className="grid grid-cols-2 gap-2">

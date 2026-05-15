@@ -22,7 +22,6 @@ import {
 	defaultTecnico,
 	tecnicoFormValidator,
 } from "../../../db/tecnicos/tecnico-validator"
-import { InputFiles } from "../input-files"
 import { Button } from "../ui/button"
 import Title from "../title"
 import { FileDropzone } from "../upload-button"

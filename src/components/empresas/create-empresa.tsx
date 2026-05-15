@@ -17,7 +17,6 @@ import {
 import { Input } from "@/components/ui/input"
 import { Loader } from "lucide-react"
 import { Button } from "../ui/button"
-import { InputFiles } from "../input-files"
 import { useCreateEmpresa } from "../../../queries/empresas/use-create-empresa"
 import {
 	defaultEmpresa,

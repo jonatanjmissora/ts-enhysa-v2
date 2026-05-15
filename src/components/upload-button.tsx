@@ -40,7 +40,7 @@ export function FileDropzone({
 	return (
 		<div className="w-full">
 			{file ? (
-				<div className="w-1/2 mx-auto relative h-20">
+				<div className="w-full relative h-20">
 					{file &&
 						(file?.includes(".pdf") ? (
 							<a
@@ -182,7 +182,7 @@ export function FilesDropzone({
 				</div>
 			)}
 			{files[0] !== "" && (
-				<div className="w-5/6 mx-auto">
+				<div className="w-full">
 					<div className="flex w-full grid-cols-4 gap-2 content-center">
 						{files.map(url => {
 							const isPdf = url.includes(".pdf")

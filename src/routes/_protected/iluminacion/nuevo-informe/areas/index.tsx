@@ -167,7 +167,7 @@ function Area({ area }: { area: AreaIluminacionType }) {
 					{area.observaciones.toUpperCase()}
 				</span>
 			</div>
-			<div className="w-5/6 grid grid-cols-2 gap-3 border-b border-foreground/10 py-2">
+			<div className="w-5/6 grid grid-cols-2 gap-4 border-b border-foreground/10 py-2">
 				<Label className="place-content-end textL text-sm">Largo : </Label>
 				<span className="text-left textL text-sm">
 					{area.largo.toFixed(0)} mts.
@@ -210,6 +210,23 @@ function Area({ area }: { area: AreaIluminacionType }) {
 				</span>
 				<span className="text-left textL text-sm font-bold">{uniformidad}</span>
 			</div>
+			{area.imagenes[0] !== "" && (
+				<div className="w-full my-10">
+					<div className="flex w-full grid-cols-4 gap-2 content-center">
+						{area.imagenes.map(url => {
+							return (
+								<div className="relative w-full h-20 " key={url}>
+									<img
+										src={url}
+										alt=""
+										className="h-full w-full object-contain rounded shadow-md border border-foreground/10"
+									/>
+								</div>
+							)
+						})}
+					</div>
+				</div>
+			)}
 		</div>
 	)
 }

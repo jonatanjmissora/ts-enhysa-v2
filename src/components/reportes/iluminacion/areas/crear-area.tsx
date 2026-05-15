@@ -46,7 +46,6 @@ import {
 	type Dispatch,
 	type SetStateAction,
 } from "react"
-import { InputFiles } from "#/components/input-files"
 import Formula from "./formula"
 import {
 	getIndiceDeLocal,
@@ -62,6 +61,7 @@ import { Button } from "#/components/ui/button"
 import Title from "#/components/title"
 import { useSuspenseQuery } from "@tanstack/react-query"
 import { reporteNuevoQueryOptions } from "../../../../../queries/reportes/iluminacion/reportes-query"
+import { FilesDropzone } from "#/components/upload-button"
 
 export default function CreateAreaAlert() {
 	const [open, setOpen] = useState(false)
@@ -94,7 +94,7 @@ function CreateArea({
 	const [puntos, setPuntos] = useState<number[]>([])
 	const [timestamps, setTimestamps] = useState<Date[]>([])
 	const [puntosError, setPuntosError] = useState<string | null>(null)
-	const [planoFiles, setPlanoFiles] = useState<File[]>([])
+	const [planoFiles, setPlanoFiles] = useState<string[]>([])
 	const { data: reporteNuevo } = useSuspenseQuery(reporteNuevoQueryOptions)
 	const [indiceRedondeo, setIndiceRedondeo] = useState<number>(0)
 
@@ -115,7 +115,7 @@ function CreateArea({
 				reportId: reporteNuevo.id,
 				puntos,
 				timestamps,
-				imagenes: [],
+				imagenes: planoFiles,
 			}
 			const result = await createArea({ data: newArea })
 			if (!result) {
@@ -490,7 +490,7 @@ function CreateArea({
 					</div>
 				</div>
 
-				<div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-5/6 mt-10 mx-auto">
+				<div className="grid grid-cols-1 sm:grid-cols-2 gap-8 w-5/6 mt-10 mx-auto">
 					<form.Field
 						name="largo"
 						children={field => {
@@ -584,15 +584,19 @@ function CreateArea({
 					/>
 				</div>
 
-				<div className="flex flex-col gap-1 w-5/6 mx-auto sm:w-full">
+				<div className="flex flex-col gap-1 w-5/6 mx-auto sm:w-full my-10">
 					<Label className="tracking-wider" htmlFor="largo">
 						Imágenes del Área
 					</Label>
-					<InputFiles
-						text="Imágenes del área a medir."
-						files={planoFiles}
-						setFiles={setPlanoFiles}
-						editMode={true}
+					<FilesDropzone
+						text="Imágenes Area"
+						defaultValue={planoFiles}
+						onUploaded={url => {
+							// console.log("URL matricula", url)
+							if (url.length > 0 && url !== planoFiles) {
+								setPlanoFiles(url)
+							} else setPlanoFiles([])
+						}}
 					/>
 				</div>
 
