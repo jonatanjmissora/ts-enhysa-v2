@@ -20,7 +20,6 @@ import {
 import type { TecnicoType } from "../../../db/tecnicos/schema"
 import { useUpdateTecnico } from "../../../queries/tecnico/use-update-tecnico"
 import { updateTecnicoValidator } from "../../../db/tecnicos/tecnico-validator"
-import { InputFiles } from "../input-files"
 import { Button } from "../ui/button"
 import Title from "../title"
 import { FileDropzone } from "../upload-button"
@@ -283,7 +282,9 @@ export function EditTecnicoForm({
 								text="Imágen matrícula"
 								onUploaded={url => {
 									console.log("URL matricula", url)
-									setMatriculaFile(url)
+									if (url.length > 0 && url !== matriculaFile) {
+										setMatriculaFile(url)
+									} else setMatriculaFile("")
 								}}
 							/>
 							{matriculaFile}

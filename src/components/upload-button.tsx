@@ -7,6 +7,7 @@ import { deleteUploadthingFile } from "../../server/upload-file-delete"
 interface FileDropzoneProps {
 	text?: string
 	onUploaded?: (urls: string) => void
+	defaultValue?: string
 }
 
 interface FilesDropzoneProps {
@@ -17,8 +18,9 @@ interface FilesDropzoneProps {
 export function FileDropzone({
 	text = "Arrastra archivos aqui",
 	onUploaded,
+	defaultValue,
 }: FileDropzoneProps) {
-	const [file, setFile] = useState<string>("")
+	const [file, setFile] = useState<string>(defaultValue || "")
 
 	const deleteImage = async () => {
 		const fileKey = file.split("/").pop()
@@ -30,6 +32,7 @@ export function FileDropzone({
 			return
 		}
 		setFile("")
+		if (onUploaded) onUploaded("")
 	}
 
 	return (
