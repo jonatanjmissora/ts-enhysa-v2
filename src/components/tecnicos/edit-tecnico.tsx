@@ -67,8 +67,10 @@ export function EditTecnicoForm({
 	setOpen: (open: boolean) => void
 	setIsMenuOpen?: (open: boolean) => void
 }) {
-	const [matriculaFile, setMatriculaFile] = useState<string>("")
-	const [firmaFile, setFirmaFile] = useState<string>("")
+	const [matriculaFile, setMatriculaFile] = useState<string>(
+		tecnico.matriculaImg ?? ""
+	)
+	const [firmaFile, setFirmaFile] = useState<string>(tecnico.firmaImg ?? "")
 
 	const {
 		mutateAsync: editTecnicoMutation,
@@ -87,18 +89,17 @@ export function EditTecnicoForm({
 				firmaImg: firmaFile,
 				matriculaImg: matriculaFile,
 			}
-			console.log("NEW TECNICO", newTecnico)
-			// if (checkTecnicoDiference(newTecnico, tecnico)) {
-			// 	setOpen(false)
-			// 	return
-			// }
-			// const result = await editTecnicoMutation({ data: newTecnico })
-			// if (!result) {
-			// 	console.error("Error al editar técnico", error)
-			// }
-			// if (setIsMenuOpen) setIsMenuOpen(false)
-			// setOpen(false)
-			// console.log("Técnico editado exitosamente")
+			if (checkTecnicoDiference(newTecnico, tecnico)) {
+				setOpen(false)
+				return
+			}
+			const result = await editTecnicoMutation({ data: newTecnico })
+			if (!result) {
+				console.error("Error al editar técnico", error)
+			}
+			if (setIsMenuOpen) setIsMenuOpen(false)
+			setOpen(false)
+			console.log("Técnico editado exitosamente")
 		},
 	})
 
@@ -269,43 +270,28 @@ export function EditTecnicoForm({
 						/>
 						<div className="flex flex-col gap-1">
 							<Label>Matrícula Digital</Label>
-							{/* <div className="card p-2 bg-background sm:bg-accent text-sm">
-								<InputFiles
-									files={matriculaFiles}
-									setFiles={setMatriculaFiles}
-									text="Imágen matrícula"
-									maxFiles={1}
-									editMode={true}
-								/>
-							</div> */}
 							<FileDropzone
-								text="Imágen matrícula"
+								text="Imágen Matrícula"
+								defaultValue={tecnico.matriculaImg}
 								onUploaded={url => {
-									console.log("URL matricula", url)
+									// console.log("URL matricula", url)
 									if (url.length > 0 && url !== matriculaFile) {
 										setMatriculaFile(url)
 									} else setMatriculaFile("")
 								}}
 							/>
-							{matriculaFile}
 						</div>
 
 						<div className="flex-1 flex flex-col gap-1">
 							<Label>Firma Digital</Label>
-							{/* <div className="card p-2 bg-background sm:bg-accent text-sm h-full">
-								<InputFiles
-									files={firmaFiles}
-									setFiles={setFirmaFiles}
-									text="Imágen Firma Digital"
-									maxFiles={1}
-									editMode={true}
-								/>
-							</div> */}
 							<FileDropzone
-								text="Imágen Firma Digital"
+								text="Imágen Firma"
+								defaultValue={tecnico.firmaImg}
 								onUploaded={url => {
 									// console.log("URL", url)
-									setFirmaFile(url)
+									if (url.length > 0 && url !== firmaFile) {
+										setFirmaFile(url)
+									} else setFirmaFile("")
 								}}
 							/>
 						</div>

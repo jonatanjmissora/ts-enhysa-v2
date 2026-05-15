@@ -28,8 +28,8 @@ import {
 	defaultInstrumento,
 	instrumentoFormValidator,
 } from "../../../db/instrumentos/instrumento-validator"
-import { InputFiles } from "../input-files"
 import { Button } from "../ui/button"
+import { FileDropzone, FilesDropzone } from "../upload-button"
 
 export function CreateInstrumento() {
 	const [open, setOpen] = useState(false)
@@ -56,8 +56,8 @@ export function CreateInstrumento() {
 }
 
 const InstrumentoForm = ({ setOpen }: { setOpen: (open: boolean) => void }) => {
-	const [imagenCalibracion, setImagenCalibracion] = useState<File[]>([])
-	const [instrumentoFiles, setInstrumentoFiles] = useState<File[]>([])
+	const [imagenCalibracion, setImagenCalibracion] = useState<string>("")
+	const [instrumentoFiles, setInstrumentoFiles] = useState<string[]>([])
 	const [calibrationDate, setCalibrationDate] = useState<Date>()
 	const [openPopover, setOpenPopover] = useState(false)
 
@@ -75,7 +75,13 @@ const InstrumentoForm = ({ setOpen }: { setOpen: (open: boolean) => void }) => {
 		},
 
 		onSubmit: async ({ value }) => {
-			const result = await createInstrumentoMutation({ data: value })
+			const newInstrumento = {
+				...value,
+				imagenCalibracion: imagenCalibracion,
+				imagenes: instrumentoFiles,
+			}
+
+			const result = await createInstrumentoMutation({ data: newInstrumento })
 
 			if (!result) {
 				console.error("Error al crear el instrumento", error)
@@ -297,12 +303,15 @@ const InstrumentoForm = ({ setOpen }: { setOpen: (open: boolean) => void }) => {
 										Imágen del certificado de calibración
 									</FieldLabel>
 
-									<InputFiles
-										files={imagenCalibracion}
-										setFiles={setImagenCalibracion}
-										text="Imágen del certificado de calibración"
-										maxFiles={1}
-										editMode={true}
+									<FileDropzone
+										text="Imágen Calibración"
+										defaultValue={imagenCalibracion}
+										onUploaded={url => {
+											// console.log("URL matricula", url)
+											if (url.length > 0 && url !== imagenCalibracion) {
+												setImagenCalibracion(url)
+											} else setImagenCalibracion("")
+										}}
 									/>
 
 									{isInvalid && (
@@ -326,12 +335,15 @@ const InstrumentoForm = ({ setOpen }: { setOpen: (open: boolean) => void }) => {
 								<Field data-invalid={isInvalid} className="relative gap-1">
 									<FieldLabel htmlFor={field.name}>Imagenes</FieldLabel>
 
-									<InputFiles
-										files={instrumentoFiles}
-										setFiles={setInstrumentoFiles}
-										text="Imágen del instrumento"
-										maxFiles={3}
-										editMode={true}
+									<FilesDropzone
+										text="Imágen Instrumento"
+										defaultValue={instrumentoFiles}
+										onUploaded={url => {
+											// console.log("URL matricula", url)
+											if (url.length > 0 && url !== instrumentoFiles) {
+												setInstrumentoFiles(url)
+											} else setInstrumentoFiles([])
+										}}
 									/>
 
 									{isInvalid && (

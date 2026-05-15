@@ -78,7 +78,7 @@ export const checkInstrumentoDiference = (
 		formValues.serie === instrumento.serie &&
 		formValues.fechaCalibracion === instrumento.fechaCalibracion &&
 		formValues.imagenCalibracion === instrumento.imagenCalibracion &&
-		formValues.imagenes === instrumento.imagenes
+		JSON.stringify(formValues.imagenes) === JSON.stringify(instrumento.imagenes)
 	)
 }
 

@@ -24,6 +24,7 @@ import {
 	empresaFormValidator,
 } from "../../../db/empresas/empresa-validator"
 import Title from "../title"
+import { FileDropzone } from "../upload-button"
 
 export default function CreateEmpresa() {
 	const [open, setOpen] = useState(false)
@@ -48,7 +49,7 @@ export default function CreateEmpresa() {
 }
 
 const EmpresaForm = ({ setOpen }: { setOpen: (open: boolean) => void }) => {
-	const [logoFiles, setLogoFiles] = useState<File[]>([])
+	const [logoFile, setLogoFile] = useState<string>("")
 	const {
 		mutateAsync: createEmpresaMutation,
 		isPending,
@@ -61,7 +62,11 @@ const EmpresaForm = ({ setOpen }: { setOpen: (open: boolean) => void }) => {
 			onSubmit: empresaFormValidator,
 		},
 		onSubmit: async ({ value }) => {
-			const result = await createEmpresaMutation({ data: value })
+			const newEmpresa = {
+				...value,
+				logo: logoFile,
+			}
+			const result = await createEmpresaMutation({ data: newEmpresa })
 			if (!result) {
 				console.error("Error al crear el técnico", error)
 			}
@@ -300,15 +305,16 @@ const EmpresaForm = ({ setOpen }: { setOpen: (open: boolean) => void }) => {
 							return (
 								<Field data-invalid={isInvalid} className="relative gap-1">
 									<FieldLabel htmlFor={field.name}>Logo Empresarial</FieldLabel>
-									<div className="card bg-background py-2">
-										<InputFiles
-											files={logoFiles}
-											setFiles={setLogoFiles}
-											text="Imágen Logo digital"
-											maxFiles={1}
-											editMode={true}
-										/>
-									</div>
+									<FileDropzone
+										text="Imágen Logo"
+										defaultValue={logoFile}
+										onUploaded={url => {
+											// console.log("URL matricula", url)
+											if (url.length > 0 && url !== logoFile) {
+												setLogoFile(url)
+											} else setLogoFile("")
+										}}
+									/>
 									{isInvalid && (
 										<FieldError
 											errors={field.state.meta.errors}

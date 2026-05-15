@@ -22,6 +22,7 @@ import { Button } from "../ui/button"
 import { Ellipsis } from "lucide-react"
 import DeleteInstrumento from "./delete-instrumento"
 import { EditInstrumento } from "./edit-instrumento"
+import useScrollTop from "#/hooks/scroll-top"
 
 export default function Instrumentos() {
 	const { data: instrumentos } = useSuspenseQuery(instrumentosQueryOptions)
@@ -35,6 +36,7 @@ function HayInstrumentos({
 }: {
 	instrumentos: InstrumentoType[]
 }) {
+	useScrollTop()
 	return (
 		<div className="w-full flex flex-col gap-2">
 			<Accordion
@@ -129,16 +131,43 @@ function Instrumento({ instrumento }: { instrumento: InstrumentoType }) {
 				</div>
 				<div className="flex flex-col gap-1">
 					<Label>Imagen de Certificado</Label>
-					<div className="bg-accent ring-[1px] ring-foreground/10 rounded-md sm:bg-accent flex items-center justify-center">
-						<img src="/calibracion.webp" alt="luxometro" className="size-20" />
-					</div>
+					{instrumento.imagenCalibracion ? (
+						<div className="w-full h-20 min-h-9 flex items-center justify-center">
+							<img
+								src={instrumento.imagenCalibracion}
+								alt="Imagen del Certificado"
+								className="w-full h-full object-contain object-center"
+							/>
+						</div>
+					) : (
+						<span className="w-full text-center rounded-lg bg-secondary/20 ring-[1px] ring-foreground/10 p-2.5 text-xs font-medium text-gray-500 italic">
+							No has cargado el certificado de calibración
+						</span>
+					)}
 				</div>
 
 				<div className="flex flex-col gap-1">
 					<Label>Imágenes</Label>
-					<div className="bg-accent ring-[1px] ring-foreground/10 rounded-md sm:bg-accent flex items-center justify-center">
-						<img src="/luxometro.jpg" alt="luxometro" className="size-20" />
-					</div>
+					{instrumento.imagenes.length > 0 ? (
+						<div className="flex w-full grid-cols-4 gap-2 content-center">
+							{instrumento.imagenes.map(imagen => (
+								<div
+									key={imagen}
+									className="w-full h-20 min-h-9 flex items-center justify-center"
+								>
+									<img
+										src={imagen}
+										alt="Imagen del Certificado"
+										className="w-full h-full object-contain object-center"
+									/>
+								</div>
+							))}
+						</div>
+					) : (
+						<span className="w-full text-center rounded-lg bg-secondary/20 ring-[1px] ring-foreground/10 p-2.5 text-xs font-medium text-gray-500 italic">
+							No has cargado el certificado de calibración
+						</span>
+					)}
 				</div>
 			</div>
 			<div className="hidden sm:block">

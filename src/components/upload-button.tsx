@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { UploadDropzone } from "@uploadthing/react"
 import type { OurFileRouter, OurFilesRouter } from "../../server/uploadthing"
-import { CloudUpload } from "lucide-react"
+import { CloudUpload, X } from "lucide-react"
 import { deleteUploadthingFile } from "../../server/upload-file-delete"
 
 interface FileDropzoneProps {
@@ -13,6 +13,7 @@ interface FileDropzoneProps {
 interface FilesDropzoneProps {
 	text?: string
 	onUploaded?: (urls: string[]) => void
+	defaultValue?: string[]
 }
 
 export function FileDropzone({
@@ -21,6 +22,7 @@ export function FileDropzone({
 	defaultValue,
 }: FileDropzoneProps) {
 	const [file, setFile] = useState<string>(defaultValue || "")
+	const [error, setError] = useState<string>("")
 
 	const deleteImage = async () => {
 		const fileKey = file.split("/").pop()
@@ -57,49 +59,57 @@ export function FileDropzone({
 								/>
 								<button
 									type="button"
-									className="absolute top-2 right-2"
+									className="absolute top-0 right-0"
 									onClick={deleteImage}
 								>
-									X
+									<X size={20} className="text-background bg-amber-700" />
 								</button>
 							</>
 						))}
 				</div>
 			) : (
-				<UploadDropzone<OurFileRouter, "imageUploader">
-					endpoint="imageUploader"
-					config={{ mode: "auto" }}
-					content={{
-						label: text,
-						allowedContent: "Imágenes hasta 2MB",
-						button({ ready, isUploading, uploadProgress }) {
-							if (isUploading) return `Subiendo ${uploadProgress}%`
-							if (ready)
-								return (
-									<CloudUpload className="size-8 text-muted-foreground/70" />
-								)
-							return "Cargando..."
-						},
-					}}
-					onClientUploadComplete={res => {
-						if (res) {
-							const url = res[0]?.ufsUrl
-							if (url) setFile(url)
-							if (onUploaded) onUploaded(url)
-						}
-					}}
-					onUploadError={error => {
-						alert(error.message)
-					}}
-					appearance={{
-						container:
-							"border-1 border-dashed rounded-xl bg-accent/50 !p-0 !my-2 !gap-0 flex flex-row-reverse",
-						label: "text-sm text-muted-foreground font-medium !mt-0",
-						allowedContent: "hidden",
-						button: "bg-transparent w-30 text-sm tracking-wide !mt-0",
-						uploadIcon: "hidden",
-					}}
-				/>
+				<div className="flex flex-col w-full items-center gap-2">
+					<UploadDropzone<OurFileRouter, "imageUploader">
+						endpoint="imageUploader"
+						config={{ mode: "auto" }}
+						content={{
+							label: text,
+							allowedContent: "Imágenes hasta 2MB",
+							button({ ready, isUploading, uploadProgress }) {
+								if (isUploading) return `Subiendo ${uploadProgress}%`
+								if (ready)
+									return (
+										<CloudUpload className="size-8 text-muted-foreground/70" />
+									)
+								return "Cargando..."
+							},
+						}}
+						onClientUploadComplete={res => {
+							setError("")
+							if (res) {
+								const url = res[0]?.ufsUrl
+								if (url) setFile(url)
+								if (onUploaded) onUploaded(url)
+							}
+						}}
+						onUploadError={error => {
+							if (error.message === "Invalid config: FileSizeMismatch")
+								setError("El archivo es demasiado grande")
+							else setError(error.message)
+						}}
+						appearance={{
+							container:
+								"border-1 border-dashed rounded-xl bg-accent/50 !p-0 !my-2 !gap-0 flex flex-row-reverse w-full",
+							label: "text-sm text-muted-foreground font-medium !mt-0",
+							allowedContent: "hidden",
+							button: "bg-transparent w-30 text-sm tracking-wide !mt-0",
+							uploadIcon: "hidden",
+						}}
+					/>
+					{error && (
+						<span className="text-red-700/50 italic text-sm">{error}</span>
+					)}
+				</div>
 			)}
 		</div>
 	)
@@ -107,77 +117,110 @@ export function FileDropzone({
 export function FilesDropzone({
 	text = "Arrastra archivos aqui",
 	onUploaded,
+	defaultValue,
 }: FilesDropzoneProps) {
-	const [files, setFiles] = useState<string[]>([])
+	const [files, setFiles] = useState<string[]>(defaultValue ?? [])
+	const [error, setError] = useState<string>("")
+
+	const deleteImage = async (file: string) => {
+		const fileKey = file.split("/").pop()
+		if (!fileKey) return
+		const res = await deleteUploadthingFile({ data: { fileKey } })
+		if (!res.success) {
+			console.log("Error al eliminar archivo")
+			alert("Error al eliminar archivo")
+			return
+		}
+		setFiles(prev => prev.filter(f => f !== file))
+		if (onUploaded) onUploaded(files.filter(f => f !== file))
+	}
 
 	return (
-		<div className="w-5/6 mx-auto">
-			<UploadDropzone<OurFilesRouter, "mixedUploader">
-				endpoint="mixedUploader"
-				config={{ mode: "auto" }}
-				content={{
-					label: text,
-					allowedContent: "Imágenes hasta 2MB",
-					button({ ready, isUploading, uploadProgress }) {
-						if (isUploading) return `Subiendo ${uploadProgress}%`
-						if (ready)
-							return <CloudUpload className="size-8 text-muted-foreground/70" />
-						return "Cargando..."
-					},
-				}}
-				// onUploadBegin={name => {
-				// 	console.log("Iniciando subida de:", name)
-				// }}
-				// onUploadProgress={progress => {
-				// 	console.log(`Progreso: ${progress}%`)
-				// }}
-				onClientUploadComplete={res => {
-					if (res) {
-						const urls = res.map(x => x.ufsUrl)
-						setFiles(prev => [...prev, ...urls])
-						if (onUploaded) onUploaded(urls)
-					}
-				}}
-				onUploadError={error => {
-					alert(error.message)
-				}}
-				appearance={{
-					container:
-						"border-1 border-dashed rounded-xl bg-accent/50 !p-3 !my-2 !gap-0 flex-col-reverse",
-					label: "text-sm text-muted-foreground font-medium !m-0 !p-0",
-					allowedContent: "text-xs text-muted-foreground/70",
-					button: "bg-transparent w-max text-sm tracking-wide !mt-0",
-					uploadIcon: "hidden",
-				}}
-			/>
-			<div className="grid grid-cols-2 gap-4">
-				{files.map(url => {
-					const isPdf = url.includes(".pdf")
+		<>
+			{files.length < 4 && (
+				<div className="flex flex-col w-full items-center gap-2">
+					<UploadDropzone<OurFilesRouter, "mixedUploader">
+						endpoint="mixedUploader"
+						config={{ mode: "auto" }}
+						content={{
+							label: text,
+							allowedContent: "Imágenes hasta 2MB",
+							button({ ready, isUploading, uploadProgress }) {
+								if (isUploading) return `Subiendo ${uploadProgress}%`
+								if (ready)
+									return (
+										<CloudUpload className="size-8 text-muted-foreground/70" />
+									)
+								return "Cargando..."
+							},
+						}}
+						onClientUploadComplete={res => {
+							setError("")
+							if (res) {
+								const urls = res.map(x => x.ufsUrl)
+								setFiles(prev => [...prev, ...urls])
+								if (onUploaded) onUploaded(urls)
+							}
+						}}
+						onUploadError={error => {
+							if (error.message === "Invalid config: FileSizeMismatch")
+								setError("El archivo es demasiado grande")
+							else setError(error.message)
+						}}
+						appearance={{
+							container:
+								"border-1 border-dashed rounded-xl bg-accent/50 !p-3 !my-2 !gap-0 flex-col-reverse w-full",
+							label: "text-sm text-muted-foreground font-medium !m-0 !p-0",
+							allowedContent: "text-xs text-muted-foreground/70",
+							button: "bg-transparent w-max text-sm tracking-wide !mt-0",
+							uploadIcon: "hidden",
+						}}
+					/>
+					{error && (
+						<span className="text-red-700/50 italic text-sm">{error}</span>
+					)}
+				</div>
+			)}
+			{files[0] !== "" && (
+				<div className="w-5/6 mx-auto">
+					<div className="flex w-full grid-cols-4 gap-2 content-center">
+						{files.map(url => {
+							const isPdf = url.includes(".pdf")
 
-					if (isPdf) {
-						return (
-							<a
-								key={url}
-								href={url}
-								target="_blank"
-								className="border rounded p-4 flex items-center justify-center bg-accent hover:bg-accent/80 transition-colors"
-							>
-								Ver PDF
-							</a>
-						)
-					}
+							if (isPdf) {
+								return (
+									<a
+										key={url}
+										href={url}
+										target="_blank"
+										className="border rounded p-4 flex items-center justify-center bg-accent hover:bg-accent/80 transition-colors"
+									>
+										Ver PDF
+									</a>
+								)
+							}
 
-					return (
-						<img
-							key={url}
-							src={url}
-							alt=""
-							className="w-full h-40 object-cover rounded shadow-md border border-foreground/10"
-						/>
-					)
-				})}
-			</div>
-		</div>
+							return (
+								<div className="relative w-full h-20 " key={url}>
+									<img
+										src={url}
+										alt=""
+										className="h-full w-full object-contain rounded shadow-md border border-foreground/10"
+									/>
+									<button
+										type="button"
+										onClick={() => deleteImage(url)}
+										className="absolute top-0 right-0"
+									>
+										<X size={20} className="text-background bg-amber-700" />
+									</button>
+								</div>
+							)
+						})}
+					</div>
+				</div>
+			)}
+		</>
 	)
 }
 

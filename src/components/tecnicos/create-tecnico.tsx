@@ -25,6 +25,7 @@ import {
 import { InputFiles } from "../input-files"
 import { Button } from "../ui/button"
 import Title from "../title"
+import { FileDropzone } from "../upload-button"
 
 export default function CreateTecnico() {
 	const [open, setOpen] = useState(false)
@@ -53,8 +54,8 @@ export function CreateTecnicoForm({
 }: {
 	setOpen: (open: boolean) => void
 }) {
-	const [matriculaFiles, setMatriculaFiles] = useState<File[]>([])
-	const [firmaFiles, setFirmaFiles] = useState<File[]>([])
+	const [matriculaFile, setMatriculaFile] = useState<string>("")
+	const [firmaFile, setFirmaFile] = useState<string>("")
 	const navigate = useNavigate()
 
 	const {
@@ -69,7 +70,12 @@ export function CreateTecnicoForm({
 			onSubmit: tecnicoFormValidator,
 		},
 		onSubmit: async ({ value }) => {
-			const result = await createTecnicoMutation({ data: value })
+			const newTecnico = {
+				...value,
+				firmaImg: firmaFile,
+				matriculaImg: matriculaFile,
+			}
+			const result = await createTecnicoMutation({ data: newTecnico })
 			if (!result) {
 				console.error("Error al crear el técnico", error)
 				return
@@ -246,26 +252,28 @@ export function CreateTecnicoForm({
 					/>
 					<div className="flex flex-col gap-1">
 						<Label>Matrícula Digital</Label>
-						<div className="card p-2 bg-background sm:bg-accent text-sm">
-							<InputFiles
-								files={matriculaFiles}
-								setFiles={setMatriculaFiles}
-								text="Imágen matrícula"
-								maxFiles={1}
-							/>
-						</div>
+						<FileDropzone
+							text="Imágen Matrícula"
+							onUploaded={url => {
+								// console.log("URL matricula", url)
+								if (url.length > 0 && url !== matriculaFile) {
+									setMatriculaFile(url)
+								} else setMatriculaFile("")
+							}}
+						/>
 					</div>
 
 					<div className="flex-1 flex flex-col gap-1">
 						<Label>Firma Digital</Label>
-						<div className="card p-2 bg-background sm:bg-accent text-sm h-full">
-							<InputFiles
-								files={firmaFiles}
-								setFiles={setFirmaFiles}
-								text="Imágen Firma Digital"
-								maxFiles={1}
-							/>
-						</div>
+						<FileDropzone
+							text="Imágen Firma"
+							onUploaded={url => {
+								// console.log("URL", url)
+								if (url.length > 0 && url !== firmaFile) {
+									setFirmaFile(url)
+								} else setFirmaFile("")
+							}}
+						/>
 					</div>
 				</div>
 

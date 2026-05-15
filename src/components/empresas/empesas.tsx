@@ -155,9 +155,19 @@ function Empresa({ empresa }: { empresa: EmpresaType }) {
 				</div>
 				<div className="flex flex-col gap-1">
 					<Label>Logo</Label>
-					<div className="bg-accent ring-[1px] ring-foreground/10 rounded-md sm:bg-accent flex items-center justify-center">
-						<img src="/telefonica.png" alt="luxometro" className="size-20" />
-					</div>
+					{empresa.logo ? (
+						<div className="w-full h-20 min-h-9 flex items-center justify-center">
+							<img
+								src={empresa.logo}
+								alt="Imágen Logo"
+								className="w-full h-full object-contain object-center"
+							/>
+						</div>
+					) : (
+						<span className="w-full text-center rounded-lg bg-secondary/20 ring-[1px] ring-foreground/10 p-2.5 text-xs font-medium text-gray-500 italic">
+							No has cargado el logo de la empresa
+						</span>
+					)}
 				</div>
 			</div>
 		</div>

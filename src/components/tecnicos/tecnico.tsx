@@ -94,12 +94,36 @@ function HayTecnico({ tecnico }: { tecnico: TecnicoType }) {
 				</div>
 				<div className="flex flex-col gap-1">
 					<Label>Matrícula Digital</Label>
-					<div className="bg-accent ring-[1px] ring-foreground/10 rounded-md w-full h-full min-h-9"></div>
+					{tecnico.matriculaImg ? (
+						<div className="w-full h-20 min-h-9 flex items-center justify-center">
+							<img
+								src={tecnico.matriculaImg}
+								alt="matricula"
+								className="w-full h-full object-contain object-center"
+							/>
+						</div>
+					) : (
+						<span className="w-full text-center rounded-lg bg-secondary/20 ring-[1px] ring-foreground/10 p-2.5 text-xs font-medium text-gray-500 italic">
+							No has cargado tu matricula digital
+						</span>
+					)}
 				</div>
 
 				<div className="flex-1 flex flex-col gap-1">
 					<Label>Firma Digital</Label>
-					<div className="bg-accent ring-[1px] ring-foreground/10 rounded-md w-full h-full min-h-9"></div>
+					{tecnico.firmaImg ? (
+						<div className="w-full h-20 min-h-9 flex items-center justify-center">
+							<img
+								src={tecnico.firmaImg}
+								alt="Firma digital"
+								className="w-full h-full object-contain object-center"
+							/>
+						</div>
+					) : (
+						<span className="w-full text-center rounded-lg bg-secondary/20 ring-[1px] ring-foreground/10 p-2.5 text-xs font-medium text-gray-500 italic">
+							No has cargado tu firma digital
+						</span>
+					)}
 				</div>
 			</div>
 		</div>

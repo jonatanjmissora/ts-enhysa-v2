@@ -27,8 +27,8 @@ import Title from "../title"
 import type { InstrumentoType } from "../../../db/instrumentos/schema"
 import { useUpdateInstrumento } from "../../../queries/instrumentos/use-update-instrumento"
 import { updateInstrumentoValidator } from "../../../db/instrumentos/instrumento-validator"
-import { InputFiles } from "../input-files"
 import { Button } from "../ui/button"
+import { FileDropzone, FilesDropzone } from "../upload-button"
 
 export function EditInstrumento({
 	instrumento,
@@ -77,8 +77,12 @@ export function EditInstrumentoForm({
 	const [calibrationDate, setCalibrationDate] = useState<Date>(
 		instrumento.fechaCalibracion
 	)
-	const [instrumentoFiles, setInstrumentoFiles] = useState<File[]>([])
-	const [imagenCalibracion, setImagenCalibracion] = useState<File[]>([])
+	const [instrumentoFiles, setInstrumentoFiles] = useState<string[]>(
+		instrumento.imagenes ?? []
+	)
+	const [imagenCalibracion, setImagenCalibracion] = useState<string>(
+		instrumento.imagenCalibracion ?? ""
+	)
 	const {
 		mutateAsync: updateInstrumentoMutation,
 		isPending,
@@ -96,8 +100,8 @@ export function EditInstrumentoForm({
 				id: instrumento.id,
 				userId: instrumento.userId,
 				fechaCalibracion: calibrationDate,
-				imageCalibracion: imagenCalibracion,
-				imageInstrumento: instrumentoFiles,
+				imagenCalibracion: imagenCalibracion,
+				imagenes: instrumentoFiles,
 			}
 
 			if (checkInstrumentoDiference(updateInstrumento, instrumento)) {
@@ -301,19 +305,22 @@ export function EditInstrumentoForm({
 					/>
 
 					<form.Field
-						name="imagenes"
+						name="imagenCalibracion"
 						children={field => {
 							const isInvalid =
 								field.state.meta.isTouched && !field.state.meta.isValid
 							return (
 								<Field data-invalid={isInvalid} className="relative gap-1">
 									<FieldLabel htmlFor={field.name}>Imagenes</FieldLabel>
-									<InputFiles
-										files={instrumentoFiles}
-										setFiles={setInstrumentoFiles}
-										text="Imágen del instrumento"
-										maxFiles={3}
-										editMode={true}
+									<FileDropzone
+										text="Imágen Calibración"
+										defaultValue={imagenCalibracion}
+										onUploaded={url => {
+											// console.log("URL matricula", url)
+											if (url.length > 0 && url !== imagenCalibracion) {
+												setImagenCalibracion(url)
+											} else setImagenCalibracion("")
+										}}
 									/>
 									{isInvalid && (
 										<FieldError
@@ -327,19 +334,22 @@ export function EditInstrumentoForm({
 					/>
 
 					<form.Field
-						name="imagenCalibracion"
+						name="imagenes"
 						children={field => {
 							const isInvalid =
 								field.state.meta.isTouched && !field.state.meta.isValid
 							return (
 								<Field data-invalid={isInvalid} className="relative gap-1">
 									<FieldLabel htmlFor={field.name}>Imagenes</FieldLabel>
-									<InputFiles
-										files={imagenCalibracion}
-										setFiles={setImagenCalibracion}
-										text="Certificado de calibración"
-										maxFiles={1}
-										editMode={true}
+									<FilesDropzone
+										text="Imágen Instrumento"
+										defaultValue={instrumentoFiles}
+										onUploaded={url => {
+											// console.log("URL matricula", url)
+											if (url.length > 0 && url !== instrumentoFiles) {
+												setInstrumentoFiles(url)
+											} else setInstrumentoFiles([])
+										}}
 									/>
 									{isInvalid && (
 										<FieldError

@@ -23,6 +23,7 @@ import { checkEmpresaDiference } from "#/lib/utils"
 import { InputFiles } from "../input-files"
 import { Button } from "../ui/button"
 import Title from "../title"
+import { FileDropzone } from "../upload-button"
 
 export function EditEmpresa({
 	empresa,
@@ -67,7 +68,7 @@ export function EditEmpresaForm({
 	setOpen: (open: boolean) => void
 	setIsMenuOpen?: (open: boolean) => void
 }) {
-	const [logoFiles, setLogoFiles] = useState<File[]>([])
+	const [logoFile, setLogoFile] = useState<string>(empresa.logo ?? "")
 	const {
 		mutateAsync: updateEmpresaMutation,
 		isPending,
@@ -80,13 +81,17 @@ export function EditEmpresaForm({
 			onSubmit: updateEmpresaValidator,
 		},
 		onSubmit: async ({ value }) => {
-			if (checkEmpresaDiference(value, empresa)) {
+			const newEmpresa = {
+				...value,
+				logo: logoFile,
+			}
+			if (checkEmpresaDiference(newEmpresa, empresa)) {
 				setOpen(false)
 				return
 			}
 
 			const updateEmpresa = {
-				...value,
+				...newEmpresa,
 				id: empresa.id,
 				userId: empresa.userId,
 			}
@@ -329,15 +334,16 @@ export function EditEmpresaForm({
 							return (
 								<Field data-invalid={isInvalid} className="relative gap-1">
 									<FieldLabel htmlFor={field.name}>Logo Empresarial</FieldLabel>
-									<div className="w-full bg-foreground/5 h-9 sm:py-[5px] 2xl:py-[4px] rounded-lg border border-foreground/7 flex items-center justify-center">
-										<InputFiles
-											files={logoFiles}
-											setFiles={setLogoFiles}
-											text="Imágen Logo digital"
-											maxFiles={1}
-											editMode={true}
-										/>
-									</div>
+									<FileDropzone
+										text="Imágen Logo"
+										defaultValue={logoFile}
+										onUploaded={url => {
+											// console.log("URL matricula", url)
+											if (url.length > 0 && url !== logoFile) {
+												setLogoFile(url)
+											} else setLogoFile("")
+										}}
+									/>
 									{isInvalid && (
 										<FieldError
 											errors={field.state.meta.errors}
