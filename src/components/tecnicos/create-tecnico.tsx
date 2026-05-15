@@ -264,15 +264,17 @@ export function CreateTecnicoForm({
 
 					<div className="flex-1 flex flex-col gap-1">
 						<Label>Firma Digital</Label>
-						<FileDropzone
-							text="Imágen Firma"
-							onUploaded={url => {
-								// console.log("URL", url)
-								if (url.length > 0 && url !== firmaFile) {
-									setFirmaFile(url)
-								} else setFirmaFile("")
-							}}
-						/>
+						<div className="bg-white/75">
+							<FileDropzone
+								text="Imágen Firma"
+								onUploaded={url => {
+									// console.log("URL", url)
+									if (url.length > 0 && url !== firmaFile) {
+										setFirmaFile(url)
+									} else setFirmaFile("")
+								}}
+							/>
+						</div>
 					</div>
 				</div>
 

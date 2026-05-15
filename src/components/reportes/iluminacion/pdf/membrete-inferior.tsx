@@ -1,4 +1,4 @@
-import { View, Text } from "@react-pdf/renderer"
+import { View, Text, Image } from "@react-pdf/renderer"
 import type { TecnicoType } from "../../../../../db/tecnicos/schema"
 
 export default function MembreteInferior({
@@ -20,22 +20,42 @@ export default function MembreteInferior({
 					style={{
 						flex: 1,
 						display: "flex",
-						alignItems: "center",
-						justifyContent: "center",
+						alignItems: "flex-start",
+						justifyContent: "flex-start",
 						paddingTop: 20,
 					}}
 				>
-					<Text style={{ fontSize: 14, fontWeight: "bold", textAlign: "left" }}>
-						LOGO
+					<Text style={{ fontSize: 14, fontWeight: "bold" }}>
+						Logo consultora
 					</Text>
 				</View>
-				<View style={{ flex: 1 }}>
+				<View
+					style={{
+						flex: 1,
+						position: "relative",
+						display: "flex",
+						flexDirection: "column",
+						alignItems: "flex-end",
+						justifyContent: "space-between",
+					}}
+				>
 					<Text style={{ fontSize: 10, textAlign: "right" }}>
 						{tecnico.nombre.toUpperCase()}
 					</Text>
 					<Text style={{ fontSize: 10, textAlign: "right" }}>
 						MAT {tecnico.matricula}
 					</Text>
+					<Image
+						src={tecnico.firmaImg}
+						style={{
+							width: "auto",
+							height: "40px",
+							objectFit: "contain",
+							position: "absolute",
+							right: 0,
+							bottom: 0,
+						}}
+					/>
 				</View>
 			</View>
 			<View

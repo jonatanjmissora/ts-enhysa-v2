@@ -1,11 +1,16 @@
-import { View, Text } from "@react-pdf/renderer"
+import { View, Text, Image } from "@react-pdf/renderer"
+import type { EmpresaType } from "../../../../../db/empresas/schema"
 
 const membreteSupDerecho = [
 	"Seguridad e Higiene en el trabajo",
 	"Informe técnico - Medición de iluminación",
 ]
 
-export default function MembreteSuperior() {
+export default function MembreteSuperior({
+	empresa,
+}: {
+	empresa: EmpresaType
+}) {
 	return (
 		<View
 			style={{
@@ -20,12 +25,29 @@ export default function MembreteSuperior() {
 				style={{
 					flex: 1,
 					display: "flex",
-					alignItems: "center",
+					alignItems: "flex-start",
 				}}
 			>
-				<Text style={{ fontSize: 14, fontWeight: "bold", textAlign: "left" }}>
-					LOGO
-				</Text>
+				{(empresa.logo !== "" && (
+					<Image
+						src={empresa.logo}
+						style={{
+							width: "auto",
+							height: "50px",
+							objectFit: "contain",
+						}}
+					/>
+				)) || (
+					<Text
+						style={{
+							fontSize: 14,
+							fontWeight: "bold",
+							textAlign: "left",
+						}}
+					>
+						{empresa.razonSocial.toUpperCase()}
+					</Text>
+				)}
 			</View>
 			<View style={{ flex: 1 }}>
 				{membreteSupDerecho.map((line, index) => (

@@ -70,7 +70,7 @@ export default function Page1({
 }) {
 	return (
 		<Page size="A4" style={styles.page}>
-			<MembreteSuperior />
+			<MembreteSuperior empresa={empresa} />
 			<Text
 				style={{
 					width: "100%",

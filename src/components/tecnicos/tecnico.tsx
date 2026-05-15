@@ -116,7 +116,7 @@ function HayTecnico({ tecnico }: { tecnico: TecnicoType }) {
 							<img
 								src={tecnico.firmaImg}
 								alt="Firma digital"
-								className="w-full h-full object-contain object-center"
+								className="w-max h-full object-contain object-center bg-white"
 							/>
 						</div>
 					) : (

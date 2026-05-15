@@ -70,7 +70,7 @@ export default function Page3({
 }) {
 	return (
 		<Page size="A4" orientation="landscape" style={styles.page}>
-			<MembreteSuperior />
+			<MembreteSuperior empresa={empresa} />
 			<Text
 				style={{
 					width: "100%",
