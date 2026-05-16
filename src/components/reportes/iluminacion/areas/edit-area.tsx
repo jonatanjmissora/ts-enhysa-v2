@@ -102,7 +102,7 @@ function EditArea({
 	const [puntos, setPuntos] = useState<number[]>(area.puntos)
 	const [timestamps, setTimestamps] = useState<Date[]>(area.timestamps)
 	const [puntosError, setPuntosError] = useState<string | null>(null)
-	const [planoFiles, setPlanoFiles] = useState<string[]>([])
+	const [planoFiles, setPlanoFiles] = useState<string[]>(area.imagenes || [])
 	const [indiceRedondeo, setIndiceRedondeo] = useState<number>(() => {
 		const indiceDeLocal = getIndiceDeLocal(area.largo, area.ancho, area.alto)
 		const oldIndiceRedondeo = getIndiceRedondeo(indiceDeLocal)

@@ -6,7 +6,7 @@ import { db } from "../../"
 export async function getReporteDB(userId: string, id: string) {
 	try {
 		await delay()
-		return await db.query.reportes_iluminacion.findFirst({
+		const result = await db.query.reportes_iluminacion.findFirst({
 			where: and(
 				eq(reportes_iluminacion.id, id),
 				eq(reportes_iluminacion.userId, userId)
@@ -17,10 +17,12 @@ export async function getReporteDB(userId: string, id: string) {
 				tecnico: true,
 			},
 		})
+		return result ?? null
 	} catch (error) {
 		console.error(
 			"ERROR leyendo reporte:",
 			error instanceof Error ? error.message : error
 		)
+		return null
 	}
 }

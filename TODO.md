@@ -18,3 +18,6 @@ cuando modifico alto algo o largo, en resumen, celdas, resetear puntos
 si pongo cancelar cuando edito o creo algo que vaya al uploadthing, hay que borrar dichas imagenes subidas, porque no sirven de nada y ocupan espacio en el servidor.
 
 cuando elimino, empresa, instumento o reporte, tambien borrar las imagenes en uploadthing
+
+edit de reportes
+

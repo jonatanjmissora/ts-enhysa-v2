@@ -17,5 +17,6 @@ export async function getEmpresaDB(id: string, userId: string) {
 			"ERROR leyendo empresa:",
 			error instanceof Error ? error.message : error
 		)
+		return null
 	}
 }

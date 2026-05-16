@@ -5,6 +5,7 @@ import { MUESTREO } from "@/lib/constants"
 import type { EmpresaType } from "../../../../../db/empresas/schema"
 import type { TecnicoType } from "../../../../../db/tecnicos/schema"
 import type { AreaIluminacionType } from "../../../../../db/reportes/iluminacion/areas/schema"
+import { getNumeroCeldas, sortedByName } from "#/lib/utils"
 
 // Create styles
 const styles = StyleSheet.create({
@@ -73,13 +74,14 @@ export default function Page2({
 }) {
 	return (
 		<>
-			{areas.map(area => {
+			{sortedByName(areas).map((area, muestreoIndex) => {
 				return area.puntos.length <= 14 ? (
 					<AreaTableOnePage
 						key={area.id}
 						area={area}
 						tecnico={tecnico}
 						empresa={empresa}
+						muestreoIndex={muestreoIndex}
 					/>
 				) : (
 					<AreaTableMultiplePages
@@ -87,6 +89,7 @@ export default function Page2({
 						area={area}
 						tecnico={tecnico}
 						empresa={empresa}
+						muestreoIndex={muestreoIndex}
 					/>
 				)
 			})}
@@ -98,10 +101,12 @@ function AreaTableOnePage({
 	area,
 	tecnico,
 	empresa,
+	muestreoIndex,
 }: {
 	area: AreaIluminacionType
 	tecnico: TecnicoType
 	empresa: EmpresaType
+	muestreoIndex: number
 }) {
 	return (
 		<Page size="A4" orientation="landscape" style={styles.page}>
@@ -285,11 +290,11 @@ function AreaTableOnePage({
 
 				{/* **************************************************************************************************** */}
 
-				<TablaDePuntos area={area} />
+				<TablaDePuntos area={area} muestreoIndex={muestreoIndex} />
 
 				{/* **************************************************************************************************** */}
 
-				<Text style={[styles.row, { height: 60, borderBottom: "none" }]}>
+				<Text style={[styles.row, { height: 40, borderBottom: "none" }]}>
 					(34) Observaciones:{" "}
 					{area.observaciones !== "" ? area.observaciones : "Sin observaciones"}
 				</Text>
@@ -299,7 +304,13 @@ function AreaTableOnePage({
 	)
 }
 
-function TablaDePuntos({ area }: { area: AreaIluminacionType }) {
+function TablaDePuntos({
+	area,
+	muestreoIndex,
+}: {
+	area: AreaIluminacionType
+	muestreoIndex: number
+}) {
 	const celdasMedidas = area.puntos.filter(punto => punto > 0)
 	const Eminima = Math.min(...celdasMedidas)
 	const uniformidad = Math.ceil(
@@ -319,7 +330,7 @@ function TablaDePuntos({ area }: { area: AreaIluminacionType }) {
 						]}
 					>
 						{/* LETRA */}
-						<Text>{MUESTREO[0]}</Text>
+						<Text>{MUESTREO[muestreoIndex]}</Text>
 					</View>
 					<View
 						style={[
@@ -423,10 +434,12 @@ function AreaTableMultiplePages({
 	area,
 	tecnico,
 	empresa,
+	muestreoIndex,
 }: {
 	area: AreaIluminacionType
 	tecnico: TecnicoType
 	empresa: EmpresaType
+	muestreoIndex: number
 }) {
 	const chunkResult = chunk(area.puntos, 12)
 	return chunkResult.map((chunk, index) => (
@@ -435,6 +448,7 @@ function AreaTableMultiplePages({
 			area={{ ...area, puntos: chunk }}
 			tecnico={tecnico}
 			empresa={empresa}
+			muestreoIndex={muestreoIndex}
 		/>
 	))
 }

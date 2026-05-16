@@ -17,5 +17,6 @@ export async function getTecnicoDB(userId: string) {
 			"ERROR obteniendo tecnico:",
 			error instanceof Error ? error.message : error
 		)
+		return null
 	}
 }

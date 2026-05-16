@@ -19,5 +19,6 @@ export async function getInstrumentoDB(userId: string, instrumentoId: string) {
 			"ERROR leyendo instrumento:",
 			error instanceof Error ? error.message : error
 		)
+		return null
 	}
 }

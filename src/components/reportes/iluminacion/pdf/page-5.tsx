@@ -4,6 +4,7 @@ import MembreteInferior from "./membrete-inferior"
 import type { AreaIluminacionType } from "../../../../../db/reportes/iluminacion/areas/schema"
 import type { TecnicoType } from "../../../../../db/tecnicos/schema"
 import type { EmpresaType } from "../../../../../db/empresas/schema"
+import { getIndiceRedondeo, getNumeroCeldas } from "#/lib/utils"
 
 // Create styles
 const styles = StyleSheet.create({
@@ -84,10 +85,10 @@ function Area({
 	tecnico: TecnicoType
 	empresa: EmpresaType
 }) {
-	const puntos = [1, 2, 3, 4, 5, 6, 0, 8, 0, 10, 11, 12, 13, 14, 15, 16]
 	const ancho = area.ancho
 	const largo = area.largo
-	const div = Math.sqrt(puntos.length)
+	const alto = area.alto
+	const div = Math.sqrt(getNumeroCeldas(ancho, largo, alto))
 	let cellW = 75
 	let cellH = (largo * cellW) / ancho
 
@@ -113,7 +114,7 @@ function Area({
 					fontWeight: "900",
 				}}
 			>
-				Anexo 4
+				Anexo 5
 			</Text>
 			<View
 				style={[
@@ -125,10 +126,27 @@ function Area({
 				]}
 			>
 				<Text style={styles.title}>PLANOS</Text>
-				<Text style={[styles.row, { padding: "10px 5px", margin: "10px 0px" }]}>
-					(A) {area.nombre.toUpperCase()} - {area.tipo.toUpperCase()}
-				</Text>
-
+				<View
+					style={[
+						styles.flexrow,
+						{
+							padding: "10px 5px",
+							margin: "10px 0px",
+							justifyContent: "space-between",
+							alignItems: "flex-end",
+						},
+					]}
+				>
+					<Text style={{ fontSize: 11 }}>
+						(A) {area.nombre.toUpperCase()} - {area.tipo.toUpperCase()}
+					</Text>
+					<Text style={{ fontSize: 8, opacity: 0.75 }}>
+						Medidas: {area.largo.toFixed(0)} mts x {area.ancho.toFixed(0)} mts
+					</Text>
+					<Text style={{ fontSize: 8, opacity: 0.75 }}>
+						Divisiones: {div ** 2}
+					</Text>
+				</View>
 				<View
 					style={{
 						flex: 1,
@@ -183,7 +201,6 @@ function Area({
 							flexDirection: "row",
 							justifyContent: "center",
 							alignItems: "center",
-							flexWrap: "wrap",
 							gap: 2,
 							paddingTop: "15px",
 						}}
@@ -192,7 +209,12 @@ function Area({
 							<Image
 								key={index}
 								src={img}
-								style={{ width: "24%", height: "auto", objectFit: "contain" }}
+								style={{
+									width: "24%",
+									height: "auto",
+									maxHeight: "80px",
+									objectFit: "contain",
+								}}
 							/>
 						))}
 					</View>

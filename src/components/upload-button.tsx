@@ -84,6 +84,18 @@ export function FileDropzone({
 								return "Cargando..."
 							},
 						}}
+						onBeforeUploadBegin={files => {
+							return files.filter(file => {
+								const extension = file.name.split(".").pop()?.toLowerCase()
+								const isAllowed = ["jpg", "jpeg", "png"].includes(
+									extension || ""
+								)
+								if (!isAllowed) {
+									alert("No es una extensión válida. Sólo se permiten archivos jpg, jpeg y png")
+								}
+								return isAllowed
+							})
+						}}
 						onClientUploadComplete={res => {
 							setError("")
 							if (res) {
@@ -153,6 +165,18 @@ export function FilesDropzone({
 									)
 								return "Cargando..."
 							},
+						}}
+						onBeforeUploadBegin={files => {
+							return files.filter(file => {
+								const extension = file.name.split(".").pop()?.toLowerCase()
+								const isAllowed = ["jpg", "jpeg", "png"].includes(
+									extension || ""
+								)
+								if (!isAllowed) {
+									alert("No es una extension valida. Solo se permiten archivos jpg, jpeg y png")
+								}
+								return isAllowed
+							})
 						}}
 						onClientUploadComplete={res => {
 							setError("")
@@ -231,6 +255,16 @@ export function ImageUploader({ onUploaded }: FilesDropzoneProps) {
 		<div className="flex flex-col items-center gap-6 w-full">
 			<UploadDropzone<OurFilesRouter, "mixedUploader">
 				endpoint="mixedUploader"
+				onBeforeUploadBegin={files => {
+					return files.filter(file => {
+						const extension = file.name.split(".").pop()?.toLowerCase()
+						const isAllowed = ["jpg", "jpeg", "png"].includes(extension || "")
+						if (!isAllowed) {
+							alert("No es una extension valida. Solo se permiten archivos jpg, jpeg y png")
+						}
+						return isAllowed
+					})
+				}}
 				onClientUploadComplete={res => {
 					if (res) {
 						const urls = res.map(file => ({

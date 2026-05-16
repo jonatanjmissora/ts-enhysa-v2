@@ -28,6 +28,8 @@ import { useState } from "react"
 import DeleteAreaAlert from "#/components/reportes/iluminacion/areas/delete-area"
 import EditAreaAlert from "#/components/reportes/iluminacion/areas/edit-area"
 import { reporteNuevoQueryOptions } from "../../../../../../queries/reportes/iluminacion/reportes-query"
+import { sortedByName } from "#/lib/utils"
+import useScrollTop from "#/hooks/scroll-top"
 
 export const Route = createFileRoute(
 	"/_protected/iluminacion/nuevo-informe/areas/"
@@ -36,6 +38,7 @@ export const Route = createFileRoute(
 })
 
 function RouteComponent() {
+	useScrollTop()
 	return (
 		<article className="w-full min-h-svh flex flex-col items-center gap-0 relative mb-60">
 			<BackChevron to="/iluminacion/nuevo-informe" />
@@ -81,7 +84,7 @@ function Areas() {
 				defaultValue=""
 				className="flex flex-col gap-2 w-5/6 mx-auto mt-5"
 			>
-				{areas.map(area => (
+				{sortedByName(areas).map(area => (
 					<AccordionItem
 						key={area.id}
 						value={area.id}

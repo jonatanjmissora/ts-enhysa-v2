@@ -62,7 +62,7 @@ function DeleteAreaForm({
 		mutateAsync: deleteAreaMutation,
 		error,
 		isPending,
-	} = useDeleteArea(area.id)
+	} = useDeleteArea(area.id, area.reportId)
 
 	const router = useRouter()
 	const form = useForm({

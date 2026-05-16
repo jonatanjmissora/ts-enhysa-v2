@@ -50,7 +50,7 @@ function Empresa() {
 		staleTime: 1000 * 60 * 5, // 5 minutos
 	})
 	return (
-		<span className="text-amber-600">{`${reporte.empresa.razonSocial.toUpperCase()} - ${reporte.finishedAt?.toLocaleDateString("it-IT")}`}</span>
+		<span className="text-amber-600">{`${reporte?.empresa.razonSocial.toUpperCase()} - ${reporte?.finishedAt?.toLocaleDateString("it-IT")}`}</span>
 	)
 }
 

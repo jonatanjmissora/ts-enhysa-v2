@@ -1,24 +1,9 @@
 import { Page, Text, View, StyleSheet, Image } from "@react-pdf/renderer"
 import MembreteSuperior from "./membrete-superior"
 import MembreteInferior from "./membrete-inferior"
-import type { AreaIluminacionType } from "../../../../../db/reportes/iluminacion/areas/schema"
 import type { TecnicoType } from "../../../../../db/tecnicos/schema"
 import type { EmpresaType } from "../../../../../db/empresas/schema"
-import { getNumeroCeldas } from "#/lib/utils"
-
-function getCeldasWidth(ancho: number) {
-	if (ancho < 10) return 50
-	else if (ancho < 15) return 30
-	else if (ancho < 20) return 20
-	return 10
-}
-
-function getCeldasHeight(largo: number) {
-	if (largo < 10) return 50
-	else if (largo < 15) return 30
-	else if (largo < 20) return 20
-	return 10
-}
+import type { InstrumentoType } from "../../../../../db/instrumentos/schema"
 
 // Create styles
 const styles = StyleSheet.create({
@@ -73,21 +58,14 @@ const styles = StyleSheet.create({
 })
 
 export default function Page4({
-	areas,
 	tecnico,
 	empresa,
+	instrumento,
 }: {
-	areas: AreaIluminacionType[]
 	tecnico: TecnicoType
 	empresa: EmpresaType
+	instrumento: InstrumentoType
 }) {
-	const numCeldas = getNumeroCeldas(
-		areas[0].largo,
-		areas[0].ancho,
-		areas[0].alto
-	)
-	const div = Number(Math.sqrt(numCeldas).toFixed(0))
-
 	return (
 		<Page size="A4" style={styles.page}>
 			<MembreteSuperior empresa={empresa} />
@@ -103,115 +81,47 @@ export default function Page4({
 				Anexo 4
 			</Text>
 			<View style={[styles.pagePadding, { flex: 1, border: "none" }]}>
-				<Text style={styles.title}>PLANOS</Text>
-				<Text style={[styles.row, { padding: "10px 5px", margin: "10px 0px" }]}>
-					(A) {areas[0].nombre.toUpperCase()} - {areas[0].tipo.toUpperCase()}
-				</Text>
+				<Text style={styles.title}>INSTRUMENTO</Text>
+				<View style={[styles.row, { padding: "10px 5px", margin: "10px 0px", flexDirection: "row", justifyContent: "space-between" }]}>
+					<Text>
+						(A) {instrumento.nombre.toUpperCase()} -{" "}
+						{instrumento.marca.toUpperCase()} - {instrumento.modelo.toUpperCase()}
+					</Text>
+					<Text >
+						Fecha de Calibración: {instrumento.fechaCalibracion.toLocaleDateString("it-IT")}
+					</Text>
+				</View>
 
 				<View
 					style={{
 						flex: 1,
 						display: "flex",
-						flexDirection: "column",
+						flexDirection: "row",
+						justifyContent: "center",
+						alignItems: "flex-start",
+						flexWrap: "wrap",
+						gap: 2,
+						paddingTop: "15px",
 					}}
 				>
-					<View
-						style={{
-							position: "relative",
-							marginTop: "10px",
-							width: `${div * getCeldasWidth(areas[0].ancho)}px`,
-							height: `${div * getCeldasHeight(areas[0].largo)}px`,
-							display: "flex",
-							flexDirection: "row",
-							flexWrap: "wrap",
-						}}
-					>
-						{areas[0].puntos.map((punto, index) => (
-							<View
-								key={index}
-								style={{
-									width: `${getCeldasWidth(areas[0].ancho) - 1}px`,
-									height: `${getCeldasHeight(areas[0].largo) - 1}px`,
-									border: "0.5px solid gray",
-									display: "flex",
-									flexDirection: "column",
-									alignItems: "center",
-									justifyContent: "center",
-								}}
-							>
-								<Text style={{ fontSize: 4, opacity: 0.5 }}>({index})</Text>
-								<Text style={{ fontSize: 7 }}>{punto}</Text>
-							</View>
-						))}
-
-						<Cotas ancho={areas[0].ancho} largo={areas[0].largo} />
-					</View>
-
-					<View
-						style={{
-							flex: 1,
-							display: "flex",
-							flexDirection: "row",
-							flexWrap: "wrap",
-							gap: 2,
-							paddingTop: "15px",
-						}}
-					>
-						{areas[0].imagenes.map((img, index) => (
+					{[instrumento.imagenCalibracion, ...instrumento.imagenes].map(
+						(img, index) => (
 							<Image
 								key={index}
 								src={img}
-								style={{ width: "24%", height: "auto", objectFit: "contain" }}
+								style={{
+									flex: 1,
+									maxWidth: "50%",
+									height: "100px",
+									objectFit: "contain",
+								}}
 							/>
-						))}
-					</View>
+						)
+					)}
 				</View>
 			</View>
 
 			<MembreteInferior tecnico={tecnico} />
 		</Page>
-	)
-}
-
-function Cotas({ ancho, largo }: { ancho: number; largo: number }) {
-	return (
-		<>
-			<View
-				style={{
-					position: "absolute",
-					top: "-14px",
-					left: 0,
-					right: 0,
-					display: "flex",
-					justifyContent: "center",
-				}}
-			>
-				<Text style={{ fontSize: 7, color: "gray", textAlign: "center" }}>
-					Ancho {ancho}m
-				</Text>
-			</View>
-			<View
-				style={{
-					position: "absolute",
-					bottom: 0,
-					left: -4,
-					width: "100%",
-				}}
-			>
-				<Text
-					style={{
-						fontSize: 7,
-						color: "gray",
-						textAlign: "center",
-						transform: "rotate(-90deg)",
-						transformOrigin: "bottom left",
-						padding: 0,
-						width: "100%",
-					}}
-				>
-					Largo {largo}m
-				</Text>
-			</View>
-		</>
 	)
 }

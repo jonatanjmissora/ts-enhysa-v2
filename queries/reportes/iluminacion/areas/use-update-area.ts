@@ -10,7 +10,7 @@ export function useUpdateArea() {
 		onSuccess: data => {
 			if (!data) return
 			queryClient.setQueryData<AreaIluminacionType[]>(
-				["areas_iluminacion"],
+				["areas_iluminacion", data.reportId],
 				oldData => {
 					if (!oldData) return oldData
 					const oldArea = oldData.find(oldArea => oldArea.id === data.id)
