@@ -1,9 +1,10 @@
 import BackChevron from "#/components/back-chevron"
-import Title from "#/components/title"
 import { createFileRoute, Link, Outlet } from "@tanstack/react-router"
-import { File, RulerDimensionLine, UserRound } from "lucide-react"
+import { CalendarDays, File, RulerDimensionLine, UserRound } from "lucide-react"
 import { reporteQueryOptions } from "../../../../../../queries/reportes/iluminacion/reportes-query"
 import { areasQueryOptions } from "../../../../../../queries/reportes/iluminacion/areas/areas-query"
+import { useSuspenseQuery } from "@tanstack/react-query"
+import { Suspense } from "react"
 
 export const Route = createFileRoute("/_protected/iluminacion/reportes/$id")({
 	loader: ({ context, params }) => {
@@ -21,7 +22,14 @@ function RouteComponent() {
 	return (
 		<article className="w-full min-h-svh flex flex-col items-center gap-0 relative mb-60">
 			<BackChevron to="/iluminacion/reportes" />
-			<Title text="Reporte Iluminación" className="mt-15" />
+			<div className="flex flex-col items-center justify-center gap-1 w-11/12 mx-auto mt-15 py-2 mb-3">
+				<span className="text-lg text-center  tracking-widest font-semibold">
+					Reporte Iluminación
+				</span>
+				<Suspense fallback={<span className="animate-pulse">. . .</span>}>
+					<SuspenseTitle />
+				</Suspense>
+			</div>
 
 			<nav className="flex items-center justify-between gap-2 w-11/12 mx-auto">
 				<Link
@@ -62,5 +70,20 @@ function RouteComponent() {
 			</nav>
 			<Outlet />
 		</article>
+	)
+}
+
+const SuspenseTitle = () => {
+	const { id } = Route.useParams()
+	const { data: reporte } = useSuspenseQuery(reporteQueryOptions({ id }))
+
+	return (
+		<div className="flex items-center gap-2">
+			<span className="text-sm tracking-wider text-foreground/50">
+				{reporte?.empresa.razonSocial.toUpperCase()} -{" "}
+				{reporte?.finishedAt?.toLocaleDateString("it-IT")}
+			</span>
+			<CalendarDays className="size-3 text-foreground/50" />
+		</div>
 	)
 }

@@ -5,14 +5,7 @@ import { useSuspenseQuery } from "@tanstack/react-query"
 import { createFileRoute, Link } from "@tanstack/react-router"
 import { Suspense } from "react"
 import { reportesQueryOptions } from "../../../../../queries/reportes/iluminacion/reportes-query"
-import {
-	Calendar,
-	ChevronRight,
-	Download,
-	Eye,
-	FileChartColumn,
-	Trash2,
-} from "lucide-react"
+import { Clock, ChevronRight, FileChartColumn } from "lucide-react"
 import { Button } from "#/components/ui/button"
 
 export const Route = createFileRoute("/_protected/iluminacion/reportes/")({
@@ -61,7 +54,7 @@ function ReportesIluminacion() {
 							{reporte.finishedAt ? (
 								<FileChartColumn className="size-8 text-blue-600" />
 							) : (
-								<Calendar className="size-8 text-amber-600" />
+								<Clock className="size-8 text-amber-600" />
 							)}
 							<div className="flex flex-col gap-0">
 								<span className="text-base font-semibold w-55 truncate">
@@ -73,7 +66,7 @@ function ReportesIluminacion() {
 										{reporte.finishedAt?.toLocaleDateString("it-IT")}
 									</span>
 								) : (
-									<span className="text-xs text-amber-600">Pendiente</span>
+									<span className="text-xs text-foreground/50">En curso</span>
 								)}
 							</div>
 						</div>

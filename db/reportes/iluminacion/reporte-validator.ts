@@ -12,7 +12,7 @@ export type ReporteNuevoFormType = z.infer<typeof reporteNuevoFormValidator>
 export const defaultReporteData: ReporteNuevoFormType = {
 	empresaId: "",
 	instrumentoId: "",
-	clima: ["soleado", "60", "10"],
+	clima: ["despejado", "60", "10"],
 }
 
 export const reporteOpinionFormValidator = z.object({

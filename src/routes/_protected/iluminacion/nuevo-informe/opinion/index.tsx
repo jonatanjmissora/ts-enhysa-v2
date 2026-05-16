@@ -16,6 +16,7 @@ import {
 import { List, Loader, NotebookPen, Search } from "lucide-react"
 import { Button } from "#/components/ui/button"
 import { reporteOpinionFormValidator } from "../../../../../../db/reportes/iluminacion/reporte-validator"
+import { ESTADO, HUMEDAD, TEMPERATURA } from "#/lib/constants"
 
 export const Route = createFileRoute(
 	"/_protected/iluminacion/nuevo-informe/opinion/"
@@ -81,7 +82,7 @@ function Opinion() {
 				tecnicoId: reporteNuevo?.tecnicoId ?? "",
 				empresaId: reporteNuevo?.empresaId ?? "",
 				instrumentoId: reporteNuevo?.instrumentoId ?? "",
-				clima: reporteNuevo?.clima ?? ["soleado", "60", "10"],
+				clima: reporteNuevo?.clima ?? [ESTADO[0], HUMEDAD[5], TEMPERATURA[3]],
 				createdAt: reporteNuevo?.createdAt ?? new Date(),
 				id: reporteNuevo?.id ?? "",
 				userId: reporteNuevo?.userId ?? "",

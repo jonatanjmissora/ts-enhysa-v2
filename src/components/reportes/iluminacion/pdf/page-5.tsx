@@ -4,21 +4,6 @@ import MembreteInferior from "./membrete-inferior"
 import type { AreaIluminacionType } from "../../../../../db/reportes/iluminacion/areas/schema"
 import type { TecnicoType } from "../../../../../db/tecnicos/schema"
 import type { EmpresaType } from "../../../../../db/empresas/schema"
-import { getNumeroCeldas } from "#/lib/utils"
-
-function getCeldasWidth(ancho: number) {
-	if (ancho < 10) return 50
-	else if (ancho < 15) return 30
-	else if (ancho < 20) return 20
-	return 10
-}
-
-function getCeldasHeight(largo: number) {
-	if (largo < 10) return 50
-	else if (largo < 15) return 30
-	else if (largo < 20) return 20
-	return 10
-}
 
 // Create styles
 const styles = StyleSheet.create({
@@ -81,12 +66,40 @@ export default function Page4({
 	tecnico: TecnicoType
 	empresa: EmpresaType
 }) {
-	const numCeldas = getNumeroCeldas(
-		areas[0].largo,
-		areas[0].ancho,
-		areas[0].alto
+	return (
+		<>
+			{areas.map(area => (
+				<Area key={area.id} area={area} tecnico={tecnico} empresa={empresa} />
+			))}
+		</>
 	)
-	const div = Number(Math.sqrt(numCeldas).toFixed(0))
+}
+
+function Area({
+	area,
+	tecnico,
+	empresa,
+}: {
+	area: AreaIluminacionType
+	tecnico: TecnicoType
+	empresa: EmpresaType
+}) {
+	const puntos = [1, 2, 3, 4, 5, 6, 0, 8, 0, 10, 11, 12, 13, 14, 15, 16]
+	const ancho = area.ancho
+	const largo = area.largo
+	const div = Math.sqrt(puntos.length)
+	let cellW = 75
+	let cellH = (largo * cellW) / ancho
+
+	if (cellW * div >= 470 || cellH * div >= 450) {
+		if (ancho > largo) {
+			cellW = 470 / div
+			cellH = (largo * cellW) / ancho
+		} else {
+			cellH = 450 / div
+			cellW = (ancho * cellH) / largo
+		}
+	}
 
 	return (
 		<Page size="A4" style={styles.page}>
@@ -102,10 +115,18 @@ export default function Page4({
 			>
 				Anexo 4
 			</Text>
-			<View style={[styles.pagePadding, { flex: 1, border: "none" }]}>
+			<View
+				style={[
+					styles.pagePadding,
+					{
+						flex: 1,
+						border: "none",
+					},
+				]}
+			>
 				<Text style={styles.title}>PLANOS</Text>
 				<Text style={[styles.row, { padding: "10px 5px", margin: "10px 0px" }]}>
-					(A) {areas[0].nombre.toUpperCase()} - {areas[0].tipo.toUpperCase()}
+					(A) {area.nombre.toUpperCase()} - {area.tipo.toUpperCase()}
 				</Text>
 
 				<View
@@ -113,25 +134,27 @@ export default function Page4({
 						flex: 1,
 						display: "flex",
 						flexDirection: "column",
+						alignItems: "center",
+						justifyContent: "center",
 					}}
 				>
 					<View
 						style={{
 							position: "relative",
 							marginTop: "10px",
-							width: `${div * getCeldasWidth(areas[0].ancho)}px`,
-							height: `${div * getCeldasHeight(areas[0].largo)}px`,
+							width: `${div * cellW}px`,
+							height: `${div * cellH}px`,
 							display: "flex",
 							flexDirection: "row",
 							flexWrap: "wrap",
 						}}
 					>
-						{areas[0].puntos.map((punto, index) => (
+						{area.puntos.map((punto, index) => (
 							<View
 								key={index}
 								style={{
-									width: `${getCeldasWidth(areas[0].ancho) - 1}px`,
-									height: `${getCeldasHeight(areas[0].largo) - 1}px`,
+									width: `${cellW - 1}px`,
+									height: `${cellH - 1}px`,
 									border: "0.5px solid gray",
 									display: "flex",
 									flexDirection: "column",
@@ -139,12 +162,18 @@ export default function Page4({
 									justifyContent: "center",
 								}}
 							>
-								<Text style={{ fontSize: 4, opacity: 0.5 }}>({index})</Text>
-								<Text style={{ fontSize: 7 }}>{punto}</Text>
+								{punto !== 0 && (
+									<>
+										<Text style={{ fontSize: 4, opacity: 0.5 }}>
+											({index + 1})
+										</Text>
+										<Text style={{ fontSize: 7 }}>{punto}</Text>
+									</>
+								)}
 							</View>
 						))}
 
-						<Cotas ancho={areas[0].ancho} largo={areas[0].largo} />
+						<Cotas ancho={ancho} largo={largo} cellH={cellH * div} />
 					</View>
 
 					<View
@@ -152,12 +181,14 @@ export default function Page4({
 							flex: 1,
 							display: "flex",
 							flexDirection: "row",
+							justifyContent: "center",
+							alignItems: "center",
 							flexWrap: "wrap",
 							gap: 2,
 							paddingTop: "15px",
 						}}
 					>
-						{areas[0].imagenes.map((img, index) => (
+						{area.imagenes.map((img, index) => (
 							<Image
 								key={index}
 								src={img}
@@ -173,7 +204,15 @@ export default function Page4({
 	)
 }
 
-function Cotas({ ancho, largo }: { ancho: number; largo: number }) {
+function Cotas({
+	ancho,
+	largo,
+	cellH,
+}: {
+	ancho: number
+	largo: number
+	cellH: number
+}) {
 	return (
 		<>
 			<View
@@ -206,7 +245,7 @@ function Cotas({ ancho, largo }: { ancho: number; largo: number }) {
 						transform: "rotate(-90deg)",
 						transformOrigin: "bottom left",
 						padding: 0,
-						width: "100%",
+						width: `${cellH}px`,
 					}}
 				>
 					Largo {largo}m

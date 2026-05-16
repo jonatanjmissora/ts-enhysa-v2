@@ -110,6 +110,18 @@ export const getIndiceRedondeo = (indiceDeLocal: number) =>
 		? Math.trunc(indiceDeLocal) + 1
 		: Math.trunc(indiceDeLocal)
 
+export const getNumeroCeldas = (
+	cantidadFilas: number,
+	cantidadColumnas: number,
+	cantidadAltura: number
+) => {
+	const indiceRedondeo = getIndiceRedondeo(
+		getIndiceDeLocal(cantidadFilas, cantidadColumnas, cantidadAltura)
+	)
+	const indice = (indiceRedondeo + 2) ** 2
+	return indice
+}
+
 export const setResetPuntos = (length: number) => {
 	const resetPuntos: number[] = Array.from({ length: length }, () => 0)
 	const resetTimestamps: Date[] = Array.from(
