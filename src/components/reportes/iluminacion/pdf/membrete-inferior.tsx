@@ -22,7 +22,7 @@ export default function MembreteInferior({
 						display: "flex",
 						alignItems: "flex-start",
 						justifyContent: "flex-start",
-						paddingTop: 20,
+						padding: "10px 0",
 					}}
 				>
 					<Text style={{ fontSize: 14, fontWeight: "bold" }}>
@@ -32,28 +32,33 @@ export default function MembreteInferior({
 				<View
 					style={{
 						flex: 1,
-						position: "relative",
 						display: "flex",
-						flexDirection: "column",
-						alignItems: "flex-end",
-						justifyContent: "space-between",
+						flexDirection: "row",
+						alignItems: "center",
+						justifyContent: "flex-end",
 					}}
 				>
-					<Text style={{ fontSize: 10, textAlign: "right" }}>
-						{tecnico.nombre.toUpperCase()}
-					</Text>
-					<Text style={{ fontSize: 10, textAlign: "right" }}>
-						MAT {tecnico.matricula}
-					</Text>
+					<View
+						style={{
+							display: "flex",
+							flexDirection: "column",
+							justifyContent: "flex-end",
+							alignItems: "center",
+						}}
+					>
+						<Text style={{ fontSize: 10, textAlign: "right" }}>
+							{tecnico.nombre.toUpperCase()}
+						</Text>
+						<Text style={{ fontSize: 10, textAlign: "right" }}>
+							MAT {tecnico.matricula}
+						</Text>
+					</View>
 					<Image
 						src={tecnico.firmaImg}
 						style={{
 							width: "auto",
-							height: "40px",
+							height: "50px",
 							objectFit: "contain",
-							position: "absolute",
-							right: 0,
-							bottom: 0,
 						}}
 					/>
 				</View>

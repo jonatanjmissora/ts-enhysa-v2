@@ -8,6 +8,7 @@ import { reporteQueryOptions } from "../../../../../../../queries/reportes/ilumi
 import { ClientComponent } from "#/components/client-component"
 import { MyDocument } from "#/components/reportes/iluminacion/pdf/my-document"
 import { areasQueryOptions } from "../../../../../../../queries/reportes/iluminacion/areas/areas-query"
+import useScrollTop from "#/hooks/scroll-top"
 
 export const Route = createFileRoute(
 	"/_protected/iluminacion/reportes/pdf/$id/"
@@ -16,6 +17,7 @@ export const Route = createFileRoute(
 })
 
 function RouteComponent() {
+	useScrollTop()
 	return (
 		<Suspense
 			fallback={

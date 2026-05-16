@@ -13,6 +13,7 @@ import type { InstrumentoType } from "../../../../../db/instrumentos/schema"
 import type { AreaIluminacionType } from "../../../../../db/reportes/iluminacion/areas/schema"
 import Page2 from "./page-2"
 import Page3 from "./page-3"
+import Page4 from "./page-4"
 
 export const MyDocument = ({
 	reporte,
@@ -86,14 +87,15 @@ function MyDocumentData({
 }) {
 	return (
 		<Document title={reporte.title}>
-			<Page1
+			{/* <Page1
 				reporte={reporte}
 				tecnico={tecnico}
 				empresa={empresa}
 				instrumento={instrumento}
 			/>
 			<Page2 areas={areas} tecnico={tecnico} empresa={empresa} />
-			<Page3 reporte={reporte} tecnico={tecnico} empresa={empresa} />
+			<Page3 reporte={reporte} tecnico={tecnico} empresa={empresa} /> */}
+			<Page4 areas={areas} tecnico={tecnico} empresa={empresa} />
 		</Document>
 	)
 }

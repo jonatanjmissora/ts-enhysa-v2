@@ -17,8 +17,9 @@ export default function MembreteSuperior({
 				display: "flex",
 				flexDirection: "row",
 				borderBottom: "1px solid black",
-				padding: "20px 0px",
+				paddingTop: "10px",
 				justifyContent: "space-between",
+				alignItems: "center",
 			}}
 		>
 			<View
