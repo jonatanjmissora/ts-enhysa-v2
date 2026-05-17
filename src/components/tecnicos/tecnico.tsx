@@ -28,7 +28,7 @@ function HayTecnico({ tecnico }: { tecnico: TecnicoType }) {
 
 	return (
 		<div className="w-5/6 mx-auto my-12 mb-80 relative pt-10">
-			<div className="absolute top-0 right-6">
+			<div className="absolute top-0 left-6">
 				<TecnicoDropdownMenu tecnico={tecnico} />
 			</div>
 			<div className="grid-cols-1 grid sm:grid-cols-2 gap-8 w-5/6 my-10 mx-auto">

@@ -6,7 +6,7 @@ export const instrumentoFormValidator = z.object({
 	modelo: z.string().min(3, "Mínimo 3 caracteres"),
 	serie: z.string().min(3, "Mínimo 3 caracteres"),
 	fechaCalibracion: z.date(),
-	imagenCalibracion: z.string(),
+	imagenCalibracion: z.array(z.string()),
 	imagenes: z.array(z.string()),
 })
 
@@ -31,6 +31,6 @@ export const defaultInstrumento: InstrumentoFormType = {
 	modelo: "",
 	serie: "",
 	fechaCalibracion: new Date(),
-	imagenCalibracion: "",
+	imagenCalibracion: [],
 	imagenes: [],
 }

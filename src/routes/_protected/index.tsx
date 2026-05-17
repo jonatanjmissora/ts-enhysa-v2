@@ -44,7 +44,11 @@ function Home() {
 								value={protocolo.id}
 								className="text-right! text-nowrap! flex justify-start! py-2"
 							>
-								<Link to={protocolo.link} resetScroll={true}>
+								<Link
+									to={protocolo.link}
+									resetScroll={true}
+									className="py-2 text-base"
+								>
 									{protocolo.title}
 								</Link>
 							</SelectItem>

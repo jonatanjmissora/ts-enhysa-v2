@@ -6,7 +6,12 @@ import { createFileRoute } from "@tanstack/react-router"
 import { Suspense } from "react"
 import { reporteQueryOptions } from "../../../../../../../queries/reportes/iluminacion/reportes-query"
 import { ClientComponent } from "#/components/client-component"
-import { MyDocument } from "#/components/reportes/iluminacion/pdf/my-document"
+import { lazy } from "react"
+const MyDocument = lazy(() =>
+	import("#/components/reportes/iluminacion/pdf/my-document").then(m => ({
+		default: m.MyDocument,
+	}))
+)
 import { areasQueryOptions } from "../../../../../../../queries/reportes/iluminacion/areas/areas-query"
 import useScrollTop from "#/hooks/scroll-top"
 
@@ -72,18 +77,27 @@ function PDF() {
 		<ClientComponent
 			fallback={
 				<Loading
-					text="generando pdf..."
+					text="preparando entorno..."
 					className="scale-50 justify-start  max-h-[50svh]"
 				/>
 			}
 		>
-			<MyDocument
-				reporte={reporte}
-				areas={areas}
-				tecnico={reporte.tecnico}
-				empresa={reporte.empresa}
-				instrumento={reporte.instrumento}
-			/>
+			<Suspense
+				fallback={
+					<Loading
+						text="cargando módulo pdf..."
+						className="scale-50 justify-start max-h-[50svh]"
+					/>
+				}
+			>
+				<MyDocument
+					reporte={reporte}
+					areas={areas}
+					tecnico={reporte.tecnico}
+					empresa={reporte.empresa}
+					instrumento={reporte.instrumento}
+				/>
+			</Suspense>
 		</ClientComponent>
 	)
 }

@@ -19,7 +19,7 @@ export const Route = createFileRoute("/_protected/perfil")({
 function RouteComponent() {
 	return (
 		<article className="w-full relative pt-10">
-			<BackChevron />
+			<BackChevron to="/iluminacion/" />
 
 			<Title text="Mi Perfil" />
 

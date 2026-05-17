@@ -14,7 +14,7 @@ export const instrumentos = pgTable("instrumentos", {
 
 	fechaCalibracion: timestamp("fecha_calibracion").notNull(),
 
-	imagenCalibracion: text("imagen_calibracion").notNull(),
+	imagenCalibracion: text("imagen_calibracion").array().notNull(),
 
 	imagenes: text("imagenes").array().notNull(),
 

@@ -29,7 +29,7 @@ import {
 	instrumentoFormValidator,
 } from "../../../db/instrumentos/instrumento-validator"
 import { Button } from "../ui/button"
-import { FileDropzone, FilesDropzone } from "../upload-button"
+import { FilesDropzone } from "../upload-button"
 
 export function CreateInstrumento() {
 	const [open, setOpen] = useState(false)
@@ -56,7 +56,7 @@ export function CreateInstrumento() {
 }
 
 const InstrumentoForm = ({ setOpen }: { setOpen: (open: boolean) => void }) => {
-	const [imagenCalibracion, setImagenCalibracion] = useState<string>("")
+	const [imagenCalibracion, setImagenCalibracion] = useState<string[]>([])
 	const [instrumentoFiles, setInstrumentoFiles] = useState<string[]>([])
 	const [calibrationDate, setCalibrationDate] = useState<Date>()
 	const [openPopover, setOpenPopover] = useState(false)
@@ -303,14 +303,13 @@ const InstrumentoForm = ({ setOpen }: { setOpen: (open: boolean) => void }) => {
 										Imágen del certificado de calibración
 									</FieldLabel>
 
-									<FileDropzone
+									<FilesDropzone
 										text="Imágen Calibración"
-										defaultValue={imagenCalibracion}
 										onUploaded={url => {
 											// console.log("URL matricula", url)
 											if (url.length > 0 && url !== imagenCalibracion) {
 												setImagenCalibracion(url)
-											} else setImagenCalibracion("")
+											} else setImagenCalibracion([])
 										}}
 									/>
 

@@ -73,7 +73,7 @@ function HayInstrumentos({
 function Instrumento({ instrumento }: { instrumento: InstrumentoType }) {
 	return (
 		<div className="bg-accent py-20 flex items-center justify-center flex-col relative">
-			<div className="sm:hidden block absolute top-10 right-6">
+			<div className="sm:hidden block absolute top-10 left-6">
 				<InstrumentoDropdownMenu instrumento={instrumento} />
 			</div>
 			<div className="grid-cols-1 grid sm:grid-cols-2 gap-8 w-5/6 my-10">
@@ -131,13 +131,16 @@ function Instrumento({ instrumento }: { instrumento: InstrumentoType }) {
 				</div>
 				<div className="flex flex-col gap-1">
 					<Label>Imagen de Certificado</Label>
-					{instrumento.imagenCalibracion ? (
-						<div className="w-full h-20 min-h-9 flex items-center justify-center">
-							<img
-								src={instrumento.imagenCalibracion}
-								alt="Imagen del Certificado"
-								className="w-full h-full object-contain object-center"
-							/>
+					{instrumento.imagenCalibracion.length > 0 ? (
+						<div className="flex w-full grid-cols-4 gap-2 content-center">
+							{instrumento.imagenCalibracion.map(imagen => (
+								<img
+									src={imagen}
+									key={imagen}
+									alt="Imagen del Certificado"
+									className="w-full h-full object-contain object-center"
+								/>
+							))}
 						</div>
 					) : (
 						<span className="w-full text-center rounded-lg bg-secondary/20 ring-[1px] ring-foreground/10 p-2.5 text-xs font-medium text-gray-500 italic">

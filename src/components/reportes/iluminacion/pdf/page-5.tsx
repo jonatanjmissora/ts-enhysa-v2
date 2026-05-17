@@ -4,7 +4,7 @@ import MembreteInferior from "./membrete-inferior"
 import type { AreaIluminacionType } from "../../../../../db/reportes/iluminacion/areas/schema"
 import type { TecnicoType } from "../../../../../db/tecnicos/schema"
 import type { EmpresaType } from "../../../../../db/empresas/schema"
-import { getIndiceRedondeo, getNumeroCeldas } from "#/lib/utils"
+import { getNumeroCeldas } from "#/lib/utils"
 
 // Create styles
 const styles = StyleSheet.create({
@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
 	},
 })
 
-export default function Page4({
+export default function Page5({
 	areas,
 	tecnico,
 	empresa,
@@ -197,12 +197,14 @@ function Area({
 					<View
 						style={{
 							flex: 1,
+							width: "100%",
 							display: "flex",
 							flexDirection: "row",
 							justifyContent: "center",
 							alignItems: "center",
-							gap: 2,
-							paddingTop: "15px",
+							gap: 10,
+							paddingTop: 15,
+							paddingBottom: 0,
 						}}
 					>
 						{area.imagenes.map((img, index) => (
@@ -210,9 +212,8 @@ function Area({
 								key={index}
 								src={img}
 								style={{
-									width: "24%",
-									height: "auto",
-									maxHeight: "80px",
+									flex: 1,
+									height: "95%",
 									objectFit: "contain",
 								}}
 							/>

@@ -28,7 +28,7 @@ import type { InstrumentoType } from "../../../db/instrumentos/schema"
 import { useUpdateInstrumento } from "../../../queries/instrumentos/use-update-instrumento"
 import { updateInstrumentoValidator } from "../../../db/instrumentos/instrumento-validator"
 import { Button } from "../ui/button"
-import { FileDropzone, FilesDropzone } from "../upload-button"
+import { FilesDropzone } from "../upload-button"
 
 export function EditInstrumento({
 	instrumento,
@@ -80,8 +80,8 @@ export function EditInstrumentoForm({
 	const [instrumentoFiles, setInstrumentoFiles] = useState<string[]>(
 		instrumento.imagenes ?? []
 	)
-	const [imagenCalibracion, setImagenCalibracion] = useState<string>(
-		instrumento.imagenCalibracion ?? ""
+	const [imagenCalibracion, setImagenCalibracion] = useState<string[]>(
+		instrumento.imagenCalibracion ?? []
 	)
 	const {
 		mutateAsync: updateInstrumentoMutation,
@@ -312,14 +312,14 @@ export function EditInstrumentoForm({
 							return (
 								<Field data-invalid={isInvalid} className="relative gap-1">
 									<FieldLabel htmlFor={field.name}>Imagenes</FieldLabel>
-									<FileDropzone
+									<FilesDropzone
 										text="Imágen Calibración"
 										defaultValue={imagenCalibracion}
 										onUploaded={url => {
 											// console.log("URL matricula", url)
 											if (url.length > 0 && url !== imagenCalibracion) {
 												setImagenCalibracion(url)
-											} else setImagenCalibracion("")
+											} else setImagenCalibracion([])
 										}}
 									/>
 									{isInvalid && (

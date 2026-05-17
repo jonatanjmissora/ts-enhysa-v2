@@ -125,7 +125,7 @@ function Area({ area }: { area: AreaIluminacionType }) {
 
 	return (
 		<div className="w-full mx-auto rounded-lg border-0 bg-accent sm:bg-background flex flex-col justify-center items-center p-0 py-10 pt-30 relative">
-			<div className="absolute top-10 right-4">
+			<div className="absolute top-10 left-4">
 				<AreaDropdownMenu area={area} />
 			</div>
 

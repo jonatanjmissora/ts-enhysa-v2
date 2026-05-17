@@ -104,27 +104,43 @@ export default function Page4({
 					</Text>
 				</View>
 
-				<Image
-					src={instrumento.imagenCalibracion}
+				<View
 					style={{
 						flex: 1,
-						maxWidth: "50%",
-						height: "200px",
-						objectFit: "contain",
-						margin: "0 auto",
+						width: "100%",
+						display: "flex",
+						flexDirection: "row",
+						justifyContent: "center",
+						alignItems: "center",
+						gap: 10,
+						paddingTop: 15,
+						paddingBottom: 0,
 					}}
-				/>
+				>
+					{instrumento.imagenCalibracion.map((img, index) => (
+						<Image
+							key={index}
+							src={img}
+							style={{
+								flex: 1,
+								height: "95%",
+								objectFit: "contain",
+							}}
+						/>
+					))}
+				</View>
 
 				<View
 					style={{
 						flex: 1,
+						width: "100%",
 						display: "flex",
 						flexDirection: "row",
 						justifyContent: "center",
-						alignItems: "flex-start",
-						flexWrap: "wrap",
-						gap: 2,
-						paddingTop: "15px",
+						alignItems: "center",
+						gap: 10,
+						paddingTop: 15,
+						paddingBottom: 0,
 					}}
 				>
 					{instrumento.imagenes.map((img, index) => (
@@ -133,8 +149,7 @@ export default function Page4({
 							src={img}
 							style={{
 								flex: 1,
-								maxWidth: "50%",
-								height: "200px",
+								height: "95%",
 								objectFit: "contain",
 							}}
 						/>

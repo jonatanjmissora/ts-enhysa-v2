@@ -1,5 +1,18 @@
-import { memo, useEffect, useState } from "react"
-import { Document, Font, PDFViewer, PDFDownloadLink } from "@react-pdf/renderer"
+import { memo, useState, useEffect } from "react"
+import {
+	Document as PDFRendererDocument,
+	Font,
+	usePDF,
+} from "@react-pdf/renderer"
+import {
+	Document as ReactPdfDocument,
+	Page as ReactPdfPage,
+	pdfjs,
+} from "react-pdf"
+import "react-pdf/dist/Page/AnnotationLayer.css"
+import "react-pdf/dist/Page/TextLayer.css"
+
+pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`
 
 Font.register({
 	family: "Roboto",
@@ -16,6 +29,8 @@ import Page2 from "./page-2"
 import Page3 from "./page-3"
 import Page4 from "./page-4"
 import Page5 from "./page-5"
+import Loading from "#/components/loading"
+import { Button } from "#/components/ui/button"
 
 export const MyDocument = memo(
 	({
@@ -31,31 +46,85 @@ export const MyDocument = memo(
 		empresa: EmpresaType
 		instrumento: InstrumentoType
 	}) => {
+		const [numPages, setNumPages] = useState<number>()
+		const [width, setWidth] = useState<number>(window.innerWidth)
+
+		useEffect(() => {
+			const handleResize = () => setWidth(window.innerWidth)
+			window.addEventListener("resize", handleResize)
+			return () => window.removeEventListener("resize", handleResize)
+		}, [])
+
+		const [instance] = usePDF({
+			document: (
+				<MyDocumentData
+					reporte={reporte}
+					areas={areas}
+					tecnico={tecnico}
+					empresa={empresa}
+					instrumento={instrumento}
+				/>
+			),
+		})
+
+		function onDocumentLoadSuccess({ numPages }: { numPages: number }) {
+			setNumPages(numPages)
+		}
+
+		if (instance.loading) {
+			return (
+				<Loading
+					text="generando pdf..."
+					className="scale-50 justify-start  max-h-[50svh]"
+				/>
+			)
+		}
+
+		if (instance.error) {
+			return <div>Error al generar el PDF: {String(instance.error)}</div>
+		}
+
 		return (
-			<>
-				{/*<div className="flex justify-center w-full mb-6">
-					 <DownloadButton
-						reporte={reporte}
-						areas={areas}
-						tecnico={tecnico}
-						empresa={empresa}
-						instrumento={instrumento}
-					/> 
-				</div>*/}
-				<PDFViewer
-					width="100%"
-					height="100%"
-					className="min-h-svh w-full overflow-hidden"
-				>
-					<MyDocumentData
-						reporte={reporte}
-						areas={areas}
-						tecnico={tecnico}
-						empresa={empresa}
-						instrumento={instrumento}
-					/>
-				</PDFViewer>
-			</>
+			<div className="flex flex-col items-center w-full gap-4 pb-12">
+				<div className="flex justify-center w-full mb-6">
+					<a
+						// biome-ignore lint/style/noNonNullAssertion: <la conozco>
+						href={instance.url!}
+						download={`Reporte Iluminacion ${empresa.razonSocial} - ${reporte.finishedAt?.toLocaleDateString("it-IT")}.pdf`}
+						className=""
+					>
+						<Button>Descargar PDF</Button>
+					</a>
+				</div>
+
+				<div className="w-full max-w-full overflow-hidden flex flex-col items-center bg-muted/20 py-8">
+					<ReactPdfDocument
+						file={instance.url}
+						onLoadSuccess={onDocumentLoadSuccess}
+						className="flex flex-col gap-8"
+						loading={
+							<Loading
+								text="cargando visor..."
+								className="scale-50 justify-start  max-h-[50svh]"
+							/>
+						}
+					>
+						{Array.from(new Array(numPages), (_el, index) => (
+							<div
+								key={`page_${index + 1}`}
+								className="shadow-xl ring-1 ring-black/5"
+							>
+								<ReactPdfPage
+									pageNumber={index + 1}
+									renderTextLayer={false}
+									renderAnnotationLayer={false}
+									width={Math.min(width - 32, 800)}
+								/>
+							</div>
+						))}
+					</ReactPdfDocument>
+				</div>
+			</div>
 		)
 	}
 )
@@ -130,7 +199,7 @@ function MyDocumentData({
 	instrumento: InstrumentoType
 }) {
 	return (
-		<Document title={reporte.title}>
+		<PDFRendererDocument title={reporte.title}>
 			<Page1
 				reporte={reporte}
 				tecnico={tecnico}
@@ -141,6 +210,6 @@ function MyDocumentData({
 			<Page3 reporte={reporte} tecnico={tecnico} empresa={empresa} />
 			<Page4 tecnico={tecnico} empresa={empresa} instrumento={instrumento} />
 			<Page5 areas={areas} tecnico={tecnico} empresa={empresa} />
-		</Document>
+		</PDFRendererDocument>
 	)
 }
