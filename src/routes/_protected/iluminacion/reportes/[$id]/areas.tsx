@@ -12,6 +12,7 @@ import {
 import { reporteQueryOptions } from "../../../../../../queries/reportes/iluminacion/reportes-query"
 import { areasQueryOptions } from "../../../../../../queries/reportes/iluminacion/areas/areas-query"
 import { ChartAreaInteractive } from "#/components/reportes/iluminacion/areas/chart"
+import { sortedByName } from "#/lib/utils"
 
 export const Route = createFileRoute(
 	"/_protected/iluminacion/reportes/$id/areas"
@@ -39,9 +40,10 @@ function Reporte() {
 
 	const { data: reporte } = useSuspenseQuery(reporteQueryOptions({ id }))
 	const { data: areas } = useSuspenseQuery(areasQueryOptions({ reportId: id }))
-	const [areaId, setAreaId] = useState<string>(areas[0].id)
+	const sortedAreas = sortedByName(areas)
+	const [areaId, setAreaId] = useState<string>(sortedAreas[0].id)
 
-	const area = areas.find(area => area.id === areaId)
+	const area = sortedAreas.find(area => area.id === areaId)
 	if (!area || !reporte)
 		return (
 			<span className="text-sm italic mt-20">No se encontro ninguna area</span>
@@ -64,7 +66,7 @@ function Reporte() {
 					<SelectValue placeholder="Seleccione Area" />
 				</SelectTrigger>
 				<SelectContent className="p-2 w-full">
-					{areas.map(area => (
+					{sortedAreas.map(area => (
 						<SelectItem key={area.id} value={area.id} className="p-4">
 							{area.nombre.toUpperCase()} - {area.tipo.toUpperCase()}
 						</SelectItem>

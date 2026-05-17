@@ -82,15 +82,38 @@ export default function Page4({
 			</Text>
 			<View style={[styles.pagePadding, { flex: 1, border: "none" }]}>
 				<Text style={styles.title}>INSTRUMENTO</Text>
-				<View style={[styles.row, { padding: "10px 5px", margin: "10px 0px", flexDirection: "row", justifyContent: "space-between" }]}>
+				<View
+					style={[
+						styles.row,
+						{
+							padding: "10px 5px",
+							margin: "10px 0px",
+							flexDirection: "row",
+							justifyContent: "space-between",
+						},
+					]}
+				>
 					<Text>
 						(A) {instrumento.nombre.toUpperCase()} -{" "}
-						{instrumento.marca.toUpperCase()} - {instrumento.modelo.toUpperCase()}
+						{instrumento.marca.toUpperCase()} -{" "}
+						{instrumento.modelo.toUpperCase()}
 					</Text>
-					<Text >
-						Fecha de Calibración: {instrumento.fechaCalibracion.toLocaleDateString("it-IT")}
+					<Text>
+						Fecha de Calibración:{" "}
+						{instrumento.fechaCalibracion.toLocaleDateString("it-IT")}
 					</Text>
 				</View>
+
+				<Image
+					src={instrumento.imagenCalibracion}
+					style={{
+						flex: 1,
+						maxWidth: "50%",
+						height: "200px",
+						objectFit: "contain",
+						margin: "0 auto",
+					}}
+				/>
 
 				<View
 					style={{
@@ -104,20 +127,18 @@ export default function Page4({
 						paddingTop: "15px",
 					}}
 				>
-					{[instrumento.imagenCalibracion, ...instrumento.imagenes].map(
-						(img, index) => (
-							<Image
-								key={index}
-								src={img}
-								style={{
-									flex: 1,
-									maxWidth: "50%",
-									height: "100px",
-									objectFit: "contain",
-								}}
-							/>
-						)
-					)}
+					{instrumento.imagenes.map((img, index) => (
+						<Image
+							key={index}
+							src={img}
+							style={{
+								flex: 1,
+								maxWidth: "50%",
+								height: "200px",
+								objectFit: "contain",
+							}}
+						/>
+					))}
 				</View>
 			</View>
 
