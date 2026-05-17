@@ -125,6 +125,23 @@ function HayTecnico({ tecnico }: { tecnico: TecnicoType }) {
 						</span>
 					)}
 				</div>
+
+				<div className="flex-1 flex flex-col gap-1">
+					<Label>Empresa Logo</Label>
+					{tecnico.empresaLogo ? (
+						<div className="w-full h-20 min-h-9 flex items-center justify-center">
+							<img
+								src={tecnico.empresaLogo}
+								alt="Empresa logo"
+								className="w-max h-full object-contain object-center bg-white"
+							/>
+						</div>
+					) : (
+						<span className="w-full text-center rounded-lg bg-secondary/20 ring-[1px] ring-foreground/10 p-2.5 text-xs font-medium text-gray-500 italic">
+							No has cargado el logo de tu empresa
+						</span>
+					)}
+				</div>
 			</div>
 		</div>
 	)

@@ -8,6 +8,7 @@ export const tecnicoFormValidator = z.object({
 	matricula: z.string().min(3, "Mínimo 3 caracteres"),
 	matriculaImg: z.string(),
 	firmaImg: z.string(),
+	empresaLogo: z.string(),
 })
 
 export type TecnicoFormType = z.infer<typeof tecnicoFormValidator>
@@ -27,6 +28,7 @@ export const defaultTecnico = {
 	matricula: "",
 	matriculaImg: "",
 	firmaImg: "",
+	empresaLogo: "",
 }
 
 export type DefaultTecnicoDataType = typeof defaultTecnico

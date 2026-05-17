@@ -55,6 +55,7 @@ export function CreateTecnicoForm({
 }) {
 	const [matriculaFile, setMatriculaFile] = useState<string>("")
 	const [firmaFile, setFirmaFile] = useState<string>("")
+	const [empresaLogoFile, setEmpresaLogoFile] = useState<string>("")
 	const navigate = useNavigate()
 
 	const {
@@ -73,6 +74,7 @@ export function CreateTecnicoForm({
 				...value,
 				firmaImg: firmaFile,
 				matriculaImg: matriculaFile,
+				empresaLogoImg: empresaLogoFile,
 			}
 			const result = await createTecnicoMutation({ data: newTecnico })
 			if (!result) {
@@ -272,6 +274,21 @@ export function CreateTecnicoForm({
 									if (url.length > 0 && url !== firmaFile) {
 										setFirmaFile(url)
 									} else setFirmaFile("")
+								}}
+							/>
+						</div>
+					</div>
+
+					<div className="flex-1 flex flex-col gap-1">
+						<Label>Empresa Logo</Label>
+						<div className="bg-white/75">
+							<FileDropzone
+								text="Imágen Empresa Logo"
+								onUploaded={url => {
+									// console.log("URL", url)
+									if (url.length > 0 && url !== empresaLogoFile) {
+										setEmpresaLogoFile(url)
+									} else setEmpresaLogoFile("")
 								}}
 							/>
 						</div>

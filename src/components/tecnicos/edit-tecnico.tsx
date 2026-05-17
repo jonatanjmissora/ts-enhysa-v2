@@ -71,6 +71,9 @@ export function EditTecnicoForm({
 		tecnico.matriculaImg ?? ""
 	)
 	const [firmaFile, setFirmaFile] = useState<string>(tecnico.firmaImg ?? "")
+	const [empresaLogoFile, setEmpresaLogoFile] = useState<string>(
+		tecnico.empresaLogo ?? ""
+	)
 
 	const {
 		mutateAsync: editTecnicoMutation,
@@ -88,6 +91,7 @@ export function EditTecnicoForm({
 				...value,
 				firmaImg: firmaFile,
 				matriculaImg: matriculaFile,
+				empresaLogo: empresaLogoFile,
 			}
 			if (checkTecnicoDiference(newTecnico, tecnico)) {
 				setOpen(false)
@@ -293,6 +297,22 @@ export function EditTecnicoForm({
 										if (url.length > 0 && url !== firmaFile) {
 											setFirmaFile(url)
 										} else setFirmaFile("")
+									}}
+								/>
+							</div>
+						</div>
+
+						<div className="flex-1 flex flex-col gap-1">
+							<Label>Empresa Logo</Label>
+							<div className="bg-white/75">
+								<FileDropzone
+									text="Imágen Empresa Logo"
+									defaultValue={tecnico.empresaLogo}
+									onUploaded={url => {
+										// console.log("URL", url)
+										if (url.length > 0 && url !== empresaLogoFile) {
+											setEmpresaLogoFile(url)
+										} else setEmpresaLogoFile("")
 									}}
 								/>
 							</div>
