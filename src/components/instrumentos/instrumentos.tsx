@@ -131,9 +131,9 @@ function Instrumento({ instrumento }: { instrumento: InstrumentoType }) {
 				</div>
 				<div className="flex flex-col gap-1">
 					<Label>Imagen de Certificado</Label>
-					{instrumento.imagenCalibracion.length > 0 ? (
+					{instrumento.imagenesCalibracion.length > 0 ? (
 						<div className="flex w-full grid-cols-4 gap-2 content-center">
-							{instrumento.imagenCalibracion.map(imagen => (
+							{instrumento.imagenesCalibracion.map(imagen => (
 								<img
 									src={imagen}
 									key={imagen}

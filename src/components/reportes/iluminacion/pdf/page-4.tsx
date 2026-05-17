@@ -117,7 +117,7 @@ export default function Page4({
 						paddingBottom: 0,
 					}}
 				>
-					{instrumento.imagenCalibracion.map((img, index) => (
+					{instrumento.imagenesCalibracion.map((img, index) => (
 						<Image
 							key={index}
 							src={img}

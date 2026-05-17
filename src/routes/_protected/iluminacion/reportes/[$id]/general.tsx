@@ -76,11 +76,11 @@ function General() {
 				<span>
 					{reporte?.instrumento.fechaCalibracion.toLocaleDateString("it-IT")}
 				</span>
-				{(reporte.instrumento.imagenCalibracion ||
+				{(reporte.instrumento.imagenesCalibracion ||
 					reporte.instrumento.imagenes) && (
 					<div className="col-span-2 flex gap-2 items-center justify-center">
 						{[
-							reporte.instrumento.imagenCalibracion,
+							reporte.instrumento.imagenesCalibracion,
 							reporte.instrumento.imagenes[0],
 						].map((img, idx) => (
 							<div

@@ -80,8 +80,8 @@ export function EditInstrumentoForm({
 	const [instrumentoFiles, setInstrumentoFiles] = useState<string[]>(
 		instrumento.imagenes ?? []
 	)
-	const [imagenCalibracion, setImagenCalibracion] = useState<string[]>(
-		instrumento.imagenCalibracion ?? []
+	const [imagenesCalibracion, setimagenesCalibracion] = useState<string[]>(
+		instrumento.imagenesCalibracion ?? []
 	)
 	const {
 		mutateAsync: updateInstrumentoMutation,
@@ -100,7 +100,7 @@ export function EditInstrumentoForm({
 				id: instrumento.id,
 				userId: instrumento.userId,
 				fechaCalibracion: calibrationDate,
-				imagenCalibracion: imagenCalibracion,
+				imagenesCalibracion: imagenesCalibracion,
 				imagenes: instrumentoFiles,
 			}
 
@@ -305,7 +305,7 @@ export function EditInstrumentoForm({
 					/>
 
 					<form.Field
-						name="imagenCalibracion"
+						name="imagenesCalibracion"
 						children={field => {
 							const isInvalid =
 								field.state.meta.isTouched && !field.state.meta.isValid
@@ -314,12 +314,12 @@ export function EditInstrumentoForm({
 									<FieldLabel htmlFor={field.name}>Imagenes</FieldLabel>
 									<FilesDropzone
 										text="Imágen Calibración"
-										defaultValue={imagenCalibracion}
+										defaultValue={imagenesCalibracion}
 										onUploaded={url => {
 											// console.log("URL matricula", url)
-											if (url.length > 0 && url !== imagenCalibracion) {
-												setImagenCalibracion(url)
-											} else setImagenCalibracion([])
+											if (url.length > 0 && url !== imagenesCalibracion) {
+												setimagenesCalibracion(url)
+											} else setimagenesCalibracion([])
 										}}
 									/>
 									{isInvalid && (

@@ -56,7 +56,7 @@ export function CreateInstrumento() {
 }
 
 const InstrumentoForm = ({ setOpen }: { setOpen: (open: boolean) => void }) => {
-	const [imagenCalibracion, setImagenCalibracion] = useState<string[]>([])
+	const [imagenesCalibracion, setimagenesCalibracion] = useState<string[]>([])
 	const [instrumentoFiles, setInstrumentoFiles] = useState<string[]>([])
 	const [calibrationDate, setCalibrationDate] = useState<Date>()
 	const [openPopover, setOpenPopover] = useState(false)
@@ -77,7 +77,7 @@ const InstrumentoForm = ({ setOpen }: { setOpen: (open: boolean) => void }) => {
 		onSubmit: async ({ value }) => {
 			const newInstrumento = {
 				...value,
-				imagenCalibracion: imagenCalibracion,
+				imagenesCalibracion: imagenesCalibracion,
 				imagenes: instrumentoFiles,
 			}
 
@@ -292,7 +292,7 @@ const InstrumentoForm = ({ setOpen }: { setOpen: (open: boolean) => void }) => {
 					/>
 
 					<form.Field
-						name="imagenCalibracion"
+						name="imagenesCalibracion"
 						children={field => {
 							const isInvalid =
 								field.state.meta.isTouched && !field.state.meta.isValid
@@ -307,9 +307,9 @@ const InstrumentoForm = ({ setOpen }: { setOpen: (open: boolean) => void }) => {
 										text="Imágen Calibración"
 										onUploaded={url => {
 											// console.log("URL matricula", url)
-											if (url.length > 0 && url !== imagenCalibracion) {
-												setImagenCalibracion(url)
-											} else setImagenCalibracion([])
+											if (url.length > 0 && url !== imagenesCalibracion) {
+												setimagenesCalibracion(url)
+											} else setimagenesCalibracion([])
 										}}
 									/>
 
