@@ -5,15 +5,6 @@ import {
 	Font,
 	usePDF,
 } from "@react-pdf/renderer"
-import {
-	Document as ReactPdfDocument,
-	Page as ReactPdfPage,
-	pdfjs,
-} from "react-pdf"
-import "react-pdf/dist/Page/AnnotationLayer.css"
-import "react-pdf/dist/Page/TextLayer.css"
-
-pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`
 
 Font.register({
 	family: "Roboto",
@@ -21,22 +12,9 @@ Font.register({
 })
 
 export const MyDocumentTest = memo(() => {
-	const [numPages, setNumPages] = useState<number>()
-	const [width, setWidth] = useState<number>(window.innerWidth)
-
-	useEffect(() => {
-		const handleResize = () => setWidth(window.innerWidth)
-		window.addEventListener("resize", handleResize)
-		return () => window.removeEventListener("resize", handleResize)
-	}, [])
-
 	const [instance] = usePDF({
 		document: <MyDocumentData />,
 	})
-
-	function onDocumentLoadSuccess({ numPages }: { numPages: number }) {
-		setNumPages(numPages)
-	}
 
 	if (instance.loading) {
 		return (
@@ -65,30 +43,14 @@ export const MyDocumentTest = memo(() => {
 			</div>
 
 			<div className="w-full max-w-full overflow-hidden flex flex-col items-center border border-border/50 rounded-xl bg-muted/20 py-8">
-				<ReactPdfDocument
-					file={instance.url}
-					onLoadSuccess={onDocumentLoadSuccess}
-					className="flex flex-col gap-8"
+				<PdfViewerClient 
+					url={instance.url} 
 					loading={
 						<span className="italic text-foreground/50 animate-pulse tracking-wider text-sm">
 							Cargando visor...
 						</span>
 					}
-				>
-					{Array.from(new Array(numPages), (el, index) => (
-						<div
-							key={`page_${index + 1}`}
-							className="shadow-xl ring-1 ring-black/5"
-						>
-							<ReactPdfPage
-								pageNumber={index + 1}
-								renderTextLayer={false}
-								renderAnnotationLayer={false}
-								width={Math.min(width - 32, 800)}
-							/>
-						</div>
-					))}
-				</ReactPdfDocument>
+				/>
 			</div>
 		</div>
 	)
@@ -112,5 +74,69 @@ function PageTest() {
 				<Text>Page 2</Text>
 			</Page>
 		</>
+	)
+}
+
+function PdfViewerClient({
+	url,
+	loading,
+}: {
+	url: string | null | undefined
+	loading: React.ReactNode
+}) {
+	const [numPages, setNumPages] = useState<number>()
+	const [width, setWidth] = useState<number>(window.innerWidth)
+	const [ReactPdf, setReactPdf] = useState<any>(null)
+
+	useEffect(() => {
+		const handleResize = () => setWidth(window.innerWidth)
+		window.addEventListener("resize", handleResize)
+		return () => window.removeEventListener("resize", handleResize)
+	}, [])
+
+	useEffect(() => {
+		let isMounted = true;
+		import("react-pdf").then(async (m) => {
+			if (!isMounted) return;
+			m.pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${m.pdfjs.version}/build/pdf.worker.min.mjs`
+			
+			// Dynamically import CSS
+			await import("react-pdf/dist/Page/AnnotationLayer.css")
+			await import("react-pdf/dist/Page/TextLayer.css")
+
+			setReactPdf({
+				Document: m.Document,
+				Page: m.Page,
+			})
+		})
+		return () => { isMounted = false }
+	}, [])
+
+	function onDocumentLoadSuccess({ numPages }: { numPages: number }) {
+		setNumPages(numPages)
+	}
+
+	if (!ReactPdf) return loading
+
+	const { Document, Page } = ReactPdf
+
+	return (
+		<Document
+			file={url}
+			onLoadSuccess={onDocumentLoadSuccess}
+			className="flex flex-col gap-8"
+			loading={loading}
+		>
+			{Array.from(new Array(numPages), (_el, index) => (
+				<div key={`page_${index + 1}`} className="shadow-xl ring-1 ring-black/5">
+					<Page
+						pageNumber={index + 1}
+						renderTextLayer={false}
+						renderAnnotationLayer={false}
+						width={Math.min(width - 32, 800)}
+					/>
+				</div>
+			))}
+		</Document>
 	)
 }
