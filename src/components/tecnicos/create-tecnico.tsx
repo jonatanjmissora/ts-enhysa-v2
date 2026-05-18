@@ -117,7 +117,6 @@ export function CreateTecnicoForm({
 										onChange={e => field.handleChange(e.target.value)}
 										aria-invalid={isInvalid}
 										placeholder="Nombre Completo"
-										className="bg-background sm:bg-accent text-right"
 									/>
 									{isInvalid && (
 										<FieldError
@@ -146,7 +145,6 @@ export function CreateTecnicoForm({
 										onChange={e => field.handleChange(e.target.value)}
 										aria-invalid={isInvalid}
 										placeholder="000-0000000"
-										className="bg-background sm:bg-accent text-right"
 									/>
 									{isInvalid && (
 										<FieldError
@@ -178,7 +176,6 @@ export function CreateTecnicoForm({
 										onChange={e => field.handleChange(e.target.value)}
 										aria-invalid={isInvalid}
 										placeholder="Ej. Seguridad e Higiene"
-										className="bg-background sm:bg-accent text-right"
 									/>
 									{isInvalid && (
 										<FieldError
@@ -207,7 +204,6 @@ export function CreateTecnicoForm({
 										onChange={e => field.handleChange(e.target.value)}
 										aria-invalid={isInvalid}
 										placeholder="Ej. Andorra"
-										className="bg-background sm:bg-accent text-right"
 									/>
 									{isInvalid && (
 										<FieldError
@@ -239,7 +235,6 @@ export function CreateTecnicoForm({
 										onChange={e => field.handleChange(e.target.value)}
 										aria-invalid={isInvalid}
 										placeholder="N° Matrícula"
-										className="bg-background sm:bg-accent text-right"
 									/>
 									{isInvalid && (
 										<FieldError

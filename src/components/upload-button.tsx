@@ -91,7 +91,9 @@ export function FileDropzone({
 									extension || ""
 								)
 								if (!isAllowed) {
-									alert("No es una extensión válida. Sólo se permiten archivos jpg, jpeg y png")
+									alert(
+										"No es una extensión válida. Sólo se permiten archivos jpg, jpeg y png"
+									)
 								}
 								return isAllowed
 							})
@@ -173,7 +175,9 @@ export function FilesDropzone({
 									extension || ""
 								)
 								if (!isAllowed) {
-									alert("No es una extension valida. Solo se permiten archivos jpg, jpeg y png")
+									alert(
+										"No es una extension valida. Solo se permiten archivos jpg, jpeg y png"
+									)
 								}
 								return isAllowed
 							})
@@ -229,7 +233,7 @@ export function FilesDropzone({
 									<img
 										src={url}
 										alt=""
-										className="h-full w-full object-contain rounded shadow-md border border-foreground/10"
+										className="h-full w-full object-contain rounded border border-foreground/10"
 									/>
 									<button
 										type="button"
@@ -260,7 +264,9 @@ export function ImageUploader({ onUploaded }: FilesDropzoneProps) {
 						const extension = file.name.split(".").pop()?.toLowerCase()
 						const isAllowed = ["jpg", "jpeg", "png"].includes(extension || "")
 						if (!isAllowed) {
-							alert("No es una extension valida. Solo se permiten archivos jpg, jpeg y png")
+							alert(
+								"No es una extension valida. Solo se permiten archivos jpg, jpeg y png"
+							)
 						}
 						return isAllowed
 					})
@@ -285,7 +291,7 @@ export function ImageUploader({ onUploaded }: FilesDropzoneProps) {
 					{images.map((img, i) => (
 						<div
 							key={i}
-							className="relative aspect-square rounded-xl overflow-hidden border border-foreground/10 shadow-lg group hover:scale-[1.02] transition-all duration-300"
+							className="relative aspect-square rounded-xl overflow-hidden border border-foreground/10 group hover:scale-[1.02] transition-all duration-300"
 						>
 							<img
 								src={img.url}

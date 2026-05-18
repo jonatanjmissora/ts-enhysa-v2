@@ -51,7 +51,7 @@ function HayInstrumentos({
 						value={instrumento.id}
 						className="border-b border-foreground/10 last:border-b-0 py-2"
 					>
-						<AccordionTrigger className="flex px-5 w-11/12 sm:w-full flex-wrap items-center bg-accent ring-[1px] ring-foreground/10">
+						<AccordionTrigger className="flex px-5 w-11/12 sm:w-full flex-wrap items-center bg-accent ring-[1px] dark:ring-foreground/10 ring-foreground/50">
 							<div className="flex items-center gap-2 text-sm tracking-wider w-60 sm:w-max truncate">
 								{instrumento.nombre.toUpperCase()} -{" "}
 								{instrumento.marca.toUpperCase()}
@@ -86,7 +86,6 @@ function Instrumento({ instrumento }: { instrumento: InstrumentoType }) {
 						placeholder="Marca"
 						value={instrumento.marca.toUpperCase()}
 						readOnly
-						className="bg-background sm:bg-accent text-right"
 					/>
 				</div>
 				<div className="flex flex-col gap-1">
@@ -98,7 +97,6 @@ function Instrumento({ instrumento }: { instrumento: InstrumentoType }) {
 						placeholder="Modelo"
 						value={instrumento.modelo.toUpperCase()}
 						readOnly
-						className="bg-background sm:bg-accent text-right"
 					/>
 				</div>
 				<div className="flex flex-col gap-1">
@@ -110,7 +108,6 @@ function Instrumento({ instrumento }: { instrumento: InstrumentoType }) {
 						placeholder="Serie"
 						value={instrumento.serie}
 						readOnly
-						className="bg-background sm:bg-accent text-right"
 					/>
 				</div>
 				<div className="flex flex-col gap-1">
@@ -126,34 +123,13 @@ function Instrumento({ instrumento }: { instrumento: InstrumentoType }) {
 							year: "numeric",
 						})}
 						readOnly
-						className="bg-background sm:bg-accent text-right"
 					/>
 				</div>
 				<div className="flex flex-col gap-1">
-					<Label>Imagen de Certificado</Label>
+					<Label>Imágenes del Certificado</Label>
 					{instrumento.imagenesCalibracion.length > 0 ? (
 						<div className="flex w-full grid-cols-4 gap-2 content-center">
 							{instrumento.imagenesCalibracion.map(imagen => (
-								<img
-									src={imagen}
-									key={imagen}
-									alt="Imagen del Certificado"
-									className="w-full h-full object-contain object-center"
-								/>
-							))}
-						</div>
-					) : (
-						<span className="w-full text-center rounded-lg bg-secondary/20 ring-[1px] ring-foreground/10 p-2.5 text-xs font-medium text-gray-500 italic">
-							No has cargado el certificado de calibración
-						</span>
-					)}
-				</div>
-
-				<div className="flex flex-col gap-1">
-					<Label>Imágenes</Label>
-					{instrumento.imagenes.length > 0 ? (
-						<div className="flex w-full grid-cols-4 gap-2 content-center">
-							{instrumento.imagenes.map(imagen => (
 								<div
 									key={imagen}
 									className="w-full h-20 min-h-9 flex items-center justify-center"
@@ -169,6 +145,30 @@ function Instrumento({ instrumento }: { instrumento: InstrumentoType }) {
 					) : (
 						<span className="w-full text-center rounded-lg bg-secondary/20 ring-[1px] ring-foreground/10 p-2.5 text-xs font-medium text-gray-500 italic">
 							No has cargado el certificado de calibración
+						</span>
+					)}
+				</div>
+
+				<div className="flex flex-col gap-1">
+					<Label>Imágenes Instrumento</Label>
+					{instrumento.imagenes.length > 0 ? (
+						<div className="flex w-full grid-cols-4 gap-2 content-center">
+							{instrumento.imagenes.map(imagen => (
+								<div
+									key={imagen}
+									className="w-full h-20 min-h-9 flex items-center justify-center"
+								>
+									<img
+										src={imagen}
+										alt="Imagen del instrumento"
+										className="w-full h-full object-contain object-center"
+									/>
+								</div>
+							))}
+						</div>
+					) : (
+						<span className="w-full text-center rounded-lg bg-secondary/20 ring-[1px] ring-foreground/10 p-2.5 text-xs font-medium text-gray-500 italic">
+							No has cargado imágenes del instrumento
 						</span>
 					)}
 				</div>

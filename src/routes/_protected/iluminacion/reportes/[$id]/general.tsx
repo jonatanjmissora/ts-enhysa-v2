@@ -76,24 +76,21 @@ function General() {
 				<span>
 					{reporte?.instrumento.fechaCalibracion.toLocaleDateString("it-IT")}
 				</span>
-				{(reporte.instrumento.imagenesCalibracion ||
-					reporte.instrumento.imagenes) && (
-					<div className="col-span-2 flex gap-2 items-center justify-center">
-						{[
-							reporte.instrumento.imagenesCalibracion,
-							reporte.instrumento.imagenes[0],
-						].map((img, idx) => (
-							<div
-								key={idx}
-								className="h-20 w-max flex items-center justify-center"
-							>
-								<img
-									src={img}
-									alt="logo"
-									className="h-full w-full object-contain"
-								/>
-							</div>
-						))}
+				{reporte?.instrumento.imagenes[0] !== "" && (
+					<div className="w-11/12 my-10 col-span-2">
+						<div className="flex w-full grid-cols-4 gap-1 content-center">
+							{reporte?.instrumento.imagenes.map(url => {
+								return (
+									<div className="relative w-full h-20 " key={url}>
+										<img
+											src={url}
+											alt=""
+											className="h-full w-full object-contain rounded border border-foreground/10"
+										/>
+									</div>
+								)
+							})}
+						</div>
 					</div>
 				)}
 			</div>

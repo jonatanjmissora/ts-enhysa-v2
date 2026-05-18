@@ -99,11 +99,11 @@ export function RegisterForm({
 							className="size-40"
 						/>
 
-						<p className="absolute bottom-3 left-1/2 -translate-x-1/2 textXL text-3xl dark:text-shadow-lg/50 w-full">
+						<p className="absolute bottom-3 left-1/2 -translate-x-1/2 textXL text-3xl w-full">
 							EnHySa App
 						</p>
 					</div>
-					<CardTitle className="hidden sm:block text-xl dark:text-shadow-lg/50">
+					<CardTitle className="hidden sm:block text-xl">
 						Bienvenido a la app
 					</CardTitle>
 					<CardDescription className="hidden sm:block text-foreground/75">
@@ -120,12 +120,7 @@ export function RegisterForm({
 					>
 						<FieldGroup>
 							<Field>
-								<Button
-									variant="outline"
-									type="button"
-									onClick={signIn}
-									className="my-shadow"
-								>
+								<Button variant="outline" type="button" onClick={signIn}>
 									{loading ? (
 										"Iniciando..."
 									) : (
@@ -153,12 +148,7 @@ export function RegisterForm({
 										field.state.meta.isTouched && !field.state.meta.isValid
 									return (
 										<Field data-invalid={isInvalid}>
-											<FieldLabel
-												htmlFor={field.name}
-												className="dark:text-shadow-sm/50"
-											>
-												Nombre
-											</FieldLabel>
+											<FieldLabel htmlFor={field.name}>Nombre</FieldLabel>
 											<Input
 												id={field.name}
 												name={field.name}
@@ -184,12 +174,7 @@ export function RegisterForm({
 										field.state.meta.isTouched && !field.state.meta.isValid
 									return (
 										<Field data-invalid={isInvalid}>
-											<FieldLabel
-												htmlFor={field.name}
-												className="dark:text-shadow-sm/50"
-											>
-												Email
-											</FieldLabel>
+											<FieldLabel htmlFor={field.name}>Email</FieldLabel>
 											<Input
 												id={field.name}
 												name={field.name}
@@ -215,12 +200,7 @@ export function RegisterForm({
 										field.state.meta.isTouched && !field.state.meta.isValid
 									return (
 										<Field data-invalid={isInvalid}>
-											<FieldLabel
-												htmlFor={field.name}
-												className="dark:text-shadow-sm/50"
-											>
-												Contraseña
-											</FieldLabel>
+											<FieldLabel htmlFor={field.name}>Contraseña</FieldLabel>
 											<div className="relative">
 												<Input
 													id={field.name}
@@ -235,7 +215,7 @@ export function RegisterForm({
 												<button
 													type="button"
 													onClick={() => setShowPassword(!showPassword)}
-													className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 cursor-pointer  my-shadow"
+													className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 cursor-pointer"
 												>
 													{showPassword ? (
 														<EyeClosed size={16} />

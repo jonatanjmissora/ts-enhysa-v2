@@ -48,7 +48,7 @@ function ReportesIluminacion() {
 				{reportes?.map(reporte => (
 					<div
 						key={reporte.id}
-						className="px-2 py-4 rounded-lg ring-[1px] ring-foreground/10 bg-accent flex justify-between w-full"
+						className="px-2 py-4 rounded-lg ring-[1px] dark:ring-foreground/10 ring-foreground/50 bg-accent flex justify-between w-full"
 					>
 						<div className="flex gap-2 items-center">
 							{reporte.finishedAt ? (
@@ -86,7 +86,7 @@ function ReportesIluminacion() {
 
 			<Link
 				to="/iluminacion/nuevo-informe"
-				className="my-20 py-3 w-5/6 mx-auto tracking-widest font-semibold text-base bg-secondary rounded-lg flex gap-2 items-center justify-center ring-[1px] ring-foreground/25"
+				className="my-20 py-3 w-5/6 mx-auto tracking-widest font-semibold text-base bg-primary rounded-lg flex gap-2 items-center justify-center ring-[1px] ring-foreground/25"
 			>
 				<FileChartColumn size={20} />
 				Nuevo Informe

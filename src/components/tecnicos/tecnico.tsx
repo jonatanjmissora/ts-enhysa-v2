@@ -41,7 +41,6 @@ function HayTecnico({ tecnico }: { tecnico: TecnicoType }) {
 						placeholder="Nombre Completo"
 						value={tecnico.nombre.toUpperCase()}
 						readOnly
-						className="bg-background sm:bg-accent text-right"
 					/>
 				</div>
 				<div className="flex flex-col gap-1">
@@ -53,7 +52,6 @@ function HayTecnico({ tecnico }: { tecnico: TecnicoType }) {
 						placeholder="000-0000000"
 						value={tecnico.telefono}
 						readOnly
-						className="bg-background sm:bg-accent text-right"
 					/>
 				</div>
 				<div className="flex flex-col gap-1 w-full">
@@ -65,7 +63,6 @@ function HayTecnico({ tecnico }: { tecnico: TecnicoType }) {
 						placeholder="Ej Técnico SeH"
 						value={tecnico.cargo.toUpperCase()}
 						readOnly
-						className="bg-background sm:bg-accent text-right"
 					/>
 				</div>
 				<div className="flex flex-col gap-1 w-full">
@@ -77,7 +74,6 @@ function HayTecnico({ tecnico }: { tecnico: TecnicoType }) {
 						placeholder="Ej. Bahia Blanca"
 						value={tecnico.localidad.toUpperCase()}
 						readOnly
-						className="bg-background sm:bg-accent text-right"
 					/>
 				</div>
 				<div className="flex flex-col gap-1 w-full">
@@ -89,7 +85,6 @@ function HayTecnico({ tecnico }: { tecnico: TecnicoType }) {
 						placeholder="00-00000"
 						value={tecnico.matricula}
 						readOnly
-						className="bg-background sm:bg-accent text-right"
 					/>
 				</div>
 				<div className="flex flex-col gap-1">

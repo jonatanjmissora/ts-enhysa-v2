@@ -117,7 +117,7 @@ function DeleteAreaForm({
 				<Button
 					type="submit"
 					disabled={isPending}
-					className="w-1/2 cursor-pointer my-shadow"
+					className="w-1/2 cursor-pointer"
 				>
 					{isPending ? (
 						<div className="flex gap-2 items-center justify-center">

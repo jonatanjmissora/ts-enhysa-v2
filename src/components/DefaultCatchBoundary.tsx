@@ -31,7 +31,7 @@ export function DefaultCatchBoundary({ error }: ErrorComponentProps) {
 				{isRoot ? (
 					<Link
 						to="/"
-						className={`px-2 py-1 bg-gray-600 dark:bg-gray-700 rounded-sm text-white uppercase font-extrabold my-shadow`}
+						className={`px-2 py-1 bg-gray-600 dark:bg-gray-700 rounded-sm text-white uppercase font-extrabold`}
 					>
 						Home
 					</Link>

@@ -68,7 +68,7 @@ export default function CreateAreaAlert() {
 	return (
 		<AlertDialog open={open} onOpenChange={setOpen}>
 			<AlertDialogTrigger asChild className="hover:bg-accent">
-				<Button className="w-1/2 mx-auto py-5 bg-primary/50 ring-foreground/25">
+				<Button className="w-1/2 mx-auto py-5 bg-primary ring-foreground/25">
 					+ Nueva Area
 				</Button>
 			</AlertDialogTrigger>
@@ -158,7 +158,6 @@ function CreateArea({
 										onBlur={field.handleBlur}
 										onChange={e => field.handleChange(e.target.value)}
 										aria-invalid={isInvalid}
-										className="bg-background sm:bg-accent text-right text-sm"
 									/>
 									{isInvalid && (
 										<FieldError
@@ -191,7 +190,6 @@ function CreateArea({
 										onBlur={field.handleBlur}
 										onChange={e => field.handleChange(e.target.value)}
 										aria-invalid={isInvalid}
-										className="bg-background sm:bg-accent text-right text-sm"
 									/>
 									{isInvalid && (
 										<FieldError
@@ -765,7 +763,7 @@ function Grilla({
 						{Array.from({ length: celdas }).map((_, index) => (
 							<div
 								key={index}
-								className={`border border-cyan-300/20 flex items-center justify-center ${puntos[index] !== 0 ? "bg-cyan-300/20" : ""}`}
+								className={`border dark:border-cyan-300/20 border-cyan-700/30 flex items-center justify-center ${puntos[index] !== 0 ? "bg-cyan-300/20" : ""}`}
 							>
 								<Punto
 									index={index}
@@ -810,7 +808,7 @@ function Punto({
 					setOpenInputMenu(true)
 					setActualPunto(index)
 				}}
-				className="w-15 text-xl font-semibold py-1 px-3 bg-accent text-foreground justify-center items-center min-h-9 rounded-sm ring-[1px] ring-foreground/15"
+				className="w-15 text-xl font-semibold py-1 px-3 bg-accent text-foreground justify-center items-center min-h-9 rounded-sm ring-[1px] dark:ring-foreground/15 ring-foreground/50"
 			>
 				{puntos[index] !== 0 ? puntos[index] : "*"}
 			</button>
@@ -861,7 +859,7 @@ function InputMenu({
 			<span className="border-b py-2 border-foreground/50 w-full text-left text-foreground/70">
 				Punto {actualPunto !== null ? actualPunto + 1 : ""}
 			</span>
-			<input
+			<Input
 				ref={inputRef}
 				defaultValue={
 					actualPunto !== null && puntos[actualPunto] !== 0
@@ -871,7 +869,7 @@ function InputMenu({
 				type="number"
 				id="punto"
 				name="punto"
-				className="dark:bg-foreground/50 bg-foreground/5 text-background/75 textXL text-4xl w-3/4 sm:w-1/2 p-4 h-20 text-center rounded-md"
+				className="dark:bg-foreground/50 bg-foreground/50 text-background/75 textXL text-4xl w-3/4 sm:w-1/2 p-4 h-20 text-center rounded-md"
 				onChange={e => setPuntoValue(e.currentTarget.value)}
 			/>
 			<div className="w-full flex flex-col justify-between gap-4">

@@ -7,7 +7,7 @@ export default function NotFound() {
 
 	return (
 		<section className="flex items-center flex-col mt-[70px] h-svh relative overflow-visible">
-			<p className="text-xl font-semibold text-center tracking-wider text-pretty dark:text-shadow-lg">
+			<p className="text-xl font-semibold text-center tracking-wider text-pretty">
 				Proximamente en nuevas actualizaciones. Estamos trabajando para ello.
 				Disculpe las molestias.
 			</p>

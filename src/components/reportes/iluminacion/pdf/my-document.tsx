@@ -76,14 +76,14 @@ export const MyDocument = memo(
 				</div>
 
 				<div className="w-full max-w-full overflow-hidden flex flex-col items-center bg-muted/20 py-8">
-					<PdfViewerClient 
-						url={instance.url} 
+					<PdfViewerClient
+						url={instance.url}
 						loading={
 							<Loading
 								text="cargando visor..."
 								className="scale-50 justify-start  max-h-[50svh]"
 							/>
-						} 
+						}
 					/>
 				</div>
 			</div>
@@ -194,11 +194,11 @@ function PdfViewerClient({
 	}, [])
 
 	useEffect(() => {
-		let isMounted = true;
-		import("react-pdf").then(async (m) => {
-			if (!isMounted) return;
+		let isMounted = true
+		import("react-pdf").then(async m => {
+			if (!isMounted) return
 			m.pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${m.pdfjs.version}/build/pdf.worker.min.mjs`
-			
+
 			// Dynamically import CSS
 			await import("react-pdf/dist/Page/AnnotationLayer.css")
 			await import("react-pdf/dist/Page/TextLayer.css")
@@ -208,7 +208,9 @@ function PdfViewerClient({
 				Page: m.Page,
 			})
 		})
-		return () => { isMounted = false }
+		return () => {
+			isMounted = false
+		}
 	}, [])
 
 	function onDocumentLoadSuccess({ numPages }: { numPages: number }) {
@@ -227,7 +229,7 @@ function PdfViewerClient({
 			loading={loading}
 		>
 			{Array.from(new Array(numPages), (_el, index) => (
-				<div key={`page_${index + 1}`} className="shadow-xl ring-1 ring-black/5">
+				<div key={`page_${index + 1}`} className="ring-1 ring-black/5">
 					<Page
 						pageNumber={index + 1}
 						renderTextLayer={false}

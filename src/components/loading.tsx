@@ -15,7 +15,7 @@ export default function Loading({
 				className="size-50 animate-pulse"
 			/>
 
-			<div className="flex leading-none text-[3rem] font-semibold tracking-[1rem] dark:text-shadow-lg/50">
+			<div className="flex leading-none text-[3rem] font-semibold tracking-[1rem]">
 				<span className="animate-bounce delay-50">E</span>
 				<span className="animate-bounce delay-100">n</span>
 				<span className="animate-bounce delay-150">H</span>

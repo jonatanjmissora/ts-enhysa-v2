@@ -21,16 +21,12 @@ export default function Navbar() {
 			className={`w-full relative h-18 flex items-center justify-between p-4 text-foreground`}
 		>
 			<Link to="/" className="flex items-center gap-3">
-				<img
-					src="/EnHySa_logo.webp"
-					alt="logo EnHySa"
-					className="size-10 dark:drop-shadow-sm/90"
-				/>
+				<img src="/EnHySa_logo.webp" alt="logo EnHySa" className="size-10" />
 
-				<p className="textXL dark:text-shadow-lg/50">EnHySa App</p>
+				<p className="textXL">EnHySa App</p>
 			</Link>
 			<button onClick={() => setIsOpen(!isOpen)}>
-				<Menu className="size-7 dark:drop-shadow-md/90" />
+				<Menu className="size-7" />
 			</button>
 			<MovilMenuContent isOpen={isOpen} setIsOpen={setIsOpen} />
 		</header>
@@ -50,11 +46,11 @@ const MovilMenuContent = ({
 		>
 			<div className="h-25 w-full flex items-center justify-end p-8">
 				<button onClick={() => setIsOpen(!isOpen)}>
-					<X className="size-7 dark:drop-shadow-md/90" />
+					<X className="size-7" />
 				</button>
 			</div>
 
-			<ul className="flex flex-col gap-5 text-2xl tracking-widest font-semibold flex-1 items-center justify-center dark:text-shadow-lg/50 w-5/6">
+			<ul className="flex flex-col gap-5 text-2xl tracking-widest font-semibold flex-1 items-center justify-center w-5/6">
 				<Link
 					to="/"
 					onClick={() => setIsOpen(!isOpen)}
@@ -99,7 +95,7 @@ function User() {
 						<img
 							src={avatar}
 							alt="User avatar"
-							className="sm:size-10 2xl:size-14 rounded-full dark:drop-shadow-lg/50"
+							className="sm:size-10 2xl:size-14 rounded-full"
 						/>
 					) : (
 						<div className="bg-accent p-2 rounded-full">

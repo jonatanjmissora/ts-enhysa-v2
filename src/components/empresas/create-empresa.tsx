@@ -104,7 +104,6 @@ const EmpresaForm = ({ setOpen }: { setOpen: (open: boolean) => void }) => {
 										onChange={e => field.handleChange(e.target.value)}
 										aria-invalid={isInvalid}
 										placeholder="Ej. Teléfonica"
-										className="bg-background sm:bg-accent text-right"
 									/>
 									{isInvalid && (
 										<FieldError
@@ -136,7 +135,6 @@ const EmpresaForm = ({ setOpen }: { setOpen: (open: boolean) => void }) => {
 										onChange={e => field.handleChange(e.target.value)}
 										aria-invalid={isInvalid}
 										placeholder="Ej. 00-00000000-0"
-										className="bg-background sm:bg-accent text-right"
 									/>
 									{isInvalid && (
 										<FieldError
@@ -165,7 +163,6 @@ const EmpresaForm = ({ setOpen }: { setOpen: (open: boolean) => void }) => {
 										onChange={e => field.handleChange(e.target.value)}
 										aria-invalid={isInvalid}
 										placeholder="Ej. Villa Verde"
-										className="bg-background sm:bg-accent text-right"
 									/>
 									{isInvalid && (
 										<FieldError
@@ -194,7 +191,6 @@ const EmpresaForm = ({ setOpen }: { setOpen: (open: boolean) => void }) => {
 										onChange={e => field.handleChange(e.target.value)}
 										aria-invalid={isInvalid}
 										placeholder="Ej. Andorra"
-										className="bg-background sm:bg-accent text-right"
 									/>
 									{isInvalid && (
 										<FieldError
@@ -223,7 +219,6 @@ const EmpresaForm = ({ setOpen }: { setOpen: (open: boolean) => void }) => {
 										onChange={e => field.handleChange(e.target.value)}
 										aria-invalid={isInvalid}
 										placeholder="Ej. 5000"
-										className="bg-background sm:bg-accent text-right"
 									/>
 									{isInvalid && (
 										<FieldError
@@ -252,7 +247,6 @@ const EmpresaForm = ({ setOpen }: { setOpen: (open: boolean) => void }) => {
 										onChange={e => field.handleChange(e.target.value)}
 										aria-invalid={isInvalid}
 										placeholder="Ej. Pr. Andorra"
-										className="bg-background sm:bg-accent text-right"
 									/>
 									{isInvalid && (
 										<FieldError
@@ -283,7 +277,6 @@ const EmpresaForm = ({ setOpen }: { setOpen: (open: boolean) => void }) => {
 										onChange={e => field.handleChange(e.target.value)}
 										aria-invalid={isInvalid}
 										placeholder="Ej. Lun a Vie de 08:00 a 18:00"
-										className="bg-background sm:bg-accent text-right"
 									/>
 									{isInvalid && (
 										<FieldError

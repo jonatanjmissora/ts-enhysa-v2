@@ -8,7 +8,7 @@ import { reportesQueryOptions } from "../../../../queries/reportes/iluminacion/r
 export default function InformesRecientes() {
 	return (
 		<div className="w-5/6 mx auto flex flex-col gap-4 flex-1 rounded-lg items-start my-14">
-			<header className="text-[22px] tracking-wider font-semibold pb-2 dark:text-shadow-lg/50">
+			<header className="text-[22px] tracking-wider font-semibold pb-2">
 				Protocolos Recientes
 			</header>
 			<Suspense
@@ -46,7 +46,7 @@ function Reportes() {
 							: "/iluminacion/nuevo-informe"
 					}
 					params={{ id: reporte.id }}
-					className="p-4 bg-secondary/50 rounded-lg ring-[1px] ring-foreground/15 justify-between w-full"
+					className="p-4 bg-accent rounded-lg ring-[1px] dark:ring-foreground/15 ring-foreground/50 justify-between w-full"
 				>
 					<div className="flex gap-4 items-center">
 						{reporte.finishedAt ? (

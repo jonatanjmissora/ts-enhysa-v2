@@ -25,7 +25,7 @@ function Home() {
 	return (
 		<article className="w-full min-h-svh flex flex-col items-center justify-center gap-20">
 			<div className="flex justify-between items-center flex-col mt-[70px] h-[550px] relative overflow-visible px-6">
-				<p className="text-[26px] text-center tracking-wider text-pretty px-3 dark:text-shadow-lg">
+				<p className="text-[26px] text-center tracking-wider text-pretty px-3">
 					Selecciona tu nuevo informe.
 				</p>
 				<img
@@ -34,8 +34,11 @@ function Home() {
 					className="absolute opacity-75 top-6 left-0 w-screen h-[500px] bottom-0 -z-10 max-w-none mask-t-from-50% mask-b-from-80%"
 				/>
 				<Select>
-					<SelectTrigger className="w-11/12 ring-[1px] ring-foreground/30 py-6 tracking-widest font-semibold text-base bg-secondary">
-						<SelectValue placeholder="Selecciona un protocolo" />
+					<SelectTrigger className="w-11/12 ring-[1px] ring-foreground/30 py-6 tracking-widest font-semibold text-yellow-700 bg-primary">
+						<SelectValue
+							placeholder="Selecciona un protocolo"
+							className="text-green-700"
+						/>
 					</SelectTrigger>
 					<SelectContent className="w-80 mx-auto truncate">
 						{PROTOCOLOS.map(protocolo => (
@@ -59,7 +62,7 @@ function Home() {
 
 			<div className="flex flex-col gap-20 w-5/6 mx-auto my-20">
 				<div className="">
-					<div className="shapeLeft flex items-center justify-center flex-col gap-2 bg-secondary/50 ring-[1px] ring-amber-500/20 rounded-md p-4 mr-4 text-amber-600">
+					<div className="shapeLeft flex items-center justify-center flex-col gap-2 bg-accent/50 ring-[1px] dark:ring-amber-500/20 ring-amber-700/40 rounded-md p-4 mr-4 dark:text-amber-600 text-amber-800">
 						<ShieldCheck size={30} />
 						Protocolo
 					</div>
@@ -73,7 +76,7 @@ function Home() {
 				</div>
 
 				<div className="">
-					<div className="shapeRight flex items-center justify-center flex-col gap-2 bg-secondary/50 ring-[1px] ring-amber-500/20 rounded-md p-4 ml-4 text-amber-600">
+					<div className="shapeRight flex items-center justify-center flex-col gap-2 bg-accent/50 ring-[1px] dark:ring-amber-500/20 ring-amber-700/40 rounded-md p-4 ml-4 dark:text-amber-600 text-amber-800">
 						<HeartPulse size={30} />
 						Saludable
 					</div>
@@ -87,7 +90,7 @@ function Home() {
 				</div>
 
 				<div className="">
-					<div className="shapeLeft flex items-center justify-center flex-col gap-2 bg-secondary/50 ring-[1px] ring-amber-500/20 rounded-md p-4 mr-4 text-amber-600">
+					<div className="shapeLeft flex items-center justify-center flex-col gap-2 bg-accent/50 ring-[1px] dark:ring-amber-500/20 ring-amber-700/40 rounded-md p-4 mr-4 dark:text-amber-600 text-amber-800">
 						<FileCheck size={30} />
 						Cumplir
 					</div>
@@ -100,7 +103,7 @@ function Home() {
 				</div>
 
 				<div className="">
-					<div className="shapeRight flex items-center justify-center flex-col gap-2 bg-secondary/50 ring-[1px] ring-amber-500/20 rounded-md p-4 ml-4 text-amber-600">
+					<div className="shapeRight flex items-center justify-center flex-col gap-2 bg-accent/50 ring-[1px] dark:ring-amber-500/20 ring-amber-700/40 rounded-md p-4 ml-4 dark:text-amber-600 text-amber-800">
 						<Factory size={30} />
 						Empresa
 					</div>
@@ -114,7 +117,7 @@ function Home() {
 				</div>
 
 				<div className="">
-					<div className="shapeLeft flex items-center justify-center flex-col gap-2 bg-secondary/50 ring-[1px] ring-amber-500/20 rounded-md p-4 mr-4 text-amber-600">
+					<div className="shapeLeft flex items-center justify-center flex-col gap-2 bg-accent/50 ring-[1px] dark:ring-amber-500/20 ring-amber-700/40 rounded-md p-4 mr-4 dark:text-amber-600 text-amber-800">
 						<ClipboardList size={30} />
 						Seguimiento
 					</div>

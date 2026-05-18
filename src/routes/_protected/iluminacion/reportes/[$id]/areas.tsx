@@ -109,7 +109,7 @@ function Reporte() {
 									<img
 										src={url}
 										alt=""
-										className="h-full w-full object-contain rounded shadow-md border border-foreground/10"
+										className="h-full w-full object-contain rounded border border-foreground/10"
 									/>
 								</div>
 							)

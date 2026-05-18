@@ -134,7 +134,6 @@ export function EditEmpresaForm({
 										onChange={e => field.handleChange(e.target.value)}
 										aria-invalid={isInvalid}
 										placeholder="Ej. Teléfonica"
-										className="bg-background sm:bg-accent text-right"
 									/>
 									{isInvalid && (
 										<FieldError
@@ -166,7 +165,6 @@ export function EditEmpresaForm({
 										onChange={e => field.handleChange(e.target.value)}
 										aria-invalid={isInvalid}
 										placeholder="Ej. 00-00000000-0"
-										className="bg-background sm:bg-accent text-right"
 									/>
 									{isInvalid && (
 										<FieldError
@@ -195,7 +193,6 @@ export function EditEmpresaForm({
 										onChange={e => field.handleChange(e.target.value)}
 										aria-invalid={isInvalid}
 										placeholder="Ej. Villa Verde"
-										className="bg-background sm:bg-accent text-right"
 									/>
 									{isInvalid && (
 										<FieldError
@@ -224,7 +221,6 @@ export function EditEmpresaForm({
 										onChange={e => field.handleChange(e.target.value)}
 										aria-invalid={isInvalid}
 										placeholder="Ej. Andorra"
-										className="bg-background sm:bg-accent text-right"
 									/>
 									{isInvalid && (
 										<FieldError
@@ -253,7 +249,6 @@ export function EditEmpresaForm({
 										onChange={e => field.handleChange(e.target.value)}
 										aria-invalid={isInvalid}
 										placeholder="Ej. 5000"
-										className="bg-background sm:bg-accent text-right"
 									/>
 									{isInvalid && (
 										<FieldError
@@ -282,7 +277,6 @@ export function EditEmpresaForm({
 										onChange={e => field.handleChange(e.target.value)}
 										aria-invalid={isInvalid}
 										placeholder="Ej. Pr. Andorra"
-										className="bg-background sm:bg-accent text-right"
 									/>
 									{isInvalid && (
 										<FieldError

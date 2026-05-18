@@ -36,9 +36,10 @@ function RouteComponent() {
 					to="/iluminacion/reportes/$id/general"
 					params={{ id }}
 					activeProps={{
-						className: "bg-secondary ring-[1px] ring-cyan-700/25 text-cyan-700",
+						className:
+							"bg-accent ring-[1px] dark:ring-cyan-700/25 ring-cyan-700/75 text-cyan-700",
 					}}
-					className="flex-1 h-20 flex flex-col gap-2 items-center justify-center text-sm rounded-lg bg-accent"
+					className="flex-1 h-20 flex flex-col gap-2 items-center justify-center text-sm rounded-lg"
 				>
 					<File className="size-10" />
 					General
@@ -48,9 +49,9 @@ function RouteComponent() {
 					params={{ id }}
 					activeProps={{
 						className:
-							"bg-secondary ring-[1px] ring-purple-700/25 text-purple-700",
+							"bg-accent ring-[1px] dark:ring-purple-700/25 ring-purple-700/75 text-purple-700",
 					}}
-					className="flex-1 h-20 flex flex-col gap-2 items-center justify-center text-sm rounded-lg bg-accent"
+					className="flex-1 h-20 flex flex-col gap-2 items-center justify-center text-sm rounded-lg"
 				>
 					<RulerDimensionLine className="size-10" />
 					Areas
@@ -60,9 +61,9 @@ function RouteComponent() {
 					params={{ id }}
 					activeProps={{
 						className:
-							"bg-secondary ring-[1px] ring-amber-700/25 text-amber-700",
+							"bg-accent ring-[1px] dark:ring-amber-700/25 ring-amber-700/75 text-amber-700",
 					}}
-					className="flex-1 h-20 flex flex-col gap-2 items-center justify-center text-sm rounded-lg bg-accent"
+					className="flex-1 h-20 flex flex-col gap-2 items-center justify-center text-sm rounded-lg"
 				>
 					<UserRound className="size-10" />
 					Resumen

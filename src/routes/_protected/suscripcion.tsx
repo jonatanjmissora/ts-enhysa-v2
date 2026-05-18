@@ -24,8 +24,8 @@ function RouteComponent() {
 
 			<div className="flex-1 flex justify-center items-center flex-col gap-6 pt-20 sm:py-10 2xl:py-20">
 				<div className="flex items-center gap-2 text-5xl 2xl:text-6xl font-bold tracking-wildest relative">
-					<span className="text-shadow-lg/50">Planes</span>
-					<Shield className="absolute top-1/2 left-full -translate-1/2 size-30 2xl:size-50 -rotate-15 text-amber-500/30 -z-10 drop-shadow-lg/90" />
+					<span>Planes</span>
+					<Shield className="absolute top-1/2 left-full -translate-1/2 size-30 2xl:size-50 -rotate-15 dark:text-amber-500/30 text-amber-700/70 -z-10" />
 				</div>
 				<div>
 					<p className="italic tracking-wider font-semibold text-pretty text-sm w-5/6 mx-auto text-center text-foreground/50">
@@ -70,7 +70,7 @@ const Plan = ({
 }: PlanProps) => {
 	return (
 		<div
-			className={`overflow-hidden relative  sm:w-80 2xl:w-100 rounded-lg p-8  flex flex-col items-start gap-10 duration-300 ${actualPlan === index ? "bg-[#1f301f] scale-100 sm:scale-120 z-10 " : "bg-accent"}`}
+			className={`overflow-hidden relative  sm:w-80 2xl:w-100 rounded-lg p-8  flex flex-col items-start gap-10 duration-300 ${actualPlan === index ? "dark:bg-[#1f301f] bg-[#8dac8d] scale-100 sm:scale-120 z-10 " : "bg-accent"}`}
 		>
 			{actualPlan === index && (
 				<img

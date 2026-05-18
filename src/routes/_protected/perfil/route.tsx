@@ -28,9 +28,9 @@ function RouteComponent() {
 					to="/perfil/tecnicos"
 					activeProps={{
 						className:
-							"bg-secondary ring-[1px] ring-foreground/25 text-cyan-700",
+							"bg-accent/50 ring-[1px] ring-foreground/25 text-cyan-700",
 					}}
-					className="flex-1 h-20 flex flex-col gap-2 items-center justify-center text-sm rounded-lg bg-accent"
+					className="flex-1 h-20 flex flex-col gap-2 items-center justify-center text-sm rounded-lg"
 				>
 					<UserRound className="size-10" />
 					Técnico
@@ -39,9 +39,9 @@ function RouteComponent() {
 					to="/perfil/empresas"
 					activeProps={{
 						className:
-							"bg-secondary ring-[1px] ring-foreground/25 text-purple-700",
+							"bg-accent/50 ring-[1px] ring-foreground/25 text-purple-700",
 					}}
-					className="flex-1 h-20 flex flex-col gap-2 items-center justify-center text-sm rounded-lg bg-accent"
+					className="flex-1 h-20 flex flex-col gap-2 items-center justify-center text-sm rounded-lg"
 				>
 					<Warehouse className="size-10" />
 					Empresas
@@ -50,9 +50,9 @@ function RouteComponent() {
 					to="/perfil/instrumentos"
 					activeProps={{
 						className:
-							"bg-secondary ring-[1px] ring-foreground/25 text-amber-700",
+							"bg-accent/50 ring-[1px] ring-foreground/25 text-amber-700",
 					}}
-					className="flex-1 h-20 flex flex-col gap-2 items-center justify-center text-sm rounded-lg bg-accent"
+					className="flex-1 h-20 flex flex-col gap-2 items-center justify-center text-sm rounded-lg"
 				>
 					<Cpu className="size-10" />
 					Instrumentos

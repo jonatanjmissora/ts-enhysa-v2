@@ -45,7 +45,7 @@ function HayEmpresas({ empresas }: { empresas: EmpresaType[] }) {
 						value={empresa.id}
 						className="border-b border-foreground/10 last:border-b-0 py-2"
 					>
-						<AccordionTrigger className="flex px-5 w-11/12 sm:w-full flex-wrap items-center bg-accent ring-[1px] ring-foreground/10">
+						<AccordionTrigger className="flex px-5 w-11/12 sm:w-full flex-wrap items-center bg-accent ring-[1px] dark:ring-foreground/10 ring-foreground/50">
 							<div className="flex items-center gap-2 text-sm tracking-wider w-60 sm:w-max truncate">
 								{empresa.razonSocial.toUpperCase()} -{" "}
 								{empresa.direccion.toUpperCase()} - {empresa.cuit}
@@ -80,7 +80,6 @@ function Empresa({ empresa }: { empresa: EmpresaType }) {
 						placeholder="Nombre de la empresa"
 						value={empresa.razonSocial.toUpperCase()}
 						readOnly
-						className="bg-background sm:bg-accent text-right"
 					/>
 				</div>
 				<div className="flex flex-col gap-1">
@@ -92,7 +91,6 @@ function Empresa({ empresa }: { empresa: EmpresaType }) {
 						placeholder="00-00000000-0"
 						value={empresa.cuit}
 						readOnly
-						className="bg-background sm:bg-accent text-right"
 					/>
 				</div>
 				<div className="flex flex-col gap-1 w-full">
@@ -104,7 +102,6 @@ function Empresa({ empresa }: { empresa: EmpresaType }) {
 						placeholder="Calle, Altura"
 						value={empresa.direccion.toUpperCase()}
 						readOnly
-						className="bg-background sm:bg-accent text-right"
 					/>
 				</div>
 				<div className="flex flex-col gap-1 w-full">
@@ -116,7 +113,6 @@ function Empresa({ empresa }: { empresa: EmpresaType }) {
 						placeholder="Ciudad, Provincia, Pais"
 						value={empresa.localidad.toUpperCase()}
 						readOnly
-						className="bg-background sm:bg-accent text-right"
 					/>
 				</div>
 				<div className="flex flex-col gap-1 w-full">
@@ -128,7 +124,6 @@ function Empresa({ empresa }: { empresa: EmpresaType }) {
 						placeholder="Ciudad, Provincia, Pais"
 						value={empresa.codigoPostal}
 						readOnly
-						className="bg-background sm:bg-accent text-right"
 					/>
 				</div>
 				<div className="flex flex-col gap-1 w-full">
@@ -140,7 +135,6 @@ function Empresa({ empresa }: { empresa: EmpresaType }) {
 						placeholder="Ciudad, Provincia, Pais"
 						value={empresa.provincia.toUpperCase()}
 						readOnly
-						className="bg-background sm:bg-accent text-right"
 					/>
 				</div>
 				<div className="flex flex-col gap-1 w-full">
@@ -150,7 +144,6 @@ function Empresa({ empresa }: { empresa: EmpresaType }) {
 						placeholder="Lun a Vie 8:00 a 16:00"
 						value={empresa.horarios.toUpperCase()}
 						readOnly
-						className="bg-background sm:bg-accent text-right"
 					/>
 				</div>
 				<div className="flex flex-col gap-1">
