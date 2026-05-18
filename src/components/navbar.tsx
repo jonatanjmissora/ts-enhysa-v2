@@ -44,13 +44,13 @@ const MovilMenuContent = ({
 		<div
 			className={` flex flex-col justify-between items-center fixed z-10 inset-0 bg-background w-screen h-svh  ${isOpen ? "translate-y-0" : "-translate-y-full"} transition-transform duration-500 text-foreground`}
 		>
-			<div className="h-25 w-full flex items-center justify-end p-8">
+			<div className="h-25 w-full sm:max-w-2xl 2xl:max-w-3xl sm:mx-auto flex items-center justify-end p-8">
 				<button onClick={() => setIsOpen(!isOpen)}>
 					<X className="size-7" />
 				</button>
 			</div>
 
-			<ul className="flex flex-col gap-5 text-2xl tracking-widest font-semibold flex-1 items-center justify-center w-5/6">
+			<ul className="flex flex-col gap-5 text-2xl tracking-widest font-semibold flex-1 items-center justify-center w-5/6 sm:max-w-2xl 2xl:max-w-3xl sm:mx-auto ">
 				<Link
 					to="/"
 					onClick={() => setIsOpen(!isOpen)}
@@ -86,7 +86,7 @@ function User() {
 	const { session } = useLoaderData({ from: "__root__" })
 	const { avatar, fullName } = getUserInfo(session)
 	return (
-		<div className="flex flex-col sm:gap-2 2xl:gap-4 m-6 w-5/6">
+		<div className="flex flex-col sm:gap-2 2xl:gap-4 m-6 w-5/6 sm:max-w-2xl 2xl:max-w-3xl sm:mx-auto ">
 			<div
 				className={`gap-4 p-8 py-4 rounded-lg flex bg-accent ring-[1px] ring-foreground/10`}
 			>

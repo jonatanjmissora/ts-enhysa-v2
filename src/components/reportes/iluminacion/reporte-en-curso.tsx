@@ -31,10 +31,10 @@ export default function ReporteEnCurso({
 					No se podrá recuperar la información una vez eliminada.
 				</span>
 
-				<div className="flex flex-col gap-4 w-5/6 mx-auto">
+				<div className="flex flex-col gap-4 sm:flex-row w-5/6 mx-auto">
 					<Button
 						variant="outline"
-						className="py-6 w-full"
+						className="py-6 w-full sm:flex-1"
 						onClick={() => {
 							setNewReportWarning(false)
 							window.scroll({ top: 0 })
@@ -85,7 +85,7 @@ function BorrarReporteEnCurso({
 	return (
 		<form
 			id="create-form"
-			className="flex flex-col items-center justify-center gap-6"
+			className="flex flex-col items-center justify-center gap-6 flex-1"
 			onSubmit={e => {
 				e.preventDefault()
 				form.handleSubmit()

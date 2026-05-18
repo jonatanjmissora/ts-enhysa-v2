@@ -43,7 +43,7 @@ function ReportesIluminacion() {
 	if (!reportes || reportes.length === 0) return <NoReports />
 
 	return (
-		<article className="w-5/6 flex flex-col gap-14 mt-20">
+		<article className="w-5/6 sm:w-2/3 flex flex-col gap-14 mt-20">
 			<div className="flex flex-col gap-4">
 				{reportes?.map(reporte => (
 					<div
@@ -86,7 +86,7 @@ function ReportesIluminacion() {
 
 			<Link
 				to="/iluminacion/nuevo-informe"
-				className="my-20 py-3 w-5/6 mx-auto tracking-widest font-semibold text-base bg-primary rounded-lg flex gap-2 items-center justify-center ring-[1px] ring-foreground/25"
+				className="my-20 py-3 w-5/6 sm:w-1/2 mx-auto tracking-widest font-semibold text-base bg-primary rounded-lg flex gap-2 items-center justify-center ring-[1px] ring-foreground/25"
 			>
 				<FileChartColumn size={20} />
 				Nuevo Informe

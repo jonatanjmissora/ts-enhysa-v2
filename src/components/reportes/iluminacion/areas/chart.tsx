@@ -44,7 +44,7 @@ export function ChartAreaInteractive({ puntos }: { puntos: number[] }) {
 	})
 
 	return (
-		<div className="mt-10 bg-accent py-10 rounded-lg w-[96dvw] mx-auto">
+		<div className="mt-10 bg-accent py-10 rounded-lg w-[96dvw] sm:w-full mx-auto">
 			<CardContent className="px-2 pt-4 sm:px-6 sm:pt-6 w-full">
 				<ChartContainer
 					config={chartConfig}

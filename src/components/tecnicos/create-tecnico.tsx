@@ -34,7 +34,7 @@ export default function CreateTecnico() {
 			<AlertDialogTrigger asChild className="hover:bg-accent">
 				<Button className="w-1/2 mx-auto py-5">Cargar datos</Button>
 			</AlertDialogTrigger>
-			<AlertDialogContent className="bg-background sm:px-20 py-15 sm:py-6 w-full sm:w-1/2 h-screen sm:h-[95dvh] overflow-auto border-none rounded-none max-w-screen">
+			<AlertDialogContent className="sm:px-20 py-15 sm:py-6 w-full h-screen sm:h-[95dvh] overflow-auto border-none rounded-none max-w-screen">
 				<AlertDialogTitle>
 					<Title text="Tecnico Datos" className="mt-0" />
 				</AlertDialogTitle>
@@ -305,7 +305,7 @@ export function CreateTecnicoForm({
 						</span>
 					</div>
 
-					<Field className="flex flex-col justify-center gap-4 items-center w-full mt-10">
+					<Field className="flex flex-col justify-center gap-4 sm:flex-row items-center w-full mt-10">
 						<Button
 							variant="outline"
 							onClick={() => setOpen(false)}

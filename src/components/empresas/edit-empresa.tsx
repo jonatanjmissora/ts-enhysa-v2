@@ -35,12 +35,12 @@ export function EditEmpresa({
 	return (
 		<AlertDialog open={open} onOpenChange={setOpen}>
 			<AlertDialogTrigger asChild>
-				<div className="w-full sm:hidden flex items-center gap-2 justify-center p-4">
+				<div className="w-full flex items-center gap-2 justify-center p-4">
 					<Pencil size={14} className="text-foreground" />
 					Editar
 				</div>
 			</AlertDialogTrigger>
-			<AlertDialogContent className="bg-background sm:px-20 py-15 sm:py-6 w-full sm:w-1/2 h-screen sm:h-[95dvh] overflow-auto border-none rounded-none max-w-screen">
+			<AlertDialogContent className="sm:px-20 py-15 sm:py-6 w-full h-screen sm:h-[95dvh] overflow-auto border-none rounded-none max-w-screen">
 				<AlertDialogTitle>
 					<Title text="Editar Empresa" />
 				</AlertDialogTitle>
@@ -356,7 +356,7 @@ export function EditEmpresaForm({
 					</span>
 				</div>
 
-				<Field className="flex flex-col justify-center gap-4 sm:gap-10 items-center w-5/6 mx-auto sm:w-full mt-10">
+				<Field className="flex flex-col justify-center gap-4 sm:flex-row items-center w-5/6 mx-auto sm:w-full mt-10">
 					<Button
 						variant="outline"
 						onClick={() => {

@@ -23,18 +23,18 @@ function Home() {
 	useScrollTop()
 
 	return (
-		<article className="w-full min-h-svh flex flex-col items-center justify-center gap-20">
-			<div className="flex justify-between items-center flex-col mt-[70px] h-[550px] relative overflow-visible px-6">
+		<article className="w-full sm:max-w-5xl 2xl:max-w-7xl sm:mx-auto min-h-svh flex flex-col items-center justify-center gap-20">
+			<div className="flex justify-between items-center flex-col mt-[70px] h-[550px] relative overflow-visible px-6 sm:w-full">
 				<p className="text-[26px] text-center tracking-wider text-pretty px-3">
 					Selecciona tu nuevo informe.
 				</p>
 				<img
 					src="/movil-hero.webp"
 					alt="logo EnHySa"
-					className="absolute opacity-75 top-6 left-0 w-screen h-[500px] bottom-0 -z-10 max-w-none mask-t-from-50% mask-b-from-80%"
+					className="absolute opacity-75 top-6 left-0 w-screen sm:w-full h-[500px] bottom-0 -z-10 max-w-none mask-t-from-50% mask-b-from-80% sm:mask-r-from-95% sm:mask-l-from-5% object-cover object-right"
 				/>
 				<Select>
-					<SelectTrigger className="w-11/12 ring-[1px] ring-foreground/30 py-6 tracking-widest font-semibold text-yellow-700 bg-primary">
+					<SelectTrigger className="w-11/12 sm:w-1/2 ring-[1px] ring-foreground/30 py-6 tracking-widest font-semibold text-yellow-700 bg-primary">
 						<SelectValue
 							placeholder="Selecciona un protocolo"
 							className="text-green-700"

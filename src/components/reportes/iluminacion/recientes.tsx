@@ -36,7 +36,7 @@ function Reportes() {
 
 	if (!reportes || reportes.length === 0) return <NoReports />
 	return (
-		<div className="w-full flex flex-col gap-4">
+		<div className="w-full sm:w-2/3 mx-auto flex flex-col gap-4">
 			{reportes?.slice(0, 3).map(reporte => (
 				<Link
 					key={reporte.id}

@@ -59,7 +59,7 @@ function Resumen() {
 				params={{ id }}
 				className="w-full flex justify-center"
 			>
-				<Button className="rounded-lg mt-20 py-5 w-5/6 mx-auto">
+				<Button className="rounded-lg mt-20 py-5 w-5/6 sm:w-1/2 mx-auto">
 					Generar el PDF
 				</Button>
 			</Link>

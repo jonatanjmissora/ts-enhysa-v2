@@ -33,7 +33,7 @@ export default function CreateEmpresa() {
 			<AlertDialogTrigger asChild className="hover:bg-accent">
 				<Button className="w-1/2 mx-auto py-5">Cargar datos</Button>
 			</AlertDialogTrigger>
-			<AlertDialogContent className="bg-background sm:px-20 py-15 sm:py-6 w-full sm:w-1/2 h-screen sm:h-[95dvh] overflow-auto border-none rounded-none max-w-screen">
+			<AlertDialogContent className="sm:px-20 py-15 sm:py-6 w-full h-screen sm:h-[95dvh] overflow-auto border-none rounded-none max-w-screen">
 				<AlertDialogTitle>
 					<Title text="Empresa Nueva" />
 				</AlertDialogTitle>
@@ -325,7 +325,7 @@ const EmpresaForm = ({ setOpen }: { setOpen: (open: boolean) => void }) => {
 					</span>
 				</div>
 
-				<Field className="flex flex-col justify-center gap-4 sm:gap-10 items-center w-5/6 sm:w-full mx-auto mt-10">
+				<Field className="flex flex-col justify-center gap-4 sm:flex-row items-center w-5/6 sm:w-full mx-auto mt-10">
 					<Button
 						variant="outline"
 						onClick={() => setOpen(false)}

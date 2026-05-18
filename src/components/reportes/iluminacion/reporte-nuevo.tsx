@@ -109,7 +109,7 @@ function ReporteNuevo() {
 				e.preventDefault()
 				form.handleSubmit()
 			}}
-			className="w-3/4 mx-auto flex flex-col gap-8 relative"
+			className="w-3/4 sm: w-1/2 mx-auto flex flex-col gap-8 relative"
 		>
 			<FieldGroup className="gap-5">
 				<form.Field

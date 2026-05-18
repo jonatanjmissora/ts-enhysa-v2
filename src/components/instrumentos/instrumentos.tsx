@@ -73,7 +73,7 @@ function HayInstrumentos({
 function Instrumento({ instrumento }: { instrumento: InstrumentoType }) {
 	return (
 		<div className="bg-accent py-20 flex items-center justify-center flex-col relative">
-			<div className="sm:hidden block absolute top-10 left-6">
+			<div className="absolute top-10 left-6">
 				<InstrumentoDropdownMenu instrumento={instrumento} />
 			</div>
 			<div className="grid-cols-1 grid sm:grid-cols-2 gap-8 w-5/6 my-10">

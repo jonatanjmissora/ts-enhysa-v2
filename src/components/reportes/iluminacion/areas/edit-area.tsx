@@ -72,7 +72,7 @@ export default function EditAreaAlert({
 					Editar
 				</div>
 			</AlertDialogTrigger>
-			<AlertDialogContent className="bg-background sm:px-20 py-15 sm:py-6 w-full sm:w-1/2 h-screen sm:h-[95dvh] overflow-auto border-none rounded-none max-w-screen">
+			<AlertDialogContent className="sm:px-20 py-15 sm:py-6 w-full h-screen sm:h-[95dvh] overflow-auto border-none rounded-none max-w-screen">
 				<AlertDialogTitle>
 					<Title text="Editar Area" />
 				</AlertDialogTitle>
@@ -655,7 +655,7 @@ function EditArea({
 					}}
 				/>
 
-				<Field className="flex flex-col justify-center gap-4 sm:gap-10 items-center w-5/6 mx-auto sm:w-full mt-10">
+				<Field className="flex flex-col justify-center gap-4 sm:flex-row items-center w-5/6 mx-auto sm:w-full mt-10">
 					<Button
 						variant="outline"
 						onClick={() => {

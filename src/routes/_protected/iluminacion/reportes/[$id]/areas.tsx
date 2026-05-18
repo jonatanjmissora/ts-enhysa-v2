@@ -76,23 +76,23 @@ function Reporte() {
 
 			<ChartAreaInteractive puntos={area.puntos} />
 
-			<div className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-2 w-5/6 mx-aut my-10">
-				<span>Uniformidad : </span>
+			<div className="grid grid-cols-[auto_1fr] sm:grid-cols-[1fr_1fr] gap-x-4 gap-y-2 w-5/6 sm:w-2/3 mx-auto my-10 justify-center items-center">
+				<span className="text-right">Uniformidad : </span>
 				<span>{uniformidad}</span>
 
-				<span>Valor Mínimo : </span>
+				<span className="text-right">Valor Mínimo : </span>
 				<span>{minValue(puntosWithValue)} lux</span>
 
-				<span>Valor Máximo : </span>
+				<span className="text-right">Valor Máximo : </span>
 				<span>{maxValue(puntosWithValue)} lux</span>
 
-				<span>Puntos Medidos : </span>
+				<span className="text-right">Puntos Medidos : </span>
 				<span>{puntosWithValue.length}</span>
 
-				<span>Valor Requerido : </span>
+				<span className="text-right">Valor Requerido : </span>
 				<span>{area.valorRequerido} lux</span>
 
-				<span>Cumplen valor requerido : </span>
+				<span className="text-right">Cumplen valor requerido : </span>
 				<span>
 					{puntosWithValue.every(punto => punto >= Number(area.valorRequerido))
 						? "SI"
