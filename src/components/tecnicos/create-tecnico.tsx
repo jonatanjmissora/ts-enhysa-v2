@@ -266,7 +266,7 @@ export function CreateTecnicoForm({
 
 					<div className="flex-1 flex flex-col gap-1">
 						<Label>Firma Digital</Label>
-						<div className="bg-white/75">
+						<div className={`${firmaFile ? "bg-white/75" : ""}`}>
 							<FileDropzone
 								text="Imágen Firma"
 								onUploaded={url => {
@@ -281,7 +281,7 @@ export function CreateTecnicoForm({
 
 					<div className="flex-1 flex flex-col gap-1">
 						<Label>Empresa Logo</Label>
-						<div className="bg-white/75">
+						<div className={`${empresaLogoFile ? "bg-white/75" : ""}`}>
 							<FileDropzone
 								text="Imágen Empresa Logo"
 								onUploaded={url => {

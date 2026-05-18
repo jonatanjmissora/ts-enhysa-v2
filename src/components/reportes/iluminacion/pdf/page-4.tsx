@@ -108,6 +108,7 @@ export default function Page4({
 					style={{
 						flex: 1,
 						width: "100%",
+						maxHeight: "200px",
 						display: "flex",
 						flexDirection: "row",
 						justifyContent: "center",
@@ -134,6 +135,7 @@ export default function Page4({
 					style={{
 						flex: 1,
 						width: "100%",
+						maxHeight: "200px",
 						display: "flex",
 						flexDirection: "row",
 						justifyContent: "center",
