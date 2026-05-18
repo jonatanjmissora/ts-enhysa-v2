@@ -7,6 +7,7 @@ import { Suspense } from "react"
 import { reportesQueryOptions } from "../../../../../queries/reportes/iluminacion/reportes-query"
 import { Clock, ChevronRight, FileChartColumn } from "lucide-react"
 import { Button } from "#/components/ui/button"
+import type { ReporteIluminacionType } from "../../../../../db/reportes/iluminacion/schema"
 
 export const Route = createFileRoute("/_protected/iluminacion/reportes/")({
 	component: RouteComponent,
@@ -45,7 +46,7 @@ function ReportesIluminacion() {
 	return (
 		<article className="w-5/6 sm:w-2/3 flex flex-col gap-14 mt-20">
 			<div className="flex flex-col gap-4">
-				{reportes?.map(reporte => (
+				{sortedByRecentDate(reportes)?.map(reporte => (
 					<div
 						key={reporte.id}
 						className="px-2 py-4 rounded-lg ring-[1px] dark:ring-foreground/10 ring-foreground/50 bg-accent flex justify-between w-full"
@@ -106,4 +107,8 @@ function NoReports() {
 			</Link>
 		</article>
 	)
+}
+
+function sortedByRecentDate(reportes: ReporteIluminacionType[]) {
+	return reportes?.sort((a, b) => (b.finishedAt || b.createdAt).getTime() - (a.finishedAt || a.createdAt).getTime())
 }

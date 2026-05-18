@@ -38,6 +38,7 @@ import { Link, useNavigate } from "@tanstack/react-router"
 import useScrollTop from "#/hooks/scroll-top"
 import { useCreateNuevoReporte } from "../../../../queries/reportes/iluminacion/use-create-reporte"
 import type { EmpresaType } from "../../../../db/empresas/schema"
+import { sortedByName, sortedByRazonSocial } from "#/lib/utils"
 
 export default function ReporteNuevoIluminacion() {
 	return (
@@ -146,7 +147,7 @@ function ReporteNuevo() {
 										<SelectGroup>
 											<SelectLabel>Empresas</SelectLabel>
 
-											{empresas?.map(empresa => (
+											{sortedByRazonSocial(empresas)?.map(empresa => (
 												<SelectItem
 													key={empresa.id}
 													value={empresa.id}
@@ -203,7 +204,7 @@ function ReporteNuevo() {
 										<SelectGroup>
 											<SelectLabel>Instrumentos</SelectLabel>
 
-											{instrumentos?.map(instrumento => (
+											{sortedByName(instrumentos)?.map(instrumento => (
 												<SelectItem
 													key={instrumento.id}
 													value={instrumento.id}

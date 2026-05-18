@@ -4,6 +4,7 @@ import { Link } from "@tanstack/react-router"
 import { Clock, FileChartColumn } from "lucide-react"
 import { Suspense } from "react"
 import { reportesQueryOptions } from "../../../../queries/reportes/iluminacion/reportes-query"
+import type { ReporteIluminacionType } from "../../../../db/reportes/iluminacion/schema"
 
 export default function InformesRecientes() {
 	return (
@@ -37,7 +38,7 @@ function Reportes() {
 	if (!reportes || reportes.length === 0) return <NoReports />
 	return (
 		<div className="w-full sm:w-2/3 mx-auto flex flex-col gap-4">
-			{reportes?.slice(0, 3).map(reporte => (
+			{sortedByRecentDate(reportes)?.slice(0, 3).map(reporte => (
 				<Link
 					key={reporte.id}
 					to={
@@ -82,4 +83,8 @@ function NoReports() {
 			</Link>
 		</article>
 	)
+}
+
+function sortedByRecentDate(reportes: ReporteIluminacionType[]) {
+	return reportes?.sort((a, b) => (b.finishedAt || b.createdAt).getTime() - (a.finishedAt || a.createdAt).getTime())
 }

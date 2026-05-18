@@ -1,6 +1,4 @@
 
-limitar el alto, ancho y largo a numero positivos.
-
 si pongo cancelar cuando edito o creo algo que vaya al uploadthing, hay que borrar dichas imagenes subidas, porque no sirven de nada y ocupan espacio en el servidor.
 
 cuando elimino, empresa, instumento o reporte, tambien borrar las imagenes en uploadthing
