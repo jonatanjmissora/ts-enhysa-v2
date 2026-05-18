@@ -82,6 +82,7 @@ function Instrumento({ instrumento }: { instrumento: InstrumentoType }) {
 						Marca
 					</Label>
 					<Input
+						onFocus={e => e.target.select()}
 						id="marca"
 						placeholder="Marca"
 						value={instrumento.marca.toUpperCase()}
@@ -93,6 +94,7 @@ function Instrumento({ instrumento }: { instrumento: InstrumentoType }) {
 						Modelo
 					</Label>
 					<Input
+						onFocus={e => e.target.select()}
 						id="modelo"
 						placeholder="Modelo"
 						value={instrumento.modelo.toUpperCase()}
@@ -104,6 +106,7 @@ function Instrumento({ instrumento }: { instrumento: InstrumentoType }) {
 						Nro Serie
 					</Label>
 					<Input
+						onFocus={e => e.target.select()}
 						id="serie"
 						placeholder="Serie"
 						value={instrumento.serie}
@@ -115,6 +118,7 @@ function Instrumento({ instrumento }: { instrumento: InstrumentoType }) {
 						Calibración
 					</Label>
 					<Input
+						onFocus={e => e.target.select()}
 						id="calibracion"
 						placeholder="Calibracion"
 						value={instrumento.fechaCalibracion.toLocaleDateString("it-IT", {

@@ -110,6 +110,7 @@ export function CreateTecnicoForm({
 										<Asterisk className="text-destructive size-3" />
 									</FieldLabel>
 									<Input
+										onFocus={e => e.target.select()}
 										id={field.name}
 										name={field.name}
 										value={field.state.value}
@@ -138,6 +139,7 @@ export function CreateTecnicoForm({
 								<Field data-invalid={isInvalid} className="relative gap-1">
 									<FieldLabel htmlFor={field.name}>Telefono</FieldLabel>
 									<Input
+										onFocus={e => e.target.select()}
 										id={field.name}
 										name={field.name}
 										value={field.state.value}
@@ -169,6 +171,7 @@ export function CreateTecnicoForm({
 										<Asterisk className="text-destructive size-3" />
 									</FieldLabel>
 									<Input
+										onFocus={e => e.target.select()}
 										id={field.name}
 										name={field.name}
 										value={field.state.value}
@@ -197,6 +200,7 @@ export function CreateTecnicoForm({
 								<Field data-invalid={isInvalid} className="relative gap-1">
 									<FieldLabel htmlFor={field.name}>Localidad </FieldLabel>
 									<Input
+										onFocus={e => e.target.select()}
 										id={field.name}
 										name={field.name}
 										value={field.state.value}
@@ -228,6 +232,7 @@ export function CreateTecnicoForm({
 										<Asterisk className="text-destructive size-3" />
 									</FieldLabel>
 									<Input
+										onFocus={e => e.target.select()}
 										id={field.name}
 										name={field.name}
 										value={field.state.value}

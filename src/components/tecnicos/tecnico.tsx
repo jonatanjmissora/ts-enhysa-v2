@@ -37,6 +37,7 @@ function HayTecnico({ tecnico }: { tecnico: TecnicoType }) {
 						Nombre Completo
 					</Label>
 					<Input
+						onFocus={e => e.target.select()}
 						id="nombre"
 						placeholder="Nombre Completo"
 						value={tecnico.nombre.toUpperCase()}
@@ -48,6 +49,7 @@ function HayTecnico({ tecnico }: { tecnico: TecnicoType }) {
 						Teléfono
 					</Label>
 					<Input
+						onFocus={e => e.target.select()}
 						id="telefono"
 						placeholder="000-0000000"
 						value={tecnico.telefono}
@@ -59,6 +61,7 @@ function HayTecnico({ tecnico }: { tecnico: TecnicoType }) {
 						Cargo
 					</Label>
 					<Input
+						onFocus={e => e.target.select()}
 						id="cargo"
 						placeholder="Ej Técnico SeH"
 						value={tecnico.cargo.toUpperCase()}
@@ -70,6 +73,7 @@ function HayTecnico({ tecnico }: { tecnico: TecnicoType }) {
 						Localidad
 					</Label>
 					<Input
+						onFocus={e => e.target.select()}
 						id="localidad"
 						placeholder="Ej. Bahia Blanca"
 						value={tecnico.localidad.toUpperCase()}
@@ -81,6 +85,7 @@ function HayTecnico({ tecnico }: { tecnico: TecnicoType }) {
 						Matrícula
 					</Label>
 					<Input
+						onFocus={e => e.target.select()}
 						id="matricula"
 						placeholder="00-00000"
 						value={tecnico.matricula}

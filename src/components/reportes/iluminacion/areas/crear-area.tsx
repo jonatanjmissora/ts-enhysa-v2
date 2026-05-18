@@ -68,7 +68,7 @@ export default function CreateAreaAlert() {
 	return (
 		<AlertDialog open={open} onOpenChange={setOpen}>
 			<AlertDialogTrigger asChild className="hover:bg-accent">
-				<Button className="w-1/2 mx-auto py-5 bg-primary ring-foreground/25">
+				<Button className="w-1/2 sm:w-1/6 mx-auto py-5 bg-primary ring-foreground/25">
 					+ Nueva Area
 				</Button>
 			</AlertDialogTrigger>
@@ -488,7 +488,7 @@ function CreateArea({
 					</div>
 				</div>
 
-				<div className="grid grid-cols-1 sm:grid-cols-2 gap-8 w-5/6 mt-10 mx-auto">
+				<div className="grid grid-cols-1 sm:grid-cols-2 gap-8 w-5/6 mt-10 mx-auto items-end">
 					<form.Field
 						name="largo"
 						children={field => {
@@ -502,6 +502,7 @@ function CreateArea({
 										name={field.name}
 										value={field.state.value}
 										onBlur={field.handleBlur}
+										onFocus={e => e.target.select()}
 										onChange={e => field.handleChange(Number(e.target.value))}
 										aria-invalid={isInvalid}
 										placeholder="Ej. 4"
@@ -532,6 +533,7 @@ function CreateArea({
 										name={field.name}
 										value={field.state.value}
 										onBlur={field.handleBlur}
+										onFocus={e => e.target.select()}
 										onChange={e => field.handleChange(Number(e.target.value))}
 										aria-invalid={isInvalid}
 										placeholder="Ej. 5"
@@ -564,6 +566,7 @@ function CreateArea({
 										name={field.name}
 										value={field.state.value}
 										onBlur={field.handleBlur}
+										onFocus={e => e.target.select()}
 										onChange={e => field.handleChange(Number(e.target.value))}
 										aria-invalid={isInvalid}
 										placeholder="Ej. 2"
@@ -578,6 +581,21 @@ function CreateArea({
 									)}
 								</Field>
 							)
+						}}
+					/>
+
+					<form.Subscribe
+						selector={state =>
+							`${state.values.largo}_${state.values.ancho}_${state.values.alto}`
+						}
+						children={values => {
+							const [largo, ancho, alto] = values.split("_").map(Number)
+							if (largo * ancho * alto < 0)
+								return (
+									<span className="text-red-700/50 italic text-sm">
+										Los valores ingresados deben de ser positivos.
+									</span>
+								)
 						}}
 					/>
 				</div>
@@ -615,28 +633,24 @@ function CreateArea({
 							setTimestamps(resetTimestamps)
 						}
 						return (
-							largo > 0 &&
-							ancho > 0 &&
-							alto > 0 && (
-								<>
-									<Formula
-										alto={Number(alto)}
-										ancho={Number(ancho)}
-										largo={Number(largo)}
-										indiceDeLocal={indiceDeLocal}
-										indiceRedondeo={newIndiceRedondeo}
-									/>
-									<Grilla
-										puntos={puntos}
-										setPuntos={setPuntos}
-										timestamps={timestamps}
-										setTimestamps={setTimestamps}
-										ancho={Number(ancho)}
-										largo={Number(largo)}
-										indiceRedondeo={newIndiceRedondeo}
-									/>
-								</>
-							)
+							<>
+								<Formula
+									alto={Number(alto)}
+									ancho={Number(ancho)}
+									largo={Number(largo)}
+									indiceDeLocal={indiceDeLocal}
+									indiceRedondeo={newIndiceRedondeo}
+								/>
+								<Grilla
+									puntos={puntos}
+									setPuntos={setPuntos}
+									timestamps={timestamps}
+									setTimestamps={setTimestamps}
+									ancho={Number(ancho)}
+									largo={Number(largo)}
+									indiceRedondeo={newIndiceRedondeo}
+								/>
+							</>
 						)
 					}}
 				/>
@@ -869,7 +883,7 @@ function InputMenu({
 				type="number"
 				id="punto"
 				name="punto"
-				className="dark:bg-foreground/50 bg-foreground/50 text-background/75 textXL text-4xl w-3/4 sm:w-1/2 p-4 h-20 text-center rounded-md"
+				className="dark:bg-foreground/50 bg-foreground/50 text-background/75 tracking-widest text-3xl md:text-3xl w-3/4 sm:w-1/2 p-4 h-20 text-center rounded-md focus:text-blue-200 dark:focus:text-blue-400"
 				onChange={e => setPuntoValue(e.currentTarget.value)}
 			/>
 			<div className="w-full flex flex-col justify-between gap-4">

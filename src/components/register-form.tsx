@@ -150,6 +150,7 @@ export function RegisterForm({
 										<Field data-invalid={isInvalid}>
 											<FieldLabel htmlFor={field.name}>Nombre</FieldLabel>
 											<Input
+												onFocus={e => e.target.select()}
 												id={field.name}
 												name={field.name}
 												value={field.state.value}
@@ -176,6 +177,7 @@ export function RegisterForm({
 										<Field data-invalid={isInvalid}>
 											<FieldLabel htmlFor={field.name}>Email</FieldLabel>
 											<Input
+												onFocus={e => e.target.select()}
 												id={field.name}
 												name={field.name}
 												value={field.state.value}
@@ -203,6 +205,7 @@ export function RegisterForm({
 											<FieldLabel htmlFor={field.name}>Contraseña</FieldLabel>
 											<div className="relative">
 												<Input
+													onFocus={e => e.target.select()}
 													id={field.name}
 													name={field.name}
 													value={field.state.value}

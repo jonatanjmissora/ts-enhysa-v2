@@ -25,10 +25,32 @@ export default function Navbar() {
 
 				<p className="textXL">EnHySa App</p>
 			</Link>
-			<button onClick={() => setIsOpen(!isOpen)}>
-				<Menu className="size-7" />
-			</button>
-			<MovilMenuContent isOpen={isOpen} setIsOpen={setIsOpen} />
+			{/* <div className="block sm:hidden"> */}
+				<button onClick={() => setIsOpen(!isOpen)}>
+					<Menu className="size-7" />
+				</button>
+				<MovilMenuContent isOpen={isOpen} setIsOpen={setIsOpen} />
+			{/* </div> */}
+				{/* <ul className="sm:flex hidden flex-1 justify-end gap-40 items-center">
+					<Link
+						to="/"
+						resetScroll={true}
+					>
+						Inicio
+					</Link>
+					<Link
+						to="/perfil/tecnicos"
+						resetScroll={true}
+					>
+						Mi Perfil
+					</Link>
+					<Link
+						to="/suscripcion"
+						resetScroll={true}
+					>
+						Suscripción
+					</Link>
+				</ul> */}
 		</header>
 	)
 }

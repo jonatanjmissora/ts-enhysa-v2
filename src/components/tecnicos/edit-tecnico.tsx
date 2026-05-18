@@ -131,6 +131,7 @@ export function EditTecnicoForm({
 											<Asterisk className="text-destructive size-3" />
 										</FieldLabel>
 										<Input
+											onFocus={e => e.target.select()}
 											id={field.name}
 											name={field.name}
 											value={field.state.value.toUpperCase()}
@@ -160,6 +161,7 @@ export function EditTecnicoForm({
 									<Field data-invalid={isInvalid} className="relative gap-1">
 										<FieldLabel htmlFor={field.name}>Telefono</FieldLabel>
 										<Input
+											onFocus={e => e.target.select()}
 											id={field.name}
 											name={field.name}
 											value={field.state.value}
@@ -192,6 +194,7 @@ export function EditTecnicoForm({
 											<Asterisk className="text-destructive size-3" />
 										</FieldLabel>
 										<Input
+											onFocus={e => e.target.select()}
 											id={field.name}
 											name={field.name}
 											value={field.state.value.toUpperCase()}
@@ -221,6 +224,7 @@ export function EditTecnicoForm({
 									<Field data-invalid={isInvalid} className="relative gap-1">
 										<FieldLabel htmlFor={field.name}>Localidad </FieldLabel>
 										<Input
+											onFocus={e => e.target.select()}
 											id={field.name}
 											name={field.name}
 											value={field.state.value.toUpperCase()}
@@ -253,6 +257,7 @@ export function EditTecnicoForm({
 											<Asterisk className="text-destructive size-3" />
 										</FieldLabel>
 										<Input
+											onFocus={e => e.target.select()}
 											id={field.name}
 											name={field.name}
 											value={field.state.value}

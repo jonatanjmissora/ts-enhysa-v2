@@ -144,6 +144,7 @@ export function EditInstrumentoForm({
 										<Asterisk className="text-destructive size-3" />
 									</FieldLabel>
 									<Input
+										onFocus={e => e.target.select()}
 										id={field.name}
 										name={field.name}
 										value={field.state.value.toUpperCase()}
@@ -175,6 +176,7 @@ export function EditInstrumentoForm({
 										<Asterisk className="text-destructive size-3" />
 									</FieldLabel>
 									<Input
+										onFocus={e => e.target.select()}
 										id={field.name}
 										name={field.name}
 										value={field.state.value.toUpperCase()}
@@ -203,6 +205,7 @@ export function EditInstrumentoForm({
 								<Field data-invalid={isInvalid} className="relative gap-1">
 									<FieldLabel htmlFor={field.name}>Modelo</FieldLabel>
 									<Input
+										onFocus={e => e.target.select()}
 										id={field.name}
 										name={field.name}
 										value={field.state.value.toUpperCase()}
@@ -233,6 +236,7 @@ export function EditInstrumentoForm({
 										<Asterisk className="text-destructive size-3" />
 									</FieldLabel>
 									<Input
+										onFocus={e => e.target.select()}
 										id={field.name}
 										name={field.name}
 										value={field.state.value.toUpperCase()}

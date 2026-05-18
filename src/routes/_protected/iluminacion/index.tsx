@@ -15,14 +15,14 @@ export const Route = createFileRoute("/_protected/iluminacion/")({
 function RouteComponent() {
 	return (
 		<article className="w-full sm:max-w-5xl 2xl:max-w-7xl sm:mx-auto min-h-svh flex flex-col items-center justify-center gap-20">
-			<div className="flex justify-between items-center flex-col mt-[70px] h-[550px] relative overflow-visible px-6 sm:w-full">
+			<div className="flex justify-between items-center flex-col mt-[70px] sm:mt-10 h-[550px] sm:h-[450px] relative overflow-visible px-6 sm:w-2/3 mx-auto">
 				<p className="text-[26px] text-center tracking-wider text-pretty px-0">
 					Informes de iluminación SRT 84/12.
 				</p>
 				<img
 					src="/movil-hero-light-meter.webp"
 					alt="logo EnHySa"
-					className="absolute opacity-75 top-6 left-0 w-screen sm:w-full h-[500px] bottom-0 -z-10 max-w-none mask-t-from-50% mask-b-from-80% sm:mask-r-from-95% sm:mask-l-from-5% object-cover object-right"
+					className="absolute opacity-75 top-6 left-0 w-screen sm:w-full h-[500px] sm:h-[400px] bottom-0 -z-10 max-w-none mask-t-from-50% mask-b-from-80% sm:mask-r-from-95% sm:mask-l-from-5% object-cover object-[50%_40%]"
 				/>
 				<Link
 					to="/iluminacion/nuevo-informe"

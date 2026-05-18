@@ -166,6 +166,7 @@ function EditArea({
 										Nombre del Area
 									</FieldLabel>
 									<Input
+										onFocus={e => e.target.select()}
 										id={field.name}
 										name={field.name}
 										value={field.state.value}
@@ -198,6 +199,7 @@ function EditArea({
 										Tipo del Area
 									</FieldLabel>
 									<Input
+										onFocus={e => e.target.select()}
 										id={field.name}
 										name={field.name}
 										value={field.state.value}
@@ -512,6 +514,7 @@ function EditArea({
 								<Field data-invalid={isInvalid} className="relative gap-1">
 									<FieldLabel htmlFor={field.name}>Largo(m)</FieldLabel>
 									<Input
+										onFocus={e => e.target.select()}
 										id={field.name}
 										name={field.name}
 										value={field.state.value}
@@ -542,6 +545,7 @@ function EditArea({
 								<Field data-invalid={isInvalid} className="relative gap-1">
 									<FieldLabel htmlFor={field.name}>Ancho(m)</FieldLabel>
 									<Input
+										onFocus={e => e.target.select()}
 										id={field.name}
 										name={field.name}
 										value={field.state.value}
@@ -574,6 +578,7 @@ function EditArea({
 										Alto del montaje (m)
 									</FieldLabel>
 									<Input
+										onFocus={e => e.target.select()}
 										id={field.name}
 										name={field.name}
 										value={field.state.value}
@@ -742,7 +747,9 @@ function Grilla({
 			</div>
 
 			{openInputMenu ? (
-				<InputMenu
+				<Input
+					onFocus={e => e.target.select()}
+					Menu
 					setOpenInputMenu={setOpenInputMenu}
 					puntos={puntos}
 					setPuntos={setPuntos}
@@ -871,6 +878,7 @@ function InputMenu({
 				Punto {actualPunto !== null ? actualPunto + 1 : ""}
 			</span>
 			<Input
+				onFocus={e => e.target.select()}
 				ref={inputRef}
 				defaultValue={
 					actualPunto !== null && puntos[actualPunto] !== 0

@@ -118,6 +118,7 @@ const InstrumentoForm = ({ setOpen }: { setOpen: (open: boolean) => void }) => {
 									</FieldLabel>
 
 									<Input
+										onFocus={e => e.target.select()}
 										id={field.name}
 										name={field.name}
 										value={field.state.value}
@@ -152,6 +153,7 @@ const InstrumentoForm = ({ setOpen }: { setOpen: (open: boolean) => void }) => {
 									</FieldLabel>
 
 									<Input
+										onFocus={e => e.target.select()}
 										id={field.name}
 										name={field.name}
 										value={field.state.value}
@@ -183,6 +185,7 @@ const InstrumentoForm = ({ setOpen }: { setOpen: (open: boolean) => void }) => {
 									<FieldLabel htmlFor={field.name}>Modelo</FieldLabel>
 
 									<Input
+										onFocus={e => e.target.select()}
 										id={field.name}
 										name={field.name}
 										value={field.state.value}
@@ -217,6 +220,7 @@ const InstrumentoForm = ({ setOpen }: { setOpen: (open: boolean) => void }) => {
 									</FieldLabel>
 
 									<Input
+										onFocus={e => e.target.select()}
 										id={field.name}
 										name={field.name}
 										value={field.state.value}

@@ -76,6 +76,7 @@ function Empresa({ empresa }: { empresa: EmpresaType }) {
 						Razón Social
 					</Label>
 					<Input
+						onFocus={e => e.target.select()}
 						id="razon-social"
 						placeholder="Nombre de la empresa"
 						value={empresa.razonSocial.toUpperCase()}
@@ -87,6 +88,7 @@ function Empresa({ empresa }: { empresa: EmpresaType }) {
 						CUIT
 					</Label>
 					<Input
+						onFocus={e => e.target.select()}
 						id="cuit"
 						placeholder="00-00000000-0"
 						value={empresa.cuit}
@@ -98,6 +100,7 @@ function Empresa({ empresa }: { empresa: EmpresaType }) {
 						Dirección
 					</Label>
 					<Input
+						onFocus={e => e.target.select()}
 						id="direccion"
 						placeholder="Calle, Altura"
 						value={empresa.direccion.toUpperCase()}
@@ -109,6 +112,7 @@ function Empresa({ empresa }: { empresa: EmpresaType }) {
 						Localidad
 					</Label>
 					<Input
+						onFocus={e => e.target.select()}
 						id="localidad"
 						placeholder="Ciudad, Provincia, Pais"
 						value={empresa.localidad.toUpperCase()}
@@ -120,6 +124,7 @@ function Empresa({ empresa }: { empresa: EmpresaType }) {
 						CP
 					</Label>
 					<Input
+						onFocus={e => e.target.select()}
 						id="codigoPostal"
 						placeholder="Ciudad, Provincia, Pais"
 						value={empresa.codigoPostal}
@@ -131,6 +136,7 @@ function Empresa({ empresa }: { empresa: EmpresaType }) {
 						Provincia
 					</Label>
 					<Input
+						onFocus={e => e.target.select()}
 						id="provincia"
 						placeholder="Ciudad, Provincia, Pais"
 						value={empresa.provincia.toUpperCase()}
@@ -140,6 +146,7 @@ function Empresa({ empresa }: { empresa: EmpresaType }) {
 				<div className="flex flex-col gap-1 w-full">
 					<Label htmlFor="horarios">Horarios</Label>
 					<Input
+						onFocus={e => e.target.select()}
 						id="horarios"
 						placeholder="Lun a Vie 8:00 a 16:00"
 						value={empresa.horarios.toUpperCase()}

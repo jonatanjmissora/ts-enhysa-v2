@@ -97,6 +97,7 @@ const EmpresaForm = ({ setOpen }: { setOpen: (open: boolean) => void }) => {
 										<Asterisk className="text-destructive size-3" />
 									</FieldLabel>
 									<Input
+										onFocus={e => e.target.select()}
 										id={field.name}
 										name={field.name}
 										value={field.state.value}
@@ -128,6 +129,7 @@ const EmpresaForm = ({ setOpen }: { setOpen: (open: boolean) => void }) => {
 										<Asterisk className="text-destructive size-3" />
 									</FieldLabel>
 									<Input
+										onFocus={e => e.target.select()}
 										id={field.name}
 										name={field.name}
 										value={field.state.value}
@@ -156,6 +158,7 @@ const EmpresaForm = ({ setOpen }: { setOpen: (open: boolean) => void }) => {
 								<Field data-invalid={isInvalid} className="relative gap-1">
 									<FieldLabel htmlFor={field.name}>Dirección</FieldLabel>
 									<Input
+										onFocus={e => e.target.select()}
 										id={field.name}
 										name={field.name}
 										value={field.state.value}
@@ -184,6 +187,7 @@ const EmpresaForm = ({ setOpen }: { setOpen: (open: boolean) => void }) => {
 								<Field data-invalid={isInvalid} className="relative gap-1">
 									<FieldLabel htmlFor={field.name}>Localidad</FieldLabel>
 									<Input
+										onFocus={e => e.target.select()}
 										id={field.name}
 										name={field.name}
 										value={field.state.value}
@@ -212,6 +216,7 @@ const EmpresaForm = ({ setOpen }: { setOpen: (open: boolean) => void }) => {
 								<Field data-invalid={isInvalid} className="relative gap-1">
 									<FieldLabel htmlFor={field.name}>Código Postal</FieldLabel>
 									<Input
+										onFocus={e => e.target.select()}
 										id={field.name}
 										name={field.name}
 										value={field.state.value}
@@ -240,6 +245,7 @@ const EmpresaForm = ({ setOpen }: { setOpen: (open: boolean) => void }) => {
 								<Field data-invalid={isInvalid} className="relative gap-1">
 									<FieldLabel htmlFor={field.name}>Provincia</FieldLabel>
 									<Input
+										onFocus={e => e.target.select()}
 										id={field.name}
 										name={field.name}
 										value={field.state.value}
@@ -270,6 +276,7 @@ const EmpresaForm = ({ setOpen }: { setOpen: (open: boolean) => void }) => {
 										Horarios de trabajo
 									</FieldLabel>
 									<Input
+										onFocus={e => e.target.select()}
 										id={field.name}
 										name={field.name}
 										value={field.state.value}

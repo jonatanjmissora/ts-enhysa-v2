@@ -650,7 +650,8 @@ function FileUpload(props: FileUploadProps) {
 					className={cn("relative flex flex-col gap-2", className)}
 				>
 					{children}
-					<input
+					<Input
+						onFocus={e => e.target.select()}
 						type="file"
 						id={inputId}
 						aria-labelledby={labelId}

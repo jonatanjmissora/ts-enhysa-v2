@@ -144,6 +144,7 @@ export function LoginForm({
 										<Field data-invalid={isInvalid}>
 											<FieldLabel htmlFor={field.name}>Email</FieldLabel>
 											<Input
+												onFocus={e => e.target.select()}
 												id={field.name}
 												name={field.name}
 												value={field.state.value}
@@ -170,6 +171,7 @@ export function LoginForm({
 											<FieldLabel htmlFor={field.name}>Contraseña</FieldLabel>
 											<div className="relative">
 												<Input
+													onFocus={e => e.target.select()}
 													id={field.name}
 													name={field.name}
 													value={field.state.value}

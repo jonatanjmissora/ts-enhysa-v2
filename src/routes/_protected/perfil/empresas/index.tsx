@@ -9,7 +9,7 @@ export const Route = createFileRoute("/_protected/perfil/empresas/")({
 
 function RouteComponent() {
 	return (
-		<article className="flex flex-col items-start justify-start min-h-svh w-full">
+		<article className="flex flex-col items-center justify-start min-h-svh w-full">
 			<Suspense
 				fallback={
 					<Loading
