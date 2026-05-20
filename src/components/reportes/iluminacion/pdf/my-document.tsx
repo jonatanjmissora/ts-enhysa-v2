@@ -22,6 +22,7 @@ import Page4 from "./page-4"
 import Page5 from "./page-5"
 import Loading from "#/components/loading"
 import { Button } from "#/components/ui/button"
+import Page0 from "./page-0"
 
 export const MyDocument = memo(
 	({
@@ -91,62 +92,6 @@ export const MyDocument = memo(
 	}
 )
 
-// function DownloadButton({
-// 	reporte,
-// 	areas,
-// 	tecnico,
-// 	empresa,
-// 	instrumento,
-// }: {
-// 	reporte: ReporteIluminacionType
-// 	areas: AreaIluminacionType[]
-// 	tecnico: TecnicoType
-// 	empresa: EmpresaType
-// 	instrumento: InstrumentoType
-// }) {
-// 	const [show, setShow] = useState(false)
-
-// useEffect(() => {
-// 	const timer = setTimeout(() => setShow(true), 2500)
-// 	return () => clearTimeout(timer)
-// }, [])
-
-// if (!show) {
-// 	return (
-// 		<span className="italic text-foreground/30 tracking-wider text-xs h-[46px] flex items-center">
-// 			Preparando enlace de descarga...
-// 		</span>
-// 	)
-// }
-
-// return (
-// 	<PDFDownloadLink
-// 		document={
-// 			<MyDocumentData
-// 				reporte={reporte}
-// 				areas={areas}
-// 				tecnico={tecnico}
-// 				empresa={empresa}
-// 				instrumento={instrumento}
-// 			/>
-// 		}
-// 		fileName={`Reporte Iluminacion ${empresa.razonSocial} - ${reporte.finishedAt?.toLocaleDateString("it-IT")}.pdf`}
-// 	>
-// 		{({ loading }) =>
-// 			loading ? (
-// 				<span className="italic text-foreground/50 animate-pulse tracking-wider text-xs h-[46px] flex items-center">
-// 					Generando PDF...
-// 				</span>
-// 			) : (
-// 				<span className="bg-primary/10 hover:bg-primary/20 text-primary py-3 px-10 rounded-lg tracking-wider text-sm ring-[1px] ring-primary/30 transition-colors duration-300">
-// 					Descargar PDF
-// 				</span>
-// 			)
-// 		}
-// 	</PDFDownloadLink>
-// )
-// }
-
 function MyDocumentData({
 	reporte,
 	areas,
@@ -162,6 +107,7 @@ function MyDocumentData({
 }) {
 	return (
 		<PDFRendererDocument title={reporte.title}>
+			<Page0 tecnico={tecnico} empresa={empresa} />
 			<Page1
 				reporte={reporte}
 				tecnico={tecnico}

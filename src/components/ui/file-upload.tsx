@@ -17,6 +17,7 @@ import * as React from "react"
 import { cn } from "#/lib/utils"
 import { useAsRef } from "#/hooks/use-as-ref"
 import { useLazyRef } from "#/hooks/use-lazy-ref"
+import { Input } from "./input"
 
 const ROOT_NAME = "FileUpload"
 const DROPZONE_NAME = "FileUploadDropzone"
@@ -1235,6 +1236,7 @@ function FileUploadItemProgress(props: FileUploadItemProgressProps) {
 						fill="none"
 						stroke="currentColor"
 					>
+						<title>Loading</title>
 						<circle
 							className="text-primary/20"
 							strokeWidth="2"

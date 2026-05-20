@@ -75,7 +75,8 @@ export default function Page2({
 	return (
 		<>
 			{sortedByName(areas).map((area, muestreoIndex) => {
-				return area.puntos.length <= 14 ? (
+				const puntosValidos = area.puntos.filter(punto => punto > 0)
+				return puntosValidos.length <= 14 ? (
 					<AreaTableOnePage
 						key={area.id}
 						area={area}

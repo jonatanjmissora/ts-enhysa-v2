@@ -5,7 +5,7 @@ const f = createUploadthing()
 export const ourFileRouter = {
 	imageUploader: f({
 		image: {
-			maxFileSize: "2MB",
+			maxFileSize: "4MB",
 			maxFileCount: 1,
 		},
 	}).onUploadComplete(async ({ file }) => {
@@ -27,7 +27,7 @@ export const ourFileRouter = {
 
 	mixedUploader: f({
 		image: {
-			maxFileSize: "2MB",
+			maxFileSize: "4MB",
 			maxFileCount: 4,
 		},
 		pdf: {
@@ -43,4 +43,3 @@ export const ourFileRouter = {
 
 export type OurFileRouter = typeof ourFileRouter
 export type OurFilesRouter = typeof ourFileRouter
-

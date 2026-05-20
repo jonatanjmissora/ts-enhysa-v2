@@ -152,6 +152,7 @@ function CreateArea({
 										Nombre del Area
 									</FieldLabel>
 									<Input
+										onFocus={e => e.target.select()}
 										id={field.name}
 										name={field.name}
 										value={field.state.value}
@@ -184,6 +185,7 @@ function CreateArea({
 										Tipo del Area
 									</FieldLabel>
 									<Input
+										onFocus={e => e.target.select()}
 										id={field.name}
 										name={field.name}
 										value={field.state.value}
@@ -883,10 +885,11 @@ function InputMenu({
 				type="number"
 				id="punto"
 				name="punto"
-				className="dark:bg-foreground/50 bg-foreground/50 text-background/75 tracking-widest text-3xl md:text-3xl w-3/4 sm:w-1/2 p-4 h-20 text-center rounded-md focus:text-blue-200 dark:focus:text-blue-400"
+				onFocus={e => e.target.select()}
+				className="dark:bg-foreground/50 bg-foreground/50 text-background/75 tracking-widest text-3xl md:text-3xl w-3/4 sm:w-1/2 p-4 h-20 text-center rounded-md focus:text-blue-200 dark:focus:text-blue-800 font-bold"
 				onChange={e => setPuntoValue(e.currentTarget.value)}
 			/>
-			<div className="w-full flex flex-col justify-between gap-4">
+			<div className="w-full flex flex-col sm:flex-row justify-between gap-4">
 				<Button
 					type="button"
 					variant="outline"

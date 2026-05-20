@@ -19,4 +19,14 @@ incluir graficas en el pdf
 
 incluir la informacion del word en el pdf
 
-agrandar el limite de 2mb en las fotos
+sin conexion
+
+pwa
+
+terminos y condiciones
+
+politicas de privacidad
+
+rate limit
+
+sentry

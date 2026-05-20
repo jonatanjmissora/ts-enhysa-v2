@@ -42,7 +42,7 @@ function Home() {
 						}
 					}}
 				>
-					<SelectTrigger className="w-11/12 sm:w-1/2 ring-[1px] ring-foreground/30 py-6 tracking-widest font-semibold text-yellow-700 bg-primary">
+					<SelectTrigger className="w-11/12 sm:w-1/2 ring-[1px] ring-foreground/30 py-6 tracking-widest font-semibold text-yellow-700 dark:bg-secondary bg-primary">
 						<SelectValue placeholder="Selecciona un protocolo" />
 					</SelectTrigger>
 					<SelectContent className="w-80 mx-auto truncate">

@@ -74,7 +74,7 @@ export function FileDropzone({
 						config={{ mode: "auto" }}
 						content={{
 							label: text,
-							allowedContent: "Imágenes hasta 2MB",
+							allowedContent: "Imágenes hasta 4MB",
 							button({ ready, isUploading, uploadProgress }) {
 								if (isUploading) return `Subiendo ${uploadProgress}%`
 								if (ready)
@@ -158,7 +158,7 @@ export function FilesDropzone({
 						config={{ mode: "auto" }}
 						content={{
 							label: text,
-							allowedContent: "Imágenes hasta 2MB",
+							allowedContent: "Imágenes hasta 4MB",
 							button({ ready, isUploading, uploadProgress }) {
 								if (isUploading) return `Subiendo ${uploadProgress}%`
 								if (ready)
