@@ -5,6 +5,7 @@ import type { AreaIluminacionType } from "../../../../../db/reportes/iluminacion
 import type { TecnicoType } from "../../../../../db/tecnicos/schema"
 import type { EmpresaType } from "../../../../../db/empresas/schema"
 import { getNumeroCeldas } from "#/lib/utils"
+import { ChartAreaPDF } from "./ChartAreaPDF"
 
 // Create styles
 const styles = StyleSheet.create({
@@ -109,8 +110,8 @@ function Area({
 				style={{
 					width: "100%",
 					textAlign: "center",
-					fontSize: 12,
-					margin: 10,
+					fontSize: 11,
+					margin: 8,
 					fontWeight: "900",
 				}}
 			>

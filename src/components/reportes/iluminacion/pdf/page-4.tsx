@@ -73,8 +73,8 @@ export default function Page4({
 				style={{
 					width: "100%",
 					textAlign: "center",
-					fontSize: 12,
-					margin: 10,
+					fontSize: 11,
+					margin: 8,
 					fontWeight: "900",
 				}}
 			>

@@ -154,7 +154,7 @@ function ReportesIluminacion() {
 				<div className="overflow-hidden">
 					<div className="p-5 flex flex-col sm:flex-row gap-4 bg-accent/35 border border-foreground/10 rounded-lg shadow-inner w-full">
 						{/* Filtro Empresa */}
-						<div className="flex flex-col gap-1.5 flex-grow min-w-[200px]">
+						<div className="flex flex-col gap-1.5 grow min-w-[200px]">
 							<Label
 								htmlFor="empresa-filter"
 								className="text-xs font-semibold text-foreground/70"
@@ -185,7 +185,7 @@ function ReportesIluminacion() {
 						</div>
 
 						{/* Filtro Fecha Desde */}
-						<div className="flex flex-col gap-1.5 flex-grow sm:max-w-[200px] min-w-[150px]">
+						<div className="flex flex-col gap-1.5 grow sm:max-w-[200px] min-w-[150px]">
 							<Label
 								htmlFor="desde-filter"
 								className="text-xs font-semibold text-foreground/70"
@@ -197,12 +197,12 @@ function ReportesIluminacion() {
 								type="date"
 								value={desde}
 								onChange={e => setDesde(e.target.value)}
-								className="[text-align:left] text-left block w-full bg-background/50"
+								className="text-left block w-full bg-background/50"
 							/>
 						</div>
 
 						{/* Filtro Fecha Hasta */}
-						<div className="flex flex-col gap-1.5 flex-grow sm:max-w-[200px] min-w-[150px]">
+						<div className="flex flex-col gap-1.5 grow sm:max-w-[200px] min-w-[150px]">
 							<Label
 								htmlFor="hasta-filter"
 								className="text-xs font-semibold text-foreground/70"
@@ -214,58 +214,14 @@ function ReportesIluminacion() {
 								type="date"
 								value={hasta}
 								onChange={e => setHasta(e.target.value)}
-								className="[text-align:left] text-left block w-full bg-background/50"
+								className="text-left block w-full bg-background/50"
 							/>
 						</div>
 					</div>
 				</div>
 			</div>
 
-			<div className="flex flex-col gap-4">
-				{filteredReportes.length === 0 ? (
-					<div className="text-center py-10 text-sm text-foreground/50 italic bg-accent/20 rounded-lg border border-dashed border-foreground/10">
-						No se encontraron reportes que coincidan con los filtros.
-					</div>
-				) : (
-					sortedByRecentDate(filteredReportes)?.map(reporte => (
-						<div
-							key={reporte.id}
-							className="px-2 py-4 rounded-lg ring-[1px] dark:ring-foreground/10 ring-foreground/50 bg-accent flex justify-between w-full"
-						>
-							<div className="flex gap-2 items-center">
-								{reporte.finishedAt ? (
-									<FileChartColumn className="size-8 text-blue-600" />
-								) : (
-									<Clock className="size-8 text-amber-600" />
-								)}
-								<div className="flex flex-col gap-0">
-									<span className="text-base font-semibold w-55 truncate">
-										{reporte.title.toUpperCase()}
-									</span>
-									{reporte.finishedAt ? (
-										<span className="text-xs text-foreground/50">
-											Realizado el{" "}
-											{reporte.finishedAt?.toLocaleDateString("it-IT")}
-										</span>
-									) : (
-										<span className="text-xs text-foreground/50">En curso</span>
-									)}
-								</div>
-							</div>
-							<Link
-								to={
-									reporte.finishedAt
-										? "/iluminacion/reportes/$id/general"
-										: "/iluminacion/nuevo-informe"
-								}
-								params={{ id: reporte.id }}
-							>
-								<ChevronRight className="size-8 text-foreground/50" />
-							</Link>
-						</div>
-					))
-				)}
-			</div>
+			<ReportesList filteredReportes={filteredReportes} />
 
 			<Link
 				to="/iluminacion/nuevo-informe"
@@ -275,6 +231,60 @@ function ReportesIluminacion() {
 				Nuevo Informe
 			</Link>
 		</article>
+	)
+}
+
+function ReportesList({
+	filteredReportes,
+}: {
+	filteredReportes: ReporteIluminacionType[]
+}) {
+	return (
+		<div className="flex flex-col gap-4">
+			{filteredReportes.length === 0 ? (
+				<div className="text-center py-10 text-sm text-foreground/50 italic bg-accent/20 rounded-lg border border-dashed border-foreground/10">
+					No se encontraron reportes que coincidan con los filtros.
+				</div>
+			) : (
+				sortedByRecentDate(filteredReportes)?.map(reporte => (
+					<div
+						key={reporte.id}
+						className="px-2 py-4 rounded-lg ring-[1px] dark:ring-foreground/10 ring-foreground/50 bg-accent flex justify-between w-full"
+					>
+						<div className="flex gap-2 items-center">
+							{reporte.finishedAt ? (
+								<FileChartColumn className="size-8 text-blue-600" />
+							) : (
+								<Clock className="size-8 text-amber-600" />
+							)}
+							<div className="flex flex-col gap-0">
+								<span className="text-base font-semibold w-55 truncate">
+									{reporte.title.toUpperCase()}
+								</span>
+								{reporte.finishedAt ? (
+									<span className="text-xs text-foreground/50">
+										Realizado el{" "}
+										{reporte.finishedAt?.toLocaleDateString("it-IT")}
+									</span>
+								) : (
+									<span className="text-xs text-foreground/50">En curso</span>
+								)}
+							</div>
+						</div>
+						<Link
+							to={
+								reporte.finishedAt
+									? "/iluminacion/reportes/$id/general"
+									: "/iluminacion/nuevo-informe"
+							}
+							params={{ id: reporte.id }}
+						>
+							<ChevronRight className="size-8 text-foreground/50" />
+						</Link>
+					</div>
+				))
+			)}
+		</div>
 	)
 }
 

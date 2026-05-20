@@ -20,13 +20,23 @@ const chartConfig = {
 		label: "uniformidad",
 		color: "cyan",
 	},
+	requerido: {
+		label: "requerido",
+		color: "pink",
+	},
 	medicion: {
 		label: "medicion",
 		color: "yellow",
 	},
 } satisfies ChartConfig
 
-export function ChartAreaInteractive({ puntos }: { puntos: number[] }) {
+export function ChartAreaInteractive({
+	puntos,
+	requerido,
+}: {
+	puntos: number[]
+	requerido?: number
+}) {
 	const puntosWithValue = puntos?.filter(punto => punto > 0)
 	if (!puntosWithValue || puntosWithValue.length === 0)
 		return <span>No hay datos</span>
@@ -39,6 +49,7 @@ export function ChartAreaInteractive({ puntos }: { puntos: number[] }) {
 		return {
 			punto: (index + 1).toString(),
 			uniformidad,
+			requerido,
 			medicion: punto,
 		}
 	})
@@ -61,6 +72,18 @@ export function ChartAreaInteractive({ puntos }: { puntos: number[] }) {
 								<stop
 									offset="95%"
 									stopColor="var(--color-medicion)"
+									stopOpacity={0.1}
+								/>
+							</linearGradient>
+							<linearGradient id="fillRequerido" x1="0" y1="0" x2="0" y2="0">
+								<stop
+									offset="5%"
+									stopColor="var(--color-requerido)"
+									stopOpacity={0.8}
+								/>
+								<stop
+									offset="95%"
+									stopColor="var(--color-requerido)"
 									stopOpacity={0.1}
 								/>
 							</linearGradient>
@@ -104,6 +127,13 @@ export function ChartAreaInteractive({ puntos }: { puntos: number[] }) {
 							type="natural"
 							fill="url(#fillUniformidad)"
 							stroke="var(--color-uniformidad)"
+							stackId="a"
+						/>
+						<Area
+							dataKey="requerido"
+							type="natural"
+							fill="url(#fillRequerido)"
+							stroke="var(--color-requerido)"
 							stackId="a"
 						/>
 						<Area

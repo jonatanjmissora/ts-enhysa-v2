@@ -76,7 +76,7 @@ export default function Page2({
 		<>
 			{sortedByName(areas).map((area, muestreoIndex) => {
 				const puntosValidos = area.puntos.filter(punto => punto > 0)
-				return puntosValidos.length <= 14 ? (
+				return puntosValidos.length <= 13 ? (
 					<AreaTableOnePage
 						key={area.id}
 						area={area}
@@ -116,8 +116,8 @@ function AreaTableOnePage({
 				style={{
 					width: "100%",
 					textAlign: "center",
-					fontSize: 12,
-					margin: 10,
+					fontSize: 11,
+					margin: 8,
 					fontWeight: "900",
 				}}
 			>
@@ -442,7 +442,9 @@ function AreaTableMultiplePages({
 	empresa: EmpresaType
 	muestreoIndex: number
 }) {
-	const chunkResult = chunk(area.puntos, 12)
+	const puntosValidos = area.puntos.filter(punto => punto > 0)
+	const chunkResult = chunk(puntosValidos, 13)
+	console.log("CHUNK", chunkResult)
 	return chunkResult.map((chunk, index) => (
 		<AreaTableOnePage
 			key={index}

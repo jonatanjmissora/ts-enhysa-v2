@@ -9,15 +9,9 @@ hacer la grilla del pdf en grilla de crear area
 
 tabla detallada o por area reducida
 
-buscador por fecha o empresa
-
-cuando hago 2 puntos, pero las celdas son 16, me arroja mas paginas en el pdf, limitar a los puntos medidos nada mas
-
 hay desbordes en la imagenes del croquis
 
 incluir graficas en el pdf
-
-incluir la informacion del word en el pdf
 
 sin conexion
 

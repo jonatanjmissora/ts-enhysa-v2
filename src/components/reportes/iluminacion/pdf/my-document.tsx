@@ -23,6 +23,7 @@ import Page5 from "./page-5"
 import Loading from "#/components/loading"
 import { Button } from "#/components/ui/button"
 import Page0 from "./page-0"
+import Page6 from "./page-6"
 
 export const MyDocument = memo(
 	({
@@ -118,6 +119,7 @@ function MyDocumentData({
 			<Page3 reporte={reporte} tecnico={tecnico} empresa={empresa} />
 			<Page4 tecnico={tecnico} empresa={empresa} instrumento={instrumento} />
 			<Page5 areas={areas} tecnico={tecnico} empresa={empresa} />
+			<Page6 areas={areas} tecnico={tecnico} empresa={empresa} />
 		</PDFRendererDocument>
 	)
 }
