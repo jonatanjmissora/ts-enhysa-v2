@@ -729,7 +729,7 @@ function Grilla({
 }) {
 	const [openInputMenu, setOpenInputMenu] = useState<boolean>(false)
 	const [actualPunto, setActualPunto] = useState<number | null>(null)
-	const celdas = (indiceRedondeo + 2) ** 2
+	const celdas = (indiceRedondeo + 2) ** 2 > 64 ? 64 : (indiceRedondeo + 2) ** 2
 	const div = Math.sqrt(celdas).toFixed(0)
 	const divisionesLargo = Number(div)
 	const divisionesAncho = Number(div)
@@ -747,9 +747,7 @@ function Grilla({
 			</div>
 
 			{openInputMenu ? (
-				<Input
-					onFocus={e => e.target.select()}
-					Menu
+				<InputMenu
 					setOpenInputMenu={setOpenInputMenu}
 					puntos={puntos}
 					setPuntos={setPuntos}
@@ -759,7 +757,7 @@ function Grilla({
 					setActualPunto={setActualPunto}
 				/>
 			) : (
-				<div className="w-[90dvw] sm:w-full min-h-[500px] overflow-auto flex flex-col p-10">
+				<div className="w-full sm:w-full min-h-[500px] overflow-auto flex flex-col ">
 					<div
 						className="grid relative mx-auto"
 						style={{

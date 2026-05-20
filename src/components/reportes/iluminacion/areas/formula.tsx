@@ -1,4 +1,3 @@
-import { getIndiceDeLocal, getIndiceRedondeo } from "#/lib/utils"
 import { Equal, EqualApproximately } from "lucide-react"
 
 export default function Formula({
@@ -44,7 +43,7 @@ export default function Formula({
 
 				<div className="flex-1 flex flex-col gap-2 items-center justify-end">
 					<span className="text-2xl sm:text-3xl font-semibold bg-pink-500/50 px-4 py-1 rounded-lg">
-						{(indiceRedondeo + 2) ** 2}
+						{(indiceRedondeo + 2) ** 2 > 64 ? 64 : (indiceRedondeo + 2) ** 2}
 					</span>
 					<span className="italic textXS">Número de mediciones</span>
 				</div>

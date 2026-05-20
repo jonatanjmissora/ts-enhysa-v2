@@ -9,7 +9,7 @@ import {
 	FieldGroup,
 	FieldLabel,
 } from "#/components/ui/field"
-import { ChevronLeft, ChevronRight, Cpu, Loader, Warehouse } from "lucide-react"
+import { ChevronRight, Cpu, Loader, Warehouse } from "lucide-react"
 import {
 	Select,
 	SelectContent,
@@ -110,7 +110,7 @@ function ReporteNuevo() {
 				e.preventDefault()
 				form.handleSubmit()
 			}}
-			className="w-3/4 sm: w-1/2 mx-auto flex flex-col gap-8 relative"
+			className="w-3/4 sm:w-1/2 mx-auto flex flex-col gap-8 relative"
 		>
 			<FieldGroup className="gap-5">
 				<form.Field

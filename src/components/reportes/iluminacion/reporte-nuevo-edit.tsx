@@ -33,6 +33,7 @@ import useScrollTop from "#/hooks/scroll-top"
 import type { ReporteIluminacionType } from "../../../../db/reportes/iluminacion/schema"
 import { useUpdateReporteNuevo } from "../../../../queries/reportes/iluminacion/use-update-reporte-nuevo"
 import { reporteNuevoFormValidator } from "../../../../db/reportes/iluminacion/reporte-validator"
+import type { EmpresaType } from "../../../../db/empresas/schema"
 
 export default function ReporteNuevoEdit({
 	reporteNuevo,
@@ -61,11 +62,16 @@ export default function ReporteNuevoEdit({
 		},
 		onSubmit: async ({ value }) => {
 			if (!tecnico || !empresas || !instrumentos) return
+
 			const newReport = {
 				...reporteNuevo,
 				empresaId: value.empresaId,
 				instrumentoId: value.instrumentoId,
 				clima: value.clima,
+			}
+			
+			if(reporteNuevo.empresaId !== value.empresaId){
+				newReport.title = getTitle(value.empresaId, empresas)
 			}
 
 			if (
@@ -419,4 +425,10 @@ export default function ReporteNuevoEdit({
 			</FieldGroup>
 		</form>
 	)
+}
+
+function getTitle(empresaId: string, empresas: EmpresaType[]) {
+	const empresa = empresas.find(e => e.id === empresaId)
+	if (!empresa) return ""
+	return `${empresa.razonSocial} - ${empresa.direccion}`
 }
