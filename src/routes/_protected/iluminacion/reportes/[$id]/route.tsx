@@ -1,5 +1,10 @@
 import BackChevron from "#/components/back-chevron"
-import { createFileRoute, Link, Outlet } from "@tanstack/react-router"
+import {
+	createFileRoute,
+	Link,
+	Outlet,
+	useLocation,
+} from "@tanstack/react-router"
 import { CalendarDays, File, RulerDimensionLine, UserRound } from "lucide-react"
 import { reporteQueryOptions } from "../../../../../../queries/reportes/iluminacion/reportes-query"
 import { areasQueryOptions } from "../../../../../../queries/reportes/iluminacion/areas/areas-query"
@@ -19,12 +24,13 @@ export const Route = createFileRoute("/_protected/iluminacion/reportes/$id")({
 
 function RouteComponent() {
 	const { id } = Route.useParams()
+	const { pathname } = useLocation()
 	return (
 		<article className="w-full min-h-svh flex flex-col items-center gap-0 relative mb-60">
 			<BackChevron to="/iluminacion/reportes" />
 			<div className="flex flex-col items-center justify-center gap-1 w-11/12 mx-auto mt-15 py-2 mb-3">
 				<span className="text-lg text-center  tracking-widest font-semibold">
-					Reporte Iluminación
+					{pathname.includes("edit") ? "Editar" : ""} Reporte Iluminación
 				</span>
 				<Suspense fallback={<span className="animate-pulse">. . .</span>}>
 					<SuspenseTitle />

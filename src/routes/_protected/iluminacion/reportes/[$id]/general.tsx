@@ -2,9 +2,20 @@ import Loading from "#/components/loading"
 import { Label } from "#/components/ui/label"
 import { useSuspenseQuery } from "@tanstack/react-query"
 import { createFileRoute } from "@tanstack/react-router"
-import { Suspense } from "react"
+import { Suspense, useState } from "react"
 import { reporteQueryOptions } from "../../../../../../queries/reportes/iluminacion/reportes-query"
 import Title from "#/components/title"
+import type { ReporteIluminacionType } from "../../../../../../db/reportes/iluminacion/schema"
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuGroup,
+	DropdownMenuSeparator,
+	DropdownMenuTrigger,
+} from "#/components/ui/dropdown-menu"
+import { Button } from "#/components/ui/button"
+import { Ellipsis } from "lucide-react"
+import EditReporteGeneral from "#/components/reportes/iluminacion/edit/general"
 
 export const Route = createFileRoute(
 	"/_protected/iluminacion/reportes/$id/general"
@@ -34,7 +45,10 @@ function General() {
 	if (!reporte) return <span>No existe reporte</span>
 
 	return (
-		<article className="min-h-screen w-5/6 mx-auto flex flex-col gap-10 tracking-wider my-14">
+		<article className="min-h-screen w-5/6 mx-auto flex flex-col gap-10 tracking-wider my-14 relative">
+			<div className="absolute top-0 left-0">
+				<ReporteDropdownMenu reporte={reporte} />
+			</div>
 			<div className="grid grid-cols-2 gap-2">
 				<Title text="Empresa" className="col-span-2" />
 				<Label className="text-right ml-auto">Nombre : </Label>
@@ -49,11 +63,11 @@ function General() {
 				<span>{reporte?.empresa.provincia.toUpperCase()}</span>
 				<Label className="text-right ml-auto">Horarios : </Label>
 				<span>{reporte?.empresa.horarios.toUpperCase()}</span>
-				{reporte.empresa.logo && (
+				{reporte?.empresa.logo && (
 					<div className="col-span-2">
 						<div className="h-20 w-full flex items-center justify-center">
 							<img
-								src={reporte.empresa.logo}
+								src={reporte?.empresa.logo}
 								alt="logo"
 								className="h-full w-full object-contain"
 							/>
@@ -109,5 +123,25 @@ function General() {
 				<span>{reporte?.createdAt.toLocaleTimeString("it-IT")}</span>
 			</div>
 		</article>
+	)
+}
+
+function ReporteDropdownMenu({ reporte }: { reporte: ReporteIluminacionType }) {
+	const [isMenuOpen, setIsMenuOpen] = useState(false)
+	return (
+		<DropdownMenu open={isMenuOpen} onOpenChange={setIsMenuOpen}>
+			<DropdownMenuTrigger asChild>
+				<Button variant="ghost" className="cursor-pointer">
+					<Ellipsis className="size-7 text-foreground/50" />
+				</Button>
+			</DropdownMenuTrigger>
+			<DropdownMenuContent className="p-6" align="end">
+				<DropdownMenuGroup className="flex flex-col bg-accent ring-[1px] ring-foreground/20 rounded-lg p-2">
+					<EditReporteGeneral reporte={reporte} setIsMenuOpen={setIsMenuOpen} />
+					<DropdownMenuSeparator className="bg-foreground/20 w-5/6 mx-auto" />
+					Delete
+				</DropdownMenuGroup>
+			</DropdownMenuContent>
+		</DropdownMenu>
 	)
 }

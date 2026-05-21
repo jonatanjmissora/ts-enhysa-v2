@@ -76,7 +76,7 @@ function Reporte() {
 
 			<ChartAreaInteractive
 				puntos={area.puntos}
-				requerido={area.valorRequerido}
+				requerido={Number(area.valorRequerido)}
 			/>
 
 			<div className="grid grid-cols-[auto_1fr] sm:grid-cols-[1fr_1fr] gap-x-4 gap-y-2 w-5/6 sm:w-2/3 mx-auto my-10 justify-center items-center">

@@ -31,6 +31,10 @@ export function useCreateReporte() {
 		mutationFn: createReporteServer,
 		onSuccess: data => {
 			// queryClient.invalidateQueries({ queryKey: ["empresas"] })
+			queryClient.setQueryData<ReporteIluminacionType>(
+				["reporte-iluminacion", data.id],
+				data
+			)
 			queryClient.setQueryData<ReporteIluminacionType[]>(
 				["reportes-iluminacion"],
 				oldData => {

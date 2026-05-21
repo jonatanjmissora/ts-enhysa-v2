@@ -7,6 +7,7 @@ import type { TecnicoFormType } from "../../db/tecnicos/tecnico-validator"
 import type { TecnicoType } from "../../db/tecnicos/schema"
 import type { InstrumentoFormType } from "../../db/instrumentos/instrumento-validator"
 import type { EmpresaFormType } from "../../db/empresas/empresa-validator"
+import type { ReporteNuevoFormType } from "../../db/reportes/iluminacion/reporte-validator"
 import type { ReporteIluminacionType } from "../../db/reportes/iluminacion/schema"
 
 export function cn(...inputs: ClassValue[]) {
@@ -80,6 +81,17 @@ export const checkInstrumentoDiference = (
 		formValues.fechaCalibracion === instrumento.fechaCalibracion &&
 		formValues.imagenesCalibracion === instrumento.imagenesCalibracion &&
 		JSON.stringify(formValues.imagenes) === JSON.stringify(instrumento.imagenes)
+	)
+}
+
+export const checkReporteGeneralDifferences = (
+	formValues: ReporteNuevoFormType,
+	reporte: ReporteIluminacionType
+) => {
+	return (
+		formValues.empresaId === reporte.empresaId &&
+		formValues.instrumentoId === reporte.instrumentoId &&
+		JSON.stringify(formValues.clima) === JSON.stringify(reporte.clima)
 	)
 }
 

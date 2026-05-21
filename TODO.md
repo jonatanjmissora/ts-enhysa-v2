@@ -24,3 +24,5 @@ politicas de privacidad
 rate limit
 
 sentry
+
+hacer lo que hice con informes, con el useQuery con id, pero para las areas
