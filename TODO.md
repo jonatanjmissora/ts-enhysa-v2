@@ -26,3 +26,5 @@ rate limit
 sentry
 
 hacer lo que hice con informes, con el useQuery con id, pero para las areas
+
+cuando termino de crear un reporte, lo crea, pero me tira error el query, y no me re-dirige

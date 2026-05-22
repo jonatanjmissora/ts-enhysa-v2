@@ -16,6 +16,7 @@ import {
 import { Button } from "#/components/ui/button"
 import { Ellipsis } from "lucide-react"
 import EditReporteGeneral from "#/components/reportes/iluminacion/edit/general"
+import DeleteReporte from "#/components/reportes/iluminacion/delete-reporte"
 
 export const Route = createFileRoute(
 	"/_protected/iluminacion/reportes/$id/general"
@@ -118,9 +119,9 @@ function General() {
 				<Label className="text-right ml-auto">Temperatura : </Label>
 				<span>{reporte?.clima[2].toUpperCase()}°C</span>
 				<Label className="text-right ml-auto">Fecha : </Label>
-				<span>{reporte?.createdAt.toLocaleDateString("it-IT")}</span>
+				<span>{reporte?.finishedAt ? reporte.finishedAt.toLocaleDateString("it-IT") : "En curso"}</span>
 				<Label className="text-right ml-auto">Hora : </Label>
-				<span>{reporte?.createdAt.toLocaleTimeString("it-IT")}</span>
+				<span>{reporte?.finishedAt ? reporte.finishedAt.toLocaleTimeString("it-IT") : "En curso"}</span>
 			</div>
 		</article>
 	)
@@ -139,7 +140,7 @@ function ReporteDropdownMenu({ reporte }: { reporte: ReporteIluminacionType }) {
 				<DropdownMenuGroup className="flex flex-col bg-accent ring-[1px] ring-foreground/20 rounded-lg p-2">
 					<EditReporteGeneral reporte={reporte} setIsMenuOpen={setIsMenuOpen} />
 					<DropdownMenuSeparator className="bg-foreground/20 w-5/6 mx-auto" />
-					Delete
+					<DeleteReporte reporte={reporte} setIsMenuOpen={setIsMenuOpen} />
 				</DropdownMenuGroup>
 			</DropdownMenuContent>
 		</DropdownMenu>

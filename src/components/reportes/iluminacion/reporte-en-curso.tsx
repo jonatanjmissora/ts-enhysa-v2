@@ -1,9 +1,9 @@
 import { Button } from "#/components/ui/button"
 import { Loader, TriangleAlert } from "lucide-react"
 import { useState } from "react"
-import ReporteNuevoEdit from "./reporte-nuevo-edit"
+import EditReporte from "./edit-reporte"
 import useScrollTop from "#/hooks/scroll-top"
-import { useDeleteReporteNuevo } from "../../../../queries/reportes/iluminacion/use-delete-reporte"
+import { useDeleteReporte } from "../../../../queries/reportes/iluminacion/use-delete-reporte"
 import type { ReporteIluminacionType } from "../../../../db/reportes/iluminacion/schema"
 import { useForm } from "@tanstack/react-form"
 import { reporteIluminacionIdValidator } from "../../../../db/reportes/iluminacion/reporte-validator"
@@ -48,7 +48,7 @@ export default function ReporteEnCurso({
 		)
 	}
 
-	return <ReporteNuevoEdit reporteNuevo={reporteNuevo} />
+	return <EditReporte reporteNuevo={reporteNuevo} />
 }
 
 function BorrarReporteEnCurso({
@@ -57,10 +57,10 @@ function BorrarReporteEnCurso({
 	reporteNuevo: ReporteIluminacionType
 }) {
 	const {
-		mutateAsync: deleteReporteNuevoMutation,
+		mutateAsync: deleteReporte,
 		error,
 		isPending,
-	} = useDeleteReporteNuevo(reporteNuevo.id)
+	} = useDeleteReporte(reporteNuevo.id)
 
 	const form = useForm({
 		defaultValues: {
@@ -70,7 +70,7 @@ function BorrarReporteEnCurso({
 			onSubmit: reporteIluminacionIdValidator,
 		},
 		onSubmit: async ({ value }) => {
-			const result = await deleteReporteNuevoMutation({
+			const result = await deleteReporte({
 				data: { id: value.id },
 			})
 

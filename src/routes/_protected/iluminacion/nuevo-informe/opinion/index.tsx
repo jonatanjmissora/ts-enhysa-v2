@@ -6,7 +6,7 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router"
 import { Suspense } from "react"
 import { reporteNuevoQueryOptions } from "../../../../../../queries/reportes/iluminacion/reportes-query"
 import { useForm } from "@tanstack/react-form"
-import { useUpdateReporteNuevo } from "../../../../../../queries/reportes/iluminacion/use-update-reporte"
+import { useUpdateReporte } from "../../../../../../queries/reportes/iluminacion/use-update-reporte"
 import {
 	Field,
 	FieldError,
@@ -50,14 +50,14 @@ function IluminacionOpinion() {
 }
 
 function Opinion() {
-	const { data: reporteNuevo } = useSuspenseQuery(reporteNuevoQueryOptions)
+	const { data: reporteNuevo } = useSuspenseQuery(reporteNuevoQueryOptions())
 	const navigate = useNavigate()
 
 	const {
 		mutateAsync: updateOpinion,
 		isPending,
 		error,
-	} = useUpdateReporteNuevo()
+	} = useUpdateReporte()
 
 	const form = useForm({
 		defaultValues: {

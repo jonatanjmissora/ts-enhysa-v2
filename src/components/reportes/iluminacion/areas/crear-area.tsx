@@ -95,7 +95,7 @@ function CreateArea({
 	const [timestamps, setTimestamps] = useState<Date[]>([])
 	const [puntosError, setPuntosError] = useState<string | null>(null)
 	const [planoFiles, setPlanoFiles] = useState<string[]>([])
-	const { data: reporteNuevo } = useSuspenseQuery(reporteNuevoQueryOptions)
+	const { data: reporteNuevo } = useSuspenseQuery(reporteNuevoQueryOptions())
 	const [indiceRedondeo, setIndiceRedondeo] = useState<number>(0)
 
 	const { mutateAsync: createArea, isPending, error } = useCreateArea()

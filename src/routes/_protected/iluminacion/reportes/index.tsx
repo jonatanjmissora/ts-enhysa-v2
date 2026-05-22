@@ -290,7 +290,7 @@ function ReportesList({
 
 function NoReports() {
 	return (
-		<article className="w-5/6 flex flex-col items-center justify-center gap-10 mt-20">
+		<article className="w-5/6 mx-auto flex flex-col items-center justify-center gap-10 mt-20">
 			<span className="text-center text-foreground/70 text-sm italic tracking-wide">
 				No posee informes de Iluminación. Realice su primer reporte ...
 			</span>

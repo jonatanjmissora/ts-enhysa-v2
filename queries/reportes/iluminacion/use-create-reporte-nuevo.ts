@@ -19,6 +19,13 @@ export function useCreateReporteNuevo() {
 					return sortedByDate([data, ...oldData])
 				}
 			)
+			queryClient.setQueryData<ReporteIluminacionType[]>(
+				["reportes-iluminacion"],
+				oldData => {
+					if (!oldData) return oldData
+					return sortedByDate([data, ...oldData])
+				}
+			)
 		},
 	})
 }

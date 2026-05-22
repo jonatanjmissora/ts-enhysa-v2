@@ -10,8 +10,8 @@ import Title from "#/components/title"
 import { Suspense, useState } from "react"
 import type { ReporteIluminacionType } from "../../../../../db/reportes/iluminacion/schema"
 import useScrollTop from "#/hooks/scroll-top"
-import { useNavigate } from "@tanstack/react-router"
-import { useUpdateReporteNuevo } from "../../../../../queries/reportes/iluminacion/use-update-reporte"
+import { useLocation, useNavigate } from "@tanstack/react-router"
+import { useUpdateReporte } from "../../../../../queries/reportes/iluminacion/use-update-reporte"
 import { useForm } from "@tanstack/react-form"
 import { reporteNuevoFormValidator } from "../../../../../db/reportes/iluminacion/reporte-validator"
 import {
@@ -42,7 +42,7 @@ import { checkReporteGeneralDifferences } from "#/lib/utils"
 import type { InstrumentoType } from "../../../../../db/instrumentos/schema"
 import type { EmpresaType } from "../../../../../db/empresas/schema"
 import { LoadingModal } from "#/components/loading"
-import { useSuspenseQuery } from "@tanstack/react-query"
+import { useSuspenseQuery, useQueryClient } from "@tanstack/react-query"
 import { empresasQueryOptions } from "../../../../../queries/empresas/empresas-query"
 import { instrumentosQueryOptions } from "../../../../../queries/instrumentos/instrumentos-query"
 
@@ -129,13 +129,8 @@ function EditReporteGeneralForm({
 }) {
 	useScrollTop()
 
-	const navigate = useNavigate()
-
-	const {
-		mutateAsync: editNewReport,
-		isPending,
-		error,
-	} = useUpdateReporteNuevo()
+	const queryClient = useQueryClient()
+  const { mutateAsync: editReport, isPending, error } = useUpdateReporte()
 	const form = useForm({
 		defaultValues: {
 			...reporte,
@@ -146,10 +141,6 @@ function EditReporteGeneralForm({
 		onSubmit: async ({ value }) => {
 			if (checkReporteGeneralDifferences(reporte, value)) {
 				setIsMenuOpen(false)
-				navigate({
-					to: "/iluminacion/reportes/$id/areas",
-					params: { id: reporte.id },
-				})
 				return
 			}
 
@@ -164,12 +155,17 @@ function EditReporteGeneralForm({
 				newReport.title = getTitle(value.empresaId, empresas)
 			}
 
-			const result = await editNewReport({ data: newReport })
+			const result = await editReport({ data: newReport })
 			if (!result) {
 				console.error("Error al editar el reporte", error)
 			}
 			console.log("Reporte editado exitosamente")
-			navigate({ to: "/iluminacion/nuevo-informe/areas" })
+			queryClient.invalidateQueries({ queryKey: ["reporte-iluminacion", reporte.id] })
+			// Also invalidate list queries
+			queryClient.invalidateQueries({ queryKey: ["reportes-iluminacion"] })
+			// Invalidate any pending new report query
+			queryClient.invalidateQueries({ queryKey: ["reporte-iluminacion-nuevo"] })
+			setIsMenuOpen(false)
 		},
 	})
 

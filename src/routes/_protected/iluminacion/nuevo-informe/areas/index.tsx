@@ -68,7 +68,7 @@ function IluminacionAreas() {
 }
 
 function Areas() {
-	const { data: reporteNuevo } = useSuspenseQuery(reporteNuevoQueryOptions)
+	const { data: reporteNuevo } = useSuspenseQuery(reporteNuevoQueryOptions())
 
 	const { data: areas } = useSuspenseQuery(
 		areasQueryOptions({ reportId: reporteNuevo?.id ?? "" })

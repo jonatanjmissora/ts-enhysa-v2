@@ -444,7 +444,6 @@ function AreaTableMultiplePages({
 }) {
 	const puntosValidos = area.puntos.filter(punto => punto > 0)
 	const chunkResult = chunk(puntosValidos, 13)
-	console.log("CHUNK", chunkResult)
 	return chunkResult.map((chunk, index) => (
 		<AreaTableOnePage
 			key={index}
