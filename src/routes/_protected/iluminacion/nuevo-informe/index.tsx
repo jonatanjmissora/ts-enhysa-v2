@@ -5,7 +5,7 @@ import { useSuspenseQuery } from "@tanstack/react-query"
 import { createFileRoute } from "@tanstack/react-router"
 import { Suspense } from "react"
 import { reporteNuevoQueryOptions } from "../../../../../queries/reportes/iluminacion/reportes-query"
-import ReporteNuevoIluminacion from "#/components/reportes/iluminacion/reporte-nuevo"
+import CreateReporteNuevo from "#/components/reportes/iluminacion/create-reporte-nuevo"
 import ReporteEnCurso from "#/components/reportes/iluminacion/reporte-en-curso"
 import useScrollTop from "#/hooks/scroll-top"
 
@@ -41,9 +41,9 @@ function IluminacionData() {
 }
 
 function Data() {
-	const { data: reporteNuevo } = useSuspenseQuery(reporteNuevoQueryOptions)
+	const { data: reporteNuevo } = useSuspenseQuery(reporteNuevoQueryOptions())
 
-	if (!reporteNuevo) return <ReporteNuevoIluminacion />
+	if (!reporteNuevo) return <CreateReporteNuevo />
 
 	return <ReporteEnCurso reporteNuevo={reporteNuevo} />
 }

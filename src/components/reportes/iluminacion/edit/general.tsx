@@ -11,7 +11,7 @@ import { Suspense, useState } from "react"
 import type { ReporteIluminacionType } from "../../../../../db/reportes/iluminacion/schema"
 import useScrollTop from "#/hooks/scroll-top"
 import { useNavigate } from "@tanstack/react-router"
-import { useUpdateReporteNuevo } from "../../../../../queries/reportes/iluminacion/use-update-reporte-nuevo"
+import { useUpdateReporteNuevo } from "../../../../../queries/reportes/iluminacion/use-update-reporte"
 import { useForm } from "@tanstack/react-form"
 import { reporteNuevoFormValidator } from "../../../../../db/reportes/iluminacion/reporte-validator"
 import {
@@ -41,7 +41,7 @@ import {
 import { checkReporteGeneralDifferences } from "#/lib/utils"
 import type { InstrumentoType } from "../../../../../db/instrumentos/schema"
 import type { EmpresaType } from "../../../../../db/empresas/schema"
-import Loading from "#/components/loading"
+import { LoadingModal } from "#/components/loading"
 import { useSuspenseQuery } from "@tanstack/react-query"
 import { empresasQueryOptions } from "../../../../../queries/empresas/empresas-query"
 import { instrumentosQueryOptions } from "../../../../../queries/instrumentos/instrumentos-query"
@@ -71,9 +71,8 @@ export default function EditReporteGeneral({
 					<div>
 						<Suspense
 							fallback={
-								<Loading
+								<LoadingModal
 									text="Cargando empresas e instrumentos"
-									className="scale-50 justify-start max-h-[50svh] max-w-5/6 mx-auto bg-red-500"
 								/>
 							}
 						>

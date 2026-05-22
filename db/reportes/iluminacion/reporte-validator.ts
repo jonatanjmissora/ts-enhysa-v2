@@ -36,7 +36,7 @@ export type ReporteIluminacionIdType = z.infer<
 	typeof reporteIluminacionIdValidator
 >
 
-export const updateReporteNuevoServerValidator =
+export const updateReporteServerValidator =
 	reporteNuevoFormValidator.extend({
 		id: z.string().min(1, "Id requerido"),
 		userId: z.string().min(1, "UserId requerido"),
@@ -49,6 +49,6 @@ export const updateReporteNuevoServerValidator =
 		finishedAt: z.date().nullish(),
 	})
 
-export type updateReporteNuevoServerType = z.infer<
-	typeof updateReporteNuevoServerValidator
+export type updateReporteServerType = z.infer<
+	typeof updateReporteServerValidator
 >

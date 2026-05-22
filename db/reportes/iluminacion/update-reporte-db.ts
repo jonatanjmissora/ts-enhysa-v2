@@ -3,7 +3,7 @@ import { db } from "../.."
 import { eq } from "drizzle-orm"
 import { reportes_iluminacion, type ReporteIluminacionType } from "./schema"
 
-export async function updateReporteNuevoDB(
+export async function updateReporteDB(
 	updatedReporteNuevo: ReporteIluminacionType
 ) {
 	try {

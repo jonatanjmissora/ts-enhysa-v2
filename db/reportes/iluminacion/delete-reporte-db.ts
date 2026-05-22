@@ -1,9 +1,9 @@
 import { delay } from "@/lib/utils"
-import { db } from "../../"
+import { db } from "../.."
 import { reportes_iluminacion } from "./schema"
 import { and, eq } from "drizzle-orm"
 
-export async function deleteReporteNuevoDB(id: string, userId: string) {
+export async function deleteReporteDB(id: string, userId: string) {
 	try {
 		await delay()
 		return await db

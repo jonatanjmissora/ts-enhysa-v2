@@ -31,7 +31,7 @@ import { Button } from "#/components/ui/button"
 import { useNavigate } from "@tanstack/react-router"
 import useScrollTop from "#/hooks/scroll-top"
 import type { ReporteIluminacionType } from "../../../../db/reportes/iluminacion/schema"
-import { useUpdateReporteNuevo } from "../../../../queries/reportes/iluminacion/use-update-reporte-nuevo"
+import { useUpdateReporteNuevo } from "../../../../queries/reportes/iluminacion/use-update-reporte"
 import { reporteNuevoFormValidator } from "../../../../db/reportes/iluminacion/reporte-validator"
 import type { EmpresaType } from "../../../../db/empresas/schema"
 

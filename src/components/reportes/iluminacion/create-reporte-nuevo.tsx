@@ -36,11 +36,11 @@ import { Button } from "#/components/ui/button"
 import Loading from "#/components/loading"
 import { Link, useNavigate } from "@tanstack/react-router"
 import useScrollTop from "#/hooks/scroll-top"
-import { useCreateNuevoReporte } from "../../../../queries/reportes/iluminacion/use-create-reporte"
+import { useCreateReporteNuevo } from "../../../../queries/reportes/iluminacion/use-create-reporte-nuevo"
 import type { EmpresaType } from "../../../../db/empresas/schema"
 import { sortedByName, sortedByRazonSocial } from "#/lib/utils"
 
-export default function ReporteNuevoIluminacion() {
+export default function CreateReporteNuevo() {
 	return (
 		<Suspense
 			fallback={
@@ -50,12 +50,12 @@ export default function ReporteNuevoIluminacion() {
 				/>
 			}
 		>
-			<ReporteNuevo />
+			<ReporteNuevoForm />
 		</Suspense>
 	)
 }
 
-function ReporteNuevo() {
+function ReporteNuevoForm() {
 	useScrollTop()
 	const { data: tecnico } = useSuspenseQuery(tecnicoQueryOptions)
 	const { data: empresas } = useSuspenseQuery(empresasQueryOptions)
@@ -63,10 +63,10 @@ function ReporteNuevo() {
 	const navigate = useNavigate()
 
 	const {
-		mutateAsync: createNewReport,
+		mutateAsync: createReporteNuevo,
 		isPending,
 		error,
-	} = useCreateNuevoReporte()
+	} = useCreateReporteNuevo()
 	const form = useForm({
 		defaultValues: defaultReporteData,
 		validators: {
@@ -82,7 +82,7 @@ function ReporteNuevo() {
 				tecnicoId: tecnico.id,
 				title,
 			}
-			const result = await createNewReport({ data: newReport })
+			const result = await createReporteNuevo({ data: newReport })
 			if (!result) {
 				console.error("Error al crear el reporte", error)
 			}

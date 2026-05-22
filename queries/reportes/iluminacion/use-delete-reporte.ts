@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { deleteReporteNuevoServer } from "../../../server/reportes/iluminacion/delete-reporte-nuevo-server"
+import { deleteReporteServer } from "../../../server/reportes/iluminacion/delete-reporte-server"
 import type { ReporteIluminacionType } from "../../../db/reportes/iluminacion/schema"
 
 export function useDeleteReporteNuevo(reporteId: string) {
@@ -7,9 +7,9 @@ export function useDeleteReporteNuevo(reporteId: string) {
 
 	return useMutation({
 		mutationFn: ({ data }: { data: { id: string } }) =>
-			deleteReporteNuevoServer({ data }),
+			deleteReporteServer({ data }),
 		onSuccess: () => {
-			queryClient.setQueryData(["reportes-iluminacion-nuevo"], null)
+			queryClient.setQueryData(["reporte-iluminacion-nuevo"], null)
 			queryClient.setQueryData<ReporteIluminacionType[]>(
 				["reportes-iluminacion"],
 				oldData => {

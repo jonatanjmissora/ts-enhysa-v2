@@ -1,11 +1,11 @@
 import { protectedServerFn } from "@/lib/protected-server-fn"
 import { createServerFn } from "@tanstack/react-start"
 import { getRequest } from "@tanstack/react-start/server"
-import { updateReporteNuevoDB } from "../../../db/reportes/iluminacion/update-reporte-nuevo-db"
-import { updateReporteNuevoServerValidator } from "../../../db/reportes/iluminacion/reporte-validator"
+import { updateReporteDB } from "../../../db/reportes/iluminacion/update-reporte-db"
+import { updateReporteServerValidator } from "../../../db/reportes/iluminacion/reporte-validator"
 
-export const updateReporteNuevoServer = createServerFn({ method: "POST" })
-	.inputValidator(updateReporteNuevoServerValidator)
+export const updateReporteServer = createServerFn({ method: "POST" })
+	.inputValidator(updateReporteServerValidator)
 	.handler(async ({ data }) => {
 		const request = getRequest()
 		const session = await protectedServerFn(request)
@@ -13,7 +13,7 @@ export const updateReporteNuevoServer = createServerFn({ method: "POST" })
 			throw new Response("Unauthorized", { status: 401 })
 		}
 
-		return await updateReporteNuevoDB({
+		return await updateReporteDB({
 			...data,
 			finishedAt: data.finishedAt || null,
 		})

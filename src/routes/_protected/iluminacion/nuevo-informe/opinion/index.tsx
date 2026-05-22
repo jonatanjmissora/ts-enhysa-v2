@@ -6,7 +6,7 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router"
 import { Suspense } from "react"
 import { reporteNuevoQueryOptions } from "../../../../../../queries/reportes/iluminacion/reportes-query"
 import { useForm } from "@tanstack/react-form"
-import { useUpdateReporteNuevo } from "../../../../../../queries/reportes/iluminacion/use-update-reporte-nuevo"
+import { useUpdateReporteNuevo } from "../../../../../../queries/reportes/iluminacion/use-update-reporte"
 import {
 	Field,
 	FieldError,
