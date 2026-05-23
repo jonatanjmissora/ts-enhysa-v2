@@ -3,19 +3,19 @@ import { deleteAreaServer } from "../../../../server/reportes/iluminacion/areas/
 import type { AreaIluminacionType } from "../../../../db/reportes/iluminacion/areas/schema"
 
 export function useDeleteArea(areaId: string, reportId: string) {
-	const queryClient = useQueryClient()
+    const queryClient = useQueryClient()
 
-	return useMutation({
-		mutationFn: ({ data }: { data: { id: string } }) =>
-			deleteAreaServer({ data }),
-		onSuccess: () => {
-			queryClient.setQueryData<AreaIluminacionType[]>(
-				["areas_iluminacion", reportId],
-				oldData => {
-					if (!oldData) return oldData
-					return oldData.filter(item => item.id !== areaId)
-				}
-			)
-		},
-	})
+    return useMutation({
+        mutationFn: ({ data }: { data: { id: string } }) =>
+            deleteAreaServer({ data }),
+        onSuccess: () => {
+            queryClient.setQueryData<AreaIluminacionType[]>(
+                ["areas_iluminacion", reportId],
+                oldData => {
+                    if (!oldData) return oldData
+                    return oldData.filter(item => item.id !== areaId)
+                }
+            )
+        },
+    })
 }

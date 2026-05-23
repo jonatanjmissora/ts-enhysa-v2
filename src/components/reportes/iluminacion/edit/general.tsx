@@ -130,13 +130,24 @@ function EditReporteGeneralForm({
 	const { mutateAsync: editReport, isPending, error } = useUpdateReporte()
 	const form = useForm({
 		defaultValues: {
-			...reporte,
+			empresaId: reporte.empresaId,
+			instrumentoId: reporte.instrumentoId,
+			clima: reporte.clima,
 		},
 		validators: {
 			onSubmit: reporteNuevoFormValidator,
 		},
 		onSubmit: async ({ value }) => {
-			if (checkReporteGeneralDifferences(reporte, value)) {
+			if (
+				checkReporteGeneralDifferences(
+					{
+						empresaId: reporte.empresaId,
+						instrumentoId: reporte.instrumentoId,
+						clima: reporte.clima,
+					},
+					value
+				)
+			) {
 				setIsMenuOpen(false)
 				return
 			}

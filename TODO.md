@@ -31,4 +31,6 @@ cuando termino de crear un reporte, lo crea, pero me tira error el query, y no m
 
 cuando borro un reporte, sea nuevo o no, tengo que borrar tambien las areas y por ende las imagenes
 
+cuando borro un area, en edit, no se actualizan las areas listadas
 
+hacer un skelton para todas las cargas de imagenes

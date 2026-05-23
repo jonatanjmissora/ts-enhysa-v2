@@ -86,7 +86,7 @@ export const checkInstrumentoDiference = (
 
 export const checkReporteGeneralDifferences = (
 	formValues: ReporteNuevoFormType,
-	reporte: ReporteIluminacionType
+	reporte: ReporteNuevoFormType
 ) => {
 	return (
 		formValues.empresaId === reporte.empresaId &&

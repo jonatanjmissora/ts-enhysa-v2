@@ -16,29 +16,19 @@ import {
 	SelectValue,
 } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
-import type {
-	IluminacionFuenteType,
-	IluminacionTipoType,
-	IluminacionType,
-	ValoresRequeridosType,
-} from "@/lib/constants"
 import {
 	FECHA_1970,
 	ILUMINACION,
 	ILUMINACION_FUENTE,
 	ILUMINACION_TIPO,
 	VALORES_REQUERIDOS,
+	type IluminacionFuenteType,
+	type IluminacionTipoType,
+	type IluminacionType,
+	type ValoresRequeridosType,
 } from "@/lib/constants"
 import { useForm } from "@tanstack/react-form"
-
-import { Box, HardHat, Lightbulb, Loader, Trash2 } from "lucide-react"
-import {
-	AlertDialog,
-	AlertDialogTrigger,
-	AlertDialogContent,
-	AlertDialogTitle,
-	AlertDialogDescription,
-} from "@/components/ui/alert-dialog"
+import { Box, Edit, HardHat, Lightbulb, Loader, Trash2 } from "lucide-react"
 import {
 	useEffect,
 	useRef,
@@ -46,39 +36,53 @@ import {
 	type Dispatch,
 	type SetStateAction,
 } from "react"
-import Formula from "./formula"
 import {
 	getIndiceDeLocal,
 	getIndiceRedondeo,
 	setResetPuntos,
-} from "#/lib/utils"
+} from "@/lib/utils"
 import {
-	areaFormValidator,
-	defaultAreaData,
-} from "../../../../../../db/reportes/iluminacion/areas/area-validator"
-import { useCreateArea } from "../../../../../../queries/reportes/iluminacion/areas/use-create-area"
-import { Button } from "#/components/ui/button"
+	AlertDialog,
+	AlertDialogTrigger,
+	AlertDialogContent,
+	AlertDialogTitle,
+	AlertDialogDescription,
+} from "@/components/ui/alert-dialog"
 import Title from "#/components/title"
-import { useSuspenseQuery } from "@tanstack/react-query"
-import { reporteNuevoQueryOptions } from "../../../../../../queries/reportes/iluminacion/reportes-query"
 import { FilesDropzone } from "#/components/upload-button"
+import type { AreaIluminacionType } from "../../../../../db/reportes/iluminacion/areas/schema"
+import { useUpdateArea } from "../../../../../queries/reportes/iluminacion/areas/use-update-area"
+import { updateAreaValidator } from "../../../../../db/reportes/iluminacion/areas/area-validator"
+import { Button } from "#/components/ui/button"
+import Formula from "../nuevo-informe/areas/formula"
 
-export default function CreateAreaAlert() {
+export default function EditAreaAlert({
+	area,
+	setIsMenuOpen,
+}: {
+	area: AreaIluminacionType
+	setIsMenuOpen: Dispatch<SetStateAction<boolean>>
+}) {
 	const [open, setOpen] = useState(false)
 	return (
 		<AlertDialog open={open} onOpenChange={setOpen}>
 			<AlertDialogTrigger asChild className="hover:bg-accent">
-				<Button className="w-1/2 min-w-40 sm:w-1/6 mx-auto py-5 bg-primary ring-foreground/25">
-					+ Nueva Area
-				</Button>
+				<div className="w-full flex items-center gap-2 justify-center p-4">
+					<Edit className="size-4" />
+					Editar
+				</div>
 			</AlertDialogTrigger>
 			<AlertDialogContent className="sm:px-20 py-15 sm:py-6 w-full h-screen sm:h-[95dvh] overflow-auto border-none rounded-none max-w-screen">
 				<AlertDialogTitle>
-					<Title text="Nueva Area" />
+					<Title text="Editar Area" />
 				</AlertDialogTitle>
 				<AlertDialogDescription asChild>
 					<div className="text-center">
-						<CreateArea setOpen={setOpen} />
+						<EditArea
+							area={area}
+							setOpen={setOpen}
+							setIsMenuOpen={setIsMenuOpen}
+						/>
 					</div>
 				</AlertDialogDescription>
 			</AlertDialogContent>
@@ -86,44 +90,54 @@ export default function CreateAreaAlert() {
 	)
 }
 
-function CreateArea({
+function EditArea({
+	area,
 	setOpen,
+	setIsMenuOpen,
 }: {
-	setOpen: Dispatch<SetStateAction<boolean>>
+	area: AreaIluminacionType
+	setOpen: (open: boolean) => void
+	setIsMenuOpen: (open: boolean) => void
 }) {
-	const [puntos, setPuntos] = useState<number[]>([])
-	const [timestamps, setTimestamps] = useState<Date[]>([])
+	const [puntos, setPuntos] = useState<number[]>(area.puntos)
+	const [timestamps, setTimestamps] = useState<Date[]>(area.timestamps)
 	const [puntosError, setPuntosError] = useState<string | null>(null)
-	const [planoFiles, setPlanoFiles] = useState<string[]>([])
-	const { data: reporteNuevo } = useSuspenseQuery(reporteNuevoQueryOptions())
-	const [indiceRedondeo, setIndiceRedondeo] = useState<number>(0)
+	const [planoFiles, setPlanoFiles] = useState<string[]>(area.imagenes || [])
+	const [indiceRedondeo, setIndiceRedondeo] = useState<number>(() => {
+		const indiceDeLocal = getIndiceDeLocal(area.largo, area.ancho, area.alto)
+		const oldIndiceRedondeo = getIndiceRedondeo(indiceDeLocal)
+		return oldIndiceRedondeo
+	})
 
-	const { mutateAsync: createArea, isPending, error } = useCreateArea()
+	const { mutateAsync: updateArea, isPending, error } = useUpdateArea()
 
 	const form = useForm({
-		defaultValues: defaultAreaData,
+		defaultValues: {
+			...area,
+		},
 		validators: {
-			onSubmit: areaFormValidator,
+			onSubmit: updateAreaValidator,
 		},
 		onSubmit: async ({ value }) => {
 			setPuntosError(null)
 			if (puntos.every(punto => punto === 0))
 				return setPuntosError("Debe agregar al menos un punto de medición")
-			if (!reporteNuevo) return
-			const newArea = {
+			const newArea: AreaIluminacionType = {
 				...value,
-				reportId: reporteNuevo.id,
+				userId: area.userId,
+				id: area.id,
 				puntos,
 				timestamps,
 				imagenes: planoFiles,
 			}
-			const result = await createArea({ data: newArea })
+			const result = await updateArea({ data: newArea })
 			if (!result) {
-				console.error("Error al crear area", error)
+				console.error("Error al actualizar area", error)
 				return
 			}
-			console.log("Área creada exitosamente")
+			console.log("Area actualizada exitosamente")
 			setOpen(false)
+			setIsMenuOpen(false)
 		},
 	})
 
@@ -465,11 +479,11 @@ function CreateArea({
 									<Textarea
 										id={field.name}
 										name={field.name}
-										value={field.state.value || ""}
+										value={field.state.value}
 										onBlur={field.handleBlur}
 										onChange={e => field.handleChange(e.target.value)}
 										aria-invalid={isInvalid}
-										className="bg-background sm:bg-accent text-right text-sm"
+										className="bg-background sm:bg-accent text-sm"
 									/>
 									{isInvalid && (
 										<FieldError
@@ -490,7 +504,7 @@ function CreateArea({
 					</div>
 				</div>
 
-				<div className="grid grid-cols-1 sm:grid-cols-2 gap-8 w-5/6 mt-10 mx-auto items-end">
+				<div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-5/6 mt-10 mx-auto">
 					<form.Field
 						name="largo"
 						children={field => {
@@ -500,11 +514,11 @@ function CreateArea({
 								<Field data-invalid={isInvalid} className="relative gap-1">
 									<FieldLabel htmlFor={field.name}>Largo(m)</FieldLabel>
 									<Input
+										onFocus={e => e.target.select()}
 										id={field.name}
 										name={field.name}
 										value={field.state.value}
 										onBlur={field.handleBlur}
-										onFocus={e => e.target.select()}
 										onChange={e => field.handleChange(Number(e.target.value))}
 										aria-invalid={isInvalid}
 										placeholder="Ej. 4"
@@ -531,11 +545,11 @@ function CreateArea({
 								<Field data-invalid={isInvalid} className="relative gap-1">
 									<FieldLabel htmlFor={field.name}>Ancho(m)</FieldLabel>
 									<Input
+										onFocus={e => e.target.select()}
 										id={field.name}
 										name={field.name}
 										value={field.state.value}
 										onBlur={field.handleBlur}
-										onFocus={e => e.target.select()}
 										onChange={e => field.handleChange(Number(e.target.value))}
 										aria-invalid={isInvalid}
 										placeholder="Ej. 5"
@@ -564,11 +578,11 @@ function CreateArea({
 										Alto del montaje (m)
 									</FieldLabel>
 									<Input
+										onFocus={e => e.target.select()}
 										id={field.name}
 										name={field.name}
 										value={field.state.value}
 										onBlur={field.handleBlur}
-										onFocus={e => e.target.select()}
 										onChange={e => field.handleChange(Number(e.target.value))}
 										aria-invalid={isInvalid}
 										placeholder="Ej. 2"
@@ -585,24 +599,9 @@ function CreateArea({
 							)
 						}}
 					/>
-
-					<form.Subscribe
-						selector={state =>
-							`${state.values.largo}_${state.values.ancho}_${state.values.alto}`
-						}
-						children={values => {
-							const [largo, ancho, alto] = values.split("_").map(Number)
-							if (largo * ancho * alto < 0)
-								return (
-									<span className="text-red-700/50 italic text-sm">
-										Los valores ingresados deben de ser positivos.
-									</span>
-								)
-						}}
-					/>
 				</div>
 
-				<div className="flex flex-col gap-1 w-5/6 mx-auto sm:w-full my-10">
+				<div className="flex flex-col gap-1 w-5/6 mx-auto sm:w-full">
 					<Label className="tracking-wider" htmlFor="largo">
 						Imágenes del Área
 					</Label>
@@ -635,32 +634,39 @@ function CreateArea({
 							setTimestamps(resetTimestamps)
 						}
 						return (
-							<>
-								<Formula
-									alto={Number(alto)}
-									ancho={Number(ancho)}
-									largo={Number(largo)}
-									indiceDeLocal={indiceDeLocal}
-									indiceRedondeo={newIndiceRedondeo}
-								/>
-								<Grilla
-									puntos={puntos}
-									setPuntos={setPuntos}
-									timestamps={timestamps}
-									setTimestamps={setTimestamps}
-									ancho={Number(ancho)}
-									largo={Number(largo)}
-									indiceRedondeo={newIndiceRedondeo}
-								/>
-							</>
+							largo > 0 &&
+							ancho > 0 &&
+							alto > 0 && (
+								<>
+									<Formula
+										alto={Number(alto)}
+										ancho={Number(ancho)}
+										largo={Number(largo)}
+										indiceDeLocal={indiceDeLocal}
+										indiceRedondeo={newIndiceRedondeo}
+									/>
+									<Grilla
+										puntos={puntos}
+										setPuntos={setPuntos}
+										timestamps={timestamps}
+										setTimestamps={setTimestamps}
+										ancho={Number(ancho)}
+										largo={Number(largo)}
+										indiceRedondeo={newIndiceRedondeo}
+									/>
+								</>
+							)
 						)
 					}}
 				/>
 
-				<Field className="flex flex-col sm:flex-row justify-center gap-4 items-center w-5/6 sm:w-full mx-auto mt-10">
+				<Field className="flex flex-col justify-center gap-4 sm:flex-row items-center w-5/6 mx-auto sm:w-full mt-10">
 					<Button
 						variant="outline"
-						onClick={() => setOpen(false)}
+						onClick={() => {
+							setOpen(false)
+							if (setIsMenuOpen) setIsMenuOpen(false)
+						}}
 						type="button"
 						disabled={isPending}
 						className="flex-1 py-4"
@@ -669,8 +675,8 @@ function CreateArea({
 					</Button>
 					<Button type="submit" disabled={isPending} className="flex-1 py-4">
 						{isPending ? (
-							<div className="flex gap-2 w-full justify-center items-center">
-								Guardando... <Loader className="animate-spin size-4"></Loader>
+							<div className="flex gap-2 w-full justify-center">
+								Editando... <Loader className="animate-spin size-4"></Loader>
 							</div>
 						) : (
 							"Guardar"
@@ -685,7 +691,7 @@ function CreateArea({
 				)}
 				{error && (
 					<p className="text-center italic textXS text-red-500/70">
-						{error?.message}
+						{error.message}
 					</p>
 				)}
 
@@ -707,10 +713,10 @@ function CreateArea({
 function Grilla({
 	puntos,
 	setPuntos,
-	timestamps,
-	setTimestamps,
 	ancho,
 	largo,
+	timestamps,
+	setTimestamps,
 	indiceRedondeo,
 }: {
 	ancho: number
@@ -723,7 +729,6 @@ function Grilla({
 }) {
 	const [openInputMenu, setOpenInputMenu] = useState<boolean>(false)
 	const [actualPunto, setActualPunto] = useState<number | null>(null)
-
 	const celdas = (indiceRedondeo + 2) ** 2 > 64 ? 64 : (indiceRedondeo + 2) ** 2
 	const div = Math.sqrt(celdas).toFixed(0)
 	const divisionesLargo = Number(div)
@@ -731,11 +736,6 @@ function Grilla({
 	const largoRatio = 150 * divisionesLargo
 	const anchoGrilla = `${(ancho / largo) * largoRatio}px`
 	const largoGrilla = `${150 * divisionesLargo}px`
-	useEffect(() => {
-		const { resetPuntos, resetTimestamps } = setResetPuntos(celdas)
-		setPuntos(resetPuntos)
-		setTimestamps(resetTimestamps)
-	}, [celdas, setPuntos, setTimestamps])
 
 	return (
 		<>
@@ -757,7 +757,7 @@ function Grilla({
 					setActualPunto={setActualPunto}
 				/>
 			) : (
-				<div className="w-[90dvw] sm:w-full min-h-[500px] overflow-auto flex flex-col p-10">
+				<div className="w-full sm:w-full min-h-[500px] overflow-auto flex flex-col ">
 					<div
 						className="grid relative mx-auto"
 						style={{
@@ -779,7 +779,7 @@ function Grilla({
 						{Array.from({ length: celdas }).map((_, index) => (
 							<div
 								key={index}
-								className={`border dark:border-cyan-300/20 border-cyan-700/30 flex items-center justify-center ${puntos[index] !== 0 ? "bg-cyan-300/20" : ""}`}
+								className={`border dark:border-cyan-300/20 border-cyan-700/50 flex items-center justify-center ${puntos[index] !== 0 ? "bg-cyan-300/20" : ""}`}
 							>
 								<Punto
 									index={index}
@@ -876,6 +876,7 @@ function InputMenu({
 				Punto {actualPunto !== null ? actualPunto + 1 : ""}
 			</span>
 			<Input
+				onFocus={e => e.target.select()}
 				ref={inputRef}
 				defaultValue={
 					actualPunto !== null && puntos[actualPunto] !== 0
@@ -885,11 +886,10 @@ function InputMenu({
 				type="number"
 				id="punto"
 				name="punto"
-				onFocus={e => e.target.select()}
-				className="dark:bg-foreground/50 bg-foreground/50 text-background/75 tracking-widest text-3xl md:text-3xl w-3/4 sm:w-1/2 p-4 h-20 text-center rounded-md focus:text-blue-200 dark:focus:text-blue-800 font-bold"
+				className="dark:bg-foreground/50 bg-foreground/50 text-background/75 textXL text-4xl w-3/4 sm:w-1/2 p-4 h-20 text-center rounded-md"
 				onChange={e => setPuntoValue(e.currentTarget.value)}
 			/>
-			<div className="w-full flex flex-col sm:flex-row justify-between gap-4">
+			<div className="w-full flex flex-col justify-between gap-4">
 				<Button
 					type="button"
 					variant="outline"

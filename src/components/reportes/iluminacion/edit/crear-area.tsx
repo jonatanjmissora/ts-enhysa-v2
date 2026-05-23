@@ -31,7 +31,7 @@ import {
 } from "@/lib/constants"
 import { useForm } from "@tanstack/react-form"
 
-import { Box, HardHat, Lightbulb, Loader, Trash2 } from "lucide-react"
+import { Box, HardHat, Lightbulb, Loader, Plus, Trash2 } from "lucide-react"
 import {
 	AlertDialog,
 	AlertDialogTrigger,
@@ -46,31 +46,47 @@ import {
 	type Dispatch,
 	type SetStateAction,
 } from "react"
-import Formula from "./formula"
 import {
 	getIndiceDeLocal,
 	getIndiceRedondeo,
 	setResetPuntos,
 } from "#/lib/utils"
-import {
-	areaFormValidator,
-	defaultAreaData,
-} from "../../../../../../db/reportes/iluminacion/areas/area-validator"
-import { useCreateArea } from "../../../../../../queries/reportes/iluminacion/areas/use-create-area"
+
 import { Button } from "#/components/ui/button"
 import Title from "#/components/title"
 import { useSuspenseQuery } from "@tanstack/react-query"
-import { reporteNuevoQueryOptions } from "../../../../../../queries/reportes/iluminacion/reportes-query"
 import { FilesDropzone } from "#/components/upload-button"
+import { reporteQueryOptions } from "../../../../../queries/reportes/iluminacion/reportes-query"
+import { useCreateArea } from "../../../../../queries/reportes/iluminacion/areas/use-create-area"
+import {
+	areaFormValidator,
+	defaultAreaData,
+} from "../../../../../db/reportes/iluminacion/areas/area-validator"
+import Formula from "../nuevo-informe/areas/formula"
 
-export default function CreateAreaAlert() {
+export default function CreateAreaAlert({
+	id,
+	dropdownMenu,
+	setIsMenuOpen,
+}: {
+	id: string
+	dropdownMenu?: boolean
+	setIsMenuOpen?: Dispatch<SetStateAction<boolean>>
+}) {
 	const [open, setOpen] = useState(false)
 	return (
 		<AlertDialog open={open} onOpenChange={setOpen}>
 			<AlertDialogTrigger asChild className="hover:bg-accent">
-				<Button className="w-1/2 min-w-40 sm:w-1/6 mx-auto py-5 bg-primary ring-foreground/25">
-					+ Nueva Area
-				</Button>
+				{dropdownMenu ? (
+					<div className="w-full flex items-center gap-2 justify-center p-4">
+						<Plus className="size-4" />
+						Crear
+					</div>
+				) : (
+					<Button className="w-1/2 min-w-40 sm:w-1/6 mx-auto py-5 bg-primary ring-foreground/25">
+						+ Nueva Area
+					</Button>
+				)}
 			</AlertDialogTrigger>
 			<AlertDialogContent className="sm:px-20 py-15 sm:py-6 w-full h-screen sm:h-[95dvh] overflow-auto border-none rounded-none max-w-screen">
 				<AlertDialogTitle>
@@ -78,7 +94,11 @@ export default function CreateAreaAlert() {
 				</AlertDialogTitle>
 				<AlertDialogDescription asChild>
 					<div className="text-center">
-						<CreateArea setOpen={setOpen} />
+						<CreateArea
+							setOpen={setOpen}
+							id={id}
+							setIsMenuOpen={setIsMenuOpen}
+						/>
 					</div>
 				</AlertDialogDescription>
 			</AlertDialogContent>
@@ -88,14 +108,18 @@ export default function CreateAreaAlert() {
 
 function CreateArea({
 	setOpen,
+	id,
+	setIsMenuOpen,
 }: {
 	setOpen: Dispatch<SetStateAction<boolean>>
+	id: string
+	setIsMenuOpen?: Dispatch<SetStateAction<boolean>>
 }) {
 	const [puntos, setPuntos] = useState<number[]>([])
 	const [timestamps, setTimestamps] = useState<Date[]>([])
 	const [puntosError, setPuntosError] = useState<string | null>(null)
 	const [planoFiles, setPlanoFiles] = useState<string[]>([])
-	const { data: reporteNuevo } = useSuspenseQuery(reporteNuevoQueryOptions())
+	const { data: reporte } = useSuspenseQuery(reporteQueryOptions({ id }))
 	const [indiceRedondeo, setIndiceRedondeo] = useState<number>(0)
 
 	const { mutateAsync: createArea, isPending, error } = useCreateArea()
@@ -109,10 +133,10 @@ function CreateArea({
 			setPuntosError(null)
 			if (puntos.every(punto => punto === 0))
 				return setPuntosError("Debe agregar al menos un punto de medición")
-			if (!reporteNuevo) return
+			if (!reporte) return
 			const newArea = {
 				...value,
-				reportId: reporteNuevo.id,
+				reportId: reporte.id,
 				puntos,
 				timestamps,
 				imagenes: planoFiles,
@@ -124,6 +148,7 @@ function CreateArea({
 			}
 			console.log("Área creada exitosamente")
 			setOpen(false)
+			setIsMenuOpen?.(false)
 		},
 	})
 
@@ -660,7 +685,10 @@ function CreateArea({
 				<Field className="flex flex-col sm:flex-row justify-center gap-4 items-center w-5/6 sm:w-full mx-auto mt-10">
 					<Button
 						variant="outline"
-						onClick={() => setOpen(false)}
+						onClick={() => {
+							setOpen(false)
+							setIsMenuOpen?.(false)
+						}}
 						type="button"
 						disabled={isPending}
 						className="flex-1 py-4"
