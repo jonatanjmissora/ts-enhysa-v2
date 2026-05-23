@@ -6,7 +6,6 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router"
 import { Suspense } from "react"
 import { reporteNuevoQueryOptions } from "../../../../../../queries/reportes/iluminacion/reportes-query"
 import { useForm } from "@tanstack/react-form"
-import { useUpdateReporte } from "../../../../../../queries/reportes/iluminacion/use-update-reporte"
 import {
 	Field,
 	FieldError,
@@ -17,6 +16,7 @@ import { List, Loader, NotebookPen, Search } from "lucide-react"
 import { Button } from "#/components/ui/button"
 import { reporteOpinionFormValidator } from "../../../../../../db/reportes/iluminacion/reporte-validator"
 import { ESTADO, HUMEDAD, TEMPERATURA } from "#/lib/constants"
+import { useFinalReporteNuevo } from "../../../../../../queries/reportes/iluminacion/use-final-reporte-nuevo"
 
 export const Route = createFileRoute(
 	"/_protected/iluminacion/nuevo-informe/opinion/"
@@ -57,7 +57,7 @@ function Opinion() {
 		mutateAsync: updateOpinion,
 		isPending,
 		error,
-	} = useUpdateReporte()
+	} = useFinalReporteNuevo()
 
 	const form = useForm({
 		defaultValues: {

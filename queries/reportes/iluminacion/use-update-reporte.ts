@@ -10,14 +10,14 @@ export function useUpdateReporteNuevo() {
 
 		onSuccess: data => {
 			if (!data) return
-			queryClient.setQueryData<ReporteIluminacionType[]>(
+			queryClient.setQueryData<ReporteIluminacionType>(
 				["reporte-iluminacion-nuevo"],
+				data
+			)
+			queryClient.setQueryData<ReporteIluminacionType[]>(
+				["reportes-iluminacion"],
 				oldData => {
 					if (!oldData) return oldData
-					const oldReporte = oldData.find(
-						oldReporte => oldReporte.id === data.id
-					)
-					if (!oldReporte) return oldData
 					return oldData.map(oldReporte =>
 						oldReporte.id === data.id ? data : oldReporte
 					)

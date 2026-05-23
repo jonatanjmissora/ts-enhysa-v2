@@ -11,7 +11,7 @@ import {
 } from "#/components/ui/select"
 import { reporteQueryOptions } from "../../../../../../queries/reportes/iluminacion/reportes-query"
 import { areasQueryOptions } from "../../../../../../queries/reportes/iluminacion/areas/areas-query"
-import { ChartAreaInteractive } from "#/components/reportes/iluminacion/areas/chart"
+import { ChartAreaInteractive } from "#/components/reportes/iluminacion/nuevo-informe/areas/chart"
 import { sortedByName } from "#/lib/utils"
 
 export const Route = createFileRoute(

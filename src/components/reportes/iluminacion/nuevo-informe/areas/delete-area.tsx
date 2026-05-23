@@ -10,9 +10,9 @@ import { useState } from "react"
 import { Trash2, Loader } from "lucide-react"
 import { useForm } from "@tanstack/react-form"
 import { useRouter } from "@tanstack/react-router"
-import type { AreaIluminacionType } from "../../../../../db/reportes/iluminacion/areas/schema"
-import { useDeleteArea } from "../../../../../queries/reportes/iluminacion/areas/use-delete-area"
-import { areaIdValidator } from "../../../../../db/reportes/iluminacion/areas/area-validator"
+import type { AreaIluminacionType } from "../../../../../../db/reportes/iluminacion/areas/schema"
+import { useDeleteArea } from "../../../../../../queries/reportes/iluminacion/areas/use-delete-area"
+import { areaIdValidator } from "../../../../../../db/reportes/iluminacion/areas/area-validator"
 
 export default function DeleteAreaAlert({
 	area,

@@ -1,12 +1,11 @@
 import { Button } from "#/components/ui/button"
-import { Loader, TriangleAlert } from "lucide-react"
+import { TriangleAlert } from "lucide-react"
 import { useState } from "react"
-import EditReporte from "./edit-reporte"
+import EditReporteNuevo from "./nuevo-informe/edit-reporte-nuevo"
 import useScrollTop from "#/hooks/scroll-top"
-import { useDeleteReporte } from "../../../../queries/reportes/iluminacion/use-delete-reporte"
 import type { ReporteIluminacionType } from "../../../../db/reportes/iluminacion/schema"
-import { useForm } from "@tanstack/react-form"
-import { reporteIluminacionIdValidator } from "../../../../db/reportes/iluminacion/reporte-validator"
+import DeleteReporteNuevo from "./nuevo-informe/delete-reporte-nuevo"
+import CreateReporteNuevo from "./nuevo-informe/create-reporte-nuevo"
 
 export default function ReporteEnCurso({
 	reporteNuevo,
@@ -42,71 +41,22 @@ export default function ReporteEnCurso({
 					>
 						Continuar Reporte
 					</Button>
-					<BorrarReporteEnCurso reporteNuevo={reporteNuevo} />
+					<DeleteReporteNuevo
+						reporteNuevo={reporteNuevo}
+						setNewReportWarning={setNewReportWarning}
+					/>
 				</div>
 			</article>
 		)
 	}
 
-	return <EditReporte reporteNuevo={reporteNuevo} />
-}
-
-function BorrarReporteEnCurso({
-	reporteNuevo,
-}: {
-	reporteNuevo: ReporteIluminacionType
-}) {
-	const {
-		mutateAsync: deleteReporte,
-		error,
-		isPending,
-	} = useDeleteReporte(reporteNuevo.id)
-
-	const form = useForm({
-		defaultValues: {
-			id: reporteNuevo.id,
-		},
-		validators: {
-			onSubmit: reporteIluminacionIdValidator,
-		},
-		onSubmit: async ({ value }) => {
-			const result = await deleteReporte({
-				data: { id: value.id },
-			})
-
-			if (!result) {
-				console.error("Error al eliminar el nuevo reporte", error)
-			}
-
-			console.log("Nuevo reporte eliminado exitosamente")
-		},
-	})
-
 	return (
-		<form
-			id="create-form"
-			className="flex flex-col items-center justify-center gap-6 flex-1"
-			onSubmit={e => {
-				e.preventDefault()
-				form.handleSubmit()
-			}}
-		>
-			<div className="flex justify-center items-center gap-2 w-full">
-				<Button type="submit" disabled={isPending} className="flex-1 py-6">
-					{isPending ? (
-						<div className="flex gap-2 items-center justify-center">
-							Eliminando... <Loader className="animate-spin size-4"></Loader>
-						</div>
-					) : (
-						"Crear Nuevo"
-					)}
-				</Button>
-			</div>
-			{error && (
-				<p className="text-red-500 text-xs">
-					Error al eliminar el nuevo reporte
-				</p>
+		<>
+			{reporteNuevo ? (
+				<EditReporteNuevo reporteNuevo={reporteNuevo} />
+			) : (
+				<CreateReporteNuevo />
 			)}
-		</form>
+		</>
 	)
 }

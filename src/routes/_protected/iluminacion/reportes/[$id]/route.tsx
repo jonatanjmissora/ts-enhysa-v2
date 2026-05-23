@@ -10,10 +10,12 @@ import { reporteQueryOptions } from "../../../../../../queries/reportes/iluminac
 import { areasQueryOptions } from "../../../../../../queries/reportes/iluminacion/areas/areas-query"
 import { useSuspenseQuery } from "@tanstack/react-query"
 import { Suspense } from "react"
+import { empresasQueryOptions } from "../../../../../../queries/empresas/empresas-query"
 
 export const Route = createFileRoute("/_protected/iluminacion/reportes/$id")({
 	loader: ({ context, params }) => {
 		context.queryClient.ensureQueryData(reporteQueryOptions({ id: params.id }))
+		context.queryClient.ensureQueryData(empresasQueryOptions)
 		context.queryClient.ensureQueryData(
 			areasQueryOptions({ reportId: params.id })
 		)
@@ -83,11 +85,13 @@ function RouteComponent() {
 const SuspenseTitle = () => {
 	const { id } = Route.useParams()
 	const { data: reporte } = useSuspenseQuery(reporteQueryOptions({ id }))
+	const { data: empresas } = useSuspenseQuery(empresasQueryOptions)
+	const empresa = empresas?.find(empresa => empresa.id === reporte?.empresaId)
 
 	return (
 		<div className="flex items-center gap-2">
 			<span className="text-sm tracking-wider text-foreground/50">
-				{reporte?.empresa.razonSocial.toUpperCase()} -{" "}
+				{empresa?.razonSocial.toUpperCase()} -{" "}
 				{reporte?.finishedAt?.toLocaleDateString("it-IT")}
 			</span>
 			<CalendarDays className="size-3 text-foreground/50" />

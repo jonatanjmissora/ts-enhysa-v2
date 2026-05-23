@@ -10,7 +10,6 @@ import Title from "#/components/title"
 import { Suspense, useState } from "react"
 import type { ReporteIluminacionType } from "../../../../../db/reportes/iluminacion/schema"
 import useScrollTop from "#/hooks/scroll-top"
-import { useLocation, useNavigate } from "@tanstack/react-router"
 import { useUpdateReporte } from "../../../../../queries/reportes/iluminacion/use-update-reporte"
 import { useForm } from "@tanstack/react-form"
 import { reporteNuevoFormValidator } from "../../../../../db/reportes/iluminacion/reporte-validator"
@@ -71,9 +70,7 @@ export default function EditReporteGeneral({
 					<div>
 						<Suspense
 							fallback={
-								<LoadingModal
-									text="Cargando empresas e instrumentos"
-								/>
+								<LoadingModal text="Cargando empresas e instrumentos" />
 							}
 						>
 							<EditReporteGeneralSuspense
@@ -130,7 +127,7 @@ function EditReporteGeneralForm({
 	useScrollTop()
 
 	const queryClient = useQueryClient()
-  const { mutateAsync: editReport, isPending, error } = useUpdateReporte()
+	const { mutateAsync: editReport, isPending, error } = useUpdateReporte()
 	const form = useForm({
 		defaultValues: {
 			...reporte,
@@ -160,7 +157,9 @@ function EditReporteGeneralForm({
 				console.error("Error al editar el reporte", error)
 			}
 			console.log("Reporte editado exitosamente")
-			queryClient.invalidateQueries({ queryKey: ["reporte-iluminacion", reporte.id] })
+			queryClient.invalidateQueries({
+				queryKey: ["reporte-iluminacion", reporte.id],
+			})
 			// Also invalidate list queries
 			queryClient.invalidateQueries({ queryKey: ["reportes-iluminacion"] })
 			// Invalidate any pending new report query

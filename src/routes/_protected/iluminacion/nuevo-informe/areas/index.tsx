@@ -6,7 +6,7 @@ import { createFileRoute, Link } from "@tanstack/react-router"
 import { Suspense } from "react"
 import { areasQueryOptions } from "../../../../../../queries/reportes/iluminacion/areas/areas-query"
 import { Button } from "#/components/ui/button"
-import CreateAreaAlert from "#/components/reportes/iluminacion/areas/crear-area"
+import CreateAreaAlert from "#/components/reportes/iluminacion/nuevo-informe/areas/crear-area"
 import {
 	Accordion,
 	AccordionContent,
@@ -25,8 +25,8 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Ellipsis } from "lucide-react"
 import { useState } from "react"
-import DeleteAreaAlert from "#/components/reportes/iluminacion/areas/delete-area"
-import EditAreaAlert from "#/components/reportes/iluminacion/areas/edit-area"
+import DeleteAreaAlert from "#/components/reportes/iluminacion/nuevo-informe/areas/delete-area"
+import EditAreaAlert from "#/components/reportes/iluminacion/nuevo-informe/areas/edit-area"
 import { reporteNuevoQueryOptions } from "../../../../../../queries/reportes/iluminacion/reportes-query"
 import { sortedByName } from "#/lib/utils"
 import useScrollTop from "#/hooks/scroll-top"

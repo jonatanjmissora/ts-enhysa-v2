@@ -55,12 +55,12 @@ import {
 import {
 	areaFormValidator,
 	defaultAreaData,
-} from "../../../../../db/reportes/iluminacion/areas/area-validator"
-import { useCreateArea } from "../../../../../queries/reportes/iluminacion/areas/use-create-area"
+} from "../../../../../../db/reportes/iluminacion/areas/area-validator"
+import { useCreateArea } from "../../../../../../queries/reportes/iluminacion/areas/use-create-area"
 import { Button } from "#/components/ui/button"
 import Title from "#/components/title"
 import { useSuspenseQuery } from "@tanstack/react-query"
-import { reporteNuevoQueryOptions } from "../../../../../queries/reportes/iluminacion/reportes-query"
+import { reporteNuevoQueryOptions } from "../../../../../../queries/reportes/iluminacion/reportes-query"
 import { FilesDropzone } from "#/components/upload-button"
 
 export default function CreateAreaAlert() {

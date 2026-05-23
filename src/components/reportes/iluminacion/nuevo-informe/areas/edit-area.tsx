@@ -49,9 +49,9 @@ import {
 	AlertDialogTitle,
 	AlertDialogDescription,
 } from "@/components/ui/alert-dialog"
-import type { AreaIluminacionType } from "../../../../../db/reportes/iluminacion/areas/schema"
-import { updateAreaValidator } from "../../../../../db/reportes/iluminacion/areas/area-validator"
-import { useUpdateArea } from "../../../../../queries/reportes/iluminacion/areas/use-update-area"
+import type { AreaIluminacionType } from "../../../../../../db/reportes/iluminacion/areas/schema"
+import { updateAreaValidator } from "../../../../../../db/reportes/iluminacion/areas/area-validator"
+import { useUpdateArea } from "../../../../../../queries/reportes/iluminacion/areas/use-update-area"
 import { Button } from "#/components/ui/button"
 import Title from "#/components/title"
 import { FilesDropzone } from "#/components/upload-button"

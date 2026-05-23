@@ -1,9 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { sortedByDate } from "#/lib/utils"
 import type { ReporteIluminacionType } from "../../../db/schema"
-import {
-	createReporteNuevoServer,
-} from "../../../server/reportes/iluminacion/create-reporte-nuevo-server"
+import { createReporteNuevoServer } from "../../../server/reportes/iluminacion/create-reporte-nuevo-server"
 
 export function useCreateReporteNuevo() {
 	const queryClient = useQueryClient()
@@ -11,13 +9,9 @@ export function useCreateReporteNuevo() {
 	return useMutation({
 		mutationFn: createReporteNuevoServer,
 		onSuccess: data => {
-			// queryClient.invalidateQueries({ queryKey: ["empresas"] })
-			queryClient.setQueryData<ReporteIluminacionType[]>(
+			queryClient.setQueryData<ReporteIluminacionType>(
 				["reporte-iluminacion-nuevo"],
-				oldData => {
-					if (!oldData) return oldData
-					return sortedByDate([data, ...oldData])
-				}
+				data
 			)
 			queryClient.setQueryData<ReporteIluminacionType[]>(
 				["reportes-iluminacion"],

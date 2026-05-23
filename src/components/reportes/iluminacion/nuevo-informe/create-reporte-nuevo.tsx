@@ -1,5 +1,9 @@
 import { useForm } from "@tanstack/react-form"
 import {
+	defaultReporteData,
+	reporteNuevoFormValidator,
+} from "../../../../../db/reportes/iluminacion/reporte-validator"
+import {
 	Field,
 	FieldError,
 	FieldGroup,
@@ -16,9 +20,10 @@ import {
 	SelectValue,
 } from "#/components/ui/select"
 import { useSuspenseQuery } from "@tanstack/react-query"
-import { empresasQueryOptions } from "../../../../queries/empresas/empresas-query"
-import { instrumentosQueryOptions } from "../../../../queries/instrumentos/instrumentos-query"
-import { tecnicoQueryOptions } from "../../../../queries/tecnico/tecnico-query"
+import { empresasQueryOptions } from "../../../../../queries/empresas/empresas-query"
+import { instrumentosQueryOptions } from "../../../../../queries/instrumentos/instrumentos-query"
+import { tecnicoQueryOptions } from "../../../../../queries/tecnico/tecnico-query"
+import { Suspense } from "react"
 import {
 	ESTADO,
 	HUMEDAD,
@@ -28,18 +33,29 @@ import {
 	type TemperaturaType,
 } from "#/lib/constants"
 import { Button } from "#/components/ui/button"
-import { useNavigate } from "@tanstack/react-router"
+import Loading from "#/components/loading"
+import { Link, useNavigate } from "@tanstack/react-router"
 import useScrollTop from "#/hooks/scroll-top"
-import type { ReporteIluminacionType } from "../../../../db/reportes/iluminacion/schema"
-import { useUpdateReporte } from "../../../../queries/reportes/iluminacion/use-update-reporte"
-import { reporteNuevoFormValidator } from "../../../../db/reportes/iluminacion/reporte-validator"
-import type { EmpresaType } from "../../../../db/empresas/schema"
+import { useCreateReporteNuevo } from "../../../../../queries/reportes/iluminacion/use-create-reporte-nuevo"
+import type { EmpresaType } from "../../../../../db/empresas/schema"
+import { sortedByName, sortedByRazonSocial } from "#/lib/utils"
 
-export default function EditReporte({
-	reporteNuevo,
-}: {
-	reporteNuevo: ReporteIluminacionType
-}) {
+export default function CreateReporteNuevo() {
+	return (
+		<Suspense
+			fallback={
+				<Loading
+					text="cargando datos del usuario..."
+					className="scale-50 justify-start  max-h-[50svh] "
+				/>
+			}
+		>
+			<ReporteNuevoForm />
+		</Suspense>
+	)
+}
+
+function ReporteNuevoForm() {
 	useScrollTop()
 	const { data: tecnico } = useSuspenseQuery(tecnicoQueryOptions)
 	const { data: empresas } = useSuspenseQuery(empresasQueryOptions)
@@ -47,52 +63,45 @@ export default function EditReporte({
 	const navigate = useNavigate()
 
 	const {
-		mutateAsync: editarReporte,
+		mutateAsync: createReporteNuevo,
 		isPending,
 		error,
-	} = useUpdateReporte()
+	} = useCreateReporteNuevo()
 	const form = useForm({
-		defaultValues: {
-			empresaId: reporteNuevo.empresaId,
-			instrumentoId: reporteNuevo.instrumentoId,
-			clima: reporteNuevo.clima,
-		},
+		defaultValues: defaultReporteData,
 		validators: {
 			onSubmit: reporteNuevoFormValidator,
 		},
 		onSubmit: async ({ value }) => {
 			if (!tecnico || !empresas || !instrumentos) return
 
+			const title = getTitle(value.empresaId, empresas)
+
 			const newReport = {
-				...reporteNuevo,
-				empresaId: value.empresaId,
-				instrumentoId: value.instrumentoId,
-				clima: value.clima,
+				...value,
+				tecnicoId: tecnico.id,
+				title,
 			}
-			
-			if(reporteNuevo.empresaId !== value.empresaId){
-				newReport.title = getTitle(value.empresaId, empresas)
-			}
-
-			if (
-				reporteNuevo.empresaId === value.empresaId &&
-				reporteNuevo.instrumentoId === value.instrumentoId &&
-				reporteNuevo.clima[0] === value.clima[0] &&
-				reporteNuevo.clima[1] === value.clima[1] &&
-				reporteNuevo.clima[2] === value.clima[2]
-			) {
-				navigate({ to: "/iluminacion/nuevo-informe/areas" })
-				return
-			}
-
-			const result = await editarReporte({ data: newReport })
+			const result = await createReporteNuevo({ data: newReport })
 			if (!result) {
-				console.error("Error al editar el reporte", error)
+				console.error("Error al crear el reporte", error)
 			}
-			console.log("Reporte editado exitosamente")
+			console.log("Reporte creado exitosamente")
 			navigate({ to: "/iluminacion/nuevo-informe/areas" })
 		},
 	})
+	if (!tecnico || !empresas?.length || !instrumentos?.length)
+		return (
+			<article className="w-full flex flex-col justify-center items-center min-h-[30svh] gap-10">
+				<span className="text-foreground/50 text-sm italic text-center w-5/6 mx-auto">
+					Debe completar los datos del técnico, empresa o instrumento en su
+					perfil primero.
+				</span>
+				<Link to="/perfil/tecnicos" className="w-1/2 mx-auto">
+					<Button className="w-full py-4">Ir al perfil</Button>
+				</Link>
+			</article>
+		)
 
 	return (
 		<form
@@ -138,7 +147,7 @@ export default function EditReporte({
 										<SelectGroup>
 											<SelectLabel>Empresas</SelectLabel>
 
-											{empresas?.map(empresa => (
+											{sortedByRazonSocial(empresas)?.map(empresa => (
 												<SelectItem
 													key={empresa.id}
 													value={empresa.id}
@@ -195,7 +204,7 @@ export default function EditReporte({
 										<SelectGroup>
 											<SelectLabel>Instrumentos</SelectLabel>
 
-											{instrumentos?.map(instrumento => (
+											{sortedByName(instrumentos)?.map(instrumento => (
 												<SelectItem
 													key={instrumento.id}
 													value={instrumento.id}
@@ -396,7 +405,7 @@ export default function EditReporte({
 					}}
 				/>
 
-				<Field className="flex flex-col justify-center gap-4 sm:gap-10 items-center w-full sm:w-1/2 mx-auto mt-30">
+				<Field className="flex flex-col justify-center gap-4 sm:gap-10 items-center w-full sm:w-1/2 mx-auto mt-20">
 					<Button type="submit" disabled={isPending} className="flex-1 py-3">
 						{isPending ? (
 							<div className="flex gap-2 w-full justify-center items-center">
