@@ -28,9 +28,10 @@ import DeleteAreaAlert from "#/components/reportes/iluminacion/nuevo-informe/are
 
 // Lazy‑load the heavy chart component
 const ChartAreaInteractive = lazy(() =>
-  import("#/components/reportes/iluminacion/nuevo-informe/areas/chart")
-    .then(mod => new Promise(resolve => setTimeout(() => resolve(mod), 1000)))
-);
+	import("#/components/reportes/iluminacion/nuevo-informe/areas/chart").then(
+		mod => ({ default: mod.default })
+	)
+)
 
 export const Route = createFileRoute(
 	"/_protected/iluminacion/reportes/$id/areas"
@@ -88,8 +89,8 @@ function Area() {
 	)
 
 	return (
-		<article className="flex flex-col justify-center items-center py-20 w-full mx-auto relative">
-			<div className="absolute top-6 left-6">
+		<article className="flex flex-col justify-center items-center py-28 w-full mx-auto relative">
+			<div className="absolute top-14 left-8">
 				<AreaDropdownMenu area={area} />
 			</div>
 			<Select value={areaId} onValueChange={setAreaId}>

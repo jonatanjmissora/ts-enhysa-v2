@@ -19,7 +19,7 @@ import { ESTADO, HUMEDAD, TEMPERATURA } from "#/lib/constants"
 import { useFinalReporteNuevo } from "../../../../../../queries/reportes/iluminacion/use-final-reporte-nuevo"
 
 export const Route = createFileRoute(
-	"/_protected/iluminacion/nuevo-informe/opinion/"
+	"/_protected/iluminacion/nuevo-informe/resumen/"
 )({
 	component: RouteComponent,
 })

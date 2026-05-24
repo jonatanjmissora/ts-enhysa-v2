@@ -36,7 +36,7 @@ type Props = {
   requerido?: number;
 };
 
-export default React.memo(function ChartAreaInteractive({ puntos, requerido }: Props) {
+function ChartAreaInteractive({ puntos, requerido }: Props) {
   // Filter positive points
   const puntosWithValue = React.useMemo(() => puntos?.filter((p) => p > 0) ?? [], [puntos]);
 
@@ -63,22 +63,25 @@ export default React.memo(function ChartAreaInteractive({ puntos, requerido }: P
   }, [puntosWithValue, uniformidad, requerido, hasData]);
 
   // Gradients
-  const ChartGradients = React.useMemo(() => (
-    <defs>
-      <linearGradient id="fillMedicion" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="5%" stopColor="var(--color-medicion)" stopOpacity={0.8} />
-        <stop offset="95%" stopColor="var(--color-medicion)" stopOpacity={0.1} />
-      </linearGradient>
-      <linearGradient id="fillRequerido" x1="0" y1="0" x2="0" y2="0">
-        <stop offset="5%" stopColor="var(--color-requerido)" stopOpacity={0.8} />
-        <stop offset="95%" stopColor="var(--color-requerido)" stopOpacity={0.1} />
-      </linearGradient>
-      <linearGradient id="fillUniformidad" x1="0" y1="0" x2="0" y2="0">
-        <stop offset="5%" stopColor="var(--color-uniformidad)" stopOpacity={0.8} />
-        <stop offset="95%" stopColor="var(--color-uniformidad)" stopOpacity={0.1} />
-      </linearGradient>
-    </defs>
-  ), []);
+  const ChartGradients = React.useMemo(
+    () => (
+      <defs>
+        <linearGradient id="fillMedicion" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="5%" stopColor="var(--color-medicion)" stopOpacity={0.8} />
+          <stop offset="95%" stopColor="var(--color-medicion)" stopOpacity={0.1} />
+        </linearGradient>
+        <linearGradient id="fillRequerido" x1="0" y1="0" x2="0" y2="0">
+          <stop offset="5%" stopColor="var(--color-requerido)" stopOpacity={0.8} />
+          <stop offset="95%" stopColor="var(--color-requerido)" stopOpacity={0.1} />
+        </linearGradient>
+        <linearGradient id="fillUniformidad" x1="0" y1="0" x2="0" y2="0">
+          <stop offset="5%" stopColor="var(--color-uniformidad)" stopOpacity={0.8} />
+          <stop offset="95%" stopColor="var(--color-uniformidad)" stopOpacity={0.1} />
+        </linearGradient>
+      </defs>
+    ),
+    []
+  );
 
   return (
     <div className="mt-10 bg-accent py-10 rounded-lg w-[96dvw] sm:w-full mx-auto">
@@ -98,34 +101,11 @@ export default React.memo(function ChartAreaInteractive({ puntos, requerido }: P
               />
               <ChartTooltip
                 cursor={false}
-                content={
-                  <ChartTooltipContent
-                    labelFormatter={(value) => `Punto ${value}`}
-                    indicator="dot"
-                  />
-                }
+                content={<ChartTooltipContent labelFormatter={(value) => `Punto ${value}`} indicator="dot" />}
               />
-              <Area
-                dataKey="uniformidad"
-                type="natural"
-                fill="url(#fillUniformidad)"
-                stroke="var(--color-uniformidad)"
-                stackId="a"
-              />
-              <Area
-                dataKey="requerido"
-                type="natural"
-                fill="url(#fillRequerido)"
-                stroke="var(--color-requerido)"
-                stackId="a"
-              />
-              <Area
-                dataKey="medicion"
-                type="natural"
-                fill="url(#fillMedicion)"
-                stroke="var(--color-medicion)"
-                stackId="a"
-              />
+              <Area dataKey="uniformidad" type="natural" fill="url(#fillUniformidad)" stroke="var(--color-uniformidad)" stackId="a" />
+              <Area dataKey="requerido" type="natural" fill="url(#fillRequerido)" stroke="var(--color-requerido)" stackId="a" />
+              <Area dataKey="medicion" type="natural" fill="url(#fillMedicion)" stroke="var(--color-medicion)" stackId="a" />
               <ChartLegend content={<ChartLegendContent />} />
             </AreaChart>
           </ChartContainer>
@@ -135,4 +115,6 @@ export default React.memo(function ChartAreaInteractive({ puntos, requerido }: P
       )}
     </div>
   );
-});
+}
+
+export default React.memo(ChartAreaInteractive);
