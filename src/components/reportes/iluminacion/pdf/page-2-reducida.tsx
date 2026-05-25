@@ -75,17 +75,8 @@ export default function Page2({
 	return (
 		<>
 			{sortedByName(areas).map((area, muestreoIndex) => {
-				const puntosValidos = area.puntos.filter(punto => punto > 0)
-				return puntosValidos.length <= 13 ? (
+				return (
 					<AreaTableOnePage
-						key={area.id}
-						area={area}
-						tecnico={tecnico}
-						empresa={empresa}
-						muestreoIndex={muestreoIndex}
-					/>
-				) : (
-					<AreaTableMultiplePages
 						key={area.id}
 						area={area}
 						tecnico={tecnico}
@@ -314,6 +305,7 @@ function TablaDePuntos({
 }) {
 	const celdasMedidas = area.puntos.filter(punto => punto > 0)
 	const Eminima = Math.min(...celdasMedidas)
+	const EminimaTimestamp = area.timestamps[celdasMedidas.indexOf(Eminima)]
 	const uniformidad = Math.ceil(
 		celdasMedidas.reduce((acc, valor) => acc + valor, 0) /
 			celdasMedidas.length /
@@ -322,141 +314,105 @@ function TablaDePuntos({
 
 	return (
 		<>
-			{celdasMedidas.map((punto, index) => (
-				<View key={index} style={styles.flexrow}>
-					<View
-						style={[
-							styles.flexRowElementWithHight,
-							{ borderRight: "1px solid black", width: `${COLUMNWIDTH[0]}%` },
-						]}
-					>
-						{/* LETRA */}
-						<Text>{MUESTREO[muestreoIndex]}</Text>
-					</View>
-					<View
-						style={[
-							styles.flexRowElementWithHight,
-							{ borderRight: "1px solid black", width: `${COLUMNWIDTH[1]}%` },
-						]}
-					>
-						{/* HORA */}
-						<Text>
-							{new Date(area.timestamps[index])
-								.toLocaleTimeString("it-IT")
-								.substring(0, 5)}
-						</Text>
-					</View>
-					<View
-						style={[
-							styles.flexRowElementWithHight,
-							{ borderRight: "1px solid black", width: `${COLUMNWIDTH[2]}%` },
-						]}
-					>
-						{/* SECTOR NOMBRE */}
-						<Text>{area.nombre}</Text>
-					</View>
-					<View
-						style={[
-							styles.flexRowElementWithHight,
-							{ borderRight: "1px solid black", width: `${COLUMNWIDTH[3]}%` },
-						]}
-					>
-						{/* Sección / Puesto / Tipo */}
-						<Text>{area.tipo}</Text>
-					</View>
-					<View
-						style={[
-							styles.flexRowElementWithHight,
-							{ borderRight: "1px solid black", width: `${COLUMNWIDTH[4]}%` },
-						]}
-					>
-						{/* Tipo de iluminación */}
-						<Text>{area.iluminacionTipo}</Text>
-					</View>
-					<View
-						style={[
-							styles.flexRowElementWithHight,
-							{ borderRight: "1px solid black", width: `${COLUMNWIDTH[5]}%` },
-						]}
-					>
-						{/* Tipo de fuente */}
-						<Text>{area.iluminacionFuente}</Text>
-					</View>
-					<View
-						style={[
-							styles.flexRowElementWithHight,
-							{ borderRight: "1px solid black", width: `${COLUMNWIDTH[6]}%` },
-						]}
-					>
-						{/* Iluminación: */}
-						<Text>{area.iluminacion}</Text>
-					</View>
-					<View
-						style={[
-							styles.flexRowElementWithHight,
-							{ borderRight: "1px solid black", width: `${COLUMNWIDTH[7]}%` },
-						]}
-					>
-						<Text>
-							{Eminima} {"\u2265"} {uniformidad}
-						</Text>
-						{/* Valor media*/}
-					</View>
-					<View
-						style={[
-							styles.flexRowElementWithHight,
-							{ borderRight: "1px solid black", width: `${COLUMNWIDTH[8]}%` },
-						]}
-					>
-						<Text
-							style={{
-								color: `${punto === Eminima ? "red" : "black"}`,
-							}}
-						>
-							{punto}
-						</Text>
-						{/* Valor Medido */}
-					</View>
-					<View
-						style={[
-							styles.flexRowElementWithHight,
-							{ borderRight: "1px solid black", width: `${COLUMNWIDTH[9]}%` },
-						]}
-					>
-						<Text>{area.valorRequerido}</Text>
-						{/* Valor requerido */}
-					</View>
+			<View style={styles.flexrow}>
+				<View
+					style={[
+						styles.flexRowElementWithHight,
+						{ borderRight: "1px solid black", width: `${COLUMNWIDTH[0]}%` },
+					]}
+				>
+					{/* LETRA */}
+					<Text>{MUESTREO[muestreoIndex]}</Text>
 				</View>
-			))}
+				<View
+					style={[
+						styles.flexRowElementWithHight,
+						{ borderRight: "1px solid black", width: `${COLUMNWIDTH[1]}%` },
+					]}
+				>
+					{/* HORA */}
+					<Text>
+						{new Date(EminimaTimestamp)
+							.toLocaleTimeString("it-IT")
+							.substring(0, 5)}
+					</Text>
+				</View>
+				<View
+					style={[
+						styles.flexRowElementWithHight,
+						{ borderRight: "1px solid black", width: `${COLUMNWIDTH[2]}%` },
+					]}
+				>
+					{/* SECTOR NOMBRE */}
+					<Text>{area.nombre}</Text>
+				</View>
+				<View
+					style={[
+						styles.flexRowElementWithHight,
+						{ borderRight: "1px solid black", width: `${COLUMNWIDTH[3]}%` },
+					]}
+				>
+					{/* Sección / Puesto / Tipo */}
+					<Text>{area.tipo}</Text>
+				</View>
+				<View
+					style={[
+						styles.flexRowElementWithHight,
+						{ borderRight: "1px solid black", width: `${COLUMNWIDTH[4]}%` },
+					]}
+				>
+					{/* Tipo de iluminación */}
+					<Text>{area.iluminacionTipo}</Text>
+				</View>
+				<View
+					style={[
+						styles.flexRowElementWithHight,
+						{ borderRight: "1px solid black", width: `${COLUMNWIDTH[5]}%` },
+					]}
+				>
+					{/* Tipo de fuente */}
+					<Text>{area.iluminacionFuente}</Text>
+				</View>
+				<View
+					style={[
+						styles.flexRowElementWithHight,
+						{ borderRight: "1px solid black", width: `${COLUMNWIDTH[6]}%` },
+					]}
+				>
+					{/* Iluminación: */}
+					<Text>{area.iluminacion}</Text>
+				</View>
+				<View
+					style={[
+						styles.flexRowElementWithHight,
+						{ borderRight: "1px solid black", width: `${COLUMNWIDTH[7]}%` },
+					]}
+				>
+					<Text>
+						{Eminima} {"\u2265"} {uniformidad}
+					</Text>
+					{/* Valor media*/}
+				</View>
+				<View
+					style={[
+						styles.flexRowElementWithHight,
+						{ borderRight: "1px solid black", width: `${COLUMNWIDTH[8]}%` },
+					]}
+				>
+					<Text>{Eminima}</Text>
+					{/* Valor Medido */}
+				</View>
+				<View
+					style={[
+						styles.flexRowElementWithHight,
+						{ borderRight: "1px solid black", width: `${COLUMNWIDTH[9]}%` },
+					]}
+				>
+					<Text>{area.valorRequerido}</Text>
+					{/* Valor requerido */}
+				</View>
+			</View>
+			)
 		</>
-	)
-}
-function AreaTableMultiplePages({
-	area,
-	tecnico,
-	empresa,
-	muestreoIndex,
-}: {
-	area: AreaIluminacionType
-	tecnico: TecnicoType
-	empresa: EmpresaType
-	muestreoIndex: number
-}) {
-	const puntosValidos = area.puntos.filter(punto => punto > 0)
-	const chunkResult = chunk(puntosValidos, 13)
-	return chunkResult.map((chunk, index) => (
-		<AreaTableOnePage
-			key={index}
-			area={{ ...area, puntos: chunk }}
-			tecnico={tecnico}
-			empresa={empresa}
-			muestreoIndex={muestreoIndex}
-		/>
-	))
-}
-
-function chunk(array: number[], size: number) {
-	return Array.from({ length: Math.ceil(array.length / size) }, (_, i) =>
-		array.slice(i * size, i * size + size)
 	)
 }

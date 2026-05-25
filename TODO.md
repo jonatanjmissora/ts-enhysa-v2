@@ -3,11 +3,7 @@ si pongo cancelar cuando edito o creo algo que vaya al uploadthing, hay que borr
 
 cuando elimino, empresa, instumento o reporte, tambien borrar las imagenes en uploadthing
 
-edit de reportes
-
 hacer la grilla del pdf en grilla de crear area
-
-tabla detallada o por area reducida
 
 hay desbordes en la imagenes del croquis
 
@@ -25,12 +21,6 @@ rate limit
 
 sentry
 
-hacer lo que hice con informes, con el useQuery con id, pero para las areas
-
 cuando termino de crear un reporte, lo crea, pero me tira error el query, y no me re-dirige
 
 cuando borro un reporte, sea nuevo o no, tengo que borrar tambien las areas y por ende las imagenes
-
-cuando borro un area, en edit, no se actualizan las areas listadas
-
-hacer un skelton para todas las cargas de imagenes

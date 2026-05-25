@@ -7,16 +7,18 @@ import { Suspense } from "react"
 import { reporteQueryOptions } from "../../../../../../../queries/reportes/iluminacion/reportes-query"
 import { ClientComponent } from "#/components/client-component"
 import { lazy } from "react"
-const MyDocument = lazy(() =>
-	import("#/components/reportes/iluminacion/pdf/my-document").then(m => ({
-		default: m.MyDocument,
-	}))
+const MyDocumentReducida = lazy(() =>
+	import("#/components/reportes/iluminacion/pdf/my-document-reducida").then(
+		m => ({
+			default: m.MyDocumentReducida,
+		})
+	)
 )
 import { areasQueryOptions } from "../../../../../../../queries/reportes/iluminacion/areas/areas-query"
 import useScrollTop from "#/hooks/scroll-top"
 
 export const Route = createFileRoute(
-	"/_protected/iluminacion/reportes/pdf/$id/"
+	"/_protected/iluminacion/reportes/pdf/$id/reducida"
 )({
 	component: RouteComponent,
 })
@@ -90,7 +92,7 @@ function PDF() {
 					/>
 				}
 			>
-				<MyDocument
+				<MyDocumentReducida
 					reporte={reporte}
 					areas={areas}
 					tecnico={reporte.tecnico}

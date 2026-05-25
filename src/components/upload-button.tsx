@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { Suspense, useState } from "react"
 import { UploadDropzone } from "@uploadthing/react"
 import type { OurFileRouter, OurFilesRouter } from "../../server/uploadthing"
 import { CloudUpload, X } from "lucide-react"
@@ -210,45 +210,59 @@ export function FilesDropzone({
 				</div>
 			)}
 			{files[0] !== "" && (
-				<div className="w-full">
-					<div className="flex w-full grid-cols-4 gap-2 content-center">
-						{files.map(url => {
-							const isPdf = url.includes(".pdf")
-
-							if (isPdf) {
-								return (
-									<a
-										key={url}
-										href={url}
-										target="_blank"
-										className="border rounded p-4 flex items-center justify-center bg-accent hover:bg-accent/80 transition-colors"
-									>
-										Ver PDF
-									</a>
-								)
-							}
-
-							return (
-								<div className="relative w-full h-20 " key={url}>
-									<img
-										src={url}
-										alt=""
-										className="h-full w-full object-contain rounded border border-foreground/10"
-									/>
-									<button
-										type="button"
-										onClick={() => deleteImage(url)}
-										className="absolute top-0 right-0"
-									>
-										<X size={20} className="text-background bg-amber-700" />
-									</button>
-								</div>
-							)
-						})}
-					</div>
-				</div>
+				<Suspense fallback={<div>Cargando imagenes...</div>}>
+					<FilesPreview files={files} deleteImage={deleteImage} />
+				</Suspense>
 			)}
 		</>
+	)
+}
+
+function FilesPreview({
+	files,
+	deleteImage,
+}: {
+	files: string[]
+	deleteImage: (file: string) => Promise<void>
+}) {
+	return (
+		<div className="w-full">
+			<div className="flex w-full grid-cols-4 gap-2 content-center">
+				{files.map(url => {
+					const isPdf = url.includes(".pdf")
+
+					if (isPdf) {
+						return (
+							<a
+								key={url}
+								href={url}
+								target="_blank"
+								className="border rounded p-4 flex items-center justify-center bg-accent hover:bg-accent/80 transition-colors"
+							>
+								Ver PDF
+							</a>
+						)
+					}
+
+					return (
+						<div className="relative w-full h-20 " key={url}>
+							<img
+								src={url}
+								alt=""
+								className="h-full w-full object-contain rounded border border-foreground/10"
+							/>
+							<button
+								type="button"
+								onClick={() => deleteImage(url)}
+								className="absolute top-0 right-0"
+							>
+								<X size={20} className="text-background bg-amber-700" />
+							</button>
+						</div>
+					)
+				})}
+			</div>
+		</div>
 	)
 }
 
@@ -287,24 +301,36 @@ export function ImageUploader({ onUploaded }: FilesDropzoneProps) {
 			/>
 
 			{images.length > 0 && (
-				<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 w-full">
-					{images.map((img, i) => (
-						<div
-							key={i}
-							className="relative aspect-square rounded-xl overflow-hidden border border-foreground/10 group hover:scale-[1.02] transition-all duration-300"
-						>
-							<img
-								src={img.url}
-								alt={img.name}
-								className="w-full h-full object-cover"
-							/>
-							<div className="absolute inset-0 from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-3">
-								<p className="text-white text-xs truncate w-full">{img.name}</p>
-							</div>
-						</div>
-					))}
-				</div>
+				<Suspense fallback={<div>Cargando imagenes...</div>}>
+					<ImagesPreview2 images={images} />
+				</Suspense>
 			)}
+		</div>
+	)
+}
+
+function ImagesPreview2({
+	images,
+}: {
+	images: { url: string; name: string }[]
+}) {
+	return (
+		<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 w-full">
+			{images.map((img, i) => (
+				<div
+					key={i}
+					className="relative aspect-square rounded-xl overflow-hidden border border-foreground/10 group hover:scale-[1.02] transition-all duration-300"
+				>
+					<img
+						src={img.url}
+						alt={img.name}
+						className="w-full h-full object-cover"
+					/>
+					<div className="absolute inset-0 from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-3">
+						<p className="text-white text-xs truncate w-full">{img.name}</p>
+					</div>
+				</div>
+			))}
 		</div>
 	)
 }

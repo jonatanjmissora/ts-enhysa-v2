@@ -16,19 +16,6 @@ export default function MembreteInferior({
 					padding: "2px 0px",
 				}}
 			>
-				{/* <View
-					style={{
-						flex: 1,
-						display: "flex",
-						alignItems: "flex-start",
-						justifyContent: "flex-start",
-						padding: "10px 0",
-					}}
-				>
-					<Text style={{ fontSize: 14, fontWeight: "bold" }}>
-						Logo consultora
-					</Text>
-				</View> */}
 				<View
 					style={{
 						flex: 1,
