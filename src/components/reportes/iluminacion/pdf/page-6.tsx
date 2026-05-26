@@ -1,4 +1,4 @@
-import { Page, Text, View, StyleSheet, Image } from "@react-pdf/renderer"
+import { Page, Text, View, StyleSheet } from "@react-pdf/renderer"
 import MembreteSuperior from "./membrete-superior"
 import MembreteInferior from "./membrete-inferior"
 import type { AreaIluminacionType } from "../../../../../db/reportes/iluminacion/areas/schema"
@@ -115,14 +115,14 @@ function Area({
 					fontWeight: "900",
 				}}
 			>
-				Anexo
+				Anexo 6
 			</Text>
 
 			<View
 				style={{
 					flex: 1,
-					width: "100%",
-					border: "1px solid black",
+					width: "80%",
+					margin: "0 auto",
 				}}
 			>
 				<ChartAreaPDF

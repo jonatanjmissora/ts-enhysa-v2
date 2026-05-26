@@ -43,9 +43,10 @@ export function ChartAreaPDF({
 	})
 
 	const pathData = `M0,50 L${points.join(" L")} L100,50 Z`
+	const ejeHorizontalDiv = 100 / (puntosWithValue.length - 1)
 
 	return (
-		<Svg viewBox="0 0 100 50" width="100%" height="100%">
+		<Svg viewBox="0 0 110 50" width="100%" height="100%">
 			<Defs>
 				<LinearGradient id="grad" x1="0" y1="0" x2="0" y2="1">
 					<Stop offset="0" stopColor="#00f" stopOpacity="0.6" />
@@ -82,14 +83,44 @@ export function ChartAreaPDF({
 			<Text x={-8} y={48} style={{ fontSize: 4 }} fill="#000">
 				{min.toFixed(0)}
 			</Text>
-			<Text x={0} y={55} style={{ fontSize: 4 }} fill="#000">
-				1
-			</Text>
-			<Text x={100} y={55} style={{ fontSize: 4 }} fill="#000" textAnchor="end">
-				{puntosWithValue.length}
-			</Text>
+
+			<EjeHorizontal
+				ejeHorizontalDiv={ejeHorizontalDiv}
+				puntosWithValueLength={puntosWithValue.length}
+			/>
+
+			<Grilla />
 
 			<Path d={pathData} fill="lightblue" stroke="blue" strokeWidth="0.5" />
 		</Svg>
 	)
+}
+
+function EjeHorizontal({
+	ejeHorizontalDiv,
+	puntosWithValueLength,
+}: {
+	ejeHorizontalDiv: number
+	puntosWithValueLength: number
+}) {
+	return (
+		<>
+			{Array.from({ length: puntosWithValueLength }).map((_, index) => (
+				<Text
+					key={index}
+					x={index * ejeHorizontalDiv}
+					y={55}
+					style={{ fontSize: 2 }}
+					fill="#000"
+					textAnchor="middle"
+				>
+					{index + 1}
+				</Text>
+			))}
+		</>
+	)
+}
+
+function Grilla() {
+	return null
 }

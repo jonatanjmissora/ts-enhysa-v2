@@ -5,7 +5,6 @@ import type { AreaIluminacionType } from "../../../../../db/reportes/iluminacion
 import type { TecnicoType } from "../../../../../db/tecnicos/schema"
 import type { EmpresaType } from "../../../../../db/empresas/schema"
 import { getNumeroCeldas } from "#/lib/utils"
-import { ChartAreaPDF } from "./ChartAreaPDF"
 
 // Create styles
 const styles = StyleSheet.create({
@@ -93,12 +92,12 @@ function Area({
 	let cellW = 75
 	let cellH = (largo * cellW) / ancho
 
-	if (cellW * div >= 470 || cellH * div >= 450) {
+	if (cellW * div >= 470 || cellH * div >= 270) {
 		if (ancho > largo) {
 			cellW = 470 / div
 			cellH = (largo * cellW) / ancho
 		} else {
-			cellH = 450 / div
+			cellH = 270 / div
 			cellW = (ancho * cellH) / largo
 		}
 	}
@@ -154,15 +153,17 @@ function Area({
 						display: "flex",
 						flexDirection: "column",
 						alignItems: "center",
-						justifyContent: "center",
+						marginTop: "15px",
+						marginBottom: "5px",
 					}}
 				>
 					<View
 						style={{
 							position: "relative",
-							marginTop: "10px",
 							width: `${div * cellW}px`,
 							height: `${div * cellH}px`,
+							maxWidth: "470px",
+							maxHeight: "270px",
 							display: "flex",
 							flexDirection: "row",
 							flexWrap: "wrap",
@@ -198,7 +199,8 @@ function Area({
 					<View
 						style={{
 							flex: 1,
-							width: "100%",
+							width: "470px",
+							maxHeight: "180px",
 							display: "flex",
 							flexDirection: "row",
 							justifyContent: "center",
