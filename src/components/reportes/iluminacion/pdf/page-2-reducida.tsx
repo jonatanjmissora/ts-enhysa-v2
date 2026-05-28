@@ -72,33 +72,17 @@ export default function Page2({
 	empresa: EmpresaType
 	tecnico: TecnicoType
 }) {
-	return (
-		<>
-			{sortedByName(areas).map((area, muestreoIndex) => {
-				return (
-					<AreaTableOnePage
-						key={area.id}
-						area={area}
-						tecnico={tecnico}
-						empresa={empresa}
-						muestreoIndex={muestreoIndex}
-					/>
-				)
-			})}
-		</>
-	)
+	return <AreaTableOnePage areas={areas} tecnico={tecnico} empresa={empresa} />
 }
 
 function AreaTableOnePage({
-	area,
+	areas,
 	tecnico,
 	empresa,
-	muestreoIndex,
 }: {
-	area: AreaIluminacionType
+	areas: AreaIluminacionType[]
 	tecnico: TecnicoType
 	empresa: EmpresaType
-	muestreoIndex: number
 }) {
 	return (
 		<Page size="A4" orientation="landscape" style={styles.page}>
@@ -282,13 +266,24 @@ function AreaTableOnePage({
 
 				{/* **************************************************************************************************** */}
 
-				<TablaDePuntos area={area} muestreoIndex={muestreoIndex} />
-
+				{sortedByName(areas).map((area, muestreoIndex) => (
+					<TablaDePuntos
+						key={area.id}
+						area={area}
+						muestreoIndex={muestreoIndex}
+					/>
+				))}
 				{/* **************************************************************************************************** */}
 
 				<Text style={[styles.row, { height: 40, borderBottom: "none" }]}>
 					(34) Observaciones:{" "}
-					{area.observaciones !== "" ? area.observaciones : "Sin observaciones"}
+					{areas
+						.map(area =>
+							area.observaciones !== ""
+								? area.observaciones
+								: "Sin Observaciones"
+						)
+						.join(" - ")}
 				</Text>
 			</View>
 			<MembreteInferior tecnico={tecnico} />
