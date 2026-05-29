@@ -1,11 +1,8 @@
 
-hacer la grilla del pdf en grilla de crear area
-
-incluir graficas en el pdf
+ACTUALIZACION
+===========
 
 sin conexion
-
-pwa
 
 terminos y condiciones
 
@@ -15,12 +12,18 @@ rate limit
 
 sentry
 
-cuando termino de crear un reporte, lo crea, pero me tira error el query, y no me re-dirige
+ir guardando por fila completa de puntos
 
+TODO
+======
+pwa
+
+hacer la grilla del pdf en grilla de crear area
+
+incluir graficas en el pdf
+
+fotos en area update, no carga todas las fotos, cargo solo la ultima
 
 ADMIN:
-cuando borro un reporte, sea nuevo o no, tengo que borrar tambien las areas y por ende las imagenes
-
-si pongo cancelar cuando edito o creo algo que vaya al uploadthing, hay que borrar dichas imagenes subidas, porque no sirven de nada y ocupan espacio en el servidor.
-
-cuando elimino, empresa, instumento o reporte, tambien borrar las imagenes en uploadthing
+========
+controlar si todas las areas tienen reporte, sino mostrar para borrar
