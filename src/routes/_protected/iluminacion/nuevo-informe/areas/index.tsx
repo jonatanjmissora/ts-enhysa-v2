@@ -71,7 +71,7 @@ function Areas() {
 	const { data: reporteNuevo } = useSuspenseQuery(reporteNuevoQueryOptions())
 
 	const { data: areas } = useSuspenseQuery(
-		areasQueryOptions({ reporteId: reporteNuevo?.id ?? "" })
+		areasQueryOptions({ reportId: reporteNuevo?.id ?? "" })
 	)
 
 	if (!areas || areas.length === 0) return <NoAreas />

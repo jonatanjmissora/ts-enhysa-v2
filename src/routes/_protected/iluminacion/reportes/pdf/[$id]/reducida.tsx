@@ -68,7 +68,7 @@ function PDF() {
 		staleTime: 1000 * 60 * 5, // 5 minutos
 	})
 	const { data: areas } = useSuspenseQuery({
-		...areasQueryOptions({ reporteId: reporte?.id || "" }),
+		...areasQueryOptions({ reportId: reporte?.id || "" }),
 		staleTime: 1000 * 60 * 5,
 	})
 

@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { deleteReporteServer } from "../../../server/reportes/iluminacion/delete-reporte-server"
 import type { ReporteIluminacionType } from "../../../db/reportes/iluminacion/schema"
 
-export function useDeleteReporteNuevo(reporteId: string) {
+export function useDeleteReporteNuevo(reportId: string) {
 	const queryClient = useQueryClient()
 
 	return useMutation({
@@ -16,14 +16,14 @@ export function useDeleteReporteNuevo(reporteId: string) {
 				["reportes-iluminacion"],
 				oldData => {
 					if (!oldData) return oldData
-					return oldData.filter(item => item.id !== reporteId)
+					return oldData.filter(item => item.id !== reportId)
 				}
 			)
 		},
 	})
 }
 
-export function useDeleteReporte(reporteId: string) {
+export function useDeleteReporte(reportId: string) {
 	const queryClient = useQueryClient()
 
 	return useMutation({
@@ -31,13 +31,13 @@ export function useDeleteReporte(reporteId: string) {
 			deleteReporteServer({ data }),
 		onSuccess: () => {
 			queryClient.removeQueries({
-				queryKey: ["reporte-iluminacion", reporteId],
+				queryKey: ["reporte-iluminacion", reportId],
 			})
 			queryClient.setQueryData<ReporteIluminacionType[]>(
 				["reportes-iluminacion"],
 				oldData => {
 					if (!oldData) return oldData
-					return oldData.filter(item => item.id !== reporteId)
+					return oldData.filter(item => item.id !== reportId)
 				}
 			)
 		},

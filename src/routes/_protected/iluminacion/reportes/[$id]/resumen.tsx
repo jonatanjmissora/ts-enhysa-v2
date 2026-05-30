@@ -48,7 +48,7 @@ function Resumen() {
 	const { id } = Route.useParams()
 	const { data: reporte } = useSuspenseQuery(reporteQueryOptions({ id }))
 	const { data: areas } = useSuspenseQuery(
-		areasQueryOptions({ reporteId: reporte?.id ?? "" })
+		areasQueryOptions({ reportId: reporte?.id ?? "" })
 	)
 	const [isModal, setIsModal] = useState(false)
 	const [reportError, setReportError] = useState("")
@@ -66,7 +66,7 @@ function Resumen() {
 			<CompletoOResumidoModal
 				isModal={isModal}
 				setIsModal={setIsModal}
-				reporteId={reporte.id}
+				reportId={reporte.id}
 			/>
 		)
 	}
@@ -178,11 +178,11 @@ function ResumenDropdownMenu({ reporte }: { reporte: ReporteIluminacionType }) {
 function CompletoOResumidoModal({
 	isModal,
 	setIsModal,
-	reporteId,
+	reportId,
 }: {
 	setIsModal: (isModal: boolean) => void
 	isModal: boolean
-	reporteId: string
+	reportId: string
 }) {
 	return (
 		<AlertDialog open={isModal} onOpenChange={setIsModal}>
@@ -198,7 +198,7 @@ function CompletoOResumidoModal({
 					<div className="w-full h-full flex flex-col gap-8">
 						<Link
 							to="/iluminacion/reportes/pdf/$id/reducida"
-							params={{ id: reporteId }}
+							params={{ id: reportId }}
 							className="flex flex-col gap-2"
 						>
 							<span className="font-bold text-lg tracking-widest text-center">
@@ -217,7 +217,7 @@ function CompletoOResumidoModal({
 						</Link>
 						<Link
 							to="/iluminacion/reportes/pdf/$id/completa"
-							params={{ id: reporteId }}
+							params={{ id: reportId }}
 							className="flex flex-col gap-2"
 						>
 							<span className="font-bold text-lg tracking-widest text-center">

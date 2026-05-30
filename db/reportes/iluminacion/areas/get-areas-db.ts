@@ -3,7 +3,7 @@ import { delay } from "@/lib/utils"
 import { db } from "../../../../db"
 import { areas_iluminacion } from "./schema"
 
-export async function getAreasDB(userId: string, reporteId: string) {
+export async function getAreasDB(userId: string, reportId: string) {
 	try {
 		await delay()
 		return await db
@@ -12,7 +12,7 @@ export async function getAreasDB(userId: string, reporteId: string) {
 			.where(
 				and(
 					eq(areas_iluminacion.userId, userId),
-					eq(areas_iluminacion.reportId, reporteId)
+					eq(areas_iluminacion.reportId, reportId)
 				)
 			)
 	} catch (error) {

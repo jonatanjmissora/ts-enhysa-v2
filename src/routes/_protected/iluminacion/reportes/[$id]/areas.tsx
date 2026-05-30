@@ -57,7 +57,7 @@ function RouteComponent() {
 function Area() {
 	const { id } = Route.useParams()
 
-	const { data: areas } = useSuspenseQuery(areasQueryOptions({ reporteId: id }))
+	const { data: areas } = useSuspenseQuery(areasQueryOptions({ reportId: id }))
 	const sortedAreas = sortedByName(areas)
 	// Initialize with empty selection; will be synced via effect below
 	const [areaId, setAreaId] = useState<string>(sortedAreas[0]?.id || "")
