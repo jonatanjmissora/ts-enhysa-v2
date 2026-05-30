@@ -48,7 +48,7 @@ function Resumen() {
 	const { id } = Route.useParams()
 	const { data: reporte } = useSuspenseQuery(reporteQueryOptions({ id }))
 	const { data: areas } = useSuspenseQuery(
-		areasQueryOptions({ reportId: reporte?.id ?? "" })
+		areasQueryOptions({ reporteId: reporte?.id ?? "" })
 	)
 	const [isModal, setIsModal] = useState(false)
 	const [reportError, setReportError] = useState("")

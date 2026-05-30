@@ -118,7 +118,6 @@ function CreateArea({
 				imagenes: planoFiles,
 			}
 			const result = await createArea({ data: newArea })
-			console.log("RESULT", result)
 			if (!result) {
 				console.error("Error al crear area", error)
 				return

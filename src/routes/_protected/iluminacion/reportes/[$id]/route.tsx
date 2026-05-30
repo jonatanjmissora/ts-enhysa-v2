@@ -17,7 +17,7 @@ export const Route = createFileRoute("/_protected/iluminacion/reportes/$id")({
 		context.queryClient.ensureQueryData(reporteQueryOptions({ id: params.id }))
 		context.queryClient.ensureQueryData(empresasQueryOptions)
 		context.queryClient.ensureQueryData(
-			areasQueryOptions({ reportId: params.id })
+			areasQueryOptions({ reporteId: params.id })
 		)
 		return null
 	},
