@@ -17,7 +17,6 @@ import { DefaultCatchBoundary } from "#/components/DefaultCatchBoundary"
 import type { Session } from "better-auth"
 import { getSession } from "../../server/get-session"
 import NotFound from "#/components/not-found"
-import Loading from "#/components/loading"
 import { getThemeServerFn } from "../../server/theme"
 
 interface MyRouterContext {
@@ -61,7 +60,7 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 
 function RootDocument({ children }: { children: React.ReactNode }) {
 	const theme = Route.useRouteContext({
-		select: (s) => s.theme,
+		select: s => s.theme,
 	})
 	return (
 		<html lang="en" className={theme === "auto" ? "dark" : theme}>
