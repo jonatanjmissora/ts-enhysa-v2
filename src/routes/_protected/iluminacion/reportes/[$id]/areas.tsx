@@ -131,7 +131,9 @@ function Area() {
 				<span className="text-right">Valor Máximo :</span>
 				<span>{maxValue(puntosWithValue)} lux</span>
 				<span className="text-right">Puntos Medidos :</span>
-				<span>{puntosWithValue.length}</span>
+				<span>
+					{puntosWithValue.length} / {area.puntos.length}
+				</span>
 				<span className="text-right">Valor Requerido :</span>
 				<span>{area.valorRequerido} lux</span>
 				<span className="text-right">Cumplen valor requerido :</span>
@@ -140,6 +142,8 @@ function Area() {
 						? "SI"
 						: "NO"}
 				</span>
+				<span className="text-right">Mediciones :</span>
+				<span>{area.puntos.join(", ")}</span>
 			</div>
 
 			<Suspense

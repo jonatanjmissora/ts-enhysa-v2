@@ -886,7 +886,7 @@ function InputMenu({
 				type="number"
 				id="punto"
 				name="punto"
-				className="dark:bg-foreground/50 bg-foreground/50 text-background/75 textXL text-4xl w-3/4 sm:w-1/2 p-4 h-20 text-center rounded-md"
+				className="dark:bg-foreground/50 bg-foreground/50 text-background/75 tracking-widest text-3xl md:text-3xl w-3/4 sm:w-1/2 p-4 h-20 text-center rounded-md focus:text-blue-200 dark:focus:text-blue-800 font-bold"
 				onChange={e => setPuntoValue(e.currentTarget.value)}
 			/>
 			<div className="w-full flex flex-col justify-between gap-4">

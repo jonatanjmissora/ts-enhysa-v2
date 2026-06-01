@@ -73,7 +73,15 @@ export const ILUMINACION = ["general", "localizada", "mixta"] as const
 
 export type IluminacionType = (typeof ILUMINACION)[number]
 
-export const VALORES_REQUERIDOS = ["100", "200", "300", "750", "1000"] as const
+export const VALORES_REQUERIDOS = [
+	"100",
+	"100 a 300",
+	"300 a 750",
+	"750 a 1500",
+	"1500 a 3000",
+	"3000",
+	"3000 a 10.000",
+] as const
 
 export type ValoresRequeridosType = (typeof VALORES_REQUERIDOS)[number]
 

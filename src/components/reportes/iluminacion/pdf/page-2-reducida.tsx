@@ -298,14 +298,13 @@ function TablaDePuntos({
 	area: AreaIluminacionType
 	muestreoIndex: number
 }) {
-	const celdasMedidas = area.puntos.filter(punto => punto > 0)
+		const celdasMedidas = area.puntos.filter(punto => punto > 0)
 	const Eminima = Math.min(...celdasMedidas)
 	const EminimaTimestamp = area.timestamps[celdasMedidas.indexOf(Eminima)]
-	const uniformidad = Math.ceil(
-		celdasMedidas.reduce((acc, valor) => acc + valor, 0) /
-			celdasMedidas.length /
-			2
+	const promedio = Math.round(
+		celdasMedidas.reduce((acc, valor) => acc + valor, 0) / celdasMedidas.length
 	)
+	const uniformidad = Math.ceil(promedio / 2)
 
 	return (
 		<>
@@ -394,7 +393,7 @@ function TablaDePuntos({
 						{ borderRight: "1px solid black", width: `${COLUMNWIDTH[8]}%` },
 					]}
 				>
-					<Text>{Eminima}</Text>
+					<Text>{promedio}</Text>
 					{/* Valor Medido */}
 				</View>
 				<View
