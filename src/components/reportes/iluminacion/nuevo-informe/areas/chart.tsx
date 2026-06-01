@@ -1,6 +1,5 @@
-import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
+import { Area, AreaChart, CartesianGrid, XAxis, YAxis, Line } from "recharts";
 import React from "react";
-
 import { CardContent } from "@/components/ui/card";
 import {
   ChartContainer,
@@ -21,10 +20,6 @@ const chartConfig = {
     label: "uniformidad",
     color: "cyan",
   },
-  requerido: {
-    label: "requerido",
-    color: "pink",
-  },
   medicion: {
     label: "medicion",
     color: "yellow",
@@ -33,10 +28,9 @@ const chartConfig = {
 
 type Props = {
   puntos: number[];
-  requerido?: number;
 };
 
-function ChartAreaInteractive({ puntos, requerido }: Props) {
+function ChartAreaInteractive({ puntos }: Props) {
   // Filter positive points
   const puntosWithValue = React.useMemo(() => puntos?.filter((p) => p > 0) ?? [], [puntos]);
 
@@ -57,10 +51,9 @@ function ChartAreaInteractive({ puntos, requerido }: Props) {
     return slice.map((punto, index) => ({
       punto: (index + 1).toString(),
       uniformidad,
-      requerido,
       medicion: punto,
     }));
-  }, [puntosWithValue, uniformidad, requerido, hasData]);
+  }, [puntosWithValue, uniformidad, hasData]);
 
   // Gradients
   const ChartGradients = React.useMemo(
@@ -69,10 +62,6 @@ function ChartAreaInteractive({ puntos, requerido }: Props) {
         <linearGradient id="fillMedicion" x1="0" y1="0" x2="0" y2="1">
           <stop offset="5%" stopColor="var(--color-medicion)" stopOpacity={0.8} />
           <stop offset="95%" stopColor="var(--color-medicion)" stopOpacity={0.1} />
-        </linearGradient>
-        <linearGradient id="fillRequerido" x1="0" y1="0" x2="0" y2="0">
-          <stop offset="5%" stopColor="var(--color-requerido)" stopOpacity={0.8} />
-          <stop offset="95%" stopColor="var(--color-requerido)" stopOpacity={0.1} />
         </linearGradient>
         <linearGradient id="fillUniformidad" x1="0" y1="0" x2="0" y2="0">
           <stop offset="5%" stopColor="var(--color-uniformidad)" stopOpacity={0.8} />
@@ -103,9 +92,8 @@ function ChartAreaInteractive({ puntos, requerido }: Props) {
                 cursor={false}
                 content={<ChartTooltipContent labelFormatter={(value) => `Punto ${value}`} indicator="dot" />}
               />
-              <Area dataKey="uniformidad" type="natural" fill="url(#fillUniformidad)" stroke="var(--color-uniformidad)" stackId="a" />
-              <Area dataKey="requerido" type="natural" fill="url(#fillRequerido)" stroke="var(--color-requerido)" stackId="a" />
-              <Area dataKey="medicion" type="natural" fill="url(#fillMedicion)" stroke="var(--color-medicion)" stackId="a" />
+              <Line dataKey="uniformidad" type="natural" stroke="var(--color-uniformidad)" dot={false} />
+              <Area dataKey="medicion" type="natural" fill="url(#fillMedicion)" stroke="var(--color-medicion)" />
               <ChartLegend content={<ChartLegendContent />} />
             </AreaChart>
           </ChartContainer>

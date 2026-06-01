@@ -119,7 +119,6 @@ function Area() {
 			>
 				<ChartAreaInteractive
 					puntos={area.puntos}
-					requerido={Number(area.valorRequerido)}
 				/>
 			</Suspense>
 
@@ -136,12 +135,7 @@ function Area() {
 				</span>
 				<span className="text-right">Valor Requerido :</span>
 				<span>{area.valorRequerido} lux</span>
-				<span className="text-right">Cumplen valor requerido :</span>
-				<span>
-					{puntosWithValue.every(p => p >= Number(area.valorRequerido))
-						? "SI"
-						: "NO"}
-				</span>
+				
 				<span className="text-right">Mediciones :</span>
 				<span>{area.puntos.join(", ")}</span>
 			</div>

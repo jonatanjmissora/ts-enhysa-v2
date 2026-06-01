@@ -127,7 +127,6 @@ function Area({
 			>
 				<ChartAreaPDF
 					puntos={area.puntos}
-					requerido={Number(area.valorRequerido)}
 				/>
 			</View>
 

@@ -14,10 +14,8 @@ import {
 // at any pixel size (e.g., 400 px × 600 px) while preserving aspect ratio.
 export function ChartAreaPDF({
 	puntos,
-	requerido,
 }: {
 	puntos: number[]
-	requerido: number
 }) {
 	const data = puntos
 	const puntosWithValue = puntos?.filter(punto => punto > 0)
@@ -130,13 +128,6 @@ export function ChartAreaPDF({
 						</Text>
 					)
 				)}
-				{requerido !== null && (
-					<Path
-						d={`M${paddingX},${paddingY + chartHeight - requerido * yFactor} L${paddingX + chartWidth},${paddingY + chartHeight - requerido * yFactor}`}
-						stroke="#c7465c"
-						strokeWidth="0.25"
-					/>
-				)}
 
 				{/* Uniformidad line */}
 				<Path
@@ -168,17 +159,7 @@ export function ChartAreaPDF({
 					></View>
 					<Text style={{ fontSize: 7 }}>Uniformidad: {uniformidad}</Text>
 				</View>
-				<View style={{ display: "flex", flexDirection: "row", gap: 2 }}>
-					<View
-						style={{
-							backgroundColor: "#c7465c",
-							width: 10,
-							height: 10,
-							borderRadius: 100,
-						}}
-					></View>
-					<Text style={{ fontSize: 7 }}>Requerido: {requerido}</Text>
-				</View>
+				
 			</View>
 		</View>
 	)
