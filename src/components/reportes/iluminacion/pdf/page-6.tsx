@@ -121,13 +121,11 @@ function Area({
 			<View
 				style={{
 					flex: 1,
-					width: "80%",
+					width: "100%",
 					margin: "0 auto",
 				}}
 			>
-				<ChartAreaPDF
-					puntos={area.puntos}
-				/>
+				<ChartAreaPDF puntos={area.puntos} />
 			</View>
 
 			<MembreteInferior tecnico={tecnico} />

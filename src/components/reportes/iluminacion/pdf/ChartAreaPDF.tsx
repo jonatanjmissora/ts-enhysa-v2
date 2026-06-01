@@ -7,16 +7,14 @@ import {
 	Rect,
 	Text,
 	View,
+	Circle,
 } from "@react-pdf/renderer"
+import React from "react"
 
 // Simple area chart – points are plotted as (index, value)
 // The chart is now normalized to a 0‑100 × 0‑100 viewBox so it can be rendered
 // at any pixel size (e.g., 400 px × 600 px) while preserving aspect ratio.
-export function ChartAreaPDF({
-	puntos,
-}: {
-	puntos: number[]
-}) {
+export function ChartAreaPDF({ puntos }: { puntos: number[] }) {
 	const data = puntos
 	const puntosWithValue = puntos?.filter(punto => punto > 0)
 	if (!puntosWithValue || puntosWithValue.length === 0)
@@ -31,12 +29,19 @@ export function ChartAreaPDF({
 	const maxX = data.length - 1 // last index (8)
 
 	// Normalization factors (0‑100 range for both axes) with padding for labels
-	const paddingX = 12 // space on left for Y‑axis values
-	const paddingY = 6 // space at bottom for X‑axis labels
-	const chartWidth = 90 - paddingX
-	const chartHeight = 100 - paddingY
+	const paddingX = 8 // space on left for Y‑axis values
+	const paddingY = 8 // space at bottom for X‑axis labels
+	const chartWidth = 95 - paddingX
+	const chartHeight = 95 - paddingY
 	const xFactor = maxX === 0 ? 0 : chartWidth / maxX
 	const yFactor = maxY === 0 ? 0 : chartHeight / maxY
+	// Determine step size (50 or 100) based on the maximum Y value
+	const step = maxY <= 200 ? 50 : 100
+	const maxTick = Math.ceil(maxY / step) * step
+	const yTicks = [] as number[]
+	for (let v = 0; v <= maxTick; v += step) {
+		yTicks.push(v)
+	}
 
 	// Build SVG path points – X and Y are scaled to chart area with padding
 	const points = data
@@ -72,21 +77,21 @@ export function ChartAreaPDF({
 				<Rect x="0" y="0" width={100} height={100} fill="#fff" />
 				{/* Required line */}
 
+				{/* Area (filled only) */}
+				<Path d={pathData} fill="#b7b7ff" stroke="none" />
 				{/* Axes */}
 				<Path
-					d={`M${paddingX},${paddingY + chartHeight} L${paddingX + chartWidth},${paddingY + chartHeight}`}
-					stroke="#000"
+					d={`M${paddingX},${paddingY + chartHeight} L${paddingX},${paddingY - 10}`}
+					stroke="#444"
 					strokeWidth="0.25"
 				/>
 				<Path
-					d={`M${paddingX},${paddingY} L${paddingX},${paddingY + chartHeight}`}
-					stroke="#000"
+					d={`M${paddingX},${paddingY + chartHeight} L${paddingX + chartWidth},${paddingY + chartHeight}`}
+					stroke="#444"
 					strokeWidth="0.25"
 				/>
-				{/* Area (filled only) */}
-				<Path d={pathData} fill="url(#grad)" stroke="none" />
 				{/* Top border line */}
-				<Path d={`M${points}`} stroke="blue" strokeWidth="0.25" fill="none" />
+				{/* <Path d={`M${points}`} stroke="blue" strokeWidth="0.25" fill="none" /> */}
 				{/* Horizontal index labels */}
 				{data.map((_, idx) => (
 					<Text
@@ -102,32 +107,41 @@ export function ChartAreaPDF({
 				))}
 				{/* Point value labels */}
 				{data.map((val, idx) => (
+					<React.Fragment key={idx}>
+						{/* Value label */}
+						<Text
+							key={`val-${idx}`}
+							x={paddingX + idx * xFactor}
+							y={paddingY + chartHeight - val * yFactor - 2}
+							style={{ fontSize: 2, color: "#000" }}
+							fill="#000"
+							textAnchor="middle"
+						>
+							{val}
+						</Text>
+						{/* Small blue circle at the point */}
+						<Circle
+							cx={paddingX + idx * xFactor}
+							cy={paddingY + chartHeight - val * yFactor}
+							r={0.4} // radius – small enough to look like a dot
+							fill="#00f" // blue fill
+							stroke="none"
+						/>
+					</React.Fragment>
+				))}
+				{/* Vertical value labels (ticks) */}
+				{yTicks.map((val, idx) => (
 					<Text
-						key={`val-${idx}`}
-						x={paddingX + idx * xFactor}
-						y={paddingY + chartHeight - val * yFactor - 2}
+						key={idx}
+						x={paddingX - 2}
+						y={paddingY + chartHeight - val * yFactor}
 						style={{ fontSize: 1.5 }}
-						fill="#000"
-						textAnchor="middle"
+						fill="#444"
+						textAnchor="end"
 					>
 						{val}
 					</Text>
 				))}
-				{/* Vertical value labels (multiples of 100) */}
-				{Array.from(new Set(data.filter(val => val % 100 === 0))).map(
-					(val, idx) => (
-						<Text
-							key={idx}
-							x={paddingX - 2}
-							y={paddingY + chartHeight - val * yFactor}
-							style={{ fontSize: 1.5 }}
-							fill="#444"
-							textAnchor="end"
-						>
-							{val}
-						</Text>
-					)
-				)}
 
 				{/* Uniformidad line */}
 				<Path
@@ -159,7 +173,6 @@ export function ChartAreaPDF({
 					></View>
 					<Text style={{ fontSize: 7 }}>Uniformidad: {uniformidad}</Text>
 				</View>
-				
 			</View>
 		</View>
 	)
