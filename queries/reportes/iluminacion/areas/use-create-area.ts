@@ -17,6 +17,7 @@ export function useCreateArea() {
 					return sortedByName([data, ...oldData])
 				}
 			)
+			queryClient.setQueryData(["area-iluminacion", data.id], data)
 		},
 	})
 }

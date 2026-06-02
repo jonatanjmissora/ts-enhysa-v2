@@ -24,13 +24,17 @@ import { Route as ProtectedPerfilEmpresasIndexRouteImport } from './routes/_prot
 import { Route as ProtectedIluminacionReportesIndexRouteImport } from './routes/_protected/iluminacion/reportes/index'
 import { Route as ProtectedIluminacionNuevoInformeIndexRouteImport } from './routes/_protected/iluminacion/nuevo-informe/index'
 import { Route as ProtectedIluminacionReportesChar91idChar93RouteRouteImport } from './routes/_protected/iluminacion/reportes/[$id]/route'
+import { Route as ProtectedIluminacionReportes_CRUDNuevoIndexRouteImport } from './routes/_protected/iluminacion/reportes_CRUD/nuevo.index'
 import { Route as ProtectedIluminacionNuevoInformeResumenIndexRouteImport } from './routes/_protected/iluminacion/nuevo-informe/resumen/index'
 import { Route as ProtectedIluminacionNuevoInformeAreasIndexRouteImport } from './routes/_protected/iluminacion/nuevo-informe/areas/index'
 import { Route as ProtectedIluminacionReportesChar91idChar93ResumenRouteImport } from './routes/_protected/iluminacion/reportes/[$id]/resumen'
 import { Route as ProtectedIluminacionReportesChar91idChar93GeneralRouteImport } from './routes/_protected/iluminacion/reportes/[$id]/general'
 import { Route as ProtectedIluminacionReportesChar91idChar93AreasRouteImport } from './routes/_protected/iluminacion/reportes/[$id]/areas'
+import { Route as ProtectedIluminacionReportes_CRUDChar91idChar93NuevoIndexRouteImport } from './routes/_protected/iluminacion/reportes_CRUD/[$id]/nuevo.index'
 import { Route as ProtectedIluminacionReportesPdfChar91idChar93ReducidaRouteImport } from './routes/_protected/iluminacion/reportes/pdf/[$id]/reducida'
 import { Route as ProtectedIluminacionReportesPdfChar91idChar93CompletaRouteImport } from './routes/_protected/iluminacion/reportes/pdf/[$id]/completa'
+import { Route as ProtectedIluminacionNuevoInformeAreasChar91areaIdChar93CrearPuntosIndexRouteImport } from './routes/_protected/iluminacion/nuevo-informe/areas/[$areaId]/crear-puntos.index'
+import { Route as ProtectedIluminacionNuevoInformeAreasChar91areaIdChar93CrearDataIndexRouteImport } from './routes/_protected/iluminacion/nuevo-informe/areas/[$areaId]/crear-data.index'
 
 const ProtectedRouteRoute = ProtectedRouteRouteImport.update({
   id: '/_protected',
@@ -113,6 +117,12 @@ const ProtectedIluminacionReportesChar91idChar93RouteRoute =
     path: '/iluminacion/reportes/$id',
     getParentRoute: () => ProtectedRouteRoute,
   } as any)
+const ProtectedIluminacionReportes_CRUDNuevoIndexRoute =
+  ProtectedIluminacionReportes_CRUDNuevoIndexRouteImport.update({
+    id: '/iluminacion/reportes_CRUD/nuevo/',
+    path: '/iluminacion/reportes_CRUD/nuevo/',
+    getParentRoute: () => ProtectedRouteRoute,
+  } as any)
 const ProtectedIluminacionNuevoInformeResumenIndexRoute =
   ProtectedIluminacionNuevoInformeResumenIndexRouteImport.update({
     id: '/iluminacion/nuevo-informe/resumen/',
@@ -143,6 +153,12 @@ const ProtectedIluminacionReportesChar91idChar93AreasRoute =
     path: '/areas',
     getParentRoute: () => ProtectedIluminacionReportesChar91idChar93RouteRoute,
   } as any)
+const ProtectedIluminacionReportes_CRUDChar91idChar93NuevoIndexRoute =
+  ProtectedIluminacionReportes_CRUDChar91idChar93NuevoIndexRouteImport.update({
+    id: '/iluminacion/reportes_CRUD/$id/nuevo/',
+    path: '/iluminacion/reportes_CRUD/$id/nuevo/',
+    getParentRoute: () => ProtectedRouteRoute,
+  } as any)
 const ProtectedIluminacionReportesPdfChar91idChar93ReducidaRoute =
   ProtectedIluminacionReportesPdfChar91idChar93ReducidaRouteImport.update({
     id: '/iluminacion/reportes/pdf/$id/reducida',
@@ -155,6 +171,22 @@ const ProtectedIluminacionReportesPdfChar91idChar93CompletaRoute =
     path: '/iluminacion/reportes/pdf/$id/completa',
     getParentRoute: () => ProtectedRouteRoute,
   } as any)
+const ProtectedIluminacionNuevoInformeAreasChar91areaIdChar93CrearPuntosIndexRoute =
+  ProtectedIluminacionNuevoInformeAreasChar91areaIdChar93CrearPuntosIndexRouteImport.update(
+    {
+      id: '/iluminacion/nuevo-informe/areas/$areaId/crear-puntos/',
+      path: '/iluminacion/nuevo-informe/areas/$areaId/crear-puntos/',
+      getParentRoute: () => ProtectedRouteRoute,
+    } as any,
+  )
+const ProtectedIluminacionNuevoInformeAreasChar91areaIdChar93CrearDataIndexRoute =
+  ProtectedIluminacionNuevoInformeAreasChar91areaIdChar93CrearDataIndexRouteImport.update(
+    {
+      id: '/iluminacion/nuevo-informe/areas/$areaId/crear-data/',
+      path: '/iluminacion/nuevo-informe/areas/$areaId/crear-data/',
+      getParentRoute: () => ProtectedRouteRoute,
+    } as any,
+  )
 
 export interface FileRoutesByFullPath {
   '/': typeof ProtectedIndexRoute
@@ -176,8 +208,12 @@ export interface FileRoutesByFullPath {
   '/iluminacion/reportes/$id/resumen': typeof ProtectedIluminacionReportesChar91idChar93ResumenRoute
   '/iluminacion/nuevo-informe/areas/': typeof ProtectedIluminacionNuevoInformeAreasIndexRoute
   '/iluminacion/nuevo-informe/resumen/': typeof ProtectedIluminacionNuevoInformeResumenIndexRoute
+  '/iluminacion/reportes_CRUD/nuevo/': typeof ProtectedIluminacionReportes_CRUDNuevoIndexRoute
   '/iluminacion/reportes/pdf/$id/completa': typeof ProtectedIluminacionReportesPdfChar91idChar93CompletaRoute
   '/iluminacion/reportes/pdf/$id/reducida': typeof ProtectedIluminacionReportesPdfChar91idChar93ReducidaRoute
+  '/iluminacion/reportes_CRUD/$id/nuevo/': typeof ProtectedIluminacionReportes_CRUDChar91idChar93NuevoIndexRoute
+  '/iluminacion/nuevo-informe/areas/$areaId/crear-data/': typeof ProtectedIluminacionNuevoInformeAreasChar91areaIdChar93CrearDataIndexRoute
+  '/iluminacion/nuevo-informe/areas/$areaId/crear-puntos/': typeof ProtectedIluminacionNuevoInformeAreasChar91areaIdChar93CrearPuntosIndexRoute
 }
 export interface FileRoutesByTo {
   '/perfil': typeof ProtectedPerfilRouteRouteWithChildren
@@ -199,8 +235,12 @@ export interface FileRoutesByTo {
   '/iluminacion/reportes/$id/resumen': typeof ProtectedIluminacionReportesChar91idChar93ResumenRoute
   '/iluminacion/nuevo-informe/areas': typeof ProtectedIluminacionNuevoInformeAreasIndexRoute
   '/iluminacion/nuevo-informe/resumen': typeof ProtectedIluminacionNuevoInformeResumenIndexRoute
+  '/iluminacion/reportes_CRUD/nuevo': typeof ProtectedIluminacionReportes_CRUDNuevoIndexRoute
   '/iluminacion/reportes/pdf/$id/completa': typeof ProtectedIluminacionReportesPdfChar91idChar93CompletaRoute
   '/iluminacion/reportes/pdf/$id/reducida': typeof ProtectedIluminacionReportesPdfChar91idChar93ReducidaRoute
+  '/iluminacion/reportes_CRUD/$id/nuevo': typeof ProtectedIluminacionReportes_CRUDChar91idChar93NuevoIndexRoute
+  '/iluminacion/nuevo-informe/areas/$areaId/crear-data': typeof ProtectedIluminacionNuevoInformeAreasChar91areaIdChar93CrearDataIndexRoute
+  '/iluminacion/nuevo-informe/areas/$areaId/crear-puntos': typeof ProtectedIluminacionNuevoInformeAreasChar91areaIdChar93CrearPuntosIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -224,8 +264,12 @@ export interface FileRoutesById {
   '/_protected/iluminacion/reportes/$id/resumen': typeof ProtectedIluminacionReportesChar91idChar93ResumenRoute
   '/_protected/iluminacion/nuevo-informe/areas/': typeof ProtectedIluminacionNuevoInformeAreasIndexRoute
   '/_protected/iluminacion/nuevo-informe/resumen/': typeof ProtectedIluminacionNuevoInformeResumenIndexRoute
+  '/_protected/iluminacion/reportes_CRUD/nuevo/': typeof ProtectedIluminacionReportes_CRUDNuevoIndexRoute
   '/_protected/iluminacion/reportes/pdf/$id/completa': typeof ProtectedIluminacionReportesPdfChar91idChar93CompletaRoute
   '/_protected/iluminacion/reportes/pdf/$id/reducida': typeof ProtectedIluminacionReportesPdfChar91idChar93ReducidaRoute
+  '/_protected/iluminacion/reportes_CRUD/$id/nuevo/': typeof ProtectedIluminacionReportes_CRUDChar91idChar93NuevoIndexRoute
+  '/_protected/iluminacion/nuevo-informe/areas/$areaId/crear-data/': typeof ProtectedIluminacionNuevoInformeAreasChar91areaIdChar93CrearDataIndexRoute
+  '/_protected/iluminacion/nuevo-informe/areas/$areaId/crear-puntos/': typeof ProtectedIluminacionNuevoInformeAreasChar91areaIdChar93CrearPuntosIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -249,8 +293,12 @@ export interface FileRouteTypes {
     | '/iluminacion/reportes/$id/resumen'
     | '/iluminacion/nuevo-informe/areas/'
     | '/iluminacion/nuevo-informe/resumen/'
+    | '/iluminacion/reportes_CRUD/nuevo/'
     | '/iluminacion/reportes/pdf/$id/completa'
     | '/iluminacion/reportes/pdf/$id/reducida'
+    | '/iluminacion/reportes_CRUD/$id/nuevo/'
+    | '/iluminacion/nuevo-informe/areas/$areaId/crear-data/'
+    | '/iluminacion/nuevo-informe/areas/$areaId/crear-puntos/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/perfil'
@@ -272,8 +320,12 @@ export interface FileRouteTypes {
     | '/iluminacion/reportes/$id/resumen'
     | '/iluminacion/nuevo-informe/areas'
     | '/iluminacion/nuevo-informe/resumen'
+    | '/iluminacion/reportes_CRUD/nuevo'
     | '/iluminacion/reportes/pdf/$id/completa'
     | '/iluminacion/reportes/pdf/$id/reducida'
+    | '/iluminacion/reportes_CRUD/$id/nuevo'
+    | '/iluminacion/nuevo-informe/areas/$areaId/crear-data'
+    | '/iluminacion/nuevo-informe/areas/$areaId/crear-puntos'
   id:
     | '__root__'
     | '/_protected'
@@ -296,8 +348,12 @@ export interface FileRouteTypes {
     | '/_protected/iluminacion/reportes/$id/resumen'
     | '/_protected/iluminacion/nuevo-informe/areas/'
     | '/_protected/iluminacion/nuevo-informe/resumen/'
+    | '/_protected/iluminacion/reportes_CRUD/nuevo/'
     | '/_protected/iluminacion/reportes/pdf/$id/completa'
     | '/_protected/iluminacion/reportes/pdf/$id/reducida'
+    | '/_protected/iluminacion/reportes_CRUD/$id/nuevo/'
+    | '/_protected/iluminacion/nuevo-informe/areas/$areaId/crear-data/'
+    | '/_protected/iluminacion/nuevo-informe/areas/$areaId/crear-puntos/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -415,6 +471,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProtectedIluminacionReportesChar91idChar93RouteRouteImport
       parentRoute: typeof ProtectedRouteRoute
     }
+    '/_protected/iluminacion/reportes_CRUD/nuevo/': {
+      id: '/_protected/iluminacion/reportes_CRUD/nuevo/'
+      path: '/iluminacion/reportes_CRUD/nuevo'
+      fullPath: '/iluminacion/reportes_CRUD/nuevo/'
+      preLoaderRoute: typeof ProtectedIluminacionReportes_CRUDNuevoIndexRouteImport
+      parentRoute: typeof ProtectedRouteRoute
+    }
     '/_protected/iluminacion/nuevo-informe/resumen/': {
       id: '/_protected/iluminacion/nuevo-informe/resumen/'
       path: '/iluminacion/nuevo-informe/resumen'
@@ -450,6 +513,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProtectedIluminacionReportesChar91idChar93AreasRouteImport
       parentRoute: typeof ProtectedIluminacionReportesChar91idChar93RouteRoute
     }
+    '/_protected/iluminacion/reportes_CRUD/$id/nuevo/': {
+      id: '/_protected/iluminacion/reportes_CRUD/$id/nuevo/'
+      path: '/iluminacion/reportes_CRUD/$id/nuevo'
+      fullPath: '/iluminacion/reportes_CRUD/$id/nuevo/'
+      preLoaderRoute: typeof ProtectedIluminacionReportes_CRUDChar91idChar93NuevoIndexRouteImport
+      parentRoute: typeof ProtectedRouteRoute
+    }
     '/_protected/iluminacion/reportes/pdf/$id/reducida': {
       id: '/_protected/iluminacion/reportes/pdf/$id/reducida'
       path: '/iluminacion/reportes/pdf/$id/reducida'
@@ -462,6 +532,20 @@ declare module '@tanstack/react-router' {
       path: '/iluminacion/reportes/pdf/$id/completa'
       fullPath: '/iluminacion/reportes/pdf/$id/completa'
       preLoaderRoute: typeof ProtectedIluminacionReportesPdfChar91idChar93CompletaRouteImport
+      parentRoute: typeof ProtectedRouteRoute
+    }
+    '/_protected/iluminacion/nuevo-informe/areas/$areaId/crear-puntos/': {
+      id: '/_protected/iluminacion/nuevo-informe/areas/$areaId/crear-puntos/'
+      path: '/iluminacion/nuevo-informe/areas/$areaId/crear-puntos'
+      fullPath: '/iluminacion/nuevo-informe/areas/$areaId/crear-puntos/'
+      preLoaderRoute: typeof ProtectedIluminacionNuevoInformeAreasChar91areaIdChar93CrearPuntosIndexRouteImport
+      parentRoute: typeof ProtectedRouteRoute
+    }
+    '/_protected/iluminacion/nuevo-informe/areas/$areaId/crear-data/': {
+      id: '/_protected/iluminacion/nuevo-informe/areas/$areaId/crear-data/'
+      path: '/iluminacion/nuevo-informe/areas/$areaId/crear-data'
+      fullPath: '/iluminacion/nuevo-informe/areas/$areaId/crear-data/'
+      preLoaderRoute: typeof ProtectedIluminacionNuevoInformeAreasChar91areaIdChar93CrearDataIndexRouteImport
       parentRoute: typeof ProtectedRouteRoute
     }
   }
@@ -513,8 +597,12 @@ interface ProtectedRouteRouteChildren {
   ProtectedIluminacionReportesIndexRoute: typeof ProtectedIluminacionReportesIndexRoute
   ProtectedIluminacionNuevoInformeAreasIndexRoute: typeof ProtectedIluminacionNuevoInformeAreasIndexRoute
   ProtectedIluminacionNuevoInformeResumenIndexRoute: typeof ProtectedIluminacionNuevoInformeResumenIndexRoute
+  ProtectedIluminacionReportes_CRUDNuevoIndexRoute: typeof ProtectedIluminacionReportes_CRUDNuevoIndexRoute
   ProtectedIluminacionReportesPdfChar91idChar93CompletaRoute: typeof ProtectedIluminacionReportesPdfChar91idChar93CompletaRoute
   ProtectedIluminacionReportesPdfChar91idChar93ReducidaRoute: typeof ProtectedIluminacionReportesPdfChar91idChar93ReducidaRoute
+  ProtectedIluminacionReportes_CRUDChar91idChar93NuevoIndexRoute: typeof ProtectedIluminacionReportes_CRUDChar91idChar93NuevoIndexRoute
+  ProtectedIluminacionNuevoInformeAreasChar91areaIdChar93CrearDataIndexRoute: typeof ProtectedIluminacionNuevoInformeAreasChar91areaIdChar93CrearDataIndexRoute
+  ProtectedIluminacionNuevoInformeAreasChar91areaIdChar93CrearPuntosIndexRoute: typeof ProtectedIluminacionNuevoInformeAreasChar91areaIdChar93CrearPuntosIndexRoute
 }
 
 const ProtectedRouteRouteChildren: ProtectedRouteRouteChildren = {
@@ -532,10 +620,18 @@ const ProtectedRouteRouteChildren: ProtectedRouteRouteChildren = {
     ProtectedIluminacionNuevoInformeAreasIndexRoute,
   ProtectedIluminacionNuevoInformeResumenIndexRoute:
     ProtectedIluminacionNuevoInformeResumenIndexRoute,
+  ProtectedIluminacionReportes_CRUDNuevoIndexRoute:
+    ProtectedIluminacionReportes_CRUDNuevoIndexRoute,
   ProtectedIluminacionReportesPdfChar91idChar93CompletaRoute:
     ProtectedIluminacionReportesPdfChar91idChar93CompletaRoute,
   ProtectedIluminacionReportesPdfChar91idChar93ReducidaRoute:
     ProtectedIluminacionReportesPdfChar91idChar93ReducidaRoute,
+  ProtectedIluminacionReportes_CRUDChar91idChar93NuevoIndexRoute:
+    ProtectedIluminacionReportes_CRUDChar91idChar93NuevoIndexRoute,
+  ProtectedIluminacionNuevoInformeAreasChar91areaIdChar93CrearDataIndexRoute:
+    ProtectedIluminacionNuevoInformeAreasChar91areaIdChar93CrearDataIndexRoute,
+  ProtectedIluminacionNuevoInformeAreasChar91areaIdChar93CrearPuntosIndexRoute:
+    ProtectedIluminacionNuevoInformeAreasChar91areaIdChar93CrearPuntosIndexRoute,
 }
 
 const ProtectedRouteRouteWithChildren = ProtectedRouteRoute._addFileChildren(

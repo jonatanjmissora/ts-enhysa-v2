@@ -6,7 +6,7 @@ import { createFileRoute, Link } from "@tanstack/react-router"
 import { Suspense } from "react"
 import { areasQueryOptions } from "../../../../../../queries/reportes/iluminacion/areas/areas-query"
 import { Button } from "#/components/ui/button"
-import CreateAreaAlert from "#/components/reportes/iluminacion/nuevo-informe/areas/crear-area"
+import CreateAreaAlert from "#/components/reportes/iluminacion/nuevo-informe/areas/XXXcrear-area"
 import {
 	Accordion,
 	AccordionContent,
@@ -76,6 +76,8 @@ function Areas() {
 
 	if (!areas || areas.length === 0) return <NoAreas />
 
+	const areaId = crypto.randomUUID().toString()
+
 	return (
 		<div className="w-full flex flex-col gap-10 items-center justify-center">
 			<Accordion
@@ -85,13 +87,11 @@ function Areas() {
 				className="flex flex-col gap-2 w-5/6 mx-auto mt-5"
 			>
 				{sortedByName(areas).map(area => (
-					<AccordionItem
-						key={area.id}
-						value={area.id}
-						className="border-b border-foreground/5 last:border-b-0"
-					>
-						<AccordionTrigger className="flex px-10 border-b border-foreground/10 items-center bw">
-							<div className="flex items-center gap-2 textXS">
+					<AccordionItem key={area.id} value={area.id} className="border-none">
+						<AccordionTrigger
+							className={`flex px-10 border-2 ${area.puntos.length === 0 ? "border-red-500/20" : checkAllPuntos(area) ? "border-foreground/10" : "border-amber-500/20"} items-center`}
+						>
+							<div className="flex items-center gap-2">
 								{`${area.nombre.toUpperCase()} - ${area.tipo.toUpperCase()}`}
 							</div>
 						</AccordionTrigger>
@@ -102,7 +102,18 @@ function Areas() {
 				))}
 			</Accordion>
 
-			<CreateAreaAlert />
+			{/* <CreateAreaAlert /> */}
+			<Link
+				to="/iluminacion/nuevo-informe/areas/$areaId/crear-data"
+				params={{
+					areaId,
+				}}
+				className="flex justify-center items-center w-full"
+			>
+				<Button className="w-1/2 min-w-40 sm:w-1/6 mx-auto py-5 bg-primary ring-foreground/25">
+					+ Crear area
+				</Button>
+			</Link>
 
 			<div className="flex flex-col justify-center items-center gap-4 w-5/6 sm:w-1/2 mt-30">
 				<Link to="/iluminacion/nuevo-informe/resumen" className="flex-1 w-full">
@@ -235,12 +246,24 @@ function Area({ area }: { area: AreaIluminacionType }) {
 }
 
 function NoAreas() {
+	const areaId = crypto.randomUUID().toString()
 	return (
 		<div className="w-5/6 h-[30svh] flex flex-col gap-8 items-center justify-center mx-auto my-12">
 			<span className="text-sm font-medium text-gray-500 italic text-center text-pretty">
 				Parece que no tienes áreas registradas
 			</span>
-			<CreateAreaAlert />
+			{/* <CreateAreaAlert /> */}
+			<Link
+				to="/iluminacion/nuevo-informe/areas/$areaId/crear-data"
+				params={{
+					areaId,
+				}}
+				className="flex justify-center items-center w-full"
+			>
+				<Button className="w-1/2 min-w-40 sm:w-1/6 mx-auto py-5 bg-primary ring-foreground/25">
+					+ Crear area
+				</Button>
+			</Link>
 		</div>
 	)
 }
@@ -267,4 +290,8 @@ export default function AreaDropdownMenu({
 			</DropdownMenuContent>
 		</DropdownMenu>
 	)
+}
+
+function checkAllPuntos(area: AreaIluminacionType) {
+	return area.puntos.every(punto => punto > 0)
 }

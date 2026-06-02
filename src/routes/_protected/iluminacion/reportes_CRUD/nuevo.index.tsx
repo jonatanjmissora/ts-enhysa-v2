@@ -1,0 +1,53 @@
+import BackChevron from "#/components/back-chevron"
+import Loading from "#/components/loading"
+import Title from "#/components/title"
+import useScrollTop from "#/hooks/scroll-top"
+import { useSuspenseQuery } from "@tanstack/react-query"
+import { createFileRoute } from "@tanstack/react-router"
+import { Suspense } from "react"
+import { reportesQueryOptions } from "../../../../../queries/reportes/iluminacion/reportes-query"
+import CreateReporteNuevo from "#/components/reportes/iluminacion/nuevo-informe/create-reporte-nuevo"
+import ReporteEnCurso from "#/components/reportes/iluminacion/reporte-en-curso"
+
+export const Route = createFileRoute(
+	"/_protected/iluminacion/reportes_CRUD/nuevo/"
+)({
+	component: RouteComponent,
+})
+
+function RouteComponent() {
+	useScrollTop()
+
+	return (
+		<article className="w-full min-h-svh flex flex-col items-center gap-10 relative mb-60">
+			<BackChevron to="/iluminacion" />
+			<Title text="Nuevo Informe" className="mt-15" />
+			<IluminacionData />
+		</article>
+	)
+}
+
+function IluminacionData() {
+	return (
+		<Suspense
+			fallback={
+				<Loading
+					text="verificando reporte en curso..."
+					className="scale-50 justify-start  max-h-[50svh] "
+				/>
+			}
+		>
+			<Data />
+		</Suspense>
+	)
+}
+
+function Data() {
+	const { data: reportes } = useSuspenseQuery(reportesQueryOptions)
+
+	const reporteNuevo = reportes?.find(r => !r.finishedAt)
+
+	if (!reporteNuevo) return <CreateReporteNuevo />
+
+	return <ReporteEnCurso reporteNuevo={reporteNuevo} />
+}

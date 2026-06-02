@@ -12,7 +12,6 @@ export const createAreaServer = createServerFn({ method: "POST" })
 
 		const newArea = {
 			...data,
-			id: crypto.randomUUID(),
 			userId: session.user.id,
 			observaciones: data.observaciones || "Sin Observaciones",
 			imagenes: data.imagenes || [],

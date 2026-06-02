@@ -45,11 +45,11 @@ export default function Formula({
 					<span className="text-2xl sm:text-3xl font-semibold bg-pink-500/50 px-4 py-1 rounded-lg">
 						{(indiceRedondeo + 2) ** 2 > 64 ? 64 : (indiceRedondeo + 2) ** 2}
 					</span>
-					<span className="italic textXS">Número de mediciones</span>
+					<span className="italic text-xs">Número de mediciones</span>
 				</div>
 			</div>
 
-			<span className="italic  border-t border-foreground/10 py-2 w-full text-right textXS text-foreground/50">
+			<span className="italic  border-t border-foreground/10 py-2 w-full text-right text-xs text-foreground/50">
 				Res. 84/2012 S.R.T.
 			</span>
 		</div>

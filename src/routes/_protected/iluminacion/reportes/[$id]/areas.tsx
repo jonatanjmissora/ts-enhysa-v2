@@ -1,5 +1,5 @@
 import Loading from "#/components/loading"
-import { createFileRoute } from "@tanstack/react-router"
+import { createFileRoute, Link } from "@tanstack/react-router"
 import { Suspense, useState, useEffect, lazy } from "react"
 import { useSuspenseQuery } from "@tanstack/react-query"
 import {
@@ -76,7 +76,15 @@ function Area() {
 		return (
 			<div className="min-h-[50svh] flex items-center justify-center flex-col gap-6">
 				<span className="text-sm italic">No se encontró ningún área</span>
-				<CreateAreaAlert id={id} />
+				{/* <CreateAreaAlert id={id} /> */}
+				<Link
+					to="/iluminacion/nuevo-informe/areas/crear-data"
+					className="flex justify-center items-center w-full"
+				>
+					<Button className="w-1/2 min-w-40 sm:w-1/6 mx-auto py-5 bg-primary ring-foreground/25">
+						+ Crear area REVISAR
+					</Button>
+				</Link>
 			</div>
 		)
 	}
@@ -117,9 +125,7 @@ function Area() {
 					</div>
 				}
 			>
-				<ChartAreaInteractive
-					puntos={area.puntos}
-				/>
+				<ChartAreaInteractive puntos={area.puntos} />
 			</Suspense>
 
 			<div className="grid grid-cols-[auto_1fr] sm:grid-cols-[1fr_1fr] gap-x-4 gap-y-2 w-5/6 sm:w-2/3 mx-auto my-10 justify-center items-center">
@@ -135,7 +141,7 @@ function Area() {
 				</span>
 				<span className="text-right">Valor Requerido :</span>
 				<span>{area.valorRequerido} lux</span>
-				
+
 				<span className="text-right">Mediciones :</span>
 				<span>{area.puntos.join(", ")}</span>
 			</div>

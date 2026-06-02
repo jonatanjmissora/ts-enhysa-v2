@@ -26,6 +26,7 @@ export type AreaFormType = z.infer<typeof areaFormValidator>
 
 export const areaServerValidator = areaFormValidator.extend({
 	reportId: z.string().min(1, "Reporte requerido"),
+	id: z.string().min(1, "Id requerido"),
 })
 
 export type AreaServerType = z.infer<typeof areaServerValidator>

@@ -13,6 +13,7 @@ export const Route = createFileRoute("/_protected/iluminacion/")({
 })
 
 function RouteComponent() {
+	const id = crypto.randomUUID().toString()
 	return (
 		<article className="w-full sm:max-w-5xl 2xl:max-w-7xl sm:mx-auto min-h-svh flex flex-col items-center justify-center gap-20">
 			<div className="flex justify-between items-center flex-col mt-[70px] sm:mt-10 h-[550px] sm:h-[450px] relative overflow-visible px-6 sm:w-2/3 mx-auto">
@@ -25,7 +26,10 @@ function RouteComponent() {
 					className="absolute opacity-75 top-6 left-0 w-screen sm:w-full h-[500px] sm:h-[400px] bottom-0 -z-10 max-w-none mask-t-from-50% mask-b-from-80% sm:mask-r-from-95% sm:mask-l-from-5% object-cover object-[50%_40%]"
 				/>
 				<Link
-					to="/iluminacion/nuevo-informe"
+					to="/iluminacion/reportes_CRUD/$id/nuevo"
+					params={{
+						id,
+					}}
 					className="py-3 w-11/12 sm:w-1/2 mx-auto tracking-widest font-semibold text-base bg-primary rounded-lg flex gap-2 items-center justify-center ring-[1px] ring-foreground/25"
 				>
 					<FileChartColumn size={20} />
