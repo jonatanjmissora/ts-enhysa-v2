@@ -2,10 +2,10 @@ import Loading from "#/components/loading"
 import { useSuspenseQuery } from "@tanstack/react-query"
 import { createFileRoute, Link } from "@tanstack/react-router"
 import { Suspense, useState } from "react"
-import { reporteQueryOptions } from "../../../../../../queries/reportes/iluminacion/reportes-query"
+import { reporteQueryOptions } from "../../../../../../../queries/reportes/iluminacion/reportes-query"
 import Title from "#/components/title"
 import { Button } from "#/components/ui/button"
-import type { ReporteIluminacionType } from "../../../../../../db/reportes/iluminacion/schema"
+import type { ReporteIluminacionType } from "../../../../../../../db/reportes/iluminacion/schema"
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -14,7 +14,7 @@ import {
 } from "#/components/ui/dropdown-menu"
 import { Ellipsis } from "lucide-react"
 import EditResumenAlert from "#/components/reportes/iluminacion/edit/edit-resumen"
-import { areasQueryOptions } from "../../../../../../queries/reportes/iluminacion/areas/areas-query"
+import { areasQueryOptions } from "../../../../../../../queries/reportes/iluminacion/areas/areas-query"
 import {
 	AlertDialogTrigger,
 	AlertDialogContent,
@@ -24,7 +24,7 @@ import {
 } from "#/components/ui/alert-dialog"
 
 export const Route = createFileRoute(
-	"/_protected/iluminacion/reportes/$id/resumen"
+	"/_protected/iluminacion/reportes/$id/_menu/resumen"
 )({
 	component: RouteComponent,
 })

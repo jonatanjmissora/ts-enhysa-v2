@@ -1,15 +1,23 @@
+import BackChevron from "#/components/back-chevron"
+import Loading from "#/components/loading"
+import Title from "#/components/title"
+import useScrollTop from "#/hooks/scroll-top"
+import { useSuspenseQuery } from "@tanstack/react-query"
+import { createFileRoute, useNavigate } from "@tanstack/react-router"
+import { Suspense } from "react"
+import { reporteQueryOptions } from "../../../../../../../queries/reportes/iluminacion/reportes-query"
+import { empresasQueryOptions } from "../../../../../../../queries/empresas/empresas-query"
+import { instrumentosQueryOptions } from "../../../../../../../queries/instrumentos/instrumentos-query"
+import { useUpdateReporte } from "../../../../../../../queries/reportes/iluminacion/use-update-reporte"
 import { useForm } from "@tanstack/react-form"
-import {
-	defaultReporteData,
-	reporteNuevoFormValidator,
-} from "../../../../../db/reportes/iluminacion/reporte-validator"
+import { reporteNuevoFormValidator } from "../../../../../../../db/reportes/iluminacion/reporte-validator"
 import {
 	Field,
 	FieldError,
 	FieldGroup,
 	FieldLabel,
 } from "#/components/ui/field"
-import { ChevronRight, Cpu, Loader, Warehouse } from "lucide-react"
+import { ChevronRight, Loader, Warehouse } from "lucide-react"
 import {
 	Select,
 	SelectContent,
@@ -19,11 +27,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "#/components/ui/select"
-import { useSuspenseQuery } from "@tanstack/react-query"
-import { empresasQueryOptions } from "../../../../../queries/empresas/empresas-query"
-import { instrumentosQueryOptions } from "../../../../../queries/instrumentos/instrumentos-query"
-import { tecnicoQueryOptions } from "../../../../../queries/tecnico/tecnico-query"
-import { Suspense } from "react"
+import { Cpu } from "lucide-react"
 import {
 	ESTADO,
 	HUMEDAD,
@@ -33,80 +37,102 @@ import {
 	type TemperaturaType,
 } from "#/lib/constants"
 import { Button } from "#/components/ui/button"
-import Loading from "#/components/loading"
-import { Link, useNavigate } from "@tanstack/react-router"
-import useScrollTop from "#/hooks/scroll-top"
-import { useCreateReporteNuevo } from "../../../../../queries/reportes/iluminacion/use-create-reporte-nuevo"
-import type { EmpresaType } from "../../../../../db/empresas/schema"
-import { sortedByName, sortedByRazonSocial } from "#/lib/utils"
+import type { EmpresaType } from "../../../../../../../db/empresas/schema"
 
-export default function CreateReporteNuevo() {
+export const Route = createFileRoute(
+	"/_protected/iluminacion/reportes/$id/_CRUD/crud/edit-general"
+)({
+	component: RouteComponent,
+})
+
+function RouteComponent() {
+	useScrollTop()
+
+	return (
+		<article className="w-full min-h-svh flex flex-col items-center gap-10 relative mb-60">
+			<BackChevron to="/iluminacion" />
+			<Title text="Nuevo Informe" className="mt-15" />
+			<IluminacionGeneralData />
+		</article>
+	)
+}
+
+function IluminacionGeneralData() {
 	return (
 		<Suspense
 			fallback={
 				<Loading
-					text="cargando datos del usuario..."
+					text="verificando reporte en curso..."
 					className="scale-50 justify-start  max-h-[50svh] "
 				/>
 			}
 		>
-			<ReporteNuevoForm />
+			<EditReporteGeneral />
 		</Suspense>
 	)
 }
 
-function ReporteNuevoForm() {
-	useScrollTop()
-	const { data: tecnico } = useSuspenseQuery(tecnicoQueryOptions)
+function EditReporteGeneral() {
+	const { id } = Route.useParams()
+	const { data: reporte } = useSuspenseQuery(reporteQueryOptions({ id }))
 	const { data: empresas } = useSuspenseQuery(empresasQueryOptions)
 	const { data: instrumentos } = useSuspenseQuery(instrumentosQueryOptions)
 	const navigate = useNavigate()
 
-	const {
-		mutateAsync: createReporteNuevo,
-		isPending,
-		error,
-	} = useCreateReporteNuevo()
+	const { mutateAsync: editarReporte, isPending, error } = useUpdateReporte()
+
 	const form = useForm({
-		defaultValues: defaultReporteData,
+		defaultValues: {
+			empresaId: reporte?.empresaId || "",
+			instrumentoId: reporte?.instrumentoId || "",
+			clima: reporte?.clima || ["despejado", "10", "10"],
+		},
 		validators: {
 			onSubmit: reporteNuevoFormValidator,
 		},
 		onSubmit: async ({ value }) => {
-			if (!tecnico || !empresas || !instrumentos) return
-
-			const title = getTitle(value.empresaId, empresas)
+			if (!empresas || !instrumentos || !reporte) return
 
 			const newReport = {
-				...value,
-				tecnicoId: tecnico.id,
-				title,
+				...reporte,
+				empresaId: value.empresaId,
+				instrumentoId: value.instrumentoId,
+				clima: value.clima,
 			}
-			const result = await createReporteNuevo({ data: newReport })
+
+			if (reporte.empresaId !== value.empresaId) {
+				newReport.title = getTitle(value.empresaId || "", empresas)
+			}
+
+			if (
+				reporte.empresaId === value.empresaId &&
+				reporte.instrumentoId === value.instrumentoId &&
+				reporte.clima[0] === value.clima[0] &&
+				reporte.clima[1] === value.clima[1] &&
+				reporte.clima[2] === value.clima[2]
+			) {
+				navigate({
+					to: "/iluminacion/reportes/$id/areas",
+					params: {
+						id: id,
+					},
+				})
+				return
+			}
+
+			const result = await editarReporte({ data: newReport })
 			if (!result) {
-				console.error("Error al crear el reporte", error)
+				console.error("Error al editar el reporte", error)
 			}
-			console.log("Reporte creado exitosamente")
+			console.log("Reporte editado exitosamente")
 			navigate({
 				to: "/iluminacion/reportes/$id/areas",
 				params: {
-					id: result.id,
+					id: id,
 				},
 			})
 		},
 	})
-	if (!tecnico || !empresas?.length || !instrumentos?.length)
-		return (
-			<article className="w-full flex flex-col justify-center items-center min-h-[30svh] gap-10">
-				<span className="text-foreground/50 text-sm italic text-center w-5/6 mx-auto">
-					Debe completar los datos del técnico, empresa o instrumento en su
-					perfil primero.
-				</span>
-				<Link to="/perfil/tecnicos" className="w-1/2 mx-auto">
-					<Button className="w-full py-4">Ir al perfil</Button>
-				</Link>
-			</article>
-		)
 
 	return (
 		<form
@@ -152,7 +178,7 @@ function ReporteNuevoForm() {
 										<SelectGroup>
 											<SelectLabel>Empresas</SelectLabel>
 
-											{sortedByRazonSocial(empresas)?.map(empresa => (
+											{empresas?.map(empresa => (
 												<SelectItem
 													key={empresa.id}
 													value={empresa.id}
@@ -209,7 +235,7 @@ function ReporteNuevoForm() {
 										<SelectGroup>
 											<SelectLabel>Instrumentos</SelectLabel>
 
-											{sortedByName(instrumentos)?.map(instrumento => (
+											{instrumentos?.map(instrumento => (
 												<SelectItem
 													key={instrumento.id}
 													value={instrumento.id}
@@ -410,7 +436,7 @@ function ReporteNuevoForm() {
 					}}
 				/>
 
-				<Field className="flex flex-col justify-center gap-4 sm:gap-10 items-center w-full sm:w-1/2 mx-auto mt-20">
+				<Field className="flex flex-col justify-center gap-4 sm:gap-10 items-center w-full sm:w-1/2 mx-auto mt-30">
 					<Button type="submit" disabled={isPending} className="flex-1 py-3">
 						{isPending ? (
 							<div className="flex gap-2 w-full justify-center items-center">

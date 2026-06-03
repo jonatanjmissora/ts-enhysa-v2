@@ -38,36 +38,38 @@ function Reportes() {
 	if (!reportes || reportes.length === 0) return <NoReports />
 	return (
 		<div className="w-full sm:w-2/3 mx-auto flex flex-col gap-4">
-			{sortedByRecentDate(reportes)?.slice(0, 3).map(reporte => (
-				<Link
-					key={reporte.id}
-					to={
-						reporte.finishedAt
-							? "/iluminacion/reportes/$id/general"
-							: "/iluminacion/nuevo-informe"
-					}
-					params={{ id: reporte.id }}
-					className="p-4 bg-accent rounded-lg ring-[1px] dark:ring-foreground/15 ring-foreground/50 justify-between w-full"
-				>
-					<div className="flex gap-4 items-center">
-						{reporte.finishedAt ? (
-							<FileChartColumn className="size-8 text-blue-600" />
-						) : (
-							<Clock className="size-8 text-amber-600" />
-						)}
-						<div className="flex flex-col gap-1">
-							<span className="textM font-semibold w-60 truncate">
-								{reporte.title.toUpperCase()}
-							</span>
-							<span className="text-xs text-foreground/50">
-								{reporte.finishedAt
-									? `Realizado el ${reporte.finishedAt?.toLocaleDateString("it-IT")}`
-									: "En curso"}
-							</span>
+			{sortedByRecentDate(reportes)
+				?.slice(0, 3)
+				.map(reporte => (
+					<Link
+						key={reporte.id}
+						to={
+							reporte.finishedAt
+								? "/iluminacion/reportes/$id/general"
+								: "/iluminacion/reportes/$id/crud/edit-general"
+						}
+						params={{ id: reporte.id }}
+						className="p-4 bg-accent rounded-lg ring-[1px] dark:ring-foreground/15 ring-foreground/50 justify-between w-full"
+					>
+						<div className="flex gap-4 items-center">
+							{reporte.finishedAt ? (
+								<FileChartColumn className="size-8 text-blue-600" />
+							) : (
+								<Clock className="size-8 text-amber-600" />
+							)}
+							<div className="flex flex-col gap-1">
+								<span className="textM font-semibold w-60 truncate">
+									{reporte.title.toUpperCase()}
+								</span>
+								<span className="text-xs text-foreground/50">
+									{reporte.finishedAt
+										? `Realizado el ${reporte.finishedAt?.toLocaleDateString("it-IT")}`
+										: "En curso"}
+								</span>
+							</div>
 						</div>
-					</div>
-				</Link>
-			))}
+					</Link>
+				))}
 		</div>
 	)
 }
@@ -86,5 +88,9 @@ function NoReports() {
 }
 
 function sortedByRecentDate(reportes: ReporteIluminacionType[]) {
-	return reportes?.sort((a, b) => (b.finishedAt || b.createdAt).getTime() - (a.finishedAt || a.createdAt).getTime())
+	return reportes?.sort(
+		(a, b) =>
+			(b.finishedAt || b.createdAt).getTime() -
+			(a.finishedAt || a.createdAt).getTime()
+	)
 }

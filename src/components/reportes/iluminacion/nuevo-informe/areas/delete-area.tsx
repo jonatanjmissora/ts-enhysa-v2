@@ -117,6 +117,7 @@ function DeleteAreaForm({
 					variant="outline"
 					onClick={() => {
 						setOpen(false)
+						if (setIsMenuOpen) setIsMenuOpen(false)
 					}}
 					className="w-1/2"
 				>

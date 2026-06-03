@@ -26,12 +26,14 @@ import {
 } from "#/components/ui/select"
 import { empresasQueryOptions } from "../../../../../queries/empresas/empresas-query"
 import { cn } from "#/lib/utils"
+import useScrollTop from "#/hooks/scroll-top"
 
 export const Route = createFileRoute("/_protected/iluminacion/reportes/")({
 	component: RouteComponent,
 })
 
 function RouteComponent() {
+	useScrollTop()
 	return (
 		<article className="w-full min-h-svh flex flex-col items-center gap-0 relative mb-60">
 			<BackChevron to="/iluminacion" />
@@ -57,6 +59,7 @@ function IluminacionReportes() {
 }
 
 function ReportesIluminacion() {
+	const id = crypto.randomUUID().toString()
 	const { data: reportes } = useSuspenseQuery(reportesQueryOptions)
 	const { data: empresas } = useSuspenseQuery(empresasQueryOptions)
 
@@ -224,7 +227,10 @@ function ReportesIluminacion() {
 			<ReportesList filteredReportes={filteredReportes} />
 
 			<Link
-				to="/iluminacion/nuevo-informe"
+				to="/iluminacion/reportes/$id/crud/create-general"
+				params={{
+					id,
+				}}
 				className="my-20 py-3 w-5/6 sm:w-1/2 mx-auto tracking-widest font-semibold text-base bg-primary rounded-lg flex gap-2 items-center justify-center ring-[1px] ring-foreground/25"
 			>
 				<FileChartColumn size={20} />
@@ -275,7 +281,7 @@ function ReportesList({
 							to={
 								reporte.finishedAt
 									? "/iluminacion/reportes/$id/general"
-									: "/iluminacion/nuevo-informe"
+									: "/iluminacion/reportes/$id/crud/edit-general"
 							}
 							params={{ id: reporte.id }}
 						>
@@ -289,12 +295,18 @@ function ReportesList({
 }
 
 function NoReports() {
+	const id = crypto.randomUUID().toString()
 	return (
 		<article className="w-5/6 mx-auto flex flex-col items-center justify-center gap-10 mt-20">
 			<span className="text-center text-foreground/70 text-sm italic tracking-wide">
 				No posee informes de Iluminación. Realice su primer reporte ...
 			</span>
-			<Link to="/iluminacion/nuevo-informe">
+			<Link
+				to="/iluminacion/reportes/$id/crud/create-general"
+				params={{
+					id,
+				}}
+			>
 				<Button>Nuevo Reporte</Button>
 			</Link>
 		</article>

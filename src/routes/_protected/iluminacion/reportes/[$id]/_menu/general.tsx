@@ -3,9 +3,9 @@ import { Label } from "#/components/ui/label"
 import { useSuspenseQuery } from "@tanstack/react-query"
 import { createFileRoute } from "@tanstack/react-router"
 import { Suspense, useState } from "react"
-import { reporteQueryOptions } from "../../../../../../queries/reportes/iluminacion/reportes-query"
+import { reporteQueryOptions } from "../../../../../../../queries/reportes/iluminacion/reportes-query"
 import Title from "#/components/title"
-import type { ReporteIluminacionType } from "../../../../../../db/reportes/iluminacion/schema"
+import type { ReporteIluminacionType } from "../../../../../../../db/reportes/iluminacion/schema"
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -17,11 +17,11 @@ import { Button } from "#/components/ui/button"
 import { Ellipsis } from "lucide-react"
 import EditReporteGeneral from "#/components/reportes/iluminacion/edit/general"
 import DeleteReporte from "#/components/reportes/iluminacion/delete-reporte"
-import { empresasQueryOptions } from "../../../../../../queries/empresas/empresas-query"
-import { instrumentosQueryOptions } from "../../../../../../queries/instrumentos/instrumentos-query"
+import { empresasQueryOptions } from "../../../../../../../queries/empresas/empresas-query"
+import { instrumentosQueryOptions } from "../../../../../../../queries/instrumentos/instrumentos-query"
 
 export const Route = createFileRoute(
-	"/_protected/iluminacion/reportes/$id/general"
+	"/_protected/iluminacion/reportes/$id/_menu/general"
 )({
 	component: RouteComponent,
 })

@@ -8,10 +8,8 @@ import { useQueryClient } from "@tanstack/react-query"
 
 export default function EliminarReporteNuevo({
 	reporteNuevo,
-	setNewReportWarning,
 }: {
 	reporteNuevo: ReporteIluminacionType
-	setNewReportWarning: (value: boolean) => void
 }) {
 	const queryClient = useQueryClient()
 	const {
@@ -38,7 +36,6 @@ export default function EliminarReporteNuevo({
 
 			console.log("Nuevo reporte eliminado exitosamente")
 			queryClient.setQueryData(["reporte-iluminacion-nuevo"], null)
-			setNewReportWarning(false)
 		},
 	})
 

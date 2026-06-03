@@ -26,7 +26,7 @@ function RouteComponent() {
 					className="absolute opacity-75 top-6 left-0 w-screen sm:w-full h-[500px] sm:h-[400px] bottom-0 -z-10 max-w-none mask-t-from-50% mask-b-from-80% sm:mask-r-from-95% sm:mask-l-from-5% object-cover object-[50%_40%]"
 				/>
 				<Link
-					to="/iluminacion/reportes_CRUD/$id/nuevo"
+					to="/iluminacion/reportes/$id/crud/create-general"
 					params={{
 						id,
 					}}

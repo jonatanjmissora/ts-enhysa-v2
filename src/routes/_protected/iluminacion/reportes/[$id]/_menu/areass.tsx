@@ -9,7 +9,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "#/components/ui/select"
-import { areasQueryOptions } from "../../../../../../queries/reportes/iluminacion/areas/areas-query"
+import { areasQueryOptions } from "../../../../../../../queries/reportes/iluminacion/areas/areas-query"
 import { sortedByName } from "#/lib/utils"
 import {
 	DropdownMenu,
@@ -18,7 +18,7 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "#/components/ui/dropdown-menu"
-import type { AreaIluminacionType } from "../../../../../../db/reportes/iluminacion/areas/schema"
+import type { AreaIluminacionType } from "../../../../../../../db/reportes/iluminacion/areas/schema"
 import { Button } from "#/components/ui/button"
 import { Ellipsis } from "lucide-react"
 import EditAreaAlert from "#/components/reportes/iluminacion/edit/edit-areas"
@@ -34,7 +34,7 @@ const ChartAreaInteractive = lazy(() =>
 )
 
 export const Route = createFileRoute(
-	"/_protected/iluminacion/reportes/$id/areas"
+	"/_protected/iluminacion/reportes/$id/_menu/areass"
 )({
 	component: RouteComponent,
 })

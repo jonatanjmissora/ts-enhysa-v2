@@ -6,13 +6,15 @@ import {
 	useLocation,
 } from "@tanstack/react-router"
 import { CalendarDays, File, RulerDimensionLine, UserRound } from "lucide-react"
-import { reporteQueryOptions } from "../../../../../../queries/reportes/iluminacion/reportes-query"
-import { areasQueryOptions } from "../../../../../../queries/reportes/iluminacion/areas/areas-query"
+import { reporteQueryOptions } from "../../../../../../../queries/reportes/iluminacion/reportes-query"
+import { areasQueryOptions } from "../../../../../../../queries/reportes/iluminacion/areas/areas-query"
 import { useSuspenseQuery } from "@tanstack/react-query"
 import { Suspense } from "react"
-import { empresasQueryOptions } from "../../../../../../queries/empresas/empresas-query"
+import { empresasQueryOptions } from "../../../../../../../queries/empresas/empresas-query"
 
-export const Route = createFileRoute("/_protected/iluminacion/reportes/$id")({
+export const Route = createFileRoute(
+	"/_protected/iluminacion/reportes/$id/_menu"
+)({
 	loader: ({ context, params }) => {
 		context.queryClient.ensureQueryData(reporteQueryOptions({ id: params.id }))
 		context.queryClient.ensureQueryData(empresasQueryOptions)
@@ -53,7 +55,7 @@ function RouteComponent() {
 					General
 				</Link>
 				<Link
-					to="/iluminacion/reportes/$id/areas"
+					to="/iluminacion/reportes/$id/areass"
 					params={{ id }}
 					activeProps={{
 						className:
