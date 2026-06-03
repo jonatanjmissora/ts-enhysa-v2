@@ -163,3 +163,13 @@ export const setResetPuntos = (length: number) => {
 	)
 	return { resetPuntos, resetTimestamps }
 }
+
+export const resetPuntos = (largo: number, ancho: number, alto: number) => {
+	const length = getNumeroCeldas(ancho, largo, alto)
+	return Array.from({ length: length }, () => 0)
+}
+
+export const resetTimestamps = (largo: number, ancho: number, alto: number) => {
+	const length = getNumeroCeldas(ancho, largo, alto)
+	return Array.from({ length: length }, () => new Date(1970, 0, 1, 0, 0, 0))
+}

@@ -16,6 +16,8 @@ import Formula from "#/components/reportes/iluminacion/nuevo-informe/areas/formu
 import {
 	getIndiceDeLocal,
 	getIndiceRedondeo,
+	resetPuntos,
+	resetTimestamps,
 	setResetPuntos,
 } from "#/lib/utils"
 import { HardHat, Loader, Trash2 } from "lucide-react"
@@ -76,8 +78,16 @@ function CargarPuntosData() {
 
 function CargarPuntos({ area }: { area: AreaIluminacionType }) {
 	const navigate = useNavigate()
-	const [puntos, setPuntos] = useState<number[]>(area.puntos || [])
-	const [timestamps, setTimestamps] = useState<Date[]>(area.timestamps || [])
+	const [puntos, setPuntos] = useState<number[]>(() =>
+		area.puntos.length !== 0
+			? area.puntos
+			: resetPuntos(area.largo, area.ancho, area.alto)
+	)
+	const [timestamps, setTimestamps] = useState<Date[]>(() =>
+		area.timestamps.length !== 0
+			? area.timestamps
+			: resetTimestamps(area.largo, area.ancho, area.alto)
+	)
 	const [puntosError, setPuntosError] = useState<string | null>(null)
 	const [puntosCount, setPuntosCount] = useState<0 | 1 | 2 | 3>(0)
 	const { mutateAsync: editArea, isPending, error } = useUpdateArea()
@@ -118,12 +128,34 @@ function CargarPuntos({ area }: { area: AreaIluminacionType }) {
 			})
 		},
 	})
+	useEffect(() => {
+		const updatePuntos = async () => {
+			try {
+				const newArea: AreaIluminacionType = {
+					...area,
+					puntos: puntos,
+					timestamps: timestamps,
+				}
 
-	// TODO: useEffect to trigger effect every 3 items pushed on "puntos"
+				const result = await editArea({ data: newArea })
+				if (!result) {
+					console.error("Error al actualizar puntos", error)
+					return
+				}
+				console.log("Puntos actualizada exitosamente")
+			} catch (error) {
+				console.log("Error", error)
+			}
+		}
+
+		if (puntosCount === 3) {
+			updatePuntos()
+			setPuntosCount(0)
+		}
+	}, [puntosCount, puntos, timestamps, area, editArea, error])
 
 	return (
 		<section className="w-11/12 sm:w-full my-5 sm:my-4 flex flex-col gap-8 relative">
-			{JSON.stringify(puntos)}
 			<Formula
 				alto={Number(area.alto)}
 				ancho={Number(area.ancho)}
@@ -139,6 +171,7 @@ function CargarPuntos({ area }: { area: AreaIluminacionType }) {
 				ancho={Number(area.ancho)}
 				largo={Number(area.largo)}
 				indiceRedondeo={newIndiceRedondeo}
+				setPuntosCount={setPuntosCount}
 			/>
 
 			<form
@@ -176,6 +209,7 @@ function Grilla({
 	ancho,
 	largo,
 	indiceRedondeo,
+	setPuntosCount,
 }: {
 	ancho: number
 	largo: number
@@ -184,6 +218,7 @@ function Grilla({
 	timestamps: Date[]
 	setTimestamps: Dispatch<SetStateAction<Date[]>>
 	indiceRedondeo: number
+	setPuntosCount: Dispatch<SetStateAction<0 | 1 | 2 | 3>>
 }) {
 	const [openInputMenu, setOpenInputMenu] = useState<boolean>(false)
 	const [actualPunto, setActualPunto] = useState<number | null>(null)
@@ -219,6 +254,7 @@ function Grilla({
 					setTimestamps={setTimestamps}
 					actualPunto={actualPunto}
 					setActualPunto={setActualPunto}
+					setPuntosCount={setPuntosCount}
 				/>
 			) : (
 				<div className="w-[90dvw] sm:w-full min-h-[500px] overflow-auto flex flex-col p-10">
@@ -262,6 +298,7 @@ function Grilla({
 				setPuntos={setPuntos}
 				timestamps={timestamps}
 				setTimestamps={setTimestamps}
+				setPuntosCount={setPuntosCount}
 			/>
 		</>
 	)
@@ -304,6 +341,7 @@ function InputMenu({
 	setTimestamps,
 	actualPunto,
 	setActualPunto,
+	setPuntosCount,
 }: {
 	setOpenInputMenu: Dispatch<SetStateAction<boolean>>
 	puntos: number[]
@@ -312,6 +350,7 @@ function InputMenu({
 	setTimestamps: Dispatch<SetStateAction<Date[]>>
 	actualPunto: number | null
 	setActualPunto: Dispatch<SetStateAction<number | null>>
+	setPuntosCount: Dispatch<SetStateAction<0 | 1 | 2 | 3>>
 }) {
 	const inputRef = useRef<HTMLInputElement | null>(null)
 	const [puntoValue, setPuntoValue] = useState<string>("")
@@ -323,8 +362,9 @@ function InputMenu({
 		}
 	}, [])
 
-	function handleSetPunto() {
-		if (actualPunto === null) return
+	function handleSetPunto(e: React.FormEvent<HTMLFormElement>) {
+		e.preventDefault()
+		if (actualPunto === null || puntoValue === "") return
 		const newPuntos = [...puntos]
 		newPuntos[actualPunto] = Number(puntoValue)
 		setPuntos(newPuntos)
@@ -333,6 +373,7 @@ function InputMenu({
 		setTimestamps(newTimestamps)
 		setOpenInputMenu(false)
 		setActualPunto(null)
+		setPuntosCount(prev => (prev + 1 <= 3 ? prev + 1 : 3) as 0 | 1 | 2 | 3)
 	}
 	return (
 		<form
@@ -365,7 +406,7 @@ function InputMenu({
 				>
 					Cancelar
 				</Button>
-				<Button type="submit" className="flex-1" onClick={handleSetPunto}>
+				<Button type="submit" className="flex-1">
 					Guardar
 				</Button>
 			</div>
@@ -378,11 +419,13 @@ function AreaPuntosList({
 	setPuntos,
 	timestamps,
 	setTimestamps,
+	setPuntosCount,
 }: {
 	puntos: number[]
 	setPuntos: Dispatch<SetStateAction<number[]>>
 	timestamps: Date[]
 	setTimestamps: Dispatch<SetStateAction<Date[]>>
+	setPuntosCount: Dispatch<SetStateAction<0 | 1 | 2 | 3>>
 }) {
 	const handleSetPunto = (index: number) => {
 		const newPuntos = puntos.map((np, indexNP) => (indexNP === index ? 0 : np))
@@ -391,6 +434,7 @@ function AreaPuntosList({
 			indexNT === index ? FECHA_1970 : nt
 		)
 		setTimestamps(newTimestamps)
+		setPuntosCount(prev => (prev - 1 <= 0 ? 0 : prev - 1) as 0 | 1 | 2 | 3)
 	}
 
 	return (
