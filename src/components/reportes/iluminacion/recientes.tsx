@@ -75,12 +75,18 @@ function Reportes() {
 }
 
 function NoReports() {
+	const id = crypto.randomUUID().toString()
 	return (
 		<article className="w-5/6 mx-auto flex flex-col items-center justify-center gap-10 mt-20">
 			<span className="text-center text-foreground/70 text-sm italic tracking-wide">
 				No posee informes de Iluminación. Realice su primer reporte ...
 			</span>
-			<Link to="/iluminacion/nuevo-informe">
+			<Link
+				to="/iluminacion/reportes/$id/crud/create-general"
+				params={{
+					id,
+				}}
+			>
 				<Button>Nuevo Reporte</Button>
 			</Link>
 		</article>

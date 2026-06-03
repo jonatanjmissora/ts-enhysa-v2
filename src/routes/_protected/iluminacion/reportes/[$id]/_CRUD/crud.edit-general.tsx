@@ -111,13 +111,12 @@ function EditReporteGeneral() {
 				reporte.clima[1] === value.clima[1] &&
 				reporte.clima[2] === value.clima[2]
 			) {
-				navigate({
+				return navigate({
 					to: "/iluminacion/reportes/$id/areas",
 					params: {
 						id: id,
 					},
 				})
-				return
 			}
 
 			const result = await editarReporte({ data: newReport })

@@ -31,6 +31,8 @@ hacer limpieza de archivos que no se usan
 
 acomodar todo los links con las nuevas rutas
 
+no puedo poner el 0 como valor de puntos, porque me lo toma como *
+
 ADMIN:
 ========
 controlar si todas las areas tienen reporte, sino mostrar para borrar

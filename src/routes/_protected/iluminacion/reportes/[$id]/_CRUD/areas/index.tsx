@@ -100,8 +100,9 @@ function Areas() {
 
 			{/* <CreateAreaAlert /> */}
 			<Link
-				to="/iluminacion/nuevo-informe/areas/$areaId/crear-data"
+				to="/iluminacion/reportes/$id/areas/$areaId/create-area"
 				params={{
+					id,
 					areaId,
 				}}
 				className="flex justify-center items-center w-full"

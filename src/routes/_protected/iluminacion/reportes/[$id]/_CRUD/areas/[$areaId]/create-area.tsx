@@ -103,8 +103,9 @@ function CreateArea() {
 			}
 			console.log("Área creada exitosamente")
 			navigate({
-				to: `/iluminacion/nuevo-informe/areas/$areaId/crear-puntos`,
+				to: `/iluminacion/reportes/$id/areas/$areaId/puntos`,
 				params: {
+					id,
 					areaId: newArea.id,
 				},
 			})

@@ -7,7 +7,11 @@ import { createFileRoute, Link } from "@tanstack/react-router"
 import { Suspense, useState } from "react"
 import { areaQueryOptions } from "../../../../../../../../../queries/reportes/iluminacion/areas/areas-query"
 import type { AreaIluminacionType } from "../../../../../../../../../db/reportes/iluminacion/areas/schema"
-import { getIndiceDeLocal, getIndiceRedondeo } from "#/lib/utils"
+import {
+	checkAreaGeneralDifferences,
+	getIndiceDeLocal,
+	getIndiceRedondeo,
+} from "#/lib/utils"
 import { useUpdateArea } from "../../../../../../../../../queries/reportes/iluminacion/areas/use-update-area"
 import { useForm } from "@tanstack/react-form"
 import { updateAreaValidator } from "../../../../../../../../../db/reportes/iluminacion/areas/area-validator"
@@ -81,6 +85,7 @@ function EditAreaData() {
 
 function EditArea({ id, area }: { id: string; area: AreaIluminacionType }) {
 	const [planoFiles, setPlanoFiles] = useState<string[]>(area.imagenes || [])
+	const navigate = Route.useNavigate()
 
 	const { mutateAsync: updateArea, isPending, error } = useUpdateArea()
 
@@ -92,6 +97,14 @@ function EditArea({ id, area }: { id: string; area: AreaIluminacionType }) {
 			onSubmit: updateAreaValidator,
 		},
 		onSubmit: async ({ value }) => {
+			if (checkAreaGeneralDifferences(value, area)) {
+				return navigate({
+					to: "/iluminacion/reportes/$id/areas/$areaId/puntos",
+					params: {
+						id: id,
+					},
+				})
+			}
 			const newArea: AreaIluminacionType = {
 				...value,
 				userId: area.userId,
@@ -104,6 +117,12 @@ function EditArea({ id, area }: { id: string; area: AreaIluminacionType }) {
 				return
 			}
 			console.log("Area actualizada exitosamente")
+			navigate({
+				to: "/iluminacion/reportes/$id/areas/$areaId/puntos",
+				params: {
+					id: id,
+				},
+			})
 		},
 	})
 
@@ -616,7 +635,7 @@ function EditArea({ id, area }: { id: string; area: AreaIluminacionType }) {
 						className="flex-1 py-4"
 					>
 						<Link to={`/iluminacion/reportes/$id/areas`} params={{ id }}>
-							Cancelar
+							Volver
 						</Link>
 					</Button>
 					<Button type="submit" disabled={isPending} className="flex-1 py-4">
@@ -625,7 +644,7 @@ function EditArea({ id, area }: { id: string; area: AreaIluminacionType }) {
 								Editando... <Loader className="animate-spin size-4"></Loader>
 							</div>
 						) : (
-							"Guardar"
+							"Siguiente"
 						)}
 					</Button>
 				</Field>

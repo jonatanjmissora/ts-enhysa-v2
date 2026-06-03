@@ -27,11 +27,12 @@ export const Route = createFileRoute(
 })
 
 function RouteComponent() {
+	const { id } = Route.useParams()
 	useScrollTop()
 	return (
 		<article className="w-full min-h-svh flex flex-col items-center gap-0 relative mb-60">
-			<BackChevron to="/iluminacion/nuevo-informe" />
-			<Title text="Nueva Area" className="mt-15" />
+			<BackChevron to="/iluminacion/reportes/$id/areas" params={{ id }} />
+			<Title text="Nuevo Informe" className="mt-15" />
 			<Suspense
 				fallback={
 					<Loading
