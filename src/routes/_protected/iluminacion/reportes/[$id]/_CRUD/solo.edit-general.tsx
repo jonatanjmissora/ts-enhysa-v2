@@ -3,7 +3,7 @@ import Loading from "#/components/loading"
 import Title from "#/components/title"
 import useScrollTop from "#/hooks/scroll-top"
 import { useSuspenseQuery } from "@tanstack/react-query"
-import { createFileRoute, useNavigate } from "@tanstack/react-router"
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router"
 import { Suspense } from "react"
 import { reporteQueryOptions } from "../../../../../../../queries/reportes/iluminacion/reportes-query"
 import { empresasQueryOptions } from "../../../../../../../queries/empresas/empresas-query"
@@ -40,7 +40,7 @@ import { Button } from "#/components/ui/button"
 import type { EmpresaType } from "../../../../../../../db/empresas/schema"
 
 export const Route = createFileRoute(
-	"/_protected/iluminacion/reportes/$id/_CRUD/crud/edit-general"
+	"/_protected/iluminacion/reportes/$id/_CRUD/solo/edit-general"
 )({
 	component: RouteComponent,
 })
@@ -112,7 +112,7 @@ function EditReporteGeneral() {
 				reporte.clima[2] === value.clima[2]
 			) {
 				return navigate({
-					to: "/iluminacion/reportes/$id/areas",
+					to: "/iluminacion/reportes/$id/general",
 					params: {
 						id: id,
 					},
@@ -125,7 +125,7 @@ function EditReporteGeneral() {
 			}
 			console.log("Reporte editado exitosamente")
 			navigate({
-				to: "/iluminacion/reportes/$id/areas",
+				to: "/iluminacion/reportes/$id/general",
 				params: {
 					id: id,
 				},
@@ -435,16 +435,19 @@ function EditReporteGeneral() {
 					}}
 				/>
 
-				<Field className="flex flex-col justify-center gap-4 sm:gap-10 items-center w-full sm:w-1/2 mx-auto mt-30">
-					<Button type="submit" disabled={isPending} className="flex-1 py-3">
+				<Field className="flex flex-col sm:flex-row justify-center gap-4 sm:gap-10 items-center w-full sm:w-1/2 mx-auto mt-30">
+					<Button variant="outline" className="py-5 sm:w-1/2">
+						<Link to="/iluminacion/reportes" params={{ id }}>
+							Cancelar
+						</Link>
+					</Button>
+					<Button type="submit" disabled={isPending} className="py-3 w-full">
 						{isPending ? (
 							<div className="flex gap-2 w-full justify-center items-center">
 								Guardando... <Loader className="animate-spin size-4"></Loader>
 							</div>
 						) : (
-							<div className="flex gap-2 w-full justify-center items-center">
-								Siguiente <ChevronRight className="size-6" />
-							</div>
+							<div className="w-full">Guardar</div>
 						)}
 					</Button>
 				</Field>

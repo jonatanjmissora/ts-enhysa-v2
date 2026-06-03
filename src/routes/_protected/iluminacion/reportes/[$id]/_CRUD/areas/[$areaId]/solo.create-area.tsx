@@ -50,7 +50,7 @@ import {
 } from "../../../../../../../../../db/reportes/iluminacion/areas/area-validator"
 
 export const Route = createFileRoute(
-	"/_protected/iluminacion/reportes/$id/_CRUD/areas/$areaId/create-area"
+	"/_protected/iluminacion/reportes/$id/_CRUD/areas/$areaId/solo/create-area"
 )({
 	component: RouteComponent,
 })
@@ -60,7 +60,7 @@ function RouteComponent() {
 	const params = Route.useParams()
 	return (
 		<article className="w-full min-h-svh flex flex-col items-center gap-0 relative mb-60">
-			<BackChevron to="/iluminacion/reportes/$id/areas" params={params} />
+			<BackChevron to="/iluminacion/reportes/$id/areass" params={params} />
 			<Title text="Nueva Area" className="mt-15" />
 			<Suspense
 				fallback={
@@ -104,7 +104,7 @@ function CreateArea() {
 			}
 			console.log("Área creada exitosamente")
 			navigate({
-				to: `/iluminacion/reportes/$id/areas/$areaId/puntos`,
+				to: `/iluminacion/reportes/$id/areas/$areaId/solo/puntos`,
 				params: {
 					id,
 					areaId: newArea.id,
@@ -628,7 +628,7 @@ function CreateArea() {
 
 				<Field className="flex flex-col sm:flex-row justify-center gap-4 items-center w-5/6 sm:w-full mx-auto mt-10">
 					<Link
-						to="/iluminacion/reportes/$id/areas"
+						to="/iluminacion/reportes/$id/areass"
 						params={{ id }}
 						className="flex-1"
 					>

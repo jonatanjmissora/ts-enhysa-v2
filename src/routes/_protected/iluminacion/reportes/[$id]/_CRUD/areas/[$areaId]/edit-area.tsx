@@ -133,7 +133,7 @@ function EditArea({ id, area }: { id: string; area: AreaIluminacionType }) {
 				e.preventDefault()
 				form.handleSubmit()
 			}}
-			className="w-full my-5 sm:my-4 flex flex-col gap-8 relative"
+			className="w-11/12 sm:w-full my-5 sm:my-4 flex flex-col gap-8 relative"
 		>
 			<FieldGroup className="gap-5">
 				<div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-5/6 mt-10 mx-auto">

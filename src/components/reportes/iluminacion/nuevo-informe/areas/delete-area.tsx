@@ -6,14 +6,12 @@ import {
 	AlertDialogTitle,
 	AlertDialogDescription,
 } from "@/components/ui/alert-dialog"
-import { Suspense, useState, useEffect } from "react"
 import { Trash2, Loader } from "lucide-react"
 import { useForm } from "@tanstack/react-form"
-import { useRouter } from "@tanstack/react-router"
 import type { AreaIluminacionType } from "../../../../../../db/reportes/iluminacion/areas/schema"
 import { useDeleteArea } from "../../../../../../queries/reportes/iluminacion/areas/use-delete-area"
 import { areaIdValidator } from "../../../../../../db/reportes/iluminacion/areas/area-validator"
-import { useQueryClient } from "@tanstack/react-query"
+import { useState } from "react"
 
 export default function DeleteAreaAlert({
 	area,
@@ -65,8 +63,6 @@ function DeleteAreaForm({
 		isPending,
 	} = useDeleteArea(area.id, area.reportId)
 
-	const router = useRouter()
-	const queryClient = useQueryClient()
 	const form = useForm({
 		defaultValues: {
 			id: area.id,
@@ -83,13 +79,6 @@ function DeleteAreaForm({
 			}
 			setIsMenuOpen(false)
 			console.log("Area eliminada exitosamente")
-			// queryClient.setQueryData<AreaIluminacionType[]>(
-			//     ["areas_iluminacion", area.reportId],
-			//     oldData => (oldData ? oldData.filter(item => item.id !== area.id) : [])
-			//   );
-			// No invalidate needed; optimistic update already updates UI.
-			// If you want to ensure server sync, you can refetch the query:
-			// queryClient.refetchQueries({ queryKey: ["areas_iluminacion", area.reportId], exact: true });
 		},
 	})
 

@@ -28,13 +28,16 @@ import { Route as ProtectedIluminacionReportesChar91idChar93MenuResumenRouteImpo
 import { Route as ProtectedIluminacionReportesChar91idChar93MenuGeneralRouteImport } from './routes/_protected/iluminacion/reportes/[$id]/_menu/general'
 import { Route as ProtectedIluminacionReportesChar91idChar93MenuAreassRouteImport } from './routes/_protected/iluminacion/reportes/[$id]/_menu/areass'
 import { Route as ProtectedIluminacionReportesChar91idChar93CRUDAreasIndexRouteImport } from './routes/_protected/iluminacion/reportes/[$id]/_CRUD/areas/index'
-import { Route as ProtectedIluminacionReportesChar91idChar93CRUDCrudEditResumenRouteImport } from './routes/_protected/iluminacion/reportes/[$id]/_CRUD/crud.edit-resumen'
+import { Route as ProtectedIluminacionReportesChar91idChar93CRUDSoloEditGeneralRouteImport } from './routes/_protected/iluminacion/reportes/[$id]/_CRUD/solo.edit-general'
 import { Route as ProtectedIluminacionReportesChar91idChar93CRUDCrudEditGeneralRouteImport } from './routes/_protected/iluminacion/reportes/[$id]/_CRUD/crud.edit-general'
 import { Route as ProtectedIluminacionReportesChar91idChar93CRUDCrudCreateResumenRouteImport } from './routes/_protected/iluminacion/reportes/[$id]/_CRUD/crud.create-resumen'
 import { Route as ProtectedIluminacionReportesChar91idChar93CRUDCrudCreateGeneralRouteImport } from './routes/_protected/iluminacion/reportes/[$id]/_CRUD/crud.create-general'
 import { Route as ProtectedIluminacionReportesChar91idChar93CRUDAreasChar91areaIdChar93PuntosRouteImport } from './routes/_protected/iluminacion/reportes/[$id]/_CRUD/areas/[$areaId]/puntos'
 import { Route as ProtectedIluminacionReportesChar91idChar93CRUDAreasChar91areaIdChar93EditAreaRouteImport } from './routes/_protected/iluminacion/reportes/[$id]/_CRUD/areas/[$areaId]/edit-area'
 import { Route as ProtectedIluminacionReportesChar91idChar93CRUDAreasChar91areaIdChar93CreateAreaRouteImport } from './routes/_protected/iluminacion/reportes/[$id]/_CRUD/areas/[$areaId]/create-area'
+import { Route as ProtectedIluminacionReportesChar91idChar93CRUDAreasChar91areaIdChar93SoloPuntosRouteImport } from './routes/_protected/iluminacion/reportes/[$id]/_CRUD/areas/[$areaId]/solo.puntos'
+import { Route as ProtectedIluminacionReportesChar91idChar93CRUDAreasChar91areaIdChar93SoloEditAreaRouteImport } from './routes/_protected/iluminacion/reportes/[$id]/_CRUD/areas/[$areaId]/solo.edit-area'
+import { Route as ProtectedIluminacionReportesChar91idChar93CRUDAreasChar91areaIdChar93SoloCreateAreaRouteImport } from './routes/_protected/iluminacion/reportes/[$id]/_CRUD/areas/[$areaId]/solo.create-area'
 
 const ProtectedRouteRoute = ProtectedRouteRouteImport.update({
   id: '/_protected',
@@ -145,11 +148,11 @@ const ProtectedIluminacionReportesChar91idChar93CRUDAreasIndexRoute =
     path: '/iluminacion/reportes/$id/areas/',
     getParentRoute: () => ProtectedRouteRoute,
   } as any)
-const ProtectedIluminacionReportesChar91idChar93CRUDCrudEditResumenRoute =
-  ProtectedIluminacionReportesChar91idChar93CRUDCrudEditResumenRouteImport.update(
+const ProtectedIluminacionReportesChar91idChar93CRUDSoloEditGeneralRoute =
+  ProtectedIluminacionReportesChar91idChar93CRUDSoloEditGeneralRouteImport.update(
     {
-      id: '/iluminacion/reportes/$id/_CRUD/crud/edit-resumen',
-      path: '/iluminacion/reportes/$id/crud/edit-resumen',
+      id: '/iluminacion/reportes/$id/_CRUD/solo/edit-general',
+      path: '/iluminacion/reportes/$id/solo/edit-general',
       getParentRoute: () => ProtectedRouteRoute,
     } as any,
   )
@@ -201,6 +204,30 @@ const ProtectedIluminacionReportesChar91idChar93CRUDAreasChar91areaIdChar93Creat
       getParentRoute: () => ProtectedRouteRoute,
     } as any,
   )
+const ProtectedIluminacionReportesChar91idChar93CRUDAreasChar91areaIdChar93SoloPuntosRoute =
+  ProtectedIluminacionReportesChar91idChar93CRUDAreasChar91areaIdChar93SoloPuntosRouteImport.update(
+    {
+      id: '/iluminacion/reportes/$id/_CRUD/areas/$areaId/solo/puntos',
+      path: '/iluminacion/reportes/$id/areas/$areaId/solo/puntos',
+      getParentRoute: () => ProtectedRouteRoute,
+    } as any,
+  )
+const ProtectedIluminacionReportesChar91idChar93CRUDAreasChar91areaIdChar93SoloEditAreaRoute =
+  ProtectedIluminacionReportesChar91idChar93CRUDAreasChar91areaIdChar93SoloEditAreaRouteImport.update(
+    {
+      id: '/iluminacion/reportes/$id/_CRUD/areas/$areaId/solo/edit-area',
+      path: '/iluminacion/reportes/$id/areas/$areaId/solo/edit-area',
+      getParentRoute: () => ProtectedRouteRoute,
+    } as any,
+  )
+const ProtectedIluminacionReportesChar91idChar93CRUDAreasChar91areaIdChar93SoloCreateAreaRoute =
+  ProtectedIluminacionReportesChar91idChar93CRUDAreasChar91areaIdChar93SoloCreateAreaRouteImport.update(
+    {
+      id: '/iluminacion/reportes/$id/_CRUD/areas/$areaId/solo/create-area',
+      path: '/iluminacion/reportes/$id/areas/$areaId/solo/create-area',
+      getParentRoute: () => ProtectedRouteRoute,
+    } as any,
+  )
 
 export interface FileRoutesByFullPath {
   '/': typeof ProtectedIndexRoute
@@ -223,11 +250,14 @@ export interface FileRoutesByFullPath {
   '/iluminacion/reportes/$id/crud/create-general': typeof ProtectedIluminacionReportesChar91idChar93CRUDCrudCreateGeneralRoute
   '/iluminacion/reportes/$id/crud/create-resumen': typeof ProtectedIluminacionReportesChar91idChar93CRUDCrudCreateResumenRoute
   '/iluminacion/reportes/$id/crud/edit-general': typeof ProtectedIluminacionReportesChar91idChar93CRUDCrudEditGeneralRoute
-  '/iluminacion/reportes/$id/crud/edit-resumen': typeof ProtectedIluminacionReportesChar91idChar93CRUDCrudEditResumenRoute
+  '/iluminacion/reportes/$id/solo/edit-general': typeof ProtectedIluminacionReportesChar91idChar93CRUDSoloEditGeneralRoute
   '/iluminacion/reportes/$id/areas/': typeof ProtectedIluminacionReportesChar91idChar93CRUDAreasIndexRoute
   '/iluminacion/reportes/$id/areas/$areaId/create-area': typeof ProtectedIluminacionReportesChar91idChar93CRUDAreasChar91areaIdChar93CreateAreaRoute
   '/iluminacion/reportes/$id/areas/$areaId/edit-area': typeof ProtectedIluminacionReportesChar91idChar93CRUDAreasChar91areaIdChar93EditAreaRoute
   '/iluminacion/reportes/$id/areas/$areaId/puntos': typeof ProtectedIluminacionReportesChar91idChar93CRUDAreasChar91areaIdChar93PuntosRoute
+  '/iluminacion/reportes/$id/areas/$areaId/solo/create-area': typeof ProtectedIluminacionReportesChar91idChar93CRUDAreasChar91areaIdChar93SoloCreateAreaRoute
+  '/iluminacion/reportes/$id/areas/$areaId/solo/edit-area': typeof ProtectedIluminacionReportesChar91idChar93CRUDAreasChar91areaIdChar93SoloEditAreaRoute
+  '/iluminacion/reportes/$id/areas/$areaId/solo/puntos': typeof ProtectedIluminacionReportesChar91idChar93CRUDAreasChar91areaIdChar93SoloPuntosRoute
 }
 export interface FileRoutesByTo {
   '/perfil': typeof ProtectedPerfilRouteRouteWithChildren
@@ -250,11 +280,14 @@ export interface FileRoutesByTo {
   '/iluminacion/reportes/$id/crud/create-general': typeof ProtectedIluminacionReportesChar91idChar93CRUDCrudCreateGeneralRoute
   '/iluminacion/reportes/$id/crud/create-resumen': typeof ProtectedIluminacionReportesChar91idChar93CRUDCrudCreateResumenRoute
   '/iluminacion/reportes/$id/crud/edit-general': typeof ProtectedIluminacionReportesChar91idChar93CRUDCrudEditGeneralRoute
-  '/iluminacion/reportes/$id/crud/edit-resumen': typeof ProtectedIluminacionReportesChar91idChar93CRUDCrudEditResumenRoute
+  '/iluminacion/reportes/$id/solo/edit-general': typeof ProtectedIluminacionReportesChar91idChar93CRUDSoloEditGeneralRoute
   '/iluminacion/reportes/$id/areas': typeof ProtectedIluminacionReportesChar91idChar93CRUDAreasIndexRoute
   '/iluminacion/reportes/$id/areas/$areaId/create-area': typeof ProtectedIluminacionReportesChar91idChar93CRUDAreasChar91areaIdChar93CreateAreaRoute
   '/iluminacion/reportes/$id/areas/$areaId/edit-area': typeof ProtectedIluminacionReportesChar91idChar93CRUDAreasChar91areaIdChar93EditAreaRoute
   '/iluminacion/reportes/$id/areas/$areaId/puntos': typeof ProtectedIluminacionReportesChar91idChar93CRUDAreasChar91areaIdChar93PuntosRoute
+  '/iluminacion/reportes/$id/areas/$areaId/solo/create-area': typeof ProtectedIluminacionReportesChar91idChar93CRUDAreasChar91areaIdChar93SoloCreateAreaRoute
+  '/iluminacion/reportes/$id/areas/$areaId/solo/edit-area': typeof ProtectedIluminacionReportesChar91idChar93CRUDAreasChar91areaIdChar93SoloEditAreaRoute
+  '/iluminacion/reportes/$id/areas/$areaId/solo/puntos': typeof ProtectedIluminacionReportesChar91idChar93CRUDAreasChar91areaIdChar93SoloPuntosRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -279,11 +312,14 @@ export interface FileRoutesById {
   '/_protected/iluminacion/reportes/$id/_CRUD/crud/create-general': typeof ProtectedIluminacionReportesChar91idChar93CRUDCrudCreateGeneralRoute
   '/_protected/iluminacion/reportes/$id/_CRUD/crud/create-resumen': typeof ProtectedIluminacionReportesChar91idChar93CRUDCrudCreateResumenRoute
   '/_protected/iluminacion/reportes/$id/_CRUD/crud/edit-general': typeof ProtectedIluminacionReportesChar91idChar93CRUDCrudEditGeneralRoute
-  '/_protected/iluminacion/reportes/$id/_CRUD/crud/edit-resumen': typeof ProtectedIluminacionReportesChar91idChar93CRUDCrudEditResumenRoute
+  '/_protected/iluminacion/reportes/$id/_CRUD/solo/edit-general': typeof ProtectedIluminacionReportesChar91idChar93CRUDSoloEditGeneralRoute
   '/_protected/iluminacion/reportes/$id/_CRUD/areas/': typeof ProtectedIluminacionReportesChar91idChar93CRUDAreasIndexRoute
   '/_protected/iluminacion/reportes/$id/_CRUD/areas/$areaId/create-area': typeof ProtectedIluminacionReportesChar91idChar93CRUDAreasChar91areaIdChar93CreateAreaRoute
   '/_protected/iluminacion/reportes/$id/_CRUD/areas/$areaId/edit-area': typeof ProtectedIluminacionReportesChar91idChar93CRUDAreasChar91areaIdChar93EditAreaRoute
   '/_protected/iluminacion/reportes/$id/_CRUD/areas/$areaId/puntos': typeof ProtectedIluminacionReportesChar91idChar93CRUDAreasChar91areaIdChar93PuntosRoute
+  '/_protected/iluminacion/reportes/$id/_CRUD/areas/$areaId/solo/create-area': typeof ProtectedIluminacionReportesChar91idChar93CRUDAreasChar91areaIdChar93SoloCreateAreaRoute
+  '/_protected/iluminacion/reportes/$id/_CRUD/areas/$areaId/solo/edit-area': typeof ProtectedIluminacionReportesChar91idChar93CRUDAreasChar91areaIdChar93SoloEditAreaRoute
+  '/_protected/iluminacion/reportes/$id/_CRUD/areas/$areaId/solo/puntos': typeof ProtectedIluminacionReportesChar91idChar93CRUDAreasChar91areaIdChar93SoloPuntosRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -308,11 +344,14 @@ export interface FileRouteTypes {
     | '/iluminacion/reportes/$id/crud/create-general'
     | '/iluminacion/reportes/$id/crud/create-resumen'
     | '/iluminacion/reportes/$id/crud/edit-general'
-    | '/iluminacion/reportes/$id/crud/edit-resumen'
+    | '/iluminacion/reportes/$id/solo/edit-general'
     | '/iluminacion/reportes/$id/areas/'
     | '/iluminacion/reportes/$id/areas/$areaId/create-area'
     | '/iluminacion/reportes/$id/areas/$areaId/edit-area'
     | '/iluminacion/reportes/$id/areas/$areaId/puntos'
+    | '/iluminacion/reportes/$id/areas/$areaId/solo/create-area'
+    | '/iluminacion/reportes/$id/areas/$areaId/solo/edit-area'
+    | '/iluminacion/reportes/$id/areas/$areaId/solo/puntos'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/perfil'
@@ -335,11 +374,14 @@ export interface FileRouteTypes {
     | '/iluminacion/reportes/$id/crud/create-general'
     | '/iluminacion/reportes/$id/crud/create-resumen'
     | '/iluminacion/reportes/$id/crud/edit-general'
-    | '/iluminacion/reportes/$id/crud/edit-resumen'
+    | '/iluminacion/reportes/$id/solo/edit-general'
     | '/iluminacion/reportes/$id/areas'
     | '/iluminacion/reportes/$id/areas/$areaId/create-area'
     | '/iluminacion/reportes/$id/areas/$areaId/edit-area'
     | '/iluminacion/reportes/$id/areas/$areaId/puntos'
+    | '/iluminacion/reportes/$id/areas/$areaId/solo/create-area'
+    | '/iluminacion/reportes/$id/areas/$areaId/solo/edit-area'
+    | '/iluminacion/reportes/$id/areas/$areaId/solo/puntos'
   id:
     | '__root__'
     | '/_protected'
@@ -363,11 +405,14 @@ export interface FileRouteTypes {
     | '/_protected/iluminacion/reportes/$id/_CRUD/crud/create-general'
     | '/_protected/iluminacion/reportes/$id/_CRUD/crud/create-resumen'
     | '/_protected/iluminacion/reportes/$id/_CRUD/crud/edit-general'
-    | '/_protected/iluminacion/reportes/$id/_CRUD/crud/edit-resumen'
+    | '/_protected/iluminacion/reportes/$id/_CRUD/solo/edit-general'
     | '/_protected/iluminacion/reportes/$id/_CRUD/areas/'
     | '/_protected/iluminacion/reportes/$id/_CRUD/areas/$areaId/create-area'
     | '/_protected/iluminacion/reportes/$id/_CRUD/areas/$areaId/edit-area'
     | '/_protected/iluminacion/reportes/$id/_CRUD/areas/$areaId/puntos'
+    | '/_protected/iluminacion/reportes/$id/_CRUD/areas/$areaId/solo/create-area'
+    | '/_protected/iluminacion/reportes/$id/_CRUD/areas/$areaId/solo/edit-area'
+    | '/_protected/iluminacion/reportes/$id/_CRUD/areas/$areaId/solo/puntos'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -512,11 +557,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProtectedIluminacionReportesChar91idChar93CRUDAreasIndexRouteImport
       parentRoute: typeof ProtectedRouteRoute
     }
-    '/_protected/iluminacion/reportes/$id/_CRUD/crud/edit-resumen': {
-      id: '/_protected/iluminacion/reportes/$id/_CRUD/crud/edit-resumen'
-      path: '/iluminacion/reportes/$id/crud/edit-resumen'
-      fullPath: '/iluminacion/reportes/$id/crud/edit-resumen'
-      preLoaderRoute: typeof ProtectedIluminacionReportesChar91idChar93CRUDCrudEditResumenRouteImport
+    '/_protected/iluminacion/reportes/$id/_CRUD/solo/edit-general': {
+      id: '/_protected/iluminacion/reportes/$id/_CRUD/solo/edit-general'
+      path: '/iluminacion/reportes/$id/solo/edit-general'
+      fullPath: '/iluminacion/reportes/$id/solo/edit-general'
+      preLoaderRoute: typeof ProtectedIluminacionReportesChar91idChar93CRUDSoloEditGeneralRouteImport
       parentRoute: typeof ProtectedRouteRoute
     }
     '/_protected/iluminacion/reportes/$id/_CRUD/crud/edit-general': {
@@ -559,6 +604,27 @@ declare module '@tanstack/react-router' {
       path: '/iluminacion/reportes/$id/areas/$areaId/create-area'
       fullPath: '/iluminacion/reportes/$id/areas/$areaId/create-area'
       preLoaderRoute: typeof ProtectedIluminacionReportesChar91idChar93CRUDAreasChar91areaIdChar93CreateAreaRouteImport
+      parentRoute: typeof ProtectedRouteRoute
+    }
+    '/_protected/iluminacion/reportes/$id/_CRUD/areas/$areaId/solo/puntos': {
+      id: '/_protected/iluminacion/reportes/$id/_CRUD/areas/$areaId/solo/puntos'
+      path: '/iluminacion/reportes/$id/areas/$areaId/solo/puntos'
+      fullPath: '/iluminacion/reportes/$id/areas/$areaId/solo/puntos'
+      preLoaderRoute: typeof ProtectedIluminacionReportesChar91idChar93CRUDAreasChar91areaIdChar93SoloPuntosRouteImport
+      parentRoute: typeof ProtectedRouteRoute
+    }
+    '/_protected/iluminacion/reportes/$id/_CRUD/areas/$areaId/solo/edit-area': {
+      id: '/_protected/iluminacion/reportes/$id/_CRUD/areas/$areaId/solo/edit-area'
+      path: '/iluminacion/reportes/$id/areas/$areaId/solo/edit-area'
+      fullPath: '/iluminacion/reportes/$id/areas/$areaId/solo/edit-area'
+      preLoaderRoute: typeof ProtectedIluminacionReportesChar91idChar93CRUDAreasChar91areaIdChar93SoloEditAreaRouteImport
+      parentRoute: typeof ProtectedRouteRoute
+    }
+    '/_protected/iluminacion/reportes/$id/_CRUD/areas/$areaId/solo/create-area': {
+      id: '/_protected/iluminacion/reportes/$id/_CRUD/areas/$areaId/solo/create-area'
+      path: '/iluminacion/reportes/$id/areas/$areaId/solo/create-area'
+      fullPath: '/iluminacion/reportes/$id/areas/$areaId/solo/create-area'
+      preLoaderRoute: typeof ProtectedIluminacionReportesChar91idChar93CRUDAreasChar91areaIdChar93SoloCreateAreaRouteImport
       parentRoute: typeof ProtectedRouteRoute
     }
   }
@@ -612,11 +678,14 @@ interface ProtectedRouteRouteChildren {
   ProtectedIluminacionReportesChar91idChar93CRUDCrudCreateGeneralRoute: typeof ProtectedIluminacionReportesChar91idChar93CRUDCrudCreateGeneralRoute
   ProtectedIluminacionReportesChar91idChar93CRUDCrudCreateResumenRoute: typeof ProtectedIluminacionReportesChar91idChar93CRUDCrudCreateResumenRoute
   ProtectedIluminacionReportesChar91idChar93CRUDCrudEditGeneralRoute: typeof ProtectedIluminacionReportesChar91idChar93CRUDCrudEditGeneralRoute
-  ProtectedIluminacionReportesChar91idChar93CRUDCrudEditResumenRoute: typeof ProtectedIluminacionReportesChar91idChar93CRUDCrudEditResumenRoute
+  ProtectedIluminacionReportesChar91idChar93CRUDSoloEditGeneralRoute: typeof ProtectedIluminacionReportesChar91idChar93CRUDSoloEditGeneralRoute
   ProtectedIluminacionReportesChar91idChar93CRUDAreasIndexRoute: typeof ProtectedIluminacionReportesChar91idChar93CRUDAreasIndexRoute
   ProtectedIluminacionReportesChar91idChar93CRUDAreasChar91areaIdChar93CreateAreaRoute: typeof ProtectedIluminacionReportesChar91idChar93CRUDAreasChar91areaIdChar93CreateAreaRoute
   ProtectedIluminacionReportesChar91idChar93CRUDAreasChar91areaIdChar93EditAreaRoute: typeof ProtectedIluminacionReportesChar91idChar93CRUDAreasChar91areaIdChar93EditAreaRoute
   ProtectedIluminacionReportesChar91idChar93CRUDAreasChar91areaIdChar93PuntosRoute: typeof ProtectedIluminacionReportesChar91idChar93CRUDAreasChar91areaIdChar93PuntosRoute
+  ProtectedIluminacionReportesChar91idChar93CRUDAreasChar91areaIdChar93SoloCreateAreaRoute: typeof ProtectedIluminacionReportesChar91idChar93CRUDAreasChar91areaIdChar93SoloCreateAreaRoute
+  ProtectedIluminacionReportesChar91idChar93CRUDAreasChar91areaIdChar93SoloEditAreaRoute: typeof ProtectedIluminacionReportesChar91idChar93CRUDAreasChar91areaIdChar93SoloEditAreaRoute
+  ProtectedIluminacionReportesChar91idChar93CRUDAreasChar91areaIdChar93SoloPuntosRoute: typeof ProtectedIluminacionReportesChar91idChar93CRUDAreasChar91areaIdChar93SoloPuntosRoute
 }
 
 const ProtectedRouteRouteChildren: ProtectedRouteRouteChildren = {
@@ -638,8 +707,8 @@ const ProtectedRouteRouteChildren: ProtectedRouteRouteChildren = {
     ProtectedIluminacionReportesChar91idChar93CRUDCrudCreateResumenRoute,
   ProtectedIluminacionReportesChar91idChar93CRUDCrudEditGeneralRoute:
     ProtectedIluminacionReportesChar91idChar93CRUDCrudEditGeneralRoute,
-  ProtectedIluminacionReportesChar91idChar93CRUDCrudEditResumenRoute:
-    ProtectedIluminacionReportesChar91idChar93CRUDCrudEditResumenRoute,
+  ProtectedIluminacionReportesChar91idChar93CRUDSoloEditGeneralRoute:
+    ProtectedIluminacionReportesChar91idChar93CRUDSoloEditGeneralRoute,
   ProtectedIluminacionReportesChar91idChar93CRUDAreasIndexRoute:
     ProtectedIluminacionReportesChar91idChar93CRUDAreasIndexRoute,
   ProtectedIluminacionReportesChar91idChar93CRUDAreasChar91areaIdChar93CreateAreaRoute:
@@ -648,6 +717,12 @@ const ProtectedRouteRouteChildren: ProtectedRouteRouteChildren = {
     ProtectedIluminacionReportesChar91idChar93CRUDAreasChar91areaIdChar93EditAreaRoute,
   ProtectedIluminacionReportesChar91idChar93CRUDAreasChar91areaIdChar93PuntosRoute:
     ProtectedIluminacionReportesChar91idChar93CRUDAreasChar91areaIdChar93PuntosRoute,
+  ProtectedIluminacionReportesChar91idChar93CRUDAreasChar91areaIdChar93SoloCreateAreaRoute:
+    ProtectedIluminacionReportesChar91idChar93CRUDAreasChar91areaIdChar93SoloCreateAreaRoute,
+  ProtectedIluminacionReportesChar91idChar93CRUDAreasChar91areaIdChar93SoloEditAreaRoute:
+    ProtectedIluminacionReportesChar91idChar93CRUDAreasChar91areaIdChar93SoloEditAreaRoute,
+  ProtectedIluminacionReportesChar91idChar93CRUDAreasChar91areaIdChar93SoloPuntosRoute:
+    ProtectedIluminacionReportesChar91idChar93CRUDAreasChar91areaIdChar93SoloPuntosRoute,
 }
 
 const ProtectedRouteRouteWithChildren = ProtectedRouteRoute._addFileChildren(

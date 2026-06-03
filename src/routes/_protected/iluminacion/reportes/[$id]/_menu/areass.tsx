@@ -20,7 +20,7 @@ import {
 } from "#/components/ui/dropdown-menu"
 import type { AreaIluminacionType } from "../../../../../../../db/reportes/iluminacion/areas/schema"
 import { Button } from "#/components/ui/button"
-import { Ellipsis } from "lucide-react"
+import { Edit, Ellipsis, Plus } from "lucide-react"
 import EditAreaAlert from "#/components/reportes/iluminacion/edit/edit-areas"
 // Duplicate imports and route definitions removed
 import CreateAreaAlert from "#/components/reportes/iluminacion/edit/crear-area"
@@ -78,7 +78,11 @@ function Area() {
 				<span className="text-sm italic">No se encontró ningún área</span>
 				{/* <CreateAreaAlert id={id} /> */}
 				<Link
-					to="/iluminacion/nuevo-informe/areas/crear-data"
+					to="/iluminacion/reportes/$id/areas/$areaId/create-area"
+					params={{
+						id,
+						areaId: crypto.randomUUID().toString(),
+					}}
 					className="flex justify-center items-center w-full"
 				>
 					<Button className="w-1/2 min-w-40 sm:w-1/6 mx-auto py-5 bg-primary ring-foreground/25">
@@ -190,13 +194,39 @@ function AreaDropdownMenu({ area }: { area: AreaIluminacionType }) {
 			</DropdownMenuTrigger>
 			<DropdownMenuContent className="p-6" align="end">
 				<DropdownMenuGroup className="flex flex-col bg-accent ring-[1px] ring-foreground/20 rounded-lg p-2">
-					<CreateAreaAlert
+					{/* <CreateAreaAlert
 						id={area.reportId}
 						dropdownMenu={true}
 						setIsMenuOpen={setIsMenuOpen}
-					/>
+					/> */}
+					<Link
+						to="/iluminacion/reportes/$id/areas/$areaId/solo/create-area"
+						params={{
+							id: area.reportId,
+							areaId: crypto.randomUUID().toString(),
+						}}
+						className="flex justify-center items-center w-full"
+					>
+						<div className="w-full flex items-center gap-2 justify-center p-4">
+							<Plus className="size-4" />
+							Crear
+						</div>
+					</Link>
 					<DropdownMenuSeparator className="bg-foreground/20 w-5/6 mx-auto" />
-					<EditAreaAlert area={area} setIsMenuOpen={setIsMenuOpen} />
+					{/* <EditAreaAlert area={area} setIsMenuOpen={setIsMenuOpen} /> */}
+					<Link
+						to="/iluminacion/reportes/$id/areas/$areaId/solo/edit-area"
+						params={{
+							id: area.reportId,
+							areaId: area.id,
+						}}
+						className="flex justify-center items-center w-full"
+					>
+						<div className="w-full flex items-center gap-2 justify-center p-4">
+							<Edit className="size-4" />
+							Editar
+						</div>
+					</Link>
 					<DropdownMenuSeparator className="bg-foreground/20 w-5/6 mx-auto" />
 					<DeleteAreaAlert area={area} setIsMenuOpen={setIsMenuOpen} />
 				</DropdownMenuGroup>

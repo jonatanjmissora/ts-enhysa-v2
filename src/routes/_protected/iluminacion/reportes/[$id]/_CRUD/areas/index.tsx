@@ -6,7 +6,7 @@ import { createFileRoute, Link } from "@tanstack/react-router"
 import { Suspense } from "react"
 import { Button } from "#/components/ui/button"
 import { Label } from "#/components/ui/label"
-import { ChevronRight, RulerDimensionLine } from "lucide-react"
+import { ChevronRight, Edit, RulerDimensionLine } from "lucide-react"
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -139,7 +139,7 @@ function Area({ area }: { area: AreaIluminacionType }) {
 	return (
 		<div className="w-full mx-auto rounded-lg border-0 bg-accent sm:bg-background flex flex-col justify-center items-center p-0 py-10 pt-30 relative">
 			<div className="absolute top-10 left-4">
-				<AreaDropdownMenu area={area} />
+				<AreaDropdownMenu area={area} id={id} />
 			</div>
 
 			<div className="w-5/6 grid grid-cols-2 gap-3 border-b border-foreground/10 pb-2">
@@ -294,8 +294,10 @@ function NoAreas() {
 
 export default function AreaDropdownMenu({
 	area,
+	id,
 }: {
 	area: AreaIluminacionType
+	id: string
 }) {
 	const [isMenuOpen, setIsMenuOpen] = useState(false)
 	return (
@@ -307,7 +309,18 @@ export default function AreaDropdownMenu({
 			</DropdownMenuTrigger>
 			<DropdownMenuContent className="p-6" align="end">
 				<DropdownMenuGroup className="flex flex-col bg-accent ring-[1px] ring-foreground/20 rounded-lg p-2">
-					<EditAreaAlert area={area} setIsMenuOpen={setIsMenuOpen} />
+					{/* <EditAreaAlert area={area} setIsMenuOpen={setIsMenuOpen} /> */}
+					<Link
+						to={"/iluminacion/reportes/$id/areas/$areaId/edit-area"}
+						params={{
+							id,
+							areaId: area.id,
+						}}
+						className="flex justify-center items-center gap-4 p-4 hover:bg-background rounded-lg"
+					>
+						<Edit className="size-3" />
+						Editar
+					</Link>
 					<DropdownMenuSeparator />
 					<DeleteAreaAlert area={area} setIsMenuOpen={setIsMenuOpen} />
 				</DropdownMenuGroup>

@@ -1,7 +1,7 @@
 import Loading from "#/components/loading"
 import { Label } from "#/components/ui/label"
 import { useSuspenseQuery } from "@tanstack/react-query"
-import { createFileRoute } from "@tanstack/react-router"
+import { createFileRoute, Link } from "@tanstack/react-router"
 import { Suspense, useState } from "react"
 import { reporteQueryOptions } from "../../../../../../../queries/reportes/iluminacion/reportes-query"
 import Title from "#/components/title"
@@ -14,8 +14,7 @@ import {
 	DropdownMenuTrigger,
 } from "#/components/ui/dropdown-menu"
 import { Button } from "#/components/ui/button"
-import { Ellipsis } from "lucide-react"
-import EditReporteGeneral from "#/components/reportes/iluminacion/edit/general"
+import { Edit, Ellipsis } from "lucide-react"
 import DeleteReporte from "#/components/reportes/iluminacion/delete-reporte"
 import { empresasQueryOptions } from "../../../../../../../queries/empresas/empresas-query"
 import { instrumentosQueryOptions } from "../../../../../../../queries/instrumentos/instrumentos-query"
@@ -157,7 +156,17 @@ function ReporteDropdownMenu({ reporte }: { reporte: ReporteIluminacionType }) {
 			</DropdownMenuTrigger>
 			<DropdownMenuContent className="p-6" align="end">
 				<DropdownMenuGroup className="flex flex-col bg-accent ring-[1px] ring-foreground/20 rounded-lg p-2">
-					<EditReporteGeneral reporte={reporte} setIsMenuOpen={setIsMenuOpen} />
+					{/* <EditReporteGeneral reporte={reporte} setIsMenuOpen={setIsMenuOpen} /> */}
+					<Link
+						to={"/iluminacion/reportes/$id/solo/edit-general"}
+						params={{
+							id: reporte.id,
+						}}
+						className="flex justify-center items-center gap-4 p-4 hover:bg-background rounded-lg"
+					>
+						<Edit className="size-3" />
+						Editar
+					</Link>
 					<DropdownMenuSeparator className="bg-foreground/20 w-5/6 mx-auto" />
 					<DeleteReporte reporte={reporte} setIsMenuOpen={setIsMenuOpen} />
 				</DropdownMenuGroup>

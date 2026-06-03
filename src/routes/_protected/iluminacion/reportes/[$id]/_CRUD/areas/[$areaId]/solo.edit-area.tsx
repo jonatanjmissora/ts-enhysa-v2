@@ -1,10 +1,20 @@
 import BackChevron from "#/components/back-chevron"
+import Loading from "#/components/loading"
 import Title from "#/components/title"
 import useScrollTop from "#/hooks/scroll-top"
 import { useSuspenseQuery } from "@tanstack/react-query"
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router"
+import { createFileRoute, Link } from "@tanstack/react-router"
 import { Suspense, useState } from "react"
+import { areaQueryOptions } from "../../../../../../../../../queries/reportes/iluminacion/areas/areas-query"
+import type { AreaIluminacionType } from "../../../../../../../../../db/reportes/iluminacion/areas/schema"
+import {
+	checkAreaGeneralDifferences,
+	getIndiceDeLocal,
+	getIndiceRedondeo,
+} from "#/lib/utils"
+import { useUpdateArea } from "../../../../../../../../../queries/reportes/iluminacion/areas/use-update-area"
 import { useForm } from "@tanstack/react-form"
+import { updateAreaValidator } from "../../../../../../../../../db/reportes/iluminacion/areas/area-validator"
 import {
 	Field,
 	FieldError,
@@ -33,35 +43,23 @@ import {
 	type ValoresRequeridosType,
 } from "#/lib/constants"
 import { Textarea } from "#/components/ui/textarea"
-import { Label } from "#/components/ui/label"
 import { FilesDropzone } from "#/components/upload-button"
-import {
-	getIndiceDeLocal,
-	getIndiceRedondeo,
-} from "#/components/reportes/iluminacion/pdf/page-5"
 import Formula from "#/components/reportes/iluminacion/nuevo-informe/areas/formula"
 import { Button } from "#/components/ui/button"
-import Loading from "#/components/loading"
-import { reporteQueryOptions } from "../../../../../../../../../queries/reportes/iluminacion/reportes-query"
-import { useCreateArea } from "../../../../../../../../../queries/reportes/iluminacion/areas/use-create-area"
-import {
-	areaFormValidator,
-	defaultAreaData,
-} from "../../../../../../../../../db/reportes/iluminacion/areas/area-validator"
+import { Label } from "#/components/ui/label"
 
 export const Route = createFileRoute(
-	"/_protected/iluminacion/reportes/$id/_CRUD/areas/$areaId/create-area"
+	"/_protected/iluminacion/reportes/$id/_CRUD/areas/$areaId/solo/edit-area"
 )({
 	component: RouteComponent,
 })
 
 function RouteComponent() {
 	useScrollTop()
-	const params = Route.useParams()
 	return (
 		<article className="w-full min-h-svh flex flex-col items-center gap-0 relative mb-60">
-			<BackChevron to="/iluminacion/reportes/$id/areas" params={params} />
-			<Title text="Nueva Area" className="mt-15" />
+			<BackChevron to="/iluminacion/reportes/$id/areass" />
+			<Title text="Editar Area" className="mt-15" />
 			<Suspense
 				fallback={
 					<Loading
@@ -70,44 +68,61 @@ function RouteComponent() {
 					/>
 				}
 			>
-				<CreateArea />
+				<EditAreaData />
 			</Suspense>
 		</article>
 	)
 }
 
-function CreateArea() {
-	const { id } = Route.useParams()
-	const [planoFiles, setPlanoFiles] = useState<string[]>([])
-	const { data: reporte } = useSuspenseQuery(reporteQueryOptions({ id }))
-	const navigate = useNavigate()
+function EditAreaData() {
+	const { id, areaId } = Route.useParams()
+	const { data: area } = useSuspenseQuery(areaQueryOptions({ areaId }))
 
-	const { mutateAsync: createArea, isPending, error } = useCreateArea()
+	if (!area) return <span>El area no existe</span>
+
+	return <EditArea id={id} area={area} />
+}
+
+function EditArea({ id, area }: { id: string; area: AreaIluminacionType }) {
+	const [planoFiles, setPlanoFiles] = useState<string[]>(area.imagenes || [])
+	const navigate = Route.useNavigate()
+
+	const { mutateAsync: updateArea, isPending, error } = useUpdateArea()
 
 	const form = useForm({
-		defaultValues: defaultAreaData,
+		defaultValues: {
+			...area,
+		},
 		validators: {
-			onSubmit: areaFormValidator,
+			onSubmit: updateAreaValidator,
 		},
 		onSubmit: async ({ value }) => {
-			if (!reporte) return
-			const newArea = {
-				...value,
-				reportId: reporte.id,
-				imagenes: planoFiles,
-				id: crypto.randomUUID(),
+			if (checkAreaGeneralDifferences(value, area)) {
+				return navigate({
+					to: "/iluminacion/reportes/$id/areas/$areaId/solo/puntos",
+					params: {
+						id: id,
+						areaId: area.id,
+					},
+				})
 			}
-			const result = await createArea({ data: newArea })
+			const newArea: AreaIluminacionType = {
+				...value,
+				userId: area.userId,
+				id: area.id,
+				imagenes: planoFiles,
+			}
+			const result = await updateArea({ data: newArea })
 			if (!result) {
-				console.error("Error al crear area", error)
+				console.error("Error al actualizar area", error)
 				return
 			}
-			console.log("Área creada exitosamente")
+			console.log("Area actualizada exitosamente")
 			navigate({
-				to: `/iluminacion/reportes/$id/areas/$areaId/puntos`,
+				to: "/iluminacion/reportes/$id/areas/$areaId/solo/puntos",
 				params: {
-					id,
-					areaId: newArea.id,
+					id: id,
+					areaId: area.id,
 				},
 			})
 		},
@@ -451,11 +466,11 @@ function CreateArea() {
 									<Textarea
 										id={field.name}
 										name={field.name}
-										value={field.state.value || ""}
+										value={field.state.value}
 										onBlur={field.handleBlur}
 										onChange={e => field.handleChange(e.target.value)}
 										aria-invalid={isInvalid}
-										className="bg-background sm:bg-accent text-right text-sm"
+										className="bg-background sm:bg-accent text-sm"
 									/>
 									{isInvalid && (
 										<FieldError
@@ -476,7 +491,7 @@ function CreateArea() {
 					</div>
 				</div>
 
-				<div className="grid grid-cols-1 sm:grid-cols-2 gap-8 w-5/6 mt-10 mx-auto items-end">
+				<div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-5/6 mt-10 mx-auto">
 					<form.Field
 						name="largo"
 						children={field => {
@@ -486,11 +501,11 @@ function CreateArea() {
 								<Field data-invalid={isInvalid} className="relative gap-1">
 									<FieldLabel htmlFor={field.name}>Largo(m)</FieldLabel>
 									<Input
+										onFocus={e => e.target.select()}
 										id={field.name}
 										name={field.name}
 										value={field.state.value}
 										onBlur={field.handleBlur}
-										onFocus={e => e.target.select()}
 										onChange={e => field.handleChange(Number(e.target.value))}
 										aria-invalid={isInvalid}
 										placeholder="Ej. 4"
@@ -517,11 +532,11 @@ function CreateArea() {
 								<Field data-invalid={isInvalid} className="relative gap-1">
 									<FieldLabel htmlFor={field.name}>Ancho(m)</FieldLabel>
 									<Input
+										onFocus={e => e.target.select()}
 										id={field.name}
 										name={field.name}
 										value={field.state.value}
 										onBlur={field.handleBlur}
-										onFocus={e => e.target.select()}
 										onChange={e => field.handleChange(Number(e.target.value))}
 										aria-invalid={isInvalid}
 										placeholder="Ej. 5"
@@ -550,11 +565,11 @@ function CreateArea() {
 										Alto del montaje (m)
 									</FieldLabel>
 									<Input
+										onFocus={e => e.target.select()}
 										id={field.name}
 										name={field.name}
 										value={field.state.value}
 										onBlur={field.handleBlur}
-										onFocus={e => e.target.select()}
 										onChange={e => field.handleChange(Number(e.target.value))}
 										aria-invalid={isInvalid}
 										placeholder="Ej. 2"
@@ -571,24 +586,9 @@ function CreateArea() {
 							)
 						}}
 					/>
-
-					<form.Subscribe
-						selector={state =>
-							`${state.values.largo}_${state.values.ancho}_${state.values.alto}`
-						}
-						children={values => {
-							const [largo, ancho, alto] = values.split("_").map(Number)
-							if (largo * ancho * alto < 0)
-								return (
-									<span className="text-red-700/50 italic text-sm">
-										Los valores ingresados deben de ser positivos.
-									</span>
-								)
-						}}
-					/>
 				</div>
 
-				<div className="flex flex-col gap-1 w-5/6 mx-auto sm:w-full my-10">
+				<div className="flex flex-col gap-1 w-5/6 mx-auto sm:w-full">
 					<Label className="tracking-wider" htmlFor="largo">
 						Imágenes del Área
 					</Label>
@@ -613,22 +613,25 @@ function CreateArea() {
 						if (largo * ancho * alto === 0) return null
 						const indiceDeLocal = getIndiceDeLocal(largo, ancho, alto)
 						const newIndiceRedondeo = getIndiceRedondeo(indiceDeLocal)
-
 						return (
-							<Formula
-								alto={Number(alto)}
-								ancho={Number(ancho)}
-								largo={Number(largo)}
-								indiceDeLocal={indiceDeLocal}
-								indiceRedondeo={newIndiceRedondeo}
-							/>
+							largo > 0 &&
+							ancho > 0 &&
+							alto > 0 && (
+								<Formula
+									alto={Number(alto)}
+									ancho={Number(ancho)}
+									largo={Number(largo)}
+									indiceDeLocal={indiceDeLocal}
+									indiceRedondeo={newIndiceRedondeo}
+								/>
+							)
 						)
 					}}
 				/>
 
 				<Field className="flex flex-col sm:flex-row justify-center gap-4 items-center w-5/6 sm:w-full mx-auto mt-10">
 					<Link
-						to="/iluminacion/reportes/$id/areas"
+						to="/iluminacion/reportes/$id/areass"
 						params={{ id }}
 						className="flex-1"
 					>
@@ -638,7 +641,7 @@ function CreateArea() {
 							disabled={isPending}
 							className="flex-1 py-5 w-full"
 						>
-							Volver
+							Cancelar
 						</Button>
 					</Link>
 					<Button
@@ -658,7 +661,7 @@ function CreateArea() {
 
 				{error && (
 					<p className="text-center italic textXS text-red-500/70">
-						{error?.message}
+						{error.message}
 					</p>
 				)}
 
