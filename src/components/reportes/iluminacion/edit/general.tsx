@@ -64,7 +64,7 @@ export default function EditReporteGeneral({
 			</AlertDialogTrigger>
 			<AlertDialogContent className="sm:px-20 py-15 sm:py-6 w-full h-screen sm:h-[95dvh] overflow-auto border-none rounded-none max-w-screen">
 				<AlertDialogTitle>
-					<Title text="Editar Reporte" />
+					<Title text="Editar Informe" />
 				</AlertDialogTitle>
 				<AlertDialogDescription asChild>
 					<div>

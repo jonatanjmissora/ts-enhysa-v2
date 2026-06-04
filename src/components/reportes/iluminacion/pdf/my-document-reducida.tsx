@@ -71,7 +71,7 @@ export const MyDocumentReducida = memo(
 					<a
 						// biome-ignore lint/style/noNonNullAssertion: <la conozco>
 						href={instance.url!}
-						download={`Reporte Iluminacion ${empresa.razonSocial} - ${reporte.finishedAt?.toLocaleDateString("it-IT")}.pdf`}
+						download={`Informe Iluminacion ${empresa.razonSocial} - ${reporte.finishedAt?.toLocaleDateString("it-IT")}.pdf`}
 						className=""
 					>
 						<Button>Descargar PDF</Button>

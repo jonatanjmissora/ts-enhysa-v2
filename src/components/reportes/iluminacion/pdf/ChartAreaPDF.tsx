@@ -1,29 +1,18 @@
-import {
-	Svg,
-	Path,
-	Defs,
-	LinearGradient,
-	Stop,
-	Rect,
-	Text,
-	View,
-	Circle,
-} from "@react-pdf/renderer"
+import { Svg, Path, Rect, Text, View, Circle } from "@react-pdf/renderer"
 import React from "react"
 
-// Simple area chart – points are plotted as (index, value)
-// The chart is now normalized to a 0‑100 × 0‑100 viewBox so it can be rendered
-// at any pixel size (e.g., 400 px × 600 px) while preserving aspect ratio.
-export function ChartAreaPDF({ puntos }: { puntos: number[] }) {
-	const data = puntos
+export function ChartAreaPDF({
+	puntos,
+	requerido,
+}: {
+	puntos: number[]
+	requerido: string
+}) {
 	const puntosWithValue = puntos?.filter(punto => punto > 0)
 	if (!puntosWithValue || puntosWithValue.length === 0)
 		return <span>No hay datos</span>
-	const uniformidad = Math.ceil(
-		puntosWithValue?.reduce((acc, valor) => acc + valor, 0) /
-			puntosWithValue?.length /
-			2
-	)
+
+	const data = [...puntosWithValue]
 
 	const maxY = Math.max(...data) // 400 in the example
 	const maxX = data.length - 1 // last index (8)
@@ -54,6 +43,13 @@ export function ChartAreaPDF({ puntos }: { puntos: number[] }) {
 	// Path that draws the area (baseline at the bottom = y = 100)
 	const pathData = `M${paddingX},${paddingY + chartHeight} L${points} L${paddingX + chartWidth},${paddingY + chartHeight} Z`
 
+	//obtenemos el rango de requerido
+	const requeridoValue = requerido.split(" ")
+	const min = parseInt(requeridoValue[0], 10)
+	const hayMax = requeridoValue.length > 1
+	const max =
+		hayMax ? parseInt(requeridoValue[2], 10) : min + 1
+
 	return (
 		<View
 			style={{
@@ -61,38 +57,30 @@ export function ChartAreaPDF({ puntos }: { puntos: number[] }) {
 				width: "100%",
 				display: "flex",
 				flexDirection: "column",
+				justifyContent: "center",
 				alignItems: "center",
-				gap: 0,
+				gap: 10,
 			}}
 		>
 			{/* viewBox is a square 0‑100 × 0‑100. Width/height are set by the parent container */}
-			<Svg viewBox="0 0 100 100" width="400" height="550">
-				<Defs>
-					<LinearGradient id="grad" x1="0" y1="0" x2="0" y2="1">
-						<Stop offset="0" stopColor="#00f" stopOpacity="0.6" />
-						<Stop offset="1" stopColor="#00f" stopOpacity="0" />
-					</LinearGradient>
-				</Defs>
-				{/* Background */}
-				<Rect x="0" y="0" width={100} height={100} fill="#fff" />
-				{/* Required line */}
+			<Svg viewBox="0 0 100 100" width="400" height="auto">
+				{/* AREA */}
+				<Path d={pathData} fill="#b7b7ff" stroke="#000" strokeWidth={0.1} />
 
-				{/* Area (filled only) */}
-				<Path d={pathData} fill="#b7b7ff" stroke="none" />
-				{/* Axes */}
+				{/* EJE VERTICAL */}
 				<Path
 					d={`M${paddingX},${paddingY + chartHeight} L${paddingX},${paddingY - 10}`}
 					stroke="#444"
 					strokeWidth="0.25"
 				/>
+				{/* EJE VERTICAL */}
 				<Path
 					d={`M${paddingX},${paddingY + chartHeight} L${paddingX + chartWidth},${paddingY + chartHeight}`}
 					stroke="#444"
 					strokeWidth="0.25"
 				/>
-				{/* Top border line */}
-				{/* <Path d={`M${points}`} stroke="blue" strokeWidth="0.25" fill="none" /> */}
-				{/* Horizontal index labels */}
+
+				{/* EJE HORIZONTAL VALORES */}
 				{data.map((_, idx) => (
 					<Text
 						key={idx}
@@ -105,7 +93,44 @@ export function ChartAreaPDF({ puntos }: { puntos: number[] }) {
 						{idx + 1}
 					</Text>
 				))}
-				{/* Point value labels */}
+
+				{/* EJE VERTICAL VALORES */}
+				{yTicks.map((val, idx) => (
+					<Text
+						key={idx}
+						x={paddingX - 2}
+						y={paddingY + chartHeight - val * yFactor}
+						style={{ fontSize: 1.5 }}
+						fill="#444"
+						textAnchor="end"
+					>
+						{val}
+					</Text>
+				))}
+
+				{/* REQUERIDO*/}
+				{hayMax ? (
+<Rect
+					x={paddingX}
+					y={paddingY + chartHeight - max * yFactor}
+					width={chartWidth}
+					height={(max - min) * yFactor}
+					fill="#ffbb63"
+					opacity={0.5}
+					stroke="#000"
+					strokeWidth={0.1}
+				/>
+				) : (
+					<Rect
+						x={paddingX}
+						y={paddingY + chartHeight - min * yFactor - 0.5}
+						width={chartWidth}
+						height={0.5}
+						fill="#ee9016"
+					/>	
+				)}
+
+				{/* PUNTOS */}
 				{data.map((val, idx) => (
 					<React.Fragment key={idx}>
 						{/* Value label */}
@@ -129,26 +154,6 @@ export function ChartAreaPDF({ puntos }: { puntos: number[] }) {
 						/>
 					</React.Fragment>
 				))}
-				{/* Vertical value labels (ticks) */}
-				{yTicks.map((val, idx) => (
-					<Text
-						key={idx}
-						x={paddingX - 2}
-						y={paddingY + chartHeight - val * yFactor}
-						style={{ fontSize: 1.5 }}
-						fill="#444"
-						textAnchor="end"
-					>
-						{val}
-					</Text>
-				))}
-
-				{/* Uniformidad line */}
-				<Path
-					d={`M${paddingX},${paddingY + chartHeight - uniformidad * yFactor} L${paddingX + chartWidth},${paddingY + chartHeight - uniformidad * yFactor}`}
-					stroke="#7629db"
-					strokeWidth="0.25"
-				/>
 			</Svg>
 			<View
 				style={{
@@ -165,13 +170,18 @@ export function ChartAreaPDF({ puntos }: { puntos: number[] }) {
 				<View style={{ display: "flex", flexDirection: "row", gap: 2 }}>
 					<View
 						style={{
-							backgroundColor: "#7629db",
+							backgroundColor: hayMax ? "#ffbb63" : "#ee9016",
 							width: 10,
 							height: 10,
 							borderRadius: 100,
+							border: "0.5px solid #888",
 						}}
 					></View>
-					<Text style={{ fontSize: 7 }}>Uniformidad: {uniformidad}</Text>
+					<Text style={{ fontSize: 7 }}>
+						{
+							hayMax ? `Requerido: (${min} - ${max}) lx` : `Requerido: ${min} lx`
+						}
+					</Text>
 				</View>
 			</View>
 		</View>

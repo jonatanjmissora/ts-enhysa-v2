@@ -10,12 +10,13 @@ export function useDeleteArea(areaId: string, reportId: string) {
             deleteAreaServer({ data }),
         onSuccess: () => {
             queryClient.setQueryData<AreaIluminacionType[]>(
-                ["areas_iluminacion", reportId],
+                ["areas-iluminacion", reportId],
                 oldData => {
                     if (!oldData) return oldData
                     return oldData.filter(item => item.id !== areaId)
                 }
             )
+            queryClient.setQueryData<AreaIluminacionType[]>(["area-iluminacion", areaId], undefined)
         },
     })
 }

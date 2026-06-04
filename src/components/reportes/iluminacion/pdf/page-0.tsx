@@ -65,7 +65,7 @@ export default function Page0({
 					}}
 				>
 					<Text style={{ fontSize: 12, fontWeight: 900, color: "darkblue" }}>
-						1. OBJ ETIVO Y MARCO LEGAL
+						OBJ ETIVO Y MARCO LEGAL
 					</Text>
 					<Text style={{ fontSize: 10, padding: "10px 25px" }}>
 						El presente informe tiene como objeto verificar las condiciones de
@@ -94,7 +94,7 @@ export default function Page0({
 					}}
 				>
 					<Text style={{ fontSize: 12, fontWeight: 900, color: "darkblue" }}>
-						2. METODOLOGÍA DE MEDICIÓN
+						METODOLOGÍA DE MEDICIÓN
 					</Text>
 					<Text style={{ fontSize: 10, padding: "10px 25px" }}>
 						Las mediciones se realizaron sobre el plano de trabajo (o a 0.80m
@@ -118,11 +118,7 @@ export default function Page0({
 						alignContent: "center",
 						letterSpacing: "1px",
 					}}
-				>
-					<Text style={{ fontSize: 12, fontWeight: 900, color: "darkblue" }}>
-						3. PROTOCOLO DE MEDICIÓN (PLANILLA DE DATOS)
-					</Text>
-				</View>
+				></View>
 			</View>
 
 			<MembreteInferior tecnico={tecnico} />

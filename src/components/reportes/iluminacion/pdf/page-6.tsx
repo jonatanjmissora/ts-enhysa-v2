@@ -4,7 +4,7 @@ import MembreteInferior from "./membrete-inferior"
 import type { AreaIluminacionType } from "../../../../../db/reportes/iluminacion/areas/schema"
 import type { TecnicoType } from "../../../../../db/tecnicos/schema"
 import type { EmpresaType } from "../../../../../db/empresas/schema"
-import { getNumeroCeldas } from "#/lib/utils"
+import { getNumeroCeldas, sortedByName } from "#/lib/utils"
 import { ChartAreaPDF } from "./ChartAreaPDF"
 
 // Create styles
@@ -70,7 +70,7 @@ export default function Page6({
 }) {
 	return (
 		<>
-			{areas.map(area => (
+			{sortedByName(areas).map(area => (
 				<Area key={area.id} area={area} tecnico={tecnico} empresa={empresa} />
 			))}
 		</>
@@ -93,12 +93,12 @@ function Area({
 	let cellW = 75
 	let cellH = (largo * cellW) / ancho
 
-	if (cellW * div >= 470 || cellH * div >= 430) {
+	if (cellW * div >= 470 || cellH * div >= 450) {
 		if (ancho > largo) {
 			cellW = 470 / div
 			cellH = (largo * cellW) / ancho
 		} else {
-			cellH = 430 / div
+			cellH = 450 / div
 			cellW = (ancho * cellH) / largo
 		}
 	}
@@ -149,7 +149,7 @@ function Area({
 					margin: "0 auto",
 				}}
 			>
-				<ChartAreaPDF puntos={area.puntos} />
+				<ChartAreaPDF puntos={area.puntos} requerido={area.valorRequerido} />
 			</View>
 
 			<MembreteInferior tecnico={tecnico} />

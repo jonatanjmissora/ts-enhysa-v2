@@ -29,7 +29,7 @@ function RouteComponent() {
 		<article className="w-full min-h-svh flex flex-col items-center gap-0 relative mb-60">
 			<BackChevron to="/iluminacion/reportes" />
 			<div className="flex flex-col gap-0 items-center justify-center w-full mb-12">
-				<Title text="Reporte Iluminación PDF" className="mt-15" />
+				<Title text="Informe Iluminación PDF" className="mt-15" />
 				<Suspense
 					fallback={<span className="text-muted-foreground">. . .</span>}
 				>

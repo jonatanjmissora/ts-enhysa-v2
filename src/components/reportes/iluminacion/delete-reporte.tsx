@@ -33,7 +33,7 @@ export default function DeleteReporte({
             </AlertDialogTrigger>
             <AlertDialogContent className="p-8 sm:p-20 sm:py-15 2xl:py-20 bg-accent/80 backdrop-blur-xl w-full sm:w-1/2 min-h-[50dvh]">
                 <AlertDialogTitle className="h-max sm:text-lg 2xl:text-2xl font-semibold tracking-wider py-2 border-b border-foreground/20 w-full mb-10">
-                    Eliminar Reporte
+                    Eliminar Informe
                 </AlertDialogTitle>
                 <AlertDialogDescription asChild>
                     <div className="text-center">

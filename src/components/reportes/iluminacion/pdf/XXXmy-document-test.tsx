@@ -35,7 +35,7 @@ export const MyDocumentTest = memo(() => {
 			<div className="flex justify-center w-full mb-6">
 				<a
 					href={instance.url!}
-					download={`Reporte Iluminacion.pdf`}
+					download={`Informe Iluminacion.pdf`}
 					className="bg-primary/10 hover:bg-primary/20 text-primary py-3 px-10 rounded-lg tracking-wider text-sm ring-[1px] ring-primary/30 transition-colors duration-300"
 				>
 					Descargar PDF

@@ -17,7 +17,7 @@ export async function updateReporteDB(
 		return result[0]
 	} catch (error) {
 		console.error(
-			"ERROR actualizando reporte nuevo:",
+			"ERROR actualizando informe nuevo:",
 			error instanceof Error ? error.message : error
 		)
 	}

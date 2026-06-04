@@ -37,7 +37,7 @@ function RouteComponent() {
 	return (
 		<article className="w-full min-h-svh flex flex-col items-center gap-0 relative mb-60">
 			<BackChevron to="/iluminacion" />
-			<Title text="Reportes Iluminación" className="mt-15" />
+			<Title text="Informes Iluminación" className="mt-15" />
 			<IluminacionReportes />
 		</article>
 	)
