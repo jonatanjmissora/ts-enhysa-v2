@@ -66,7 +66,7 @@ export function ChartAreaPDF({ puntos }: { puntos: number[] }) {
 			}}
 		>
 			{/* viewBox is a square 0‑100 × 0‑100. Width/height are set by the parent container */}
-			<Svg viewBox="0 0 100 100" width="400" height="600">
+			<Svg viewBox="0 0 100 100" width="400" height="550">
 				<Defs>
 					<LinearGradient id="grad" x1="0" y1="0" x2="0" y2="1">
 						<Stop offset="0" stopColor="#00f" stopOpacity="0.6" />

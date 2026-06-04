@@ -644,7 +644,7 @@ function CreateArea() {
 					<Button
 						type="submit"
 						disabled={isPending}
-						className="flex-1 py-3 w-full"
+						className="flex-1 py-5 w-full"
 					>
 						{isPending ? (
 							<div className="flex gap-2 w-full justify-center items-center">

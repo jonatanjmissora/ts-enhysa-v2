@@ -93,12 +93,12 @@ function Area({
 	let cellW = 75
 	let cellH = (largo * cellW) / ancho
 
-	if (cellW * div >= 470 || cellH * div >= 450) {
+	if (cellW * div >= 470 || cellH * div >= 430) {
 		if (ancho > largo) {
 			cellW = 470 / div
 			cellH = (largo * cellW) / ancho
 		} else {
-			cellH = 450 / div
+			cellH = 430 / div
 			cellW = (ancho * cellH) / largo
 		}
 	}
@@ -110,13 +110,37 @@ function Area({
 				style={{
 					width: "100%",
 					textAlign: "center",
-					fontSize: 12,
-					margin: 10,
+					fontSize: 10,
+					margin: 6,
 					fontWeight: "900",
 				}}
 			>
 				Anexo 6
 			</Text>
+
+			<Text style={styles.title}>GRÁFICOS</Text>
+			<View
+				style={[
+					styles.flexrow,
+					{
+						padding: "10px 5px",
+						margin: "10px 0px",
+						justifyContent: "space-between",
+						alignItems: "flex-end",
+					},
+				]}
+			>
+				<Text style={{ fontSize: 11 }}>
+					(A) {area.nombre.toUpperCase()} - {area.tipo.toUpperCase()}
+				</Text>
+				<Text style={{ fontSize: 8, opacity: 0.75 }}>
+					Medidas: {area.largo.toFixed(0)} mts x {area.ancho.toFixed(0)} mts
+				</Text>
+				<Text style={{ fontSize: 8, opacity: 0.75 }}>
+					Divisiones: {div ** 2} ({(area.ancho / div).toFixed(1)}m x{" "}
+					{(area.largo / div).toFixed(1)}m)
+				</Text>
+			</View>
 
 			<View
 				style={{

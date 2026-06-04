@@ -151,7 +151,7 @@ export default function Page1({
 				</Text>
 				<Text style={styles.row}>(15) Certificado de calibración: Anexo 4</Text>
 				<Text style={styles.row}>
-					(16) Plano o croquis del establecimiento: Anexo 5
+					(16) Plano o croquis del establecimiento: Anexo 5 - Gráficas: Anexo 6
 				</Text>
 
 				<Text style={[styles.row, { height: 100, borderBottom: "none" }]}>

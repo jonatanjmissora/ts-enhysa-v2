@@ -483,7 +483,10 @@ function CreateArea() {
 							const isInvalid =
 								field.state.meta.isTouched && !field.state.meta.isValid
 							return (
-								<Field data-invalid={isInvalid} className="relative gap-1">
+								<Field
+									data-invalid={isInvalid}
+									className="relative flex-row gap-1"
+								>
 									<FieldLabel htmlFor={field.name}>Largo(m)</FieldLabel>
 									<Input
 										id={field.name}
@@ -495,12 +498,12 @@ function CreateArea() {
 										aria-invalid={isInvalid}
 										placeholder="Ej. 4"
 										type="number"
-										className="text-center"
+										className="text-center text-lg w-1/2"
 									/>
 									{isInvalid && (
 										<FieldError
 											errors={field.state.meta.errors}
-											className="text-xs 2xl:text-sm absolute -bottom-4 left-0"
+											className="text-xs 2xl:text-sm absolute -bottom-4 right-0"
 										/>
 									)}
 								</Field>
@@ -514,7 +517,10 @@ function CreateArea() {
 							const isInvalid =
 								field.state.meta.isTouched && !field.state.meta.isValid
 							return (
-								<Field data-invalid={isInvalid} className="relative gap-1">
+								<Field
+									data-invalid={isInvalid}
+									className="relative flex-row gap-1"
+								>
 									<FieldLabel htmlFor={field.name}>Ancho(m)</FieldLabel>
 									<Input
 										id={field.name}
@@ -526,12 +532,12 @@ function CreateArea() {
 										aria-invalid={isInvalid}
 										placeholder="Ej. 5"
 										type="number"
-										className="text-center"
+										className="text-center text-lg w-1/2"
 									/>
 									{isInvalid && (
 										<FieldError
 											errors={field.state.meta.errors}
-											className="text-xs 2xl:text-sm absolute -bottom-4 left-0"
+											className="text-xs 2xl:text-sm absolute -bottom-4 right-0"
 										/>
 									)}
 								</Field>
@@ -545,7 +551,10 @@ function CreateArea() {
 							const isInvalid =
 								field.state.meta.isTouched && !field.state.meta.isValid
 							return (
-								<Field data-invalid={isInvalid} className="relative gap-1">
+								<Field
+									data-invalid={isInvalid}
+									className="relative flex-row gap-1"
+								>
 									<FieldLabel htmlFor={field.name}>
 										Alto del montaje (m)
 									</FieldLabel>
@@ -559,12 +568,12 @@ function CreateArea() {
 										aria-invalid={isInvalid}
 										placeholder="Ej. 2"
 										type="number"
-										className="text-center"
+										className="text-center text-lg w-1/2"
 									/>
 									{isInvalid && (
 										<FieldError
 											errors={field.state.meta.errors}
-											className="text-xs 2xl:text-sm absolute -bottom-4 left-0"
+											className="text-xs 2xl:text-sm absolute -bottom-4 right-0"
 										/>
 									)}
 								</Field>

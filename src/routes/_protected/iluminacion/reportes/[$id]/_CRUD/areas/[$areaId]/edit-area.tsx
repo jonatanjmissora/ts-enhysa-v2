@@ -154,7 +154,7 @@ function EditArea({ id, area }: { id: string; area: AreaIluminacionType }) {
 										onFocus={e => e.target.select()}
 										id={field.name}
 										name={field.name}
-										value={field.state.value}
+										value={field.state.value.toUpperCase()}
 										onBlur={field.handleBlur}
 										onChange={e => field.handleChange(e.target.value)}
 										aria-invalid={isInvalid}
@@ -187,7 +187,7 @@ function EditArea({ id, area }: { id: string; area: AreaIluminacionType }) {
 										onFocus={e => e.target.select()}
 										id={field.name}
 										name={field.name}
-										value={field.state.value}
+										value={field.state.value.toUpperCase()}
 										onBlur={field.handleBlur}
 										onChange={e => field.handleChange(e.target.value)}
 										aria-invalid={isInvalid}
@@ -489,14 +489,17 @@ function EditArea({ id, area }: { id: string; area: AreaIluminacionType }) {
 					</div>
 				</div>
 
-				<div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-5/6 mt-10 mx-auto">
+				<div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-5/6 mt-10 mx-auto">
 					<form.Field
 						name="largo"
 						children={field => {
 							const isInvalid =
 								field.state.meta.isTouched && !field.state.meta.isValid
 							return (
-								<Field data-invalid={isInvalid} className="relative gap-1">
+								<Field
+									data-invalid={isInvalid}
+									className="relative flex-row gap-1"
+								>
 									<FieldLabel htmlFor={field.name}>Largo(m)</FieldLabel>
 									<Input
 										onFocus={e => e.target.select()}
@@ -508,12 +511,12 @@ function EditArea({ id, area }: { id: string; area: AreaIluminacionType }) {
 										aria-invalid={isInvalid}
 										placeholder="Ej. 4"
 										type="number"
-										className="text-center"
+										className="text-center text-lg w-1/2"
 									/>
 									{isInvalid && (
 										<FieldError
 											errors={field.state.meta.errors}
-											className="text-xs 2xl:text-sm absolute -bottom-4 left-0"
+											className="text-xs 2xl:text-sm absolute -bottom-4 right-0"
 										/>
 									)}
 								</Field>
@@ -527,7 +530,10 @@ function EditArea({ id, area }: { id: string; area: AreaIluminacionType }) {
 							const isInvalid =
 								field.state.meta.isTouched && !field.state.meta.isValid
 							return (
-								<Field data-invalid={isInvalid} className="relative gap-1">
+								<Field
+									data-invalid={isInvalid}
+									className="relative flex-row gap-1"
+								>
 									<FieldLabel htmlFor={field.name}>Ancho(m)</FieldLabel>
 									<Input
 										onFocus={e => e.target.select()}
@@ -539,12 +545,12 @@ function EditArea({ id, area }: { id: string; area: AreaIluminacionType }) {
 										aria-invalid={isInvalid}
 										placeholder="Ej. 5"
 										type="number"
-										className="text-center"
+										className="text-center text-lg w-1/2"
 									/>
 									{isInvalid && (
 										<FieldError
 											errors={field.state.meta.errors}
-											className="text-xs 2xl:text-sm absolute -bottom-4 left-0"
+											className="text-xs 2xl:text-sm absolute -bottom-4 right-0"
 										/>
 									)}
 								</Field>
@@ -558,7 +564,10 @@ function EditArea({ id, area }: { id: string; area: AreaIluminacionType }) {
 							const isInvalid =
 								field.state.meta.isTouched && !field.state.meta.isValid
 							return (
-								<Field data-invalid={isInvalid} className="relative gap-1">
+								<Field
+									data-invalid={isInvalid}
+									className="relative flex-row gap-1"
+								>
 									<FieldLabel htmlFor={field.name}>
 										Alto del montaje (m)
 									</FieldLabel>
@@ -572,12 +581,12 @@ function EditArea({ id, area }: { id: string; area: AreaIluminacionType }) {
 										aria-invalid={isInvalid}
 										placeholder="Ej. 2"
 										type="number"
-										className="text-center"
+										className="text-center text-lg w-1/2"
 									/>
 									{isInvalid && (
 										<FieldError
 											errors={field.state.meta.errors}
-											className="text-xs 2xl:text-sm absolute -bottom-4 left-0"
+											className="text-xs 2xl:text-sm absolute -bottom-4 right-0"
 										/>
 									)}
 								</Field>
@@ -586,7 +595,7 @@ function EditArea({ id, area }: { id: string; area: AreaIluminacionType }) {
 					/>
 				</div>
 
-				<div className="flex flex-col gap-1 w-5/6 mx-auto sm:w-full">
+				<div className="flex flex-col gap-1 w-5/6 mx-auto sm:w-full my-10">
 					<Label className="tracking-wider" htmlFor="largo">
 						Imágenes del Área
 					</Label>

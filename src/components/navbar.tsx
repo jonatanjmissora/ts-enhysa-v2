@@ -23,15 +23,15 @@ export default function Navbar() {
 			<Link to="/" className="flex items-center gap-3">
 				<img src="/EnHySa_logo.webp" alt="logo EnHySa" className="size-10" />
 
-				<p className="textXL">EnHySa App</p>
+				<p className="text-2xl">EnHySa App</p>
 			</Link>
 			{/* <div className="block sm:hidden"> */}
-				<button onClick={() => setIsOpen(!isOpen)}>
-					<Menu className="size-7" />
-				</button>
-				<MovilMenuContent isOpen={isOpen} setIsOpen={setIsOpen} />
+			<button onClick={() => setIsOpen(!isOpen)}>
+				<Menu className="size-7" />
+			</button>
+			<MovilMenuContent isOpen={isOpen} setIsOpen={setIsOpen} />
 			{/* </div> */}
-				{/* <ul className="sm:flex hidden flex-1 justify-end gap-40 items-center">
+			{/* <ul className="sm:flex hidden flex-1 justify-end gap-40 items-center">
 					<Link
 						to="/"
 						resetScroll={true}

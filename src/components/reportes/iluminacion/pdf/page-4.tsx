@@ -107,55 +107,67 @@ export default function Page4({
 				<View
 					style={{
 						flex: 1,
-						width: "100%",
-						maxHeight: "200px",
 						display: "flex",
-						flexDirection: "row",
-						justifyContent: "center",
+						flexDirection: "column",
+						justifyContent: "space-around",
 						alignItems: "center",
-						gap: 10,
-						paddingTop: 15,
-						paddingBottom: 0,
+						marginTop: "5px",
+						marginBottom: "5px",
+						maxHeight: "700px",
 					}}
 				>
-					{instrumento.imagenesCalibracion.map((img, index) => (
-						<Image
-							key={index}
-							src={img}
-							style={{
-								flex: 1,
-								height: "95%",
-								objectFit: "contain",
-							}}
-						/>
-					))}
-				</View>
+					<View
+						style={{
+							flex: 1,
+							width: "100%",
+							display: "flex",
+							flexDirection: "row",
+							justifyContent: "center",
+							alignItems: "center",
+							gap: 3,
+							paddingTop: 5,
+							paddingBottom: 0,
+						}}
+					>
+						{instrumento.imagenesCalibracion.map((img, index) => (
+							<Image
+								key={index}
+								src={img}
+								style={{
+									flex: 1,
+									height: "100%",
+									objectFit: "contain",
+								}}
+							/>
+						))}
+					</View>
 
-				<View
-					style={{
-						flex: 1,
-						width: "100%",
-						maxHeight: "200px",
-						display: "flex",
-						flexDirection: "row",
-						justifyContent: "center",
-						alignItems: "center",
-						gap: 10,
-						paddingTop: 15,
-						paddingBottom: 0,
-					}}
-				>
-					{instrumento.imagenes.map((img, index) => (
-						<Image
-							key={index}
-							src={img}
-							style={{
-								flex: 1,
-								height: "95%",
-								objectFit: "contain",
-							}}
-						/>
-					))}
+					<View
+						style={{
+							flex: 1,
+							width: "100%",
+							maxHeight: "200px",
+							display: "flex",
+							flexDirection: "row",
+							justifyContent: "center",
+							alignItems: "center",
+							gap: 3,
+							paddingTop: 15,
+							paddingBottom: 0,
+						}}
+					>
+						{instrumento.imagenes.map((img, index) => (
+							<Image
+								key={index}
+								src={img}
+								style={{
+									flex: 1,
+									height: "100%",
+									objectFit: "contain",
+								}}
+							/>
+						))}
+					</View>
 				</View>
 			</View>
 

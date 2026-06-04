@@ -78,15 +78,11 @@ function CargarPuntosData() {
 
 function CargarPuntos({ area }: { area: AreaIluminacionType }) {
 	const navigate = useNavigate()
-	const [puntos, setPuntos] = useState<number[]>(() =>
-		area.puntos.length !== 0
-			? area.puntos
-			: resetPuntos(area.largo, area.ancho, area.alto)
+	const [puntos, setPuntos] = useState<number[]>(
+		area.puntos || resetPuntos(area.largo, area.ancho, area.alto)
 	)
-	const [timestamps, setTimestamps] = useState<Date[]>(() =>
-		area.timestamps.length !== 0
-			? area.timestamps
-			: resetTimestamps(area.largo, area.ancho, area.alto)
+	const [timestamps, setTimestamps] = useState<Date[]>(
+		area.timestamps || resetTimestamps(area.largo, area.ancho, area.alto)
 	)
 	const [puntosError, setPuntosError] = useState<string | null>(null)
 	const [puntosCount, setPuntosCount] = useState<0 | 1 | 2 | 3>(0)
@@ -108,6 +104,17 @@ function CargarPuntos({ area }: { area: AreaIluminacionType }) {
 				setPuntosError(
 					"Todos los puntos deben tener valor. En el caso que no haya medición en dicho punto, coloque 0 y será excluido de las fórmulas. "
 				)
+				return
+			}
+
+			if (
+				JSON.stringify(puntos) === JSON.stringify(area.puntos) &&
+				JSON.stringify(timestamps) === JSON.stringify(area.timestamps)
+			) {
+				navigate({
+					to: "/iluminacion/reportes/$id/areass",
+					params: { id: area.reportId },
+				})
 				return
 			}
 
