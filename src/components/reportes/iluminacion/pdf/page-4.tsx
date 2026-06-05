@@ -4,6 +4,7 @@ import MembreteInferior from "./membrete-inferior"
 import type { TecnicoType } from "../../../../../db/tecnicos/schema"
 import type { EmpresaType } from "../../../../../db/empresas/schema"
 import type { InstrumentoType } from "../../../../../db/instrumentos/schema"
+import Watermark from "./watermark"
 
 // Create styles
 const styles = StyleSheet.create({
@@ -12,6 +13,7 @@ const styles = StyleSheet.create({
 		backgroundColor: "#fff",
 		fontFamily: "Roboto",
 		padding: "0px 60px",
+		position: "relative",
 	},
 	pagePadding: {
 		border: "1px solid black",
@@ -68,6 +70,7 @@ export default function Page4({
 }) {
 	return (
 		<Page size="A4" style={styles.page}>
+			<Watermark />
 			<MembreteSuperior empresa={empresa} />
 			<Text
 				style={{

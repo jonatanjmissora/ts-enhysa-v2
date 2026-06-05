@@ -4,6 +4,7 @@ import MembreteInferior from "./membrete-inferior"
 import type { AreaIluminacionType } from "../../../../../db/reportes/iluminacion/areas/schema"
 import type { TecnicoType } from "../../../../../db/tecnicos/schema"
 import type { EmpresaType } from "../../../../../db/empresas/schema"
+import Watermark from "./watermark"
 
 // Create styles
 const styles = StyleSheet.create({
@@ -12,6 +13,7 @@ const styles = StyleSheet.create({
 		backgroundColor: "#fff",
 		fontFamily: "Roboto",
 		padding: "0px 60px",
+		position: "relative",
 	},
 	pagePadding: {
 		border: "1px solid black",
@@ -108,6 +110,7 @@ function Area({
 
 	return (
 		<Page size="A4" style={styles.page}>
+			<Watermark />
 			<MembreteSuperior empresa={empresa} />
 			<Text
 				style={{

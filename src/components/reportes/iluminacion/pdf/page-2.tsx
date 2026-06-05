@@ -6,6 +6,7 @@ import type { EmpresaType } from "../../../../../db/empresas/schema"
 import type { TecnicoType } from "../../../../../db/tecnicos/schema"
 import type { AreaIluminacionType } from "../../../../../db/reportes/iluminacion/areas/schema"
 import { capitalizeString, sortedByName } from "#/lib/utils"
+import Watermark from "./watermark"
 
 // Create styles
 const styles = StyleSheet.create({
@@ -14,6 +15,7 @@ const styles = StyleSheet.create({
 		backgroundColor: "#fff",
 		fontFamily: "Roboto",
 		padding: "0px 30px",
+		position: "relative",
 	},
 	pagePadding: {
 		border: "1px solid black",
@@ -111,6 +113,7 @@ function AreaTableOnePage({
 }) {
 	return (
 		<Page size="A4" orientation="landscape" style={styles.page}>
+			<Watermark />
 			<MembreteSuperior empresa={empresa} />
 			<Text
 				style={{
