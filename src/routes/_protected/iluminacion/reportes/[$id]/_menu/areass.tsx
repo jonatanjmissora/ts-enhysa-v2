@@ -21,9 +21,6 @@ import {
 import type { AreaIluminacionType } from "../../../../../../../db/reportes/iluminacion/areas/schema"
 import { Button } from "#/components/ui/button"
 import { Edit, Ellipsis, Plus } from "lucide-react"
-import EditAreaAlert from "#/components/reportes/iluminacion/edit/edit-areas"
-// Duplicate imports and route definitions removed
-import CreateAreaAlert from "#/components/reportes/iluminacion/edit/crear-area"
 import DeleteAreaAlert from "#/components/reportes/iluminacion/nuevo-informe/areas/delete-area"
 
 // Lazy‑load the heavy chart component
@@ -86,7 +83,7 @@ function Area() {
 					className="flex justify-center items-center w-full"
 				>
 					<Button className="w-1/2 min-w-40 sm:w-1/6 mx-auto py-5 bg-primary ring-foreground/25">
-						+ Crear area REVISAR
+						+ Crear area
 					</Button>
 				</Link>
 			</div>
@@ -133,20 +130,32 @@ function Area() {
 			</Suspense>
 
 			<div className="grid grid-cols-[auto_1fr] sm:grid-cols-[1fr_1fr] gap-x-4 gap-y-2 w-5/6 sm:w-2/3 mx-auto my-10 justify-center items-center">
-				<span className="text-right">Uniformidad :</span>
+				<span className="text-right font-semibold text-amber-700">
+					Uniformidad :
+				</span>
 				<span>{uniformidad}</span>
-				<span className="text-right">Valor Mínimo :</span>
+				<span className="text-right font-semibold text-amber-700">
+					Valor Mínimo :
+				</span>
 				<span>{minValue(puntosWithValue)} lux</span>
-				<span className="text-right">Valor Máximo :</span>
+				<span className="text-right font-semibold text-amber-700">
+					Valor Máximo :
+				</span>
 				<span>{maxValue(puntosWithValue)} lux</span>
-				<span className="text-right">Puntos Medidos :</span>
+				<span className="text-right font-semibold text-amber-700">
+					Puntos Medidos :
+				</span>
 				<span>
 					{puntosWithValue.length} / {area.puntos.length}
 				</span>
-				<span className="text-right">Valor Requerido :</span>
+				<span className="text-right font-semibold text-amber-700">
+					Valor Requerido :
+				</span>
 				<span>{area.valorRequerido} lux</span>
 
-				<span className="text-right">Mediciones :</span>
+				<span className="text-right font-semibold text-amber-700">
+					Mediciones :
+				</span>
 				<span>{area.puntos.join(", ")}</span>
 			</div>
 

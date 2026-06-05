@@ -5,6 +5,7 @@ import MembreteInferior from "./membrete-inferior"
 import type { TecnicoType } from "../../../../../db/tecnicos/schema"
 import type { EmpresaType } from "../../../../../db/empresas/schema"
 import type { InstrumentoType } from "../../../../../db/instrumentos/schema"
+import { capitalizeString } from "#/lib/utils"
 
 const styles = StyleSheet.create({
 	page: {
@@ -142,8 +143,8 @@ export default function Page1({
 				</View>
 
 				<Text style={styles.row}>
-					(14) Condiciones atmosféricas: {reporte.clima[0]} - {reporte.clima[1]}
-					% - {reporte.clima[2]}°C
+					(14) Condiciones atmosféricas: {capitalizeString(reporte.clima[0])} -
+					Humedad: {reporte.clima[1]}% - Temperatura: {reporte.clima[2]}°C
 				</Text>
 
 				<Text style={styles.subtitle}>

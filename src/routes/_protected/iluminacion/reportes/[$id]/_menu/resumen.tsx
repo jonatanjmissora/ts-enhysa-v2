@@ -77,22 +77,22 @@ function Resumen() {
 				<ResumenDropdownMenu reporte={reporte} />
 			</div>
 			<div className="flex flex-col justify-center items-center gap-3">
-				<Title text="Conclusiones Finales" />
-				<span className="text-sm text-pretty italic">
+				<Title text="Conclusiones Finales" className="text-amber-700" />
+				<span className="text-xs text-pretty italic">
 					{reporte?.conclusion}
 				</span>
 			</div>
 
 			<div className="flex flex-col justify-center items-center gap-3">
-				<Title text="Observaciones Generales" />
-				<span className="text-sm text-pretty italic">
+				<Title text="Observaciones Generales" className="text-amber-700" />
+				<span className="text-xs text-pretty italic">
 					{reporte?.observacion}
 				</span>
 			</div>
 
 			<div className="flex flex-col justify-center items-center gap-3">
-				<Title text="Recomendaciones" />
-				<span className="text-sm text-pretty italic">
+				<Title text="Recomendaciones" className="text-amber-700" />
+				<span className="text-xs text-pretty italic">
 					{reporte?.recomendacion}
 				</span>
 			</div>

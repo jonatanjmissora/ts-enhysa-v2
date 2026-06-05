@@ -17,7 +17,6 @@ import {
 import { Ellipsis } from "lucide-react"
 import { useState } from "react"
 import DeleteAreaAlert from "#/components/reportes/iluminacion/nuevo-informe/areas/delete-area"
-import EditAreaAlert from "#/components/reportes/iluminacion/nuevo-informe/areas/edit-area"
 import { sortedByName } from "#/lib/utils"
 import useScrollTop from "#//hooks/scroll-top"
 import { areasQueryOptions } from "../../../../../../../../queries/reportes/iluminacion/areas/areas-query"

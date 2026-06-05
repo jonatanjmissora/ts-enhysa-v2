@@ -33,7 +33,7 @@ function HayTecnico({ tecnico }: { tecnico: TecnicoType }) {
 			</div>
 			<div className="grid-cols-1 grid sm:grid-cols-2 gap-8 w-5/6 my-10 mx-auto">
 				<div className="flex flex-col gap-1">
-					<Label className="tracking-wider" htmlFor="nombre">
+					<Label className="tracking-wider text-amber-700" htmlFor="nombre">
 						Nombre Completo
 					</Label>
 					<Input
@@ -45,7 +45,7 @@ function HayTecnico({ tecnico }: { tecnico: TecnicoType }) {
 					/>
 				</div>
 				<div className="flex flex-col gap-1">
-					<Label className="tracking-wider" htmlFor="telefono">
+					<Label className="tracking-wider text-amber-700" htmlFor="telefono">
 						Teléfono
 					</Label>
 					<Input
@@ -57,7 +57,7 @@ function HayTecnico({ tecnico }: { tecnico: TecnicoType }) {
 					/>
 				</div>
 				<div className="flex flex-col gap-1 w-full">
-					<Label className="tracking-wider" htmlFor="cargo">
+					<Label className="tracking-wider text-amber-700" htmlFor="cargo">
 						Cargo
 					</Label>
 					<Input
@@ -69,7 +69,7 @@ function HayTecnico({ tecnico }: { tecnico: TecnicoType }) {
 					/>
 				</div>
 				<div className="flex flex-col gap-1 w-full">
-					<Label className="tracking-wider" htmlFor="localidad">
+					<Label className="tracking-wider text-amber-700" htmlFor="localidad">
 						Localidad
 					</Label>
 					<Input
@@ -81,7 +81,7 @@ function HayTecnico({ tecnico }: { tecnico: TecnicoType }) {
 					/>
 				</div>
 				<div className="flex flex-col gap-1 w-full">
-					<Label className="tracking-wider" htmlFor="matricula">
+					<Label className="tracking-wider text-amber-700" htmlFor="matricula">
 						Matrícula
 					</Label>
 					<Input
@@ -93,7 +93,9 @@ function HayTecnico({ tecnico }: { tecnico: TecnicoType }) {
 					/>
 				</div>
 				<div className="flex flex-col gap-1">
-					<Label>Matrícula Digital</Label>
+					<Label className="tracking-wider text-amber-700">
+						Matrícula Digital
+					</Label>
 					{tecnico.matriculaImg ? (
 						<div className="w-full h-20 min-h-9 flex items-center justify-center">
 							<img
@@ -110,7 +112,7 @@ function HayTecnico({ tecnico }: { tecnico: TecnicoType }) {
 				</div>
 
 				<div className="flex-1 flex flex-col gap-1">
-					<Label>Firma Digital</Label>
+					<Label className="tracking-wider text-amber-700">Firma Digital</Label>
 					{tecnico.firmaImg ? (
 						<div className="w-full h-20 min-h-9 flex items-center justify-center">
 							<img
@@ -127,7 +129,7 @@ function HayTecnico({ tecnico }: { tecnico: TecnicoType }) {
 				</div>
 
 				<div className="flex-1 flex flex-col gap-1">
-					<Label>Empresa Logo</Label>
+					<Label className="tracking-wider text-amber-700">Empresa Logo</Label>
 					{tecnico.empresaLogo ? (
 						<div className="w-full h-20 min-h-9 flex items-center justify-center">
 							<img

@@ -5,7 +5,7 @@ import { MUESTREO } from "@/lib/constants"
 import type { EmpresaType } from "../../../../../db/empresas/schema"
 import type { TecnicoType } from "../../../../../db/tecnicos/schema"
 import type { AreaIluminacionType } from "../../../../../db/reportes/iluminacion/areas/schema"
-import { sortedByName } from "#/lib/utils"
+import { capitalizeString, sortedByName } from "#/lib/utils"
 
 // Create styles
 const styles = StyleSheet.create({
@@ -357,7 +357,7 @@ function TablaDePuntos({
 						]}
 					>
 						{/* SECTOR NOMBRE */}
-						<Text>{area.nombre}</Text>
+						<Text>{capitalizeString(area.nombre)}</Text>
 					</View>
 					<View
 						style={[
@@ -366,7 +366,7 @@ function TablaDePuntos({
 						]}
 					>
 						{/* Sección / Puesto / Tipo */}
-						<Text>{area.tipo}</Text>
+						<Text>{capitalizeString(area.tipo)}</Text>
 					</View>
 					<View
 						style={[
@@ -375,7 +375,7 @@ function TablaDePuntos({
 						]}
 					>
 						{/* Tipo de iluminación */}
-						<Text>{area.iluminacionTipo}</Text>
+						<Text>{capitalizeString(area.iluminacionTipo)}</Text>
 					</View>
 					<View
 						style={[
@@ -384,7 +384,7 @@ function TablaDePuntos({
 						]}
 					>
 						{/* Tipo de fuente */}
-						<Text>{area.iluminacionFuente}</Text>
+						<Text>{capitalizeString(area.iluminacionFuente)}</Text>
 					</View>
 					<View
 						style={[
@@ -393,7 +393,7 @@ function TablaDePuntos({
 						]}
 					>
 						{/* Iluminación: */}
-						<Text>{area.iluminacion}</Text>
+						<Text>{capitalizeString(area.iluminacion)}</Text>
 					</View>
 					<View
 						style={[

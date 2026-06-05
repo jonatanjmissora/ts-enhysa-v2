@@ -78,7 +78,7 @@ function Instrumento({ instrumento }: { instrumento: InstrumentoType }) {
 			</div>
 			<div className="grid-cols-1 grid sm:grid-cols-2 gap-8 w-5/6 my-10">
 				<div className="flex flex-col gap-1">
-					<Label className="tracking-wider" htmlFor="marca">
+					<Label className="tracking-wider text-amber-700" htmlFor="marca">
 						Marca
 					</Label>
 					<Input
@@ -90,7 +90,7 @@ function Instrumento({ instrumento }: { instrumento: InstrumentoType }) {
 					/>
 				</div>
 				<div className="flex flex-col gap-1">
-					<Label className="tracking-wider" htmlFor="cargo">
+					<Label className="tracking-wider text-amber-700" htmlFor="cargo">
 						Modelo
 					</Label>
 					<Input
@@ -102,7 +102,7 @@ function Instrumento({ instrumento }: { instrumento: InstrumentoType }) {
 					/>
 				</div>
 				<div className="flex flex-col gap-1">
-					<Label className="tracking-wider" htmlFor="serie">
+					<Label className="tracking-wider text-amber-700" htmlFor="serie">
 						Nro Serie
 					</Label>
 					<Input
@@ -114,7 +114,10 @@ function Instrumento({ instrumento }: { instrumento: InstrumentoType }) {
 					/>
 				</div>
 				<div className="flex flex-col gap-1">
-					<Label className="tracking-wider" htmlFor="calibracion">
+					<Label
+						className="tracking-wider text-amber-700"
+						htmlFor="calibracion"
+					>
 						Calibración
 					</Label>
 					<Input
@@ -130,7 +133,9 @@ function Instrumento({ instrumento }: { instrumento: InstrumentoType }) {
 					/>
 				</div>
 				<div className="flex flex-col gap-1">
-					<Label>Imágenes del Certificado</Label>
+					<Label className="tracking-wider text-amber-700">
+						Imágenes del Certificado
+					</Label>
 					{instrumento.imagenesCalibracion.length > 0 ? (
 						<div className="flex w-full grid-cols-4 gap-2 content-center">
 							{instrumento.imagenesCalibracion.map(imagen => (
@@ -154,7 +159,9 @@ function Instrumento({ instrumento }: { instrumento: InstrumentoType }) {
 				</div>
 
 				<div className="flex flex-col gap-1">
-					<Label>Imágenes Instrumento</Label>
+					<Label className="tracking-wider text-amber-700">
+						Imágenes Instrumento
+					</Label>
 					{instrumento.imagenes.length > 0 ? (
 						<div className="flex w-full grid-cols-4 gap-2 content-center">
 							{instrumento.imagenes.map(imagen => (

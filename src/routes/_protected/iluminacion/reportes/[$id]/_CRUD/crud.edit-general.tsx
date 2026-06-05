@@ -183,7 +183,8 @@ function EditReporteGeneral() {
 													value={empresa.id}
 													className="justify-center"
 												>
-													{empresa.razonSocial.toUpperCase()}
+													{empresa.razonSocial.toUpperCase()} -{" "}
+													{empresa.direccion.toUpperCase()}
 												</SelectItem>
 											))}
 										</SelectGroup>
@@ -240,7 +241,8 @@ function EditReporteGeneral() {
 													value={instrumento.id}
 													className="justify-center"
 												>
-													{instrumento.nombre.toUpperCase()}
+													{instrumento.nombre.toUpperCase()} -{" "}
+													{instrumento.marca.toUpperCase()}
 												</SelectItem>
 											))}
 										</SelectGroup>

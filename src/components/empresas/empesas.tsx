@@ -72,7 +72,10 @@ function Empresa({ empresa }: { empresa: EmpresaType }) {
 			</div>
 			<div className="grid-cols-1 grid sm:grid-cols-2 gap-8 w-5/6 my-10">
 				<div className="flex flex-col gap-1">
-					<Label className="tracking-wider" htmlFor="razon-social">
+					<Label
+						className="tracking-wider text-amber-700"
+						htmlFor="razon-social"
+					>
 						Razón Social
 					</Label>
 					<Input
@@ -84,7 +87,7 @@ function Empresa({ empresa }: { empresa: EmpresaType }) {
 					/>
 				</div>
 				<div className="flex flex-col gap-1">
-					<Label className="tracking-wider" htmlFor="cuit">
+					<Label className="tracking-wider text-amber-700" htmlFor="cuit">
 						CUIT
 					</Label>
 					<Input
@@ -96,7 +99,7 @@ function Empresa({ empresa }: { empresa: EmpresaType }) {
 					/>
 				</div>
 				<div className="flex flex-col gap-1 w-full">
-					<Label className="tracking-wider" htmlFor="direccion">
+					<Label className="tracking-wider text-amber-700" htmlFor="direccion">
 						Dirección
 					</Label>
 					<Input
@@ -108,7 +111,7 @@ function Empresa({ empresa }: { empresa: EmpresaType }) {
 					/>
 				</div>
 				<div className="flex flex-col gap-1 w-full">
-					<Label className="tracking-wider" htmlFor="localidad">
+					<Label className="tracking-wider text-amber-700" htmlFor="localidad">
 						Localidad
 					</Label>
 					<Input
@@ -120,7 +123,10 @@ function Empresa({ empresa }: { empresa: EmpresaType }) {
 					/>
 				</div>
 				<div className="flex flex-col gap-1 w-full">
-					<Label className="tracking-wider" htmlFor="codigoPostal">
+					<Label
+						className="tracking-wider text-amber-700"
+						htmlFor="codigoPostal"
+					>
 						CP
 					</Label>
 					<Input
@@ -132,7 +138,7 @@ function Empresa({ empresa }: { empresa: EmpresaType }) {
 					/>
 				</div>
 				<div className="flex flex-col gap-1 w-full">
-					<Label className="tracking-wider" htmlFor="provincia">
+					<Label className="tracking-wider text-amber-700" htmlFor="provincia">
 						Provincia
 					</Label>
 					<Input
@@ -144,7 +150,9 @@ function Empresa({ empresa }: { empresa: EmpresaType }) {
 					/>
 				</div>
 				<div className="flex flex-col gap-1 w-full">
-					<Label htmlFor="horarios">Horarios</Label>
+					<Label htmlFor="horarios" className="tracking-wider text-amber-700">
+						Horarios
+					</Label>
 					<Input
 						onFocus={e => e.target.select()}
 						id="horarios"
@@ -154,7 +162,7 @@ function Empresa({ empresa }: { empresa: EmpresaType }) {
 					/>
 				</div>
 				<div className="flex flex-col gap-1">
-					<Label>Logo</Label>
+					<Label className="tracking-wider text-amber-700">Logo</Label>
 					{empresa.logo ? (
 						<div className="w-full h-20 min-h-9 flex items-center justify-center">
 							<img

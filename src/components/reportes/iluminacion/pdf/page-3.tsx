@@ -68,6 +68,73 @@ export default function Page3({
 	tecnico: TecnicoType
 	empresa: EmpresaType
 }) {
+	const conclusionChunks = reporte.conclusion.split("\n")
+	const recomendacionChunks = reporte.recomendacion.split("\n")
+	const CHUNCK_SIZE = 28
+
+	const conclusionChunksFormated = conclusionChunks.reduce((acc, chunk) => {
+		if (acc.length === 0) {
+			acc.push([chunk])
+			return acc
+		}
+		const lastChunk = acc[acc.length - 1]
+		if (lastChunk.length < CHUNCK_SIZE) {
+			lastChunk.push(chunk)
+		} else {
+			acc.push([chunk])
+		}
+		return acc
+	}, [] as string[][])
+
+	const recomendacionChunksFormated = recomendacionChunks.reduce(
+		(acc, chunk) => {
+			// If accumulator is empty, start with a new subarray
+			if (acc.length === 0) {
+				acc.push([chunk])
+				return acc
+			}
+			const lastChunk = acc[acc.length - 1]
+			if (lastChunk.length < CHUNCK_SIZE) {
+				lastChunk.push(chunk)
+			} else {
+				acc.push([chunk])
+			}
+			return acc
+		},
+		[] as string[][]
+	)
+
+	const pagesNumber = Math.max(
+		conclusionChunksFormated.length,
+		recomendacionChunksFormated.length
+	)
+
+	return (
+		<>
+			{Array.from({ length: pagesNumber }).map((_, index) => (
+				<ResumePage
+					key={index}
+					tecnico={tecnico}
+					empresa={empresa}
+					conclusionChunk={conclusionChunksFormated[index]}
+					recomendacionChunk={recomendacionChunksFormated[index]}
+				/>
+			))}
+		</>
+	)
+}
+
+function ResumePage({
+	tecnico,
+	empresa,
+	conclusionChunk,
+	recomendacionChunk,
+}: {
+	tecnico: TecnicoType
+	empresa: EmpresaType
+	conclusionChunk: string[]
+	recomendacionChunk: string[]
+}) {
 	return (
 		<Page size="A4" orientation="landscape" style={styles.page}>
 			<MembreteSuperior empresa={empresa} />
@@ -161,10 +228,10 @@ export default function Page3({
 							{ borderRight: "1px solid black", flex: 1, height: "100%" },
 						]}
 					>
-						<Text>{reporte.conclusion}</Text>
+						<Text>{conclusionChunk.join(" ")}</Text>
 					</View>
 					<View style={[styles.flexrowelement, { height: "100%", flex: 1 }]}>
-						<Text>{reporte.recomendacion}</Text>
+						<Text>{recomendacionChunk.join(" ")}</Text>
 					</View>
 				</View>
 			</View>

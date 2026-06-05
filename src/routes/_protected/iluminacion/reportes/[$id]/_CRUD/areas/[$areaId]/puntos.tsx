@@ -79,10 +79,14 @@ function CargarPuntosData() {
 function CargarPuntos({ area }: { area: AreaIluminacionType }) {
 	const navigate = useNavigate()
 	const [puntos, setPuntos] = useState<number[]>(
-		area.puntos.length !== 0 ? area.puntos : resetPuntos(area.largo, area.ancho, area.alto)
+		area.puntos.length !== 0
+			? area.puntos
+			: resetPuntos(area.largo, area.ancho, area.alto)
 	)
 	const [timestamps, setTimestamps] = useState<Date[]>(
-		area.timestamps.length !== 0 ? area.timestamps : resetTimestamps(area.largo, area.ancho, area.alto)
+		area.timestamps.length !== 0
+			? area.timestamps
+			: resetTimestamps(area.largo, area.ancho, area.alto)
 	)
 	const [puntosError, setPuntosError] = useState<string | null>(null)
 	const [puntosCount, setPuntosCount] = useState<0 | 1 | 2 | 3>(0)
@@ -318,7 +322,7 @@ function Punto({
 }) {
 	return (
 		<div className="flex flex-col gap-1 items-center justify-center">
-			<span className="italic tracking-widest text-xs text-foreground">
+			<span className="italic tracking-widest text-[9px] text-foreground">
 				punto-{index + 1}
 			</span>
 			<button

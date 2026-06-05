@@ -79,8 +79,10 @@ function CreateResumen({ reporte }: { reporte: ReporteIluminacionType }) {
 				value.conclusion === reporte.conclusion &&
 				value.observacion === reporte.observacion &&
 				value.recomendacion === reporte.recomendacion
-			)
+			) {
+				navigate({ to: `/iluminacion/reportes` })
 				return
+			}
 
 			const updateReporteNuevo = {
 				finishedAt: new Date(),
