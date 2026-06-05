@@ -4,7 +4,7 @@ import {
 	ILUMINACION_TIPO,
 	VALORES_REQUERIDOS,
 } from "@/lib/constants"
-import { integer, pgTable, text, timestamp } from "drizzle-orm/pg-core"
+import { integer, pgTable, text, timestamp, numeric } from "drizzle-orm/pg-core"
 import { user } from "../../../users/schema"
 import { reportes_iluminacion } from "../schema"
 
@@ -37,11 +37,11 @@ export const areas_iluminacion = pgTable("areas_iluminacion", {
 
 	observaciones: text("observaciones").notNull(),
 
-	largo: integer("largo").notNull(),
+	largo: numeric("largo", { mode: "number" }).notNull(),
 
-	ancho: integer("ancho").notNull(),
+	ancho: numeric("ancho", { mode: "number" }).notNull(),
 
-	alto: integer("alto").notNull(),
+	alto: numeric("alto", { mode: "number" }).notNull(),
 
 	imagenes: text("imagenes").array().notNull(),
 

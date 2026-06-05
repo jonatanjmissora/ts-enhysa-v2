@@ -507,7 +507,9 @@ function EditArea({ id, area }: { id: string; area: AreaIluminacionType }) {
 										name={field.name}
 										value={field.state.value}
 										onBlur={field.handleBlur}
-										onChange={e => field.handleChange(Number(e.target.value))}
+										onChange={e =>
+											field.handleChange(parseFloat(e.target.value))
+										}
 										aria-invalid={isInvalid}
 										placeholder="Ej. 4"
 										type="number"
