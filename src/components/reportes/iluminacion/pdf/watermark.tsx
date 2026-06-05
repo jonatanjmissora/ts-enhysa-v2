@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
 	watermarkText: {
 		fontSize: 40,
 		color: "gray",
-		opacity: 0.075, // Nivel de transparencia
+		opacity: 0.1, // Nivel de transparencia
 		width: "100%",
 		overflow: "hidden",
 		display: "flex",
