@@ -18,7 +18,6 @@ import {
 	getIndiceRedondeo,
 	resetPuntos,
 	resetTimestamps,
-	setResetPuntos,
 } from "#/lib/utils"
 import { HardHat, Loader, Trash2 } from "lucide-react"
 import { Input } from "#/components/ui/input"
