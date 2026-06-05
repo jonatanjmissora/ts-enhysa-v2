@@ -21,9 +21,6 @@ import {
 import type { AreaIluminacionType } from "../../../../../../../db/reportes/iluminacion/areas/schema"
 import { Button } from "#/components/ui/button"
 import { Edit, Ellipsis, Plus } from "lucide-react"
-import EditAreaAlert from "#/components/reportes/iluminacion/edit/edit-areas"
-// Duplicate imports and route definitions removed
-import CreateAreaAlert from "#/components/reportes/iluminacion/edit/crear-area"
 import DeleteAreaAlert from "#/components/reportes/iluminacion/nuevo-informe/areas/delete-area"
 
 // Lazy‑load the heavy chart component

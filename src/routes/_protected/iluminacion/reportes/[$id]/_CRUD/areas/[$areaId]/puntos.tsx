@@ -18,7 +18,6 @@ import {
 	getIndiceRedondeo,
 	resetPuntos,
 	resetTimestamps,
-	setResetPuntos,
 } from "#/lib/utils"
 import { HardHat, Loader, Trash2 } from "lucide-react"
 import { Input } from "#/components/ui/input"
@@ -79,10 +78,14 @@ function CargarPuntosData() {
 function CargarPuntos({ area }: { area: AreaIluminacionType }) {
 	const navigate = useNavigate()
 	const [puntos, setPuntos] = useState<number[]>(
-		area.puntos.length !== 0 ? area.puntos : resetPuntos(area.largo, area.ancho, area.alto)
+		area.puntos.length !== 0
+			? area.puntos
+			: resetPuntos(area.largo, area.ancho, area.alto)
 	)
 	const [timestamps, setTimestamps] = useState<Date[]>(
-		area.timestamps.length !== 0 ? area.timestamps : resetTimestamps(area.largo, area.ancho, area.alto)
+		area.timestamps.length !== 0
+			? area.timestamps
+			: resetTimestamps(area.largo, area.ancho, area.alto)
 	)
 	const [puntosError, setPuntosError] = useState<string | null>(null)
 	const [puntosCount, setPuntosCount] = useState<0 | 1 | 2 | 3>(0)

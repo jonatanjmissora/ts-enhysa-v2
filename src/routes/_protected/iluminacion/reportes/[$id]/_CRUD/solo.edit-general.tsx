@@ -17,7 +17,7 @@ import {
 	FieldGroup,
 	FieldLabel,
 } from "#/components/ui/field"
-import { ChevronRight, Loader, Warehouse } from "lucide-react"
+import { Loader, Warehouse } from "lucide-react"
 import {
 	Select,
 	SelectContent,
