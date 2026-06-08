@@ -12,7 +12,7 @@ const styles = StyleSheet.create({
 		justifyContent: "center",
 		alignContent: "center",
 		gap: "10px",
-		zIndex: 10, // Envía la marca de agua al fondo del contenido principal
+		zIndex: -1, // Envía la marca de agua al fondo del contenido principal
 		transform: "rotate(-45deg)", // Rotación diagonal típica de marcas de agua
 		transformOrigin: "center",
 		border: "1px solid blue",
@@ -20,8 +20,8 @@ const styles = StyleSheet.create({
 	},
 	watermarkText: {
 		fontSize: 40,
-		color: "gray",
-		opacity: 0.1, // Nivel de transparencia
+		color: "#eeeeee",
+		// opacity: 0.1, // Nivel de transparencia
 		width: "100%",
 		overflow: "hidden",
 		display: "flex",
