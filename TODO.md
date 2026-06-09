@@ -18,11 +18,15 @@ TODO
 ======
 pwa
 
-cambiar integer a numeric en el tipo de la columna "alto, ancho, largo"
-
 numeros negativos no, en los puntos
 
 girar fotos
+
+si trabajo para 2 empresas, poder elegir logos distintos
+
+si borro instrumento / empresa, que pasa con informes que lo utilizan?
+
+si no espero al 100% para cargar la foto, no puedo seguir
 
 ADMIN:
 ========
