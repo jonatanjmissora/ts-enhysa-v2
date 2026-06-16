@@ -86,7 +86,7 @@ export function RegisterForm({
 	}
 
 	return (
-		<div className={cn("w-90 relative sm:mr-50", className)} {...props}>
+		<div className={cn("w-90 relative", className)} {...props}>
 			{/*<div className="absolute top-4 left-4 right-4">
 				 <PreferencesMenu /> 
 			</div>*/}
@@ -218,7 +218,7 @@ export function RegisterForm({
 												<button
 													type="button"
 													onClick={() => setShowPassword(!showPassword)}
-													className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 cursor-pointer"
+													className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 cursor-pointer"
 												>
 													{showPassword ? (
 														<EyeClosed size={16} />

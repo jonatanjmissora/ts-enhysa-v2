@@ -23,7 +23,7 @@ import { useSuspenseQuery } from "@tanstack/react-query"
 import { empresasQueryOptions } from "../../../../../queries/empresas/empresas-query"
 import { instrumentosQueryOptions } from "../../../../../queries/instrumentos/instrumentos-query"
 import { tecnicoQueryOptions } from "../../../../../queries/tecnico/tecnico-query"
-import { Suspense } from "react"
+import { Suspense, useState } from "react"
 import {
 	ESTADO,
 	HUMEDAD,
@@ -39,6 +39,7 @@ import useScrollTop from "#/hooks/scroll-top"
 import { useCreateReporteNuevo } from "../../../../../queries/reportes/iluminacion/use-create-reporte-nuevo"
 import type { EmpresaType } from "../../../../../db/empresas/schema"
 import { sortedByName, sortedByRazonSocial } from "#/lib/utils"
+import { Checkbox } from "#/components/ui/checkbox"
 
 export default function CreateReporteNuevo() {
 	return (
@@ -62,6 +63,10 @@ function ReporteNuevoForm() {
 	const { data: instrumentos } = useSuspenseQuery(instrumentosQueryOptions)
 	const navigate = useNavigate()
 
+	const [medicionTipo, setMedicionTipo] = useState<
+		"localizada" | "area" | "ambos" | null
+	>("area")
+
 	const {
 		mutateAsync: createReporteNuevo,
 		isPending,
@@ -73,7 +78,7 @@ function ReporteNuevoForm() {
 			onSubmit: reporteNuevoFormValidator,
 		},
 		onSubmit: async ({ value }) => {
-			if (!tecnico || !empresas || !instrumentos) return
+			if (!tecnico || !empresas || !instrumentos || !medicionTipo) return
 
 			const title = getTitle(value.empresaId, empresas)
 
@@ -91,6 +96,9 @@ function ReporteNuevoForm() {
 				to: "/iluminacion/reportes/$id/areas",
 				params: {
 					id: result.id,
+				},
+				search: {
+					medicionTipo,
 				},
 			})
 		},
@@ -411,6 +419,54 @@ function ReporteNuevoForm() {
 						)
 					}}
 				/>
+
+				<div className="mt-6 flex flex-col gap-8">
+					<Field
+						orientation="horizontal"
+						className="gap-4 sm:gap-10 flex items-center justify-center"
+					>
+						<Checkbox
+							id="medicionLocalizadaCheck"
+							name="medicionLocalizadaCheck"
+							className="size-6 text-4xl"
+							checked={
+								medicionTipo === "localizada" || medicionTipo === "ambos"
+							}
+							onCheckedChange={() =>
+								setMedicionTipo(prev => {
+									if (prev === "ambos") return "area"
+									if (prev === "area") return "ambos"
+									return "localizada"
+								})
+							}
+						/>
+						<FieldLabel htmlFor="medicionLocalizadaCheck" className="max-w-1/2">
+							Medición Localizada
+						</FieldLabel>
+					</Field>
+
+					<Field
+						orientation="horizontal"
+						className="gap-4 sm:gap-10 flex items-center justify-center"
+					>
+						<Checkbox
+							id="medicionAreaCheck"
+							name="medicionAreaCheck"
+							className="size-6 text-4xl"
+							checked={medicionTipo === "area" || medicionTipo === "ambos"}
+							onCheckedChange={() =>
+								setMedicionTipo(prev => {
+									if (prev === "ambos") return "localizada"
+									if (prev === "localizada") return "ambos"
+									return "area"
+								})
+							}
+						/>
+						<FieldLabel htmlFor="medicionAreaCheck" className="max-w-1/2">
+							Medición de Área
+						</FieldLabel>
+					</Field>
+				</div>
 
 				<Field className="flex flex-col justify-center gap-4 sm:gap-10 items-center w-full sm:w-1/2 mx-auto mt-20">
 					<Button type="submit" disabled={isPending} className="flex-1 py-3">

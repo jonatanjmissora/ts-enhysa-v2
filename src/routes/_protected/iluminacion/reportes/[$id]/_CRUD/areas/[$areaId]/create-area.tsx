@@ -58,9 +58,16 @@ export const Route = createFileRoute(
 function RouteComponent() {
 	useScrollTop()
 	const params = Route.useParams()
+	const { medicionTipo = "area" } = Route.useSearch() as {
+		medicionTipo?: "area" | "localizada" | "ambos"
+	}
 	return (
 		<article className="w-full min-h-svh flex flex-col items-center gap-0 relative mb-60">
-			<BackChevron to="/iluminacion/reportes/$id/areas" params={params} />
+			<BackChevron
+				to="/iluminacion/reportes/$id/areas"
+				params={params}
+				search={{ medicionTipo }}
+			/>
 			<Title text="Nueva Area" className="mt-15" />
 			<Suspense
 				fallback={
@@ -70,18 +77,23 @@ function RouteComponent() {
 					/>
 				}
 			>
-				<CreateArea />
+				<CreateArea medicionTipo={medicionTipo} />
 			</Suspense>
 		</article>
 	)
 }
 
-function CreateArea() {
+function CreateArea({
+	medicionTipo,
+}: {
+	medicionTipo: "area" | "localizada" | "ambos"
+}) {
 	const { id } = Route.useParams()
+
 	const [planoFiles, setPlanoFiles] = useState<string[]>([])
 	const { data: reporte } = useSuspenseQuery(reporteQueryOptions({ id }))
 	const navigate = useNavigate()
-
+	// Pass medicionTipo where needed (example: include in navigation or API calls)
 	const { mutateAsync: createArea, isPending, error } = useCreateArea()
 
 	const form = useForm({
@@ -109,6 +121,7 @@ function CreateArea() {
 					id,
 					areaId: newArea.id,
 				},
+				search: { medicionTipo },
 			})
 		},
 	})
@@ -122,6 +135,7 @@ function CreateArea() {
 			}}
 			className="w-11/12 sm:w-full my-5 sm:my-4 flex flex-col gap-8 relative"
 		>
+			{medicionTipo}
 			<FieldGroup className="gap-5">
 				<div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-5/6 mt-10 mx-auto">
 					<form.Field
