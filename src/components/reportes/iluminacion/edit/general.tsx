@@ -126,7 +126,6 @@ function EditReporteGeneralForm({
 }) {
 	useScrollTop()
 
-	const queryClient = useQueryClient()
 	const { mutateAsync: editReport, isPending, error } = useUpdateReporte()
 	const form = useForm({
 		defaultValues: {
@@ -168,13 +167,6 @@ function EditReporteGeneralForm({
 				console.error("Error al editar el reporte", error)
 			}
 			console.log("Reporte editado exitosamente")
-			// queryClient.invalidateQueries({
-			// 	queryKey: ["reporte-iluminacion", reporte.id],
-			// })
-			// // Also invalidate list queries
-			// queryClient.invalidateQueries({ queryKey: ["reportes-iluminacion"] })
-			// // Invalidate any pending new report query
-			// queryClient.invalidateQueries({ queryKey: ["reporte-iluminacion-nuevo"] })
 			setIsMenuOpen(false)
 		},
 	})

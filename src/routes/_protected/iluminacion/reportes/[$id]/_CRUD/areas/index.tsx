@@ -6,7 +6,7 @@ import { createFileRoute, Link } from "@tanstack/react-router"
 import { Suspense } from "react"
 import { Button } from "#/components/ui/button"
 import { Label } from "#/components/ui/label"
-import { ChevronRight, Edit, RulerDimensionLine } from "lucide-react"
+import { ChevronRight, Edit, RulerDimensionLine, Telescope } from "lucide-react"
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -40,10 +40,6 @@ function RouteComponent() {
 		<article className="w-full min-h-svh flex flex-col items-center gap-0 relative mb-60">
 			<BackChevron to="/iluminacion/reportes" />
 			<Title text="Nuevo Informe" className="mt-15" />
-			<div className="flex items-center justify-between px-6 py-1 border-b border-foreground/50 mt-10 mb-4 w-5/6 mx-auto">
-				<RulerDimensionLine className="size-6" />
-				<span className="text-lg">Areas</span>
-			</div>
 			<IluminacionAreas />
 		</article>
 	)
@@ -54,12 +50,13 @@ function IluminacionAreas() {
 		<Suspense
 			fallback={
 				<Loading
-					text="obteniendo áreas..."
+					text="obteniendo mediciones..."
 					className="scale-50 justify-start  max-h-[50svh] "
 				/>
 			}
 		>
 			<Areas />
+			<Localizadas />
 		</Suspense>
 	)
 }
@@ -74,53 +71,65 @@ function Areas() {
 	const areaId = crypto.randomUUID().toString()
 
 	return (
-		<div className="w-full flex flex-col gap-10 items-center justify-center">
-			<Accordion
-				type="single"
-				collapsible
-				defaultValue=""
-				className="flex flex-col gap-2 w-5/6 mx-auto mt-5"
-			>
-				{sortedByName(areas).map(area => (
-					<AccordionItem key={area.id} value={area.id} className="border-none">
-						<AccordionTrigger
-							className={`flex px-10 border-2 ${area.puntos.length === 0 ? "border-red-500/20" : checkAllPuntos(area) ? "border-foreground/10" : "border-amber-500/20"} items-center`}
-						>
-							<div className="flex items-center gap-2">
-								{`${area.nombre.toUpperCase()} - ${area.tipo.toUpperCase()}`}
-							</div>
-						</AccordionTrigger>
-						<AccordionContent className="">
-							<Area area={area} />
-						</AccordionContent>
-					</AccordionItem>
-				))}
-			</Accordion>
-
-			{/* <CreateAreaAlert /> */}
-			<Link
-				to="/iluminacion/reportes/$id/areas/$areaId/create-area"
-				params={{
-					id,
-					areaId,
-				}}
-				className="flex justify-center items-center w-full"
-			>
-				<Button className="w-1/2 min-w-40 sm:w-1/6 mx-auto py-5 bg-primary ring-foreground/25">
-					+ Crear area
-				</Button>
-			</Link>
-
-			<div className="flex flex-col justify-center items-center gap-4 w-5/6 sm:w-1/2 mt-30">
-				<Link
-					to="/iluminacion/reportes/$id/crud/create-resumen"
-					params={{ id }}
-					className="flex-1 w-full"
+		<div className="flex flex-col gap-2">
+			<div className="w-full flex justify items-center">
+				<div className="flex items-center justify-between px-6 py-1 border-b border-foreground/50 mt-10 mb-4 w-5/6 mx-auto">
+					<RulerDimensionLine className="size-6" />
+					<span className="text-lg">Areas</span>
+				</div>
+			</div>
+			<div className="w-full flex flex-col gap-10 items-center justify-center">
+				<Accordion
+					type="single"
+					collapsible
+					defaultValue=""
+					className="flex flex-col gap-2 w-5/6 mx-auto mt-5"
 				>
-					<Button type="submit" className="w-full py-6">
-						Siguiente <ChevronRight className="size-6" />
+					{sortedByName(areas).map(area => (
+						<AccordionItem
+							key={area.id}
+							value={area.id}
+							className="border-none"
+						>
+							<AccordionTrigger
+								className={`flex px-10 border-2 ${area.puntos.length === 0 ? "border-red-500/20" : checkAllPuntos(area) ? "border-foreground/10" : "border-amber-500/20"} items-center`}
+							>
+								<div className="flex items-center gap-2">
+									{`${area.nombre.toUpperCase()} - ${area.tipo.toUpperCase()}`}
+								</div>
+							</AccordionTrigger>
+							<AccordionContent className="">
+								<Area area={area} />
+							</AccordionContent>
+						</AccordionItem>
+					))}
+				</Accordion>
+
+				{/* <CreateAreaAlert /> */}
+				<Link
+					to="/iluminacion/reportes/$id/areas/$areaId/create-area"
+					params={{
+						id,
+						areaId,
+					}}
+					className="flex justify-center items-center w-full"
+				>
+					<Button className="w-1/2 min-w-40 sm:w-1/6 mx-auto py-5 bg-primary ring-foreground/25">
+						+ Crear area
 					</Button>
 				</Link>
+
+				<div className="flex flex-col justify-center items-center gap-4 w-5/6 sm:w-1/2 mt-30">
+					<Link
+						to="/iluminacion/reportes/$id/crud/create-resumen"
+						params={{ id }}
+						className="flex-1 w-full"
+					>
+						<Button type="submit" className="w-full py-6">
+							Siguiente <ChevronRight className="size-6" />
+						</Button>
+					</Link>
+				</div>
 			</div>
 		</div>
 	)
@@ -270,7 +279,11 @@ function NoAreas() {
 	const { id } = Route.useParams()
 	const areaId = crypto.randomUUID().toString()
 	return (
-		<div className="w-5/6 h-[30svh] flex flex-col gap-8 items-center justify-center mx-auto my-12">
+		<div className="w-5/6 flex flex-col gap-8 items-center justify-center mx-auto">
+			<div className="flex items-center justify-between py-1 border-b border-foreground/50 mt-10 mb-4 w-full sm:w-5/6 mx-auto">
+				<span className="text-lg">Mediciones en Área</span>
+				<RulerDimensionLine className="size-6" />
+			</div>
 			<span className="text-sm font-medium text-gray-500 italic text-center text-pretty">
 				Parece que no tienes áreas registradas
 			</span>
@@ -330,4 +343,37 @@ export default function AreaDropdownMenu({
 
 function checkAllPuntos(area: AreaIluminacionType) {
 	return area.puntos.every(punto => punto > 0)
+}
+
+function Localizadas() {
+	return <NoLocalizada />
+}
+
+function NoLocalizada() {
+	const { id } = Route.useParams()
+	const areaId = crypto.randomUUID().toString()
+	return (
+		<div className="w-5/6 h-[30svh] flex flex-col gap-8 items-center justify-center mx-auto">
+			<div className="flex items-center justify-between py-1 border-b border-foreground/50 mt-10 mb-4 w-full sm:w-5/6 mx-auto">
+				<span className="text-lg">Mediciones Localizadas</span>
+				<Telescope className="size-6" />
+			</div>
+			<span className="text-sm font-medium text-gray-500 italic text-center text-pretty">
+				Parece que no tienes mediciones localizadas
+			</span>
+			{/* <CreateAreaAlert /> */}
+			<Link
+				to="/iluminacion/reportes/$id/areas/$areaId/create-localizada"
+				params={{
+					id,
+					areaId,
+				}}
+				className="flex justify-center items-center w-full"
+			>
+				<Button className="w-1/2 min-w-40 sm:w-1/6 mx-auto py-5 bg-primary ring-foreground/25">
+					+ Crear localizada
+				</Button>
+			</Link>
+		</div>
+	)
 }

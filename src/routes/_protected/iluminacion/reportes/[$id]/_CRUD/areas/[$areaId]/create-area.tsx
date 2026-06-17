@@ -12,7 +12,7 @@ import {
 	FieldLabel,
 } from "#/components/ui/field"
 import { Input } from "#/components/ui/input"
-import { Box, Lightbulb, Loader } from "lucide-react"
+import { Box, Lightbulb, Loader, Telescope } from "lucide-react"
 import {
 	Select,
 	SelectContent,
@@ -58,16 +58,9 @@ export const Route = createFileRoute(
 function RouteComponent() {
 	useScrollTop()
 	const params = Route.useParams()
-	const { medicionTipo = "area" } = Route.useSearch() as {
-		medicionTipo?: "area" | "localizada" | "ambos"
-	}
 	return (
 		<article className="w-full min-h-svh flex flex-col items-center gap-0 relative mb-60">
-			<BackChevron
-				to="/iluminacion/reportes/$id/areas"
-				params={params}
-				search={{ medicionTipo }}
-			/>
+			<BackChevron to="/iluminacion/reportes/$id/areas" params={params} />
 			<Title text="Nueva Area" className="mt-15" />
 			<Suspense
 				fallback={
@@ -77,17 +70,13 @@ function RouteComponent() {
 					/>
 				}
 			>
-				<CreateArea medicionTipo={medicionTipo} />
+				<CreateArea />
 			</Suspense>
 		</article>
 	)
 }
 
-function CreateArea({
-	medicionTipo,
-}: {
-	medicionTipo: "area" | "localizada" | "ambos"
-}) {
+function CreateArea() {
 	const { id } = Route.useParams()
 
 	const [planoFiles, setPlanoFiles] = useState<string[]>([])
@@ -121,7 +110,6 @@ function CreateArea({
 					id,
 					areaId: newArea.id,
 				},
-				search: { medicionTipo },
 			})
 		},
 	})
@@ -135,7 +123,6 @@ function CreateArea({
 			}}
 			className="w-11/12 sm:w-full my-5 sm:my-4 flex flex-col gap-8 relative"
 		>
-			{medicionTipo}
 			<FieldGroup className="gap-5">
 				<div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-5/6 mt-10 mx-auto">
 					<form.Field
@@ -212,7 +199,7 @@ function CreateArea({
 					</div>
 				</div>
 
-				<div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-5/6 mt-10 mx-auto">
+				<div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-5/6 mb-10 mx-auto">
 					<form.Field
 						name="iluminacionTipo"
 						children={field => {
@@ -483,6 +470,111 @@ function CreateArea({
 					/>
 				</div>
 
+				<div className="flex items-center justify-between border-b border-purple-700/50 dark:border-purple-300/50 my-10 w-full">
+					<div className="textL py-2 px-3 flex items-center gap-8 justify-between w-full">
+						Medición Localizada{" "}
+						<Telescope className="sm:size-7 2xl:size-9 text-purple-700/70 dark:text-purple-300/75" />
+					</div>
+				</div>
+
+				<div className="grid grid-cols-1 sm:grid-cols-2 gap-8 w-5/6 mb-10 mx-auto items-end">
+					<form.Field
+						name="nombre"
+						children={field => {
+							const isInvalid =
+								field.state.meta.isTouched && !field.state.meta.isValid
+							return (
+								<Field data-invalid={isInvalid} className="relative gap-1">
+									<FieldLabel
+										htmlFor={field.name}
+										className="flex items-center gap-3 textL"
+									>
+										Nombre de la medición Localizada
+									</FieldLabel>
+									<Input
+										onFocus={e => e.target.select()}
+										id={field.name}
+										name={field.name}
+										value={field.state.value}
+										onBlur={field.handleBlur}
+										onChange={e => field.handleChange(e.target.value)}
+										aria-invalid={isInvalid}
+									/>
+									{isInvalid && (
+										<FieldError
+											errors={field.state.meta.errors}
+											className="text-xs 2xl:text-sm absolute -bottom-4 left-0"
+										/>
+									)}
+								</Field>
+							)
+						}}
+					/>
+
+					<form.Field
+						name="valorRequerido"
+						children={field => {
+							const isInvalid =
+								field.state.meta.isTouched && !field.state.meta.isValid
+
+							return (
+								<Field data-invalid={isInvalid} className="relative gap-1">
+									<FieldLabel
+										htmlFor={field.name}
+										className="flex items-center gap-3 textL"
+									>
+										Valor Requerido Localizado
+									</FieldLabel>
+
+									<Select
+										value={field.state.value || ""}
+										onValueChange={value =>
+											field.handleChange(value as ValoresRequeridosType)
+										}
+									>
+										<SelectTrigger
+											id={field.name}
+											name={field.name}
+											onBlur={field.handleBlur}
+											aria-invalid={isInvalid}
+											className="w-full justify-end"
+										>
+											<SelectValue placeholder="Seleccione Valor" />
+										</SelectTrigger>
+
+										<SelectContent position="popper">
+											<SelectGroup>
+												<SelectLabel>Valores</SelectLabel>
+
+												{VALORES_REQUERIDOS?.map(valorRequerido => (
+													<SelectItem
+														key={valorRequerido}
+														value={valorRequerido}
+														className="justify-center"
+													>
+														{valorRequerido.toUpperCase()}
+													</SelectItem>
+												))}
+											</SelectGroup>
+										</SelectContent>
+									</Select>
+
+									{isInvalid && (
+										<FieldError
+											errors={field.state.meta.errors}
+											className="text-xs 2xl:text-sm absolute -bottom-4 left-0"
+										/>
+									)}
+								</Field>
+							)
+						}}
+					/>
+
+					<Button type="button" onClick={() => {}} className="w-1/2 ml-auto">
+						Agregar Otra
+					</Button>
+				</div>
+
 				<div className="flex items-center justify-between border-b border-orange-700/50 dark:border-orange-300/50 my-10 w-full">
 					<div className="textL py-2 px-3 flex items-center gap-8 justify-between w-full">
 						Dimensiones{" "}
@@ -490,7 +582,7 @@ function CreateArea({
 					</div>
 				</div>
 
-				<div className="grid grid-cols-1 sm:grid-cols-2 gap-8 w-5/6 mt-10 mx-auto items-end">
+				<div className="grid grid-cols-1 sm:grid-cols-2 gap-8 w-5/6 mb-10 mx-auto items-end">
 					<form.Field
 						name="largo"
 						children={field => {
@@ -611,7 +703,7 @@ function CreateArea({
 					/>
 				</div>
 
-				<div className="flex flex-col gap-1 w-5/6 mx-auto sm:w-full my-10">
+				<div className="flex flex-col gap-1 w-5/6 mx-auto sm:w-full mb-10">
 					<Label className="tracking-wider" htmlFor="largo">
 						Imágenes del Área
 					</Label>
@@ -649,7 +741,7 @@ function CreateArea({
 					}}
 				/>
 
-				<Field className="flex flex-col sm:flex-row justify-center gap-4 items-center w-5/6 sm:w-full mx-auto mt-10">
+				<Field className="flex flex-col sm:flex-row justify-center gap-4 items-center w-5/6 sm:w-full mx-auto my-10">
 					<Link
 						to="/iluminacion/reportes/$id/areas"
 						params={{ id }}
