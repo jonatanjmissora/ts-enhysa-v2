@@ -21,13 +21,13 @@ import {
 import type { AreaIluminacionType } from "../../../../../../../db/reportes/iluminacion/areas/schema"
 import { Button } from "#/components/ui/button"
 import { Edit, Ellipsis, Plus } from "lucide-react"
-import DeleteAreaAlert from "#/components/reportes/iluminacion/nuevo-informe/areas/delete-area"
+import DeleteAreaAlert from "#/components/reportes/iluminacion/nuevo-informe/mediciones/delete-area"
 
 // Lazy‑load the heavy chart component
 const ChartAreaInteractive = lazy(() =>
-	import("#/components/reportes/iluminacion/nuevo-informe/areas/chart").then(
-		mod => ({ default: mod.default })
-	)
+	import(
+		"#/components/reportes/iluminacion/nuevo-informe/mediciones/chart"
+	).then(mod => ({ default: mod.default }))
 )
 
 export const Route = createFileRoute(
@@ -75,7 +75,7 @@ function Area() {
 				<span className="text-sm italic">No se encontró ningún área</span>
 				{/* <CreateAreaAlert id={id} /> */}
 				<Link
-					to="/iluminacion/reportes/$id/areas/$areaId/create-area"
+					to="/iluminacion/reportes/$id/medicion/areas/$areaId/create-area"
 					params={{
 						id,
 						areaId: crypto.randomUUID().toString(),
@@ -209,7 +209,7 @@ function AreaDropdownMenu({ area }: { area: AreaIluminacionType }) {
 						setIsMenuOpen={setIsMenuOpen}
 					/> */}
 					<Link
-						to="/iluminacion/reportes/$id/areas/$areaId/solo/create-area"
+						to="/iluminacion/reportes/$id/medicion/areas/$areaId/solo/create-area"
 						params={{
 							id: area.reportId,
 							areaId: crypto.randomUUID().toString(),
@@ -224,7 +224,7 @@ function AreaDropdownMenu({ area }: { area: AreaIluminacionType }) {
 					<DropdownMenuSeparator className="bg-foreground/20 w-5/6 mx-auto" />
 					{/* <EditAreaAlert area={area} setIsMenuOpen={setIsMenuOpen} /> */}
 					<Link
-						to="/iluminacion/reportes/$id/areas/$areaId/solo/edit-area"
+						to="/iluminacion/reportes/$id/medicion/areas/$areaId/solo/edit-area"
 						params={{
 							id: area.reportId,
 							areaId: area.id,

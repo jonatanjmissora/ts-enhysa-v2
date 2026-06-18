@@ -5,7 +5,7 @@ import { updateTecnicoValidator } from "../../db/tecnicos/tecnico-validator"
 import { updateTecnicoDB } from "../../db/tecnicos/update-tecnico-db"
 
 export const updateTecnicoServer = createServerFn({ method: "POST" })
-	.inputValidator(updateTecnicoValidator)
+	.validator(updateTecnicoValidator)
 	.handler(async ({ data }) => {
 		const request = getRequest()
 		const session = await protectedServerFn(request)

@@ -35,8 +35,5 @@ controlar si todas las areas tienen reporte, sino mostrar para borrar
 
 LOCALIZADA
 ==============
-en [$id]/_CRUD/areas/index.tsx
-le agregue un boton de "Agregar localizada" Agregarlo cuando hay areas, o hay localizadas.
-Crear la ruta para crear / editar / solo.editar / solo.crear localizadas
-Arreglar create-area.tsx y sacarle la parte que le agregue de localizada
+cargando imagenes... hay algunos que no tienen Suspense+fallback
 

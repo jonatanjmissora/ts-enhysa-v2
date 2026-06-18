@@ -4,7 +4,7 @@ import { getRequest } from "@tanstack/react-start/server"
 import { getInstrumentoDB } from "../../db/instrumentos/get-instrumento-db"
 
 export const getInstrumentoServer = createServerFn()
-	.inputValidator((data: { id: string; tecnicoId: string }) => data)
+	.validator((data: { id: string; tecnicoId: string }) => data)
 	.handler(async ({ data }) => {
 		const request = getRequest()
 		await protectedServerFn(request)

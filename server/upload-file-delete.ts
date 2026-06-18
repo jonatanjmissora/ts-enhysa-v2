@@ -7,7 +7,7 @@ const fileKeyValidator = z.object({
 })
 
 export const deleteUploadthingFile = createServerFn({ method: "POST" })
-	.inputValidator(fileKeyValidator)
+	.validator(fileKeyValidator)
 	.handler(async ({ data }) => {
 		const utapi = new UTApi()
 		const res = await utapi.deleteFiles(data.fileKey)

@@ -5,7 +5,7 @@ import { reporteIluminacionIdValidator } from "../../../db/reportes/iluminacion/
 import { deleteReporteDB } from "../../../db/reportes/iluminacion/delete-reporte-db"
 
 export const deleteReporteServer = createServerFn({ method: "POST" })
-	.inputValidator(reporteIluminacionIdValidator)
+	.validator(reporteIluminacionIdValidator)
 	.handler(async ({ data }) => {
 		const request = getRequest()
 		const session = await protectedServerFn(request)

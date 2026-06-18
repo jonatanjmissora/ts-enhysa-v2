@@ -12,7 +12,7 @@ import {
 	type SetStateAction,
 } from "react"
 import { Button } from "#/components/ui/button"
-import Formula from "#/components/reportes/iluminacion/nuevo-informe/areas/formula"
+import Formula from "#/components/reportes/iluminacion/nuevo-informe/mediciones/formula"
 import {
 	getIndiceDeLocal,
 	getIndiceRedondeo,
@@ -30,7 +30,7 @@ import { useUpdateArea } from "../../../../../../../../../queries/reportes/ilumi
 import useScrollTop from "#/hooks/scroll-top"
 
 export const Route = createFileRoute(
-	"/_protected/iluminacion/reportes/$id/_CRUD/areas/$areaId/solo/puntos"
+	"/_protected/iluminacion/reportes/$id/medicion/areas/$areaId/solo/puntos"
 )({
 	component: RouteComponent,
 })
@@ -41,7 +41,7 @@ function RouteComponent() {
 	return (
 		<article className="w-full min-h-svh flex flex-col items-center gap-0 relative mb-60">
 			<BackChevron
-				to={`/iluminacion/reportes/$id/areass`}
+				to={`/iluminacion/reportes/$id/medicion/areass`}
 				params={{ id, areaId }}
 			/>
 			<Suspense fallback={<span>Cargando...</span>}>
@@ -109,7 +109,7 @@ function CargarPuntos({ area }: { area: AreaIluminacionType }) {
 				JSON.stringify(timestamps) === JSON.stringify(area.timestamps)
 			) {
 				navigate({
-					to: "/iluminacion/reportes/$id/areass",
+					to: "/iluminacion/reportes/$id/medicion/areass",
 					params: { id: area.reportId },
 				})
 				return
@@ -127,7 +127,7 @@ function CargarPuntos({ area }: { area: AreaIluminacionType }) {
 			}
 			console.log("Puntos actualizada exitosamente")
 			navigate({
-				to: "/iluminacion/reportes/$id/areass",
+				to: "/iluminacion/reportes/$id/medicion/areass",
 				params: { id: area.reportId },
 			})
 		},
@@ -464,7 +464,7 @@ function NoArea() {
 	return (
 		<article className="w-full flex flex-col justify-center items-center gap-10 my-10">
 			<p>No se encontro area</p>
-			<Link to="/iluminacion/reportes/$id/areass" params={{ id }}>
+			<Link to="/iluminacion/reportes/$id/medicion/areass" params={{ id }}>
 				<Button className="px-10">Volver</Button>
 			</Link>
 		</article>

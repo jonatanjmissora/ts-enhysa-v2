@@ -55,7 +55,7 @@ function RouteComponent() {
 					General
 				</Link>
 				<Link
-					to="/iluminacion/reportes/$id/areass"
+					to="/iluminacion/reportes/$id/medicion2"
 					params={{ id }}
 					activeProps={{
 						className:
@@ -64,7 +64,7 @@ function RouteComponent() {
 					className="flex-1 h-20 flex flex-col gap-2 items-center justify-center text-sm rounded-lg"
 				>
 					<RulerDimensionLine className="size-10" />
-					Areas
+					Mediciones
 				</Link>
 				<Link
 					to="/iluminacion/reportes/$id/resumen"

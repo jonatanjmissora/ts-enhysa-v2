@@ -5,7 +5,7 @@ import { protectedServerFn } from "@/lib/protected-server-fn"
 import { updateEmpresaValidator } from "../../db/empresas/empresa-validator"
 
 export const updateEmpresaServer = createServerFn({ method: "POST" })
-	.inputValidator(updateEmpresaValidator)
+	.validator(updateEmpresaValidator)
 	.handler(async ({ data }) => {
 		const request = getRequest()
 		const session = await protectedServerFn(request)

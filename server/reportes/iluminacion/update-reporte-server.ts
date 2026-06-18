@@ -5,7 +5,7 @@ import { updateReporteDB } from "../../../db/reportes/iluminacion/update-reporte
 import { updateReporteServerValidator } from "../../../db/reportes/iluminacion/reporte-validator"
 
 export const updateReporteServer = createServerFn({ method: "POST" })
-	.inputValidator(updateReporteServerValidator)
+	.validator(updateReporteServerValidator)
 	.handler(async ({ data }) => {
 		const request = getRequest()
 		const session = await protectedServerFn(request)

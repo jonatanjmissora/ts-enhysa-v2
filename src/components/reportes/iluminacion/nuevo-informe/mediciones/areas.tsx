@@ -1,81 +1,40 @@
-import BackChevron from "#/components/back-chevron"
-import Loading from "#/components/loading"
-import Title from "#/components/title"
 import { useSuspenseQuery } from "@tanstack/react-query"
-import { createFileRoute, Link } from "@tanstack/react-router"
-import { Suspense } from "react"
+import { areasQueryOptions } from "../../../../../../queries/reportes/iluminacion/areas/areas-query"
+import { RulerDimensionLine, Ellipsis, Edit } from "lucide-react"
 import { Button } from "#/components/ui/button"
-import { Label } from "#/components/ui/label"
-import { ChevronRight, Edit, RulerDimensionLine, Telescope } from "lucide-react"
-import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuGroup,
-	DropdownMenuSeparator,
-	DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Ellipsis } from "lucide-react"
-import { useState } from "react"
-import DeleteAreaAlert from "#/components/reportes/iluminacion/nuevo-informe/areas/delete-area"
-import { sortedByName } from "#/lib/utils"
-import useScrollTop from "#//hooks/scroll-top"
-import { areasQueryOptions } from "../../../../../../../../queries/reportes/iluminacion/areas/areas-query"
+import { Link } from "@tanstack/react-router"
 import {
 	Accordion,
 	AccordionContent,
 	AccordionItem,
 	AccordionTrigger,
 } from "#/components/ui/accordion"
-import type { AreaIluminacionType } from "../../../../../../../../db/reportes/iluminacion/areas/schema"
+import { sortedByName } from "#/lib/utils"
+import type { AreaIluminacionType } from "../../../../../../db/reportes/iluminacion/areas/schema"
+import { Label } from "#/components/ui/label"
+import { useState } from "react"
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuGroup,
+	DropdownMenuSeparator,
+	DropdownMenuTrigger,
+} from "#/components/ui/dropdown-menu"
+import DeleteAreaAlert from "./delete-area"
 
-export const Route = createFileRoute(
-	"/_protected/iluminacion/reportes/$id/_CRUD/areas/"
-)({
-	component: RouteComponent,
-})
-
-function RouteComponent() {
-	useScrollTop()
-	return (
-		<article className="w-full min-h-svh flex flex-col items-center gap-0 relative mb-60">
-			<BackChevron to="/iluminacion/reportes" />
-			<Title text="Nuevo Informe" className="mt-15" />
-			<IluminacionAreas />
-		</article>
-	)
-}
-
-function IluminacionAreas() {
-	return (
-		<Suspense
-			fallback={
-				<Loading
-					text="obteniendo mediciones..."
-					className="scale-50 justify-start  max-h-[50svh] "
-				/>
-			}
-		>
-			<Areas />
-			<Localizadas />
-		</Suspense>
-	)
-}
-
-function Areas() {
-	const { id } = Route.useParams()
-
+export default function Areas({ id }: { id: string }) {
 	const { data: areas } = useSuspenseQuery(areasQueryOptions({ reportId: id }))
 
-	if (!areas || areas.length === 0) return <NoAreas />
+	if (!areas || areas.length === 0) return <NoAreas id={id} />
 
 	const areaId = crypto.randomUUID().toString()
 
 	return (
-		<div className="flex flex-col gap-2">
+		<div className="flex flex-col gap-2 w-5/6">
 			<div className="w-full flex justify items-center">
-				<div className="flex items-center justify-between px-6 py-1 border-b border-foreground/50 mt-10 mb-4 w-5/6 mx-auto">
-					<RulerDimensionLine className="size-6" />
+				<div className="flex items-center justify-between py-1 border-b border-foreground/50 mt-10 mb-4 w-full mx-auto">
 					<span className="text-lg">Areas</span>
+					<RulerDimensionLine className="size-6" />
 				</div>
 			</div>
 			<div className="w-full flex flex-col gap-10 items-center justify-center">
@@ -83,7 +42,7 @@ function Areas() {
 					type="single"
 					collapsible
 					defaultValue=""
-					className="flex flex-col gap-2 w-5/6 mx-auto mt-5"
+					className="flex flex-col gap-2 w-full mx-auto mt-5"
 				>
 					{sortedByName(areas).map(area => (
 						<AccordionItem
@@ -99,7 +58,7 @@ function Areas() {
 								</div>
 							</AccordionTrigger>
 							<AccordionContent className="">
-								<Area area={area} />
+								<Area area={area} id={id} />
 							</AccordionContent>
 						</AccordionItem>
 					))}
@@ -107,7 +66,7 @@ function Areas() {
 
 				{/* <CreateAreaAlert /> */}
 				<Link
-					to="/iluminacion/reportes/$id/areas/$areaId/create-area"
+					to="/iluminacion/reportes/$id/medicion/areas/$areaId/create-area"
 					params={{
 						id,
 						areaId,
@@ -118,25 +77,12 @@ function Areas() {
 						+ Crear area
 					</Button>
 				</Link>
-
-				<div className="flex flex-col justify-center items-center gap-4 w-5/6 sm:w-1/2 mt-30">
-					<Link
-						to="/iluminacion/reportes/$id/crud/create-resumen"
-						params={{ id }}
-						className="flex-1 w-full"
-					>
-						<Button type="submit" className="w-full py-6">
-							Siguiente <ChevronRight className="size-6" />
-						</Button>
-					</Link>
-				</div>
 			</div>
 		</div>
 	)
 }
 
-function Area({ area }: { area: AreaIluminacionType }) {
-	const { id } = Route.useParams()
+function Area({ area, id }: { area: AreaIluminacionType; id: string }) {
 	const celdasMedidas = area.puntos.filter(punto => punto > 0)
 	const uniformidad = Math.ceil(
 		celdasMedidas.reduce((acc, valor) => acc + valor, 0) /
@@ -151,40 +97,48 @@ function Area({ area }: { area: AreaIluminacionType }) {
 			</div>
 
 			<div className="w-5/6 grid grid-cols-2 gap-3 border-b border-foreground/10 pb-2">
-				<Label className="textL text-sm place-content-end">Nombre : </Label>
+				<Label className="textL text-sm place-content-end text-amber-700">
+					Nombre :{" "}
+				</Label>
 				<span className="textL text-sm">{area.nombre.toUpperCase()}</span>
 
-				<Label className="place-content-end textL text-sm">Tipo : </Label>
+				<Label className="place-content-end textL text-sm text-amber-700">
+					Tipo :{" "}
+				</Label>
 				<span className="text-left textL text-sm">
 					{area.tipo.toUpperCase()}
 				</span>
 			</div>
 			<div className="w-5/6 grid grid-cols-2 gap-3 border-b border-foreground/10 py-2">
-				<Label className="place-content-end textL text-sm">ilum. Tipo :</Label>
+				<Label className="place-content-end textL text-sm text-amber-700">
+					ilum. Tipo :
+				</Label>
 				<span className="text-left textL text-sm">
 					{area.iluminacionTipo.toUpperCase()}
 				</span>
 
-				<Label className="place-content-end textL text-sm">
+				<Label className="place-content-end textL text-sm text-amber-700">
 					ilum. Fuente :{" "}
 				</Label>
 				<span className="text-left textL text-sm">
 					{area.iluminacionFuente.toUpperCase()}
 				</span>
 
-				<Label className="place-content-end textL text-sm">
+				<Label className="place-content-end textL text-sm text-amber-700">
 					iluminación :{" "}
 				</Label>
 				<span className="text-left textL text-sm">
 					{area.iluminacion.toUpperCase()}
 				</span>
 
-				<Label className="place-content-end textL text-sm">Valor Req. : </Label>
+				<Label className="place-content-end textL text-sm text-amber-700">
+					Valor Req. :{" "}
+				</Label>
 				<span className="text-left textL text-sm">
 					{area.valorRequerido.toUpperCase()} lm
 				</span>
 
-				<Label className="place-content-end textL text-sm">
+				<Label className="place-content-end textL text-sm text-amber-700">
 					Observaciones :{" "}
 				</Label>
 				<span className="text-left textL text-sm">
@@ -192,22 +146,28 @@ function Area({ area }: { area: AreaIluminacionType }) {
 				</span>
 			</div>
 			<div className="w-5/6 grid grid-cols-2 gap-4 border-b border-foreground/10 py-2">
-				<Label className="place-content-end textL text-sm">Largo : </Label>
+				<Label className="place-content-end textL text-sm text-amber-700">
+					Largo :{" "}
+				</Label>
 				<span className="text-left textL text-sm">
 					{area.largo.toFixed(0)} mts.
 				</span>
 
-				<Label className="place-content-end textL text-sm">Ancho : </Label>
+				<Label className="place-content-end textL text-sm text-amber-700">
+					Ancho :{" "}
+				</Label>
 				<span className="text-left textL text-sm">
 					{area.ancho.toFixed(0)} mts.
 				</span>
 
-				<Label className="place-content-end textL text-sm">Alto : </Label>
+				<Label className="place-content-end textL text-sm text-amber-700">
+					Alto :{" "}
+				</Label>
 				<span className="text-left textL text-sm">
 					{area.alto.toFixed(0)} mts.
 				</span>
 
-				<Label className="place-content-end textL text-sm">
+				<Label className="place-content-end textL text-sm text-amber-700">
 					Celdas medidas :{" "}
 				</Label>
 				<span className="text-left textL text-sm">
@@ -221,10 +181,10 @@ function Area({ area }: { area: AreaIluminacionType }) {
 							key={index}
 							className={`flex gap-2 justify-center items-center ${punto > 0 ? "bg-background" : "bg-accent"} p-1 rounded-sm`}
 						>
-							<Label className="textL text-sm text-foreground/50">
+							<Label className="textL text-sm text-amber-700/50">
 								Punto {index + 1} :{" "}
 							</Label>
-							<span className="textL text-sm">{punto.toFixed(0)} lm</span>
+							<span className="textL text-sm">{punto.toFixed(0)} lux</span>
 						</div>
 					))}
 				</div>
@@ -232,7 +192,7 @@ function Area({ area }: { area: AreaIluminacionType }) {
 				<div className="w-5/6 flex items-center justify-center gap-4 border-b border-foreground/10 py-2 text-amber-700">
 					<span className="text-center">Sin puntos medidos</span>
 					<Link
-						to="/iluminacion/reportes/$id/areas/$areaId/puntos"
+						to="/iluminacion/reportes/$id/medicion/areas/$areaId/puntos"
 						params={{
 							id,
 							areaId: area.id,
@@ -275,12 +235,11 @@ function Area({ area }: { area: AreaIluminacionType }) {
 	)
 }
 
-function NoAreas() {
-	const { id } = Route.useParams()
+function NoAreas({ id }: { id: string }) {
 	const areaId = crypto.randomUUID().toString()
 	return (
 		<div className="w-5/6 flex flex-col gap-8 items-center justify-center mx-auto">
-			<div className="flex items-center justify-between py-1 border-b border-foreground/50 mt-10 mb-4 w-full sm:w-5/6 mx-auto">
+			<div className="flex items-center justify-between py-1 border-b border-foreground/50 mt-10 mb-4 w-full mx-auto">
 				<span className="text-lg">Mediciones en Área</span>
 				<RulerDimensionLine className="size-6" />
 			</div>
@@ -289,7 +248,7 @@ function NoAreas() {
 			</span>
 			{/* <CreateAreaAlert /> */}
 			<Link
-				to="/iluminacion/reportes/$id/areas/$areaId/create-area"
+				to="/iluminacion/reportes/$id/medicion/areas/$areaId/create-area"
 				params={{
 					id,
 					areaId,
@@ -304,7 +263,7 @@ function NoAreas() {
 	)
 }
 
-export default function AreaDropdownMenu({
+export function AreaDropdownMenu({
 	area,
 	id,
 }: {
@@ -323,7 +282,7 @@ export default function AreaDropdownMenu({
 				<DropdownMenuGroup className="flex flex-col bg-accent ring-[1px] ring-foreground/20 rounded-lg p-2">
 					{/* <EditAreaAlert area={area} setIsMenuOpen={setIsMenuOpen} /> */}
 					<Link
-						to={"/iluminacion/reportes/$id/areas/$areaId/edit-area"}
+						to={"/iluminacion/reportes/$id/medicion/areas/$areaId/edit-area"}
 						params={{
 							id,
 							areaId: area.id,
@@ -343,37 +302,4 @@ export default function AreaDropdownMenu({
 
 function checkAllPuntos(area: AreaIluminacionType) {
 	return area.puntos.every(punto => punto > 0)
-}
-
-function Localizadas() {
-	return <NoLocalizada />
-}
-
-function NoLocalizada() {
-	const { id } = Route.useParams()
-	const areaId = crypto.randomUUID().toString()
-	return (
-		<div className="w-5/6 h-[30svh] flex flex-col gap-8 items-center justify-center mx-auto">
-			<div className="flex items-center justify-between py-1 border-b border-foreground/50 mt-10 mb-4 w-full sm:w-5/6 mx-auto">
-				<span className="text-lg">Mediciones Localizadas</span>
-				<Telescope className="size-6" />
-			</div>
-			<span className="text-sm font-medium text-gray-500 italic text-center text-pretty">
-				Parece que no tienes mediciones localizadas
-			</span>
-			{/* <CreateAreaAlert /> */}
-			<Link
-				to="/iluminacion/reportes/$id/areas/$areaId/create-localizada"
-				params={{
-					id,
-					areaId,
-				}}
-				className="flex justify-center items-center w-full"
-			>
-				<Button className="w-1/2 min-w-40 sm:w-1/6 mx-auto py-5 bg-primary ring-foreground/25">
-					+ Crear localizada
-				</Button>
-			</Link>
-		</div>
-	)
 }

@@ -31,7 +31,7 @@ function RouteComponent() {
 	useScrollTop()
 	return (
 		<article className="w-full min-h-svh flex flex-col items-center gap-0 relative mb-60">
-			<BackChevron to="/iluminacion/reportes/$id/areas" params={{ id }} />
+			<BackChevron to="/iluminacion/reportes/$id/medicion" params={{ id }} />
 			<Title text="Nuevo Informe" className="mt-15" />
 			<Suspense
 				fallback={

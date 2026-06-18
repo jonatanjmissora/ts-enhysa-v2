@@ -1,10 +1,20 @@
 import BackChevron from "#/components/back-chevron"
+import Loading from "#/components/loading"
 import Title from "#/components/title"
 import useScrollTop from "#/hooks/scroll-top"
 import { useSuspenseQuery } from "@tanstack/react-query"
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router"
+import { createFileRoute, Link } from "@tanstack/react-router"
 import { Suspense, useState } from "react"
+import { areaQueryOptions } from "../../../../../../../../../queries/reportes/iluminacion/areas/areas-query"
+import type { AreaIluminacionType } from "../../../../../../../../../db/reportes/iluminacion/areas/schema"
+import {
+	checkAreaGeneralDifferences,
+	getIndiceDeLocal,
+	getIndiceRedondeo,
+} from "#/lib/utils"
+import { useUpdateArea } from "../../../../../../../../../queries/reportes/iluminacion/areas/use-update-area"
 import { useForm } from "@tanstack/react-form"
+import { updateAreaValidator } from "../../../../../../../../../db/reportes/iluminacion/areas/area-validator"
 import {
 	Field,
 	FieldError,
@@ -12,7 +22,7 @@ import {
 	FieldLabel,
 } from "#/components/ui/field"
 import { Input } from "#/components/ui/input"
-import { Box, Lightbulb, Loader, Telescope } from "lucide-react"
+import { Box, Lightbulb, Loader } from "lucide-react"
 import {
 	Select,
 	SelectContent,
@@ -33,35 +43,23 @@ import {
 	type ValoresRequeridosType,
 } from "#/lib/constants"
 import { Textarea } from "#/components/ui/textarea"
-import { Label } from "#/components/ui/label"
 import { FilesDropzone } from "#/components/upload-button"
-import {
-	getIndiceDeLocal,
-	getIndiceRedondeo,
-} from "#/components/reportes/iluminacion/pdf/page-5"
-import Formula from "#/components/reportes/iluminacion/nuevo-informe/areas/formula"
+import Formula from "#/components/reportes/iluminacion/nuevo-informe/mediciones/formula"
 import { Button } from "#/components/ui/button"
-import Loading from "#/components/loading"
-import { reporteQueryOptions } from "../../../../../../../../../queries/reportes/iluminacion/reportes-query"
-import { useCreateArea } from "../../../../../../../../../queries/reportes/iluminacion/areas/use-create-area"
-import {
-	areaFormValidator,
-	defaultAreaData,
-} from "../../../../../../../../../db/reportes/iluminacion/areas/area-validator"
+import { Label } from "#/components/ui/label"
 
 export const Route = createFileRoute(
-	"/_protected/iluminacion/reportes/$id/_CRUD/areas/$areaId/create-area"
+	"/_protected/iluminacion/reportes/$id/medicion/areas/$areaId/solo/edit-area"
 )({
 	component: RouteComponent,
 })
 
 function RouteComponent() {
 	useScrollTop()
-	const params = Route.useParams()
 	return (
 		<article className="w-full min-h-svh flex flex-col items-center gap-0 relative mb-60">
-			<BackChevron to="/iluminacion/reportes/$id/areas" params={params} />
-			<Title text="Nueva Area" className="mt-15" />
+			<BackChevron to="/iluminacion/reportes/$id/medicion/areass" />
+			<Title text="Editar Area" className="mt-15" />
 			<Suspense
 				fallback={
 					<Loading
@@ -70,45 +68,61 @@ function RouteComponent() {
 					/>
 				}
 			>
-				<CreateArea />
+				<EditAreaData />
 			</Suspense>
 		</article>
 	)
 }
 
-function CreateArea() {
-	const { id } = Route.useParams()
+function EditAreaData() {
+	const { id, areaId } = Route.useParams()
+	const { data: area } = useSuspenseQuery(areaQueryOptions({ areaId }))
 
-	const [planoFiles, setPlanoFiles] = useState<string[]>([])
-	const { data: reporte } = useSuspenseQuery(reporteQueryOptions({ id }))
-	const navigate = useNavigate()
-	// Pass medicionTipo where needed (example: include in navigation or API calls)
-	const { mutateAsync: createArea, isPending, error } = useCreateArea()
+	if (!area) return <span>El area no existe</span>
+
+	return <EditArea id={id} area={area} />
+}
+
+function EditArea({ id, area }: { id: string; area: AreaIluminacionType }) {
+	const [planoFiles, setPlanoFiles] = useState<string[]>(area.imagenes || [])
+	const navigate = Route.useNavigate()
+
+	const { mutateAsync: updateArea, isPending, error } = useUpdateArea()
 
 	const form = useForm({
-		defaultValues: defaultAreaData,
+		defaultValues: {
+			...area,
+		},
 		validators: {
-			onSubmit: areaFormValidator,
+			onSubmit: updateAreaValidator,
 		},
 		onSubmit: async ({ value }) => {
-			if (!reporte) return
-			const newArea = {
-				...value,
-				reportId: reporte.id,
-				imagenes: planoFiles,
-				id: crypto.randomUUID(),
+			if (checkAreaGeneralDifferences(value, area)) {
+				return navigate({
+					to: "/iluminacion/reportes/$id/medicion/areas/$areaId/solo/puntos",
+					params: {
+						id: id,
+						areaId: area.id,
+					},
+				})
 			}
-			const result = await createArea({ data: newArea })
+			const newArea: AreaIluminacionType = {
+				...value,
+				userId: area.userId,
+				id: area.id,
+				imagenes: planoFiles,
+			}
+			const result = await updateArea({ data: newArea })
 			if (!result) {
-				console.error("Error al crear area", error)
+				console.error("Error al actualizar area", error)
 				return
 			}
-			console.log("Área creada exitosamente")
+			console.log("Area actualizada exitosamente")
 			navigate({
-				to: `/iluminacion/reportes/$id/areas/$areaId/puntos`,
+				to: "/iluminacion/reportes/$id/medicion/areas/$areaId/solo/puntos",
 				params: {
-					id,
-					areaId: newArea.id,
+					id: id,
+					areaId: area.id,
 				},
 			})
 		},
@@ -142,7 +156,7 @@ function CreateArea() {
 										onFocus={e => e.target.select()}
 										id={field.name}
 										name={field.name}
-										value={field.state.value}
+										value={field.state.value.toUpperCase()}
 										onBlur={field.handleBlur}
 										onChange={e => field.handleChange(e.target.value)}
 										aria-invalid={isInvalid}
@@ -175,7 +189,7 @@ function CreateArea() {
 										onFocus={e => e.target.select()}
 										id={field.name}
 										name={field.name}
-										value={field.state.value}
+										value={field.state.value.toUpperCase()}
 										onBlur={field.handleBlur}
 										onChange={e => field.handleChange(e.target.value)}
 										aria-invalid={isInvalid}
@@ -199,7 +213,7 @@ function CreateArea() {
 					</div>
 				</div>
 
-				<div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-5/6 mb-10 mx-auto">
+				<div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-5/6 mt-10 mx-auto">
 					<form.Field
 						name="iluminacionTipo"
 						children={field => {
@@ -452,53 +466,11 @@ function CreateArea() {
 									<Textarea
 										id={field.name}
 										name={field.name}
-										value={field.state.value || ""}
-										onBlur={field.handleBlur}
-										onChange={e => field.handleChange(e.target.value)}
-										aria-invalid={isInvalid}
-										className="bg-background sm:bg-accent text-right text-sm"
-									/>
-									{isInvalid && (
-										<FieldError
-											errors={field.state.meta.errors}
-											className="text-xs 2xl:text-sm absolute -bottom-4 left-0"
-										/>
-									)}
-								</Field>
-							)
-						}}
-					/>
-				</div>
-
-				<div className="flex items-center justify-between border-b border-purple-700/50 dark:border-purple-300/50 my-10 w-full">
-					<div className="textL py-2 px-3 flex items-center gap-8 justify-between w-full">
-						Medición Localizada{" "}
-						<Telescope className="sm:size-7 2xl:size-9 text-purple-700/70 dark:text-purple-300/75" />
-					</div>
-				</div>
-
-				<div className="grid grid-cols-1 sm:grid-cols-2 gap-8 w-5/6 mb-10 mx-auto items-end">
-					<form.Field
-						name="nombre"
-						children={field => {
-							const isInvalid =
-								field.state.meta.isTouched && !field.state.meta.isValid
-							return (
-								<Field data-invalid={isInvalid} className="relative gap-1">
-									<FieldLabel
-										htmlFor={field.name}
-										className="flex items-center gap-3 textL"
-									>
-										Nombre de la medición Localizada
-									</FieldLabel>
-									<Input
-										onFocus={e => e.target.select()}
-										id={field.name}
-										name={field.name}
 										value={field.state.value}
 										onBlur={field.handleBlur}
 										onChange={e => field.handleChange(e.target.value)}
 										aria-invalid={isInvalid}
+										className="bg-background sm:bg-accent text-sm"
 									/>
 									{isInvalid && (
 										<FieldError
@@ -510,69 +482,6 @@ function CreateArea() {
 							)
 						}}
 					/>
-
-					<form.Field
-						name="valorRequerido"
-						children={field => {
-							const isInvalid =
-								field.state.meta.isTouched && !field.state.meta.isValid
-
-							return (
-								<Field data-invalid={isInvalid} className="relative gap-1">
-									<FieldLabel
-										htmlFor={field.name}
-										className="flex items-center gap-3 textL"
-									>
-										Valor Requerido Localizado
-									</FieldLabel>
-
-									<Select
-										value={field.state.value || ""}
-										onValueChange={value =>
-											field.handleChange(value as ValoresRequeridosType)
-										}
-									>
-										<SelectTrigger
-											id={field.name}
-											name={field.name}
-											onBlur={field.handleBlur}
-											aria-invalid={isInvalid}
-											className="w-full justify-end"
-										>
-											<SelectValue placeholder="Seleccione Valor" />
-										</SelectTrigger>
-
-										<SelectContent position="popper">
-											<SelectGroup>
-												<SelectLabel>Valores</SelectLabel>
-
-												{VALORES_REQUERIDOS?.map(valorRequerido => (
-													<SelectItem
-														key={valorRequerido}
-														value={valorRequerido}
-														className="justify-center"
-													>
-														{valorRequerido.toUpperCase()}
-													</SelectItem>
-												))}
-											</SelectGroup>
-										</SelectContent>
-									</Select>
-
-									{isInvalid && (
-										<FieldError
-											errors={field.state.meta.errors}
-											className="text-xs 2xl:text-sm absolute -bottom-4 left-0"
-										/>
-									)}
-								</Field>
-							)
-						}}
-					/>
-
-					<Button type="button" onClick={() => {}} className="w-1/2 ml-auto">
-						Agregar Otra
-					</Button>
 				</div>
 
 				<div className="flex items-center justify-between border-b border-orange-700/50 dark:border-orange-300/50 my-10 w-full">
@@ -582,7 +491,7 @@ function CreateArea() {
 					</div>
 				</div>
 
-				<div className="grid grid-cols-1 sm:grid-cols-2 gap-8 w-5/6 mb-10 mx-auto items-end">
+				<div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-5/6 mt-10 mx-auto">
 					<form.Field
 						name="largo"
 						children={field => {
@@ -595,11 +504,11 @@ function CreateArea() {
 								>
 									<FieldLabel htmlFor={field.name}>Largo(m)</FieldLabel>
 									<Input
+										onFocus={e => e.target.select()}
 										id={field.name}
 										name={field.name}
 										value={field.state.value}
 										onBlur={field.handleBlur}
-										onFocus={e => e.target.select()}
 										onChange={e => field.handleChange(Number(e.target.value))}
 										aria-invalid={isInvalid}
 										placeholder="Ej. 4"
@@ -629,11 +538,11 @@ function CreateArea() {
 								>
 									<FieldLabel htmlFor={field.name}>Ancho(m)</FieldLabel>
 									<Input
+										onFocus={e => e.target.select()}
 										id={field.name}
 										name={field.name}
 										value={field.state.value}
 										onBlur={field.handleBlur}
-										onFocus={e => e.target.select()}
 										onChange={e => field.handleChange(Number(e.target.value))}
 										aria-invalid={isInvalid}
 										placeholder="Ej. 5"
@@ -665,11 +574,11 @@ function CreateArea() {
 										Alto del montaje (m)
 									</FieldLabel>
 									<Input
+										onFocus={e => e.target.select()}
 										id={field.name}
 										name={field.name}
 										value={field.state.value}
 										onBlur={field.handleBlur}
-										onFocus={e => e.target.select()}
 										onChange={e => field.handleChange(Number(e.target.value))}
 										aria-invalid={isInvalid}
 										placeholder="Ej. 2"
@@ -686,24 +595,9 @@ function CreateArea() {
 							)
 						}}
 					/>
-
-					<form.Subscribe
-						selector={state =>
-							`${state.values.largo}_${state.values.ancho}_${state.values.alto}`
-						}
-						children={values => {
-							const [largo, ancho, alto] = values.split("_").map(Number)
-							if (largo * ancho * alto < 0)
-								return (
-									<span className="text-red-700/50 italic text-sm">
-										Los valores ingresados deben de ser positivos.
-									</span>
-								)
-						}}
-					/>
 				</div>
 
-				<div className="flex flex-col gap-1 w-5/6 mx-auto sm:w-full mb-10">
+				<div className="flex flex-col gap-1 w-5/6 mx-auto sm:w-full my-10">
 					<Label className="tracking-wider" htmlFor="largo">
 						Imágenes del Área
 					</Label>
@@ -728,22 +622,25 @@ function CreateArea() {
 						if (largo * ancho * alto === 0) return null
 						const indiceDeLocal = getIndiceDeLocal(largo, ancho, alto)
 						const newIndiceRedondeo = getIndiceRedondeo(indiceDeLocal)
-
 						return (
-							<Formula
-								alto={Number(alto)}
-								ancho={Number(ancho)}
-								largo={Number(largo)}
-								indiceDeLocal={indiceDeLocal}
-								indiceRedondeo={newIndiceRedondeo}
-							/>
+							largo > 0 &&
+							ancho > 0 &&
+							alto > 0 && (
+								<Formula
+									alto={Number(alto)}
+									ancho={Number(ancho)}
+									largo={Number(largo)}
+									indiceDeLocal={indiceDeLocal}
+									indiceRedondeo={newIndiceRedondeo}
+								/>
+							)
 						)
 					}}
 				/>
 
-				<Field className="flex flex-col sm:flex-row justify-center gap-4 items-center w-5/6 sm:w-full mx-auto my-10">
+				<Field className="flex flex-col sm:flex-row justify-center gap-4 items-center w-5/6 sm:w-full mx-auto mt-10">
 					<Link
-						to="/iluminacion/reportes/$id/areas"
+						to="/iluminacion/reportes/$id/medicion/areass"
 						params={{ id }}
 						className="flex-1"
 					>
@@ -753,13 +650,13 @@ function CreateArea() {
 							disabled={isPending}
 							className="flex-1 py-5 w-full"
 						>
-							Volver
+							Cancelar
 						</Button>
 					</Link>
 					<Button
 						type="submit"
 						disabled={isPending}
-						className="flex-1 py-3 w-full"
+						className="flex-1 py-5 w-full"
 					>
 						{isPending ? (
 							<div className="flex gap-2 w-full justify-center items-center">
@@ -773,7 +670,7 @@ function CreateArea() {
 
 				{error && (
 					<p className="text-center italic textXS text-red-500/70">
-						{error?.message}
+						{error.message}
 					</p>
 				)}
 

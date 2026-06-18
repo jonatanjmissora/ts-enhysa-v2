@@ -88,7 +88,7 @@ function ReporteNuevoForm() {
 			}
 			console.log("Reporte creado exitosamente")
 			navigate({
-				to: "/iluminacion/reportes/$id/areas",
+				to: "/iluminacion/reportes/$id/medicion",
 				params: {
 					id: result.id,
 				},

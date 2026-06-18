@@ -5,7 +5,7 @@ import { deleteInstrumentoDB } from "../../db/instrumentos/delete-instrumento-db
 import { instrumentoIdValidator } from "../../db/instrumentos/instrumento-validator"
 
 export const deleteInstrumentoServer = createServerFn({ method: "POST" })
-	.inputValidator(instrumentoIdValidator)
+	.validator(instrumentoIdValidator)
 	.handler(async ({ data }) => {
 		const request = getRequest()
 		const session = await protectedServerFn(request)

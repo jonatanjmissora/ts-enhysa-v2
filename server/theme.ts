@@ -11,7 +11,7 @@ export const getThemeServerFn = createServerFn().handler(() => {
 })
 
 export const setThemeServerFn = createServerFn()
-	.inputValidator(setThemeValidator)
+	.validator(setThemeValidator)
 	.handler(({ data }) => {
 		setCookie(storageKey, data)
 	})

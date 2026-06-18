@@ -10,6 +10,7 @@ import type { EmpresaFormType } from "../../db/empresas/empresa-validator"
 import type { ReporteNuevoFormType } from "../../db/reportes/iluminacion/reporte-validator"
 import type { ReporteIluminacionType } from "../../db/reportes/iluminacion/schema"
 import type { AreaIluminacionType } from "../../db/reportes/iluminacion/areas/schema"
+import type { LocalizadaIluminacionType } from "../../db/reportes/iluminacion/localizadas/schema"
 
 export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs))
@@ -112,6 +113,23 @@ export const checkAreaGeneralDifferences = (
 		formValues.ancho === area.ancho &&
 		formValues.alto === area.alto &&
 		JSON.stringify(formValues.imagenes) === JSON.stringify(area.imagenes)
+	)
+}
+
+export const checkLocalizadaDifferences = (
+	formValues: LocalizadaIluminacionType,
+	localizada: LocalizadaIluminacionType
+) => {
+	return (
+		formValues.nombre === localizada.nombre &&
+		formValues.tipo === localizada.tipo &&
+		formValues.iluminacionTipo === localizada.iluminacionTipo &&
+		formValues.iluminacionFuente === localizada.iluminacionFuente &&
+		formValues.iluminacion === localizada.iluminacion &&
+		formValues.valorRequerido === localizada.valorRequerido &&
+		formValues.observaciones === localizada.observaciones &&
+		formValues.valor === localizada.valor &&
+		JSON.stringify(formValues.imagenes) === JSON.stringify(localizada.imagenes)
 	)
 }
 

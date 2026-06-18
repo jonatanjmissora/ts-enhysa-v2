@@ -5,7 +5,7 @@ import { protectedServerFn } from "@/lib/protected-server-fn"
 import { instrumentoFormValidator } from "../../db/instrumentos/instrumento-validator"
 
 export const createInstrumentoServer = createServerFn({ method: "POST" })
-	.inputValidator(instrumentoFormValidator)
+	.validator(instrumentoFormValidator)
 	.handler(async ({ data }) => {
 		const request = getRequest()
 		const session = await protectedServerFn(request)

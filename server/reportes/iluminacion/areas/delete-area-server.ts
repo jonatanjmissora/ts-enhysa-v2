@@ -5,7 +5,7 @@ import { deleteAreaDB } from "../../../../db/reportes/iluminacion/areas/delete-a
 import { protectedServerFn } from "#/lib/protected-server-fn"
 
 export const deleteAreaServer = createServerFn({ method: "POST" })
-	.inputValidator(areaIdValidator)
+	.validator(areaIdValidator)
 	.handler(async ({ data }) => {
 		const request = getRequest()
 		const session = await protectedServerFn(request)

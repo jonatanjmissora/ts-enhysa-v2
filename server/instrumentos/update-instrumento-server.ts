@@ -5,7 +5,7 @@ import { updateInstrumentoDB } from "../../db/instrumentos/update-instrumento-db
 import { updateInstrumentoValidator } from "../../db/instrumentos/instrumento-validator"
 
 export const updateInstrumentoServer = createServerFn({ method: "POST" })
-	.inputValidator(updateInstrumentoValidator)
+	.validator(updateInstrumentoValidator)
 	.handler(async ({ data }) => {
 		const request = getRequest()
 		const session = await protectedServerFn(request)

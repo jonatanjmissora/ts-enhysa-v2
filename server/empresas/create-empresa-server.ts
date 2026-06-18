@@ -5,7 +5,7 @@ import { createEmpresaDB } from "../../db/empresas/create-empresa-db"
 import { empresaFormValidator } from "../../db/empresas/empresa-validator"
 
 export const createEmpresaServer = createServerFn({ method: "POST" })
-	.inputValidator(empresaFormValidator)
+	.validator(empresaFormValidator)
 	.handler(async ({ data }) => {
 		const request = getRequest()
 		const session = await protectedServerFn(request)

@@ -112,7 +112,7 @@ function EditReporteGeneral() {
 				reporte.clima[2] === value.clima[2]
 			) {
 				return navigate({
-					to: "/iluminacion/reportes/$id/areas",
+					to: "/iluminacion/reportes/$id/medicion",
 					params: {
 						id: id,
 					},
@@ -125,7 +125,7 @@ function EditReporteGeneral() {
 			}
 			console.log("Reporte editado exitosamente")
 			navigate({
-				to: "/iluminacion/reportes/$id/areas",
+				to: "/iluminacion/reportes/$id/medicion",
 				params: {
 					id: id,
 				},

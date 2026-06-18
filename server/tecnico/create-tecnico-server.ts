@@ -5,7 +5,7 @@ import { createTecnicoDB } from "../../db/tecnicos/create-tecnico-db"
 import { tecnicoFormValidator } from "../../db/tecnicos/tecnico-validator"
 
 export const createTecnicoServer = createServerFn({ method: "POST" })
-	.inputValidator(tecnicoFormValidator)
+	.validator(tecnicoFormValidator)
 	.handler(async ({ data }) => {
 		const request = getRequest()
 		const session = await protectedServerFn(request)

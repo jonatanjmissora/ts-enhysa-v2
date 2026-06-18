@@ -5,16 +5,7 @@ import useScrollTop from "#/hooks/scroll-top"
 import { useSuspenseQuery } from "@tanstack/react-query"
 import { createFileRoute, Link } from "@tanstack/react-router"
 import { Suspense, useState } from "react"
-import { areaQueryOptions } from "../../../../../../../../../queries/reportes/iluminacion/areas/areas-query"
-import type { AreaIluminacionType } from "../../../../../../../../../db/reportes/iluminacion/areas/schema"
-import {
-	checkAreaGeneralDifferences,
-	getIndiceDeLocal,
-	getIndiceRedondeo,
-} from "#/lib/utils"
-import { useUpdateArea } from "../../../../../../../../../queries/reportes/iluminacion/areas/use-update-area"
 import { useForm } from "@tanstack/react-form"
-import { updateAreaValidator } from "../../../../../../../../../db/reportes/iluminacion/areas/area-validator"
 import {
 	Field,
 	FieldError,
@@ -22,7 +13,7 @@ import {
 	FieldLabel,
 } from "#/components/ui/field"
 import { Input } from "#/components/ui/input"
-import { Box, Lightbulb, Loader } from "lucide-react"
+import { Lightbulb, Loader } from "lucide-react"
 import {
 	Select,
 	SelectContent,
@@ -44,12 +35,16 @@ import {
 } from "#/lib/constants"
 import { Textarea } from "#/components/ui/textarea"
 import { FilesDropzone } from "#/components/upload-button"
-import Formula from "#/components/reportes/iluminacion/nuevo-informe/areas/formula"
 import { Button } from "#/components/ui/button"
 import { Label } from "#/components/ui/label"
+import { localizadaQueryOptions } from "../../../../../../../../../queries/reportes/iluminacion/localizadas/localizadas-query"
+import type { LocalizadaIluminacionType } from "../../../../../../../../../db/reportes/iluminacion/localizadas/schema"
+import { useUpdateLocalizada } from "../../../../../../../../../queries/reportes/iluminacion/localizadas/use-update-localizada"
+import { updateLocalizadaValidator } from "../../../../../../../../../db/reportes/iluminacion/localizadas/localizada-validator"
+import { checkLocalizadaDifferences } from "#/lib/utils"
 
 export const Route = createFileRoute(
-	"/_protected/iluminacion/reportes/$id/_CRUD/areas/$areaId/solo/edit-area"
+	"/_protected/iluminacion/reportes/$id/medicion/localizadas/$localizadaId/edit-localizada"
 )({
 	component: RouteComponent,
 })
@@ -58,7 +53,7 @@ function RouteComponent() {
 	useScrollTop()
 	return (
 		<article className="w-full min-h-svh flex flex-col items-center gap-0 relative mb-60">
-			<BackChevron to="/iluminacion/reportes/$id/areass" />
+			<BackChevron to="/iluminacion/reportes/$id/medicion" />
 			<Title text="Editar Area" className="mt-15" />
 			<Suspense
 				fallback={
@@ -68,61 +63,73 @@ function RouteComponent() {
 					/>
 				}
 			>
-				<EditAreaData />
+				<EditLocalizadaData />
 			</Suspense>
 		</article>
 	)
 }
 
-function EditAreaData() {
-	const { id, areaId } = Route.useParams()
-	const { data: area } = useSuspenseQuery(areaQueryOptions({ areaId }))
+function EditLocalizadaData() {
+	const { id, localizadaId } = Route.useParams()
+	const { data: localizada } = useSuspenseQuery(
+		localizadaQueryOptions({ localizadaId })
+	)
 
-	if (!area) return <span>El area no existe</span>
+	if (!localizada) return <span>La localizada no existe</span>
 
-	return <EditArea id={id} area={area} />
+	return <EditLocalizada id={id} localizada={localizada} />
 }
 
-function EditArea({ id, area }: { id: string; area: AreaIluminacionType }) {
-	const [planoFiles, setPlanoFiles] = useState<string[]>(area.imagenes || [])
+function EditLocalizada({
+	id,
+	localizada,
+}: {
+	id: string
+	localizada: LocalizadaIluminacionType
+}) {
+	const [planoFiles, setPlanoFiles] = useState<string[]>(
+		localizada.imagenes || []
+	)
 	const navigate = Route.useNavigate()
 
-	const { mutateAsync: updateArea, isPending, error } = useUpdateArea()
+	const {
+		mutateAsync: updateLocalizada,
+		isPending,
+		error,
+	} = useUpdateLocalizada()
 
 	const form = useForm({
 		defaultValues: {
-			...area,
+			...localizada,
 		},
 		validators: {
-			onSubmit: updateAreaValidator,
+			onSubmit: updateLocalizadaValidator,
 		},
 		onSubmit: async ({ value }) => {
-			if (checkAreaGeneralDifferences(value, area)) {
+			if (checkLocalizadaDifferences(value, localizada)) {
 				return navigate({
-					to: "/iluminacion/reportes/$id/areas/$areaId/solo/puntos",
+					to: "/iluminacion/reportes/$id/medicion",
 					params: {
 						id: id,
-						areaId: area.id,
 					},
 				})
 			}
-			const newArea: AreaIluminacionType = {
+			const newLocalizada: LocalizadaIluminacionType = {
 				...value,
-				userId: area.userId,
-				id: area.id,
+				userId: localizada.userId,
+				id: localizada.id,
 				imagenes: planoFiles,
 			}
-			const result = await updateArea({ data: newArea })
+			const result = await updateLocalizada({ data: newLocalizada })
 			if (!result) {
-				console.error("Error al actualizar area", error)
+				console.error("Error al actualizar la localizada", error)
 				return
 			}
-			console.log("Area actualizada exitosamente")
+			console.log("La localizada actualizada exitosamente")
 			navigate({
-				to: "/iluminacion/reportes/$id/areas/$areaId/solo/puntos",
+				to: "/iluminacion/reportes/$id/medicion",
 				params: {
 					id: id,
-					areaId: area.id,
 				},
 			})
 		},
@@ -403,7 +410,7 @@ function EditArea({ id, area }: { id: string; area: AreaIluminacionType }) {
 										htmlFor={field.name}
 										className="flex items-center gap-3 textL"
 									>
-										Valor Requerido
+										Valor Requerido (lux)
 									</FieldLabel>
 
 									<Select
@@ -451,6 +458,40 @@ function EditArea({ id, area }: { id: string; area: AreaIluminacionType }) {
 					/>
 
 					<form.Field
+						name="valor"
+						children={field => {
+							const isInvalid =
+								field.state.meta.isTouched && !field.state.meta.isValid
+							return (
+								<Field data-invalid={isInvalid} className="relative gap-1">
+									<FieldLabel
+										htmlFor={field.name}
+										className="flex items-center gap-3 textL"
+									>
+										Valor (lux)
+									</FieldLabel>
+									<Input
+										id={field.name}
+										name={field.name}
+										value={field.state.value || ""}
+										onBlur={field.handleBlur}
+										onChange={e => field.handleChange(Number(e.target.value))}
+										aria-invalid={isInvalid}
+										type="number"
+										className="bg-background sm:bg-accent text-sm text-center"
+									/>
+									{isInvalid && (
+										<FieldError
+											errors={field.state.meta.errors}
+											className="text-xs 2xl:text-sm absolute -bottom-4 left-0"
+										/>
+									)}
+								</Field>
+							)
+						}}
+					/>
+
+					<form.Field
 						name="observaciones"
 						children={field => {
 							const isInvalid =
@@ -484,122 +525,9 @@ function EditArea({ id, area }: { id: string; area: AreaIluminacionType }) {
 					/>
 				</div>
 
-				<div className="flex items-center justify-between border-b border-orange-700/50 dark:border-orange-300/50 my-10 w-full">
-					<div className="textL py-2 px-3 flex items-center gap-8 justify-between w-full">
-						Dimensiones{" "}
-						<Box className="sm:size-7 2xl:size-9 text-orange-700/70 dark:text-orange-300/75" />
-					</div>
-				</div>
-
-				<div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-5/6 mt-10 mx-auto">
-					<form.Field
-						name="largo"
-						children={field => {
-							const isInvalid =
-								field.state.meta.isTouched && !field.state.meta.isValid
-							return (
-								<Field
-									data-invalid={isInvalid}
-									className="relative flex-row gap-1"
-								>
-									<FieldLabel htmlFor={field.name}>Largo(m)</FieldLabel>
-									<Input
-										onFocus={e => e.target.select()}
-										id={field.name}
-										name={field.name}
-										value={field.state.value}
-										onBlur={field.handleBlur}
-										onChange={e => field.handleChange(Number(e.target.value))}
-										aria-invalid={isInvalid}
-										placeholder="Ej. 4"
-										type="number"
-										className="text-center text-lg w-1/2"
-									/>
-									{isInvalid && (
-										<FieldError
-											errors={field.state.meta.errors}
-											className="text-xs 2xl:text-sm absolute -bottom-4 right-0"
-										/>
-									)}
-								</Field>
-							)
-						}}
-					/>
-
-					<form.Field
-						name="ancho"
-						children={field => {
-							const isInvalid =
-								field.state.meta.isTouched && !field.state.meta.isValid
-							return (
-								<Field
-									data-invalid={isInvalid}
-									className="relative flex-row gap-1"
-								>
-									<FieldLabel htmlFor={field.name}>Ancho(m)</FieldLabel>
-									<Input
-										onFocus={e => e.target.select()}
-										id={field.name}
-										name={field.name}
-										value={field.state.value}
-										onBlur={field.handleBlur}
-										onChange={e => field.handleChange(Number(e.target.value))}
-										aria-invalid={isInvalid}
-										placeholder="Ej. 5"
-										type="number"
-										className="text-center text-lg w-1/2"
-									/>
-									{isInvalid && (
-										<FieldError
-											errors={field.state.meta.errors}
-											className="text-xs 2xl:text-sm absolute -bottom-4 right-0"
-										/>
-									)}
-								</Field>
-							)
-						}}
-					/>
-
-					<form.Field
-						name="alto"
-						children={field => {
-							const isInvalid =
-								field.state.meta.isTouched && !field.state.meta.isValid
-							return (
-								<Field
-									data-invalid={isInvalid}
-									className="relative flex-row gap-1"
-								>
-									<FieldLabel htmlFor={field.name}>
-										Alto del montaje (m)
-									</FieldLabel>
-									<Input
-										onFocus={e => e.target.select()}
-										id={field.name}
-										name={field.name}
-										value={field.state.value}
-										onBlur={field.handleBlur}
-										onChange={e => field.handleChange(Number(e.target.value))}
-										aria-invalid={isInvalid}
-										placeholder="Ej. 2"
-										type="number"
-										className="text-center text-lg w-1/2"
-									/>
-									{isInvalid && (
-										<FieldError
-											errors={field.state.meta.errors}
-											className="text-xs 2xl:text-sm absolute -bottom-4 right-0"
-										/>
-									)}
-								</Field>
-							)
-						}}
-					/>
-				</div>
-
 				<div className="flex flex-col gap-1 w-5/6 mx-auto sm:w-full my-10">
 					<Label className="tracking-wider" htmlFor="largo">
-						Imágenes del Área
+						Imágenes de la localizada
 					</Label>
 					<FilesDropzone
 						text="Imágenes Area"
@@ -613,54 +541,21 @@ function EditArea({ id, area }: { id: string; area: AreaIluminacionType }) {
 					/>
 				</div>
 
-				<form.Subscribe
-					selector={state =>
-						`${state.values.largo}-${state.values.ancho}-${state.values.alto}`
-					}
-					children={values => {
-						const [largo, ancho, alto] = values.split("-").map(Number)
-						if (largo * ancho * alto === 0) return null
-						const indiceDeLocal = getIndiceDeLocal(largo, ancho, alto)
-						const newIndiceRedondeo = getIndiceRedondeo(indiceDeLocal)
-						return (
-							largo > 0 &&
-							ancho > 0 &&
-							alto > 0 && (
-								<Formula
-									alto={Number(alto)}
-									ancho={Number(ancho)}
-									largo={Number(largo)}
-									indiceDeLocal={indiceDeLocal}
-									indiceRedondeo={newIndiceRedondeo}
-								/>
-							)
-						)
-					}}
-				/>
-
-				<Field className="flex flex-col sm:flex-row justify-center gap-4 items-center w-5/6 sm:w-full mx-auto mt-10">
-					<Link
-						to="/iluminacion/reportes/$id/areass"
-						params={{ id }}
-						className="flex-1"
-					>
-						<Button
-							variant="outline"
-							type="button"
-							disabled={isPending}
-							className="flex-1 py-5 w-full"
-						>
-							Cancelar
-						</Button>
-					</Link>
+				<Field className="flex flex-col justify-center gap-4 sm:flex-row items-center w-5/6 mx-auto sm:w-full mt-10">
 					<Button
-						type="submit"
+						variant="outline"
+						type="button"
 						disabled={isPending}
-						className="flex-1 py-5 w-full"
+						className="flex-1 py-4"
 					>
+						<Link to={`/iluminacion/reportes/$id/medicion`} params={{ id }}>
+							Volver
+						</Link>
+					</Button>
+					<Button type="submit" disabled={isPending} className="flex-1 py-4">
 						{isPending ? (
-							<div className="flex gap-2 w-full justify-center items-center">
-								Guardando... <Loader className="animate-spin size-4"></Loader>
+							<div className="flex gap-2 w-full justify-center">
+								Editando... <Loader className="animate-spin size-4"></Loader>
 							</div>
 						) : (
 							"Siguiente"

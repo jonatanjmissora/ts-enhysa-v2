@@ -5,7 +5,7 @@ import { reporteServerValidator } from "../../../db/reportes/iluminacion/reporte
 import { createReporteNuevoDB } from "../../../db/reportes/iluminacion/create-reporte-nuevo-db"
 
 export const createReporteNuevoServer = createServerFn({ method: "POST" })
-	.inputValidator(reporteServerValidator)
+	.validator(reporteServerValidator)
 	.handler(async ({ data }) => {
 		const request = getRequest()
 		const session = await protectedServerFn(request)
@@ -28,7 +28,7 @@ export const createReporteNuevoServer = createServerFn({ method: "POST" })
 	})
 
 // export const createReporteServer = createServerFn({ method: "POST" })
-// 	.inputValidator(reporteServerValidator)
+// 	.validator(reporteServerValidator)
 // 	.handler(async ({ data }) => {
 // 		const request = getRequest()
 // 		const session = await protectedServerFn(request)
