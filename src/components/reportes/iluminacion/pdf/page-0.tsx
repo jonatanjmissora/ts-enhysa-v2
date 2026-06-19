@@ -68,7 +68,7 @@ export default function Page0({
 					}}
 				>
 					<Text style={{ fontSize: 12, fontWeight: 900, color: "darkblue" }}>
-						OBJ ETIVO Y MARCO LEGAL
+						OBJETIVO Y MARCO LEGAL
 					</Text>
 					<Text style={{ fontSize: 10, padding: "10px 25px" }}>
 						El presente informe tiene como objeto verificar las condiciones de

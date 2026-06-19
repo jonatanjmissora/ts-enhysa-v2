@@ -599,10 +599,7 @@ function CreateArea() {
 						text="Imágenes Area"
 						defaultValue={planoFiles}
 						onUploaded={url => {
-							// console.log("URL matricula", url)
-							if (url.length > 0 && url !== planoFiles) {
-								setPlanoFiles(url)
-							} else setPlanoFiles([])
+							setPlanoFiles(url)
 						}}
 					/>
 				</div>
@@ -631,7 +628,7 @@ function CreateArea() {
 
 				<Field className="flex flex-col sm:flex-row justify-center gap-4 items-center w-5/6 sm:w-full mx-auto mt-10">
 					<Link
-						to="/iluminacion/reportes/$id/medicion/areass"
+						to="/iluminacion/reportes/$id/medicion"
 						params={{ id }}
 						className="flex-1"
 					>

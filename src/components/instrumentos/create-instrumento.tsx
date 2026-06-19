@@ -306,10 +306,7 @@ const InstrumentoForm = ({ setOpen }: { setOpen: (open: boolean) => void }) => {
 									<FilesDropzone
 										text="Imágen Calibración"
 										onUploaded={url => {
-											// console.log("URL matricula", url)
-											if (url.length > 0 && url !== imagenesCalibracion) {
-												setimagenesCalibracion(url)
-											} else setimagenesCalibracion([])
+											setimagenesCalibracion(url)
 										}}
 									/>
 
@@ -338,10 +335,7 @@ const InstrumentoForm = ({ setOpen }: { setOpen: (open: boolean) => void }) => {
 										text="Imágen Instrumento"
 										defaultValue={instrumentoFiles}
 										onUploaded={url => {
-											// console.log("URL matricula", url)
-											if (url.length > 0 && url !== instrumentoFiles) {
-												setInstrumentoFiles(url)
-											} else setInstrumentoFiles([])
+											setInstrumentoFiles(url)
 										}}
 									/>
 

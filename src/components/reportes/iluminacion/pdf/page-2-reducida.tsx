@@ -7,6 +7,7 @@ import type { TecnicoType } from "../../../../../db/tecnicos/schema"
 import type { AreaIluminacionType } from "../../../../../db/reportes/iluminacion/areas/schema"
 import { capitalizeString, sortedByName } from "#/lib/utils"
 import Watermark from "./watermark"
+import type { LocalizadaIluminacionType } from "../../../../../db/reportes/iluminacion/localizadas/schema"
 
 // Create styles
 const styles = StyleSheet.create({
@@ -66,25 +67,49 @@ const styles = StyleSheet.create({
 const COLUMNWIDTH = [6, 5, 16, 16, 10, 11, 10, 10, 6, 10]
 
 export default function Page2({
+	localizadas,
 	areas,
 	tecnico,
 	empresa,
 }: {
+	localizadas: LocalizadaIluminacionType[]
 	areas: AreaIluminacionType[]
 	empresa: EmpresaType
 	tecnico: TecnicoType
 }) {
-	return <AreaTableOnePage areas={areas} tecnico={tecnico} empresa={empresa} />
+	return (
+		<>
+			{localizadas.length + areas.length <= 13 ? (
+				<TableOnePage
+					localizadas={localizadas}
+					areas={areas}
+					tecnico={tecnico}
+					empresa={empresa}
+				/>
+			) : (
+				<TableMultiPage
+					localizadas={localizadas}
+					areas={areas}
+					tecnico={tecnico}
+					empresa={empresa}
+				/>
+			)}
+		</>
+	)
 }
 
-function AreaTableOnePage({
+function TableOnePage({
+	localizadas,
 	areas,
 	tecnico,
 	empresa,
+	muestreoOffset = 0,
 }: {
+	localizadas: LocalizadaIluminacionType[]
 	areas: AreaIluminacionType[]
-	tecnico: TecnicoType
 	empresa: EmpresaType
+	tecnico: TecnicoType
+	muestreoOffset?: number
 }) {
 	return (
 		<Page size="A4" orientation="landscape" style={styles.page}>
@@ -269,21 +294,30 @@ function AreaTableOnePage({
 
 				{/* **************************************************************************************************** */}
 
-				{sortedByName(areas).map((area, muestreoIndex) => (
-					<TablaDePuntos
-						key={area.id}
-						area={area}
-						muestreoIndex={muestreoIndex}
+				{sortedByName(localizadas).map((localizada, muestreoIndex) => (
+					<LocalizadaTabla
+						key={localizada.id}
+						localizada={localizada}
+						muestreoIndex={muestreoOffset + muestreoIndex}
 					/>
 				))}
+
+				{sortedByName(areas).map((area, muestreoIndex) => (
+					<AreaTablaDePuntos
+						key={area.id}
+						area={area}
+						muestreoIndex={muestreoOffset + localizadas.length + muestreoIndex}
+					/>
+				))}
+
 				{/* **************************************************************************************************** */}
 
 				<Text style={[styles.row, { height: 40, borderBottom: "none" }]}>
 					(34) Observaciones:{" "}
-					{areas
-						.map(area =>
-							area.observaciones !== ""
-								? `${capitalizeString(area.nombre)}: ${area.observaciones}`
+					{[...localizadas, ...areas]
+						.map(areas =>
+							areas.observaciones !== ""
+								? `${capitalizeString(areas.nombre)}: ${areas.observaciones}`
 								: "Sin Observaciones"
 						)
 						.join(" - ")}
@@ -294,7 +328,117 @@ function AreaTableOnePage({
 	)
 }
 
-function TablaDePuntos({
+function LocalizadaTabla({
+	localizada,
+	muestreoIndex,
+}: {
+	localizada: LocalizadaIluminacionType
+	muestreoIndex: number
+}) {
+	console.log(localizada.timestamps)
+	return (
+		<View>
+			<View style={styles.flexrow}>
+				<View
+					style={[
+						styles.flexRowElementWithHight,
+						{ borderRight: "1px solid black", width: `${COLUMNWIDTH[0]}%` },
+					]}
+				>
+					{/* LETRA */}
+					<Text>{MUESTREO[muestreoIndex]}</Text>
+				</View>
+				<View
+					style={[
+						styles.flexRowElementWithHight,
+						{ borderRight: "1px solid black", width: `${COLUMNWIDTH[1]}%` },
+					]}
+				>
+					{/* HORA */}
+					<Text>
+						{new Date(localizada.timestamps[0])
+							.toLocaleTimeString("it-IT")
+							.substring(0, 5)}
+					</Text>
+				</View>
+				<View
+					style={[
+						styles.flexRowElementWithHight,
+						{ borderRight: "1px solid black", width: `${COLUMNWIDTH[2]}%` },
+					]}
+				>
+					{/* SECTOR NOMBRE */}
+					<Text>{capitalizeString(localizada.nombre)}</Text>
+				</View>
+				<View
+					style={[
+						styles.flexRowElementWithHight,
+						{ borderRight: "1px solid black", width: `${COLUMNWIDTH[3]}%` },
+					]}
+				>
+					{/* Sección / Puesto / Tipo */}
+					<Text>{capitalizeString(localizada.tipo)}</Text>
+				</View>
+				<View
+					style={[
+						styles.flexRowElementWithHight,
+						{ borderRight: "1px solid black", width: `${COLUMNWIDTH[4]}%` },
+					]}
+				>
+					{/* Tipo de iluminación */}
+					<Text>{capitalizeString(localizada.iluminacionTipo)}</Text>
+				</View>
+				<View
+					style={[
+						styles.flexRowElementWithHight,
+						{ borderRight: "1px solid black", width: `${COLUMNWIDTH[5]}%` },
+					]}
+				>
+					{/* Tipo de fuente */}
+					<Text>{capitalizeString(localizada.iluminacionFuente)}</Text>
+				</View>
+				<View
+					style={[
+						styles.flexRowElementWithHight,
+						{ borderRight: "1px solid black", width: `${COLUMNWIDTH[6]}%` },
+					]}
+				>
+					{/* Iluminación: */}
+					<Text>{capitalizeString(localizada.iluminacion)}</Text>
+				</View>
+				<View
+					style={[
+						styles.flexRowElementWithHight,
+						{ borderRight: "1px solid black", width: `${COLUMNWIDTH[7]}%` },
+					]}
+				>
+					<Text>-</Text>
+					{/* Valor media*/}
+				</View>
+				<View
+					style={[
+						styles.flexRowElementWithHight,
+						{ borderRight: "1px solid black", width: `${COLUMNWIDTH[8]}%` },
+					]}
+				>
+					<Text>{localizada.valor}</Text>
+					{/* Valor Medido */}
+				</View>
+				<View
+					style={[
+						styles.flexRowElementWithHight,
+						{ borderRight: "1px solid black", width: `${COLUMNWIDTH[9]}%` },
+					]}
+				>
+					<Text>{localizada.valorRequerido}</Text>
+					{/* Valor requerido */}
+				</View>
+			</View>
+		</View>
+	)
+}
+
+function AreaTablaDePuntos({
 	area,
 	muestreoIndex,
 }: {
@@ -415,4 +559,59 @@ function TablaDePuntos({
 			</View>
 		</View>
 	)
+}
+
+function TableMultiPage({
+	localizadas,
+	areas,
+	tecnico,
+	empresa,
+}: {
+	localizadas: LocalizadaIluminacionType[]
+	areas: AreaIluminacionType[]
+	tecnico: TecnicoType
+	empresa: EmpresaType
+}) {
+	const pages = chunkPages(localizadas, areas)
+	let offset = 0
+
+	return pages.map((page, index) => {
+		const currentOffset = offset
+		offset += page.chunkLocalizadas.length + page.chunkAreas.length
+		return (
+			<TableOnePage
+				key={index}
+				localizadas={page.chunkLocalizadas}
+				areas={page.chunkAreas}
+				tecnico={tecnico}
+				empresa={empresa}
+				muestreoOffset={currentOffset}
+			/>
+		)
+	})
+}
+
+function chunkPages(
+	localizadas: LocalizadaIluminacionType[],
+	areas: AreaIluminacionType[],
+	maxRows = 13
+): { chunkLocalizadas: LocalizadaIluminacionType[]; chunkAreas: AreaIluminacionType[] }[] {
+	const pages: { chunkLocalizadas: LocalizadaIluminacionType[]; chunkAreas: AreaIluminacionType[] }[] = []
+	let locIdx = 0
+	let areaIdx = 0
+
+	while (locIdx < localizadas.length || areaIdx < areas.length) {
+		let remaining = maxRows
+
+		const locSlice = localizadas.slice(locIdx, locIdx + remaining)
+		locIdx += locSlice.length
+		remaining -= locSlice.length
+
+		const areaSlice = areas.slice(areaIdx, areaIdx + remaining)
+		areaIdx += areaSlice.length
+
+		pages.push({ chunkLocalizadas: locSlice, chunkAreas: areaSlice })
+	}
+
+	return pages
 }

@@ -14,6 +14,7 @@ const MyDocument = lazy(() =>
 )
 import { areasQueryOptions } from "../../../../../../../queries/reportes/iluminacion/areas/areas-query"
 import useScrollTop from "#/hooks/scroll-top"
+import { localizadasQueryOptions } from "../../../../../../../queries/reportes/iluminacion/localizadas/localizadas-query"
 
 export const Route = createFileRoute(
 	"/_protected/iluminacion/reportes/pdf/$id/completa"
@@ -65,6 +66,10 @@ function PDF() {
 		...reporteQueryOptions({ id }),
 		staleTime: 1000 * 60 * 5, // 5 minutos
 	})
+	const { data: localizadas } = useSuspenseQuery({
+		...localizadasQueryOptions({ reportId: reporte?.id || "" }),
+		staleTime: 1000 * 60 * 5,
+	})
 	const { data: areas } = useSuspenseQuery({
 		...areasQueryOptions({ reportId: reporte?.id || "" }),
 		staleTime: 1000 * 60 * 5,
@@ -92,6 +97,7 @@ function PDF() {
 			>
 				<MyDocument
 					reporte={reporte}
+					localizadas={localizadas}
 					areas={areas}
 					tecnico={reporte.tecnico}
 					empresa={reporte.empresa}

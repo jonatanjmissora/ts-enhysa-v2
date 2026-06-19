@@ -25,16 +25,19 @@ import { Button } from "#/components/ui/button"
 import Page0 from "./page-0"
 import Page6 from "./page-6"
 import Page05 from "./page-0-5"
+import type { LocalizadaIluminacionType } from "../../../../../db/reportes/iluminacion/localizadas/schema"
 
 export const MyDocument = memo(
 	({
 		reporte,
+		localizadas,
 		areas,
 		tecnico,
 		empresa,
 		instrumento,
 	}: {
 		reporte: ReporteIluminacionType
+		localizadas: LocalizadaIluminacionType[]
 		areas: AreaIluminacionType[]
 		tecnico: TecnicoType
 		empresa: EmpresaType
@@ -44,6 +47,7 @@ export const MyDocument = memo(
 			document: (
 				<MyDocumentData
 					reporte={reporte}
+					localizadas={localizadas}
 					areas={areas}
 					tecnico={tecnico}
 					empresa={empresa}
@@ -96,12 +100,14 @@ export const MyDocument = memo(
 
 function MyDocumentData({
 	reporte,
+	localizadas,
 	areas,
 	tecnico,
 	empresa,
 	instrumento,
 }: {
 	reporte: ReporteIluminacionType
+	localizadas: LocalizadaIluminacionType[]
 	areas: AreaIluminacionType[]
 	tecnico: TecnicoType
 	empresa: EmpresaType
@@ -117,7 +123,12 @@ function MyDocumentData({
 				empresa={empresa}
 				instrumento={instrumento}
 			/>
-			<Page2 areas={areas} tecnico={tecnico} empresa={empresa} />
+			<Page2
+				localizadas={localizadas}
+				areas={areas}
+				tecnico={tecnico}
+				empresa={empresa}
+			/>
 			<Page3 reporte={reporte} tecnico={tecnico} empresa={empresa} />
 			<Page4 tecnico={tecnico} empresa={empresa} instrumento={instrumento} />
 			<Page5 areas={areas} tecnico={tecnico} empresa={empresa} />

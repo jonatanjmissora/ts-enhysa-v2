@@ -95,6 +95,7 @@ function CreateLocalizada() {
 				...value,
 				reportId: reporte.id,
 				imagenes: planoFiles,
+				timestamps: [new Date()],
 				id: crypto.randomUUID(),
 			}
 			const result = await createLocalizada({ data: newLocalizada })
@@ -509,10 +510,7 @@ function CreateLocalizada() {
 						text="Imágenes Area"
 						defaultValue={planoFiles}
 						onUploaded={url => {
-							// console.log("URL matricula", url)
-							if (url.length > 0 && url !== planoFiles) {
-								setPlanoFiles(url)
-							} else setPlanoFiles([])
+							setPlanoFiles(url)
 						}}
 					/>
 				</div>

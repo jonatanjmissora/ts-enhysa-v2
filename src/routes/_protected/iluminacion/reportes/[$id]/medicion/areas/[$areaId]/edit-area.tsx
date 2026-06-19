@@ -97,7 +97,7 @@ function EditArea({ id, area }: { id: string; area: AreaIluminacionType }) {
 			onSubmit: updateAreaValidator,
 		},
 		onSubmit: async ({ value }) => {
-			if (checkAreaGeneralDifferences(value, area)) {
+			if (checkAreaGeneralDifferences(value, planoFiles, area)) {
 				return navigate({
 					to: "/iluminacion/reportes/$id/medicion/areas/$areaId/puntos",
 					params: {
@@ -605,10 +605,7 @@ function EditArea({ id, area }: { id: string; area: AreaIluminacionType }) {
 						text="Imágenes Area"
 						defaultValue={planoFiles}
 						onUploaded={url => {
-							// console.log("URL matricula", url)
-							if (url.length > 0 && url !== planoFiles) {
-								setPlanoFiles(url)
-							} else setPlanoFiles([])
+							setPlanoFiles(url)
 						}}
 					/>
 				</div>

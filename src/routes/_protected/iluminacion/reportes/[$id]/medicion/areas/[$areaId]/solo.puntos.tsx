@@ -109,7 +109,7 @@ function CargarPuntos({ area }: { area: AreaIluminacionType }) {
 				JSON.stringify(timestamps) === JSON.stringify(area.timestamps)
 			) {
 				navigate({
-					to: "/iluminacion/reportes/$id/medicion/areass",
+					to: "/iluminacion/reportes/$id/medicion",
 					params: { id: area.reportId },
 				})
 				return
@@ -127,7 +127,7 @@ function CargarPuntos({ area }: { area: AreaIluminacionType }) {
 			}
 			console.log("Puntos actualizada exitosamente")
 			navigate({
-				to: "/iluminacion/reportes/$id/medicion/areass",
+				to: "/iluminacion/reportes/$id/medicion",
 				params: { id: area.reportId },
 			})
 		},
@@ -464,7 +464,7 @@ function NoArea() {
 	return (
 		<article className="w-full flex flex-col justify-center items-center gap-10 my-10">
 			<p>No se encontro area</p>
-			<Link to="/iluminacion/reportes/$id/medicion/areass" params={{ id }}>
+			<Link to="/iluminacion/reportes/$id/medicion" params={{ id }}>
 				<Button className="px-10">Volver</Button>
 			</Link>
 		</article>

@@ -149,6 +149,17 @@ function Localizada({
 				<span className="text-left textL text-sm">
 					{localizada.observaciones.toUpperCase()}
 				</span>
+
+				<Label className="place-content-end textL text-sm text-amber-700">
+					Fecha :{" "}
+				</Label>
+				<span className="text-left textL text-sm">
+					{localizada.timestamps[0].toLocaleDateString("it-IT", {
+						day: "2-digit",
+						month: "2-digit",
+						year: "numeric",
+					})}
+				</span>
 			</div>
 
 			{localizada.imagenes[0] !== "" && (

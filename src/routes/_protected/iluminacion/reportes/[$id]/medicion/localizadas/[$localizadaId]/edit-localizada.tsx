@@ -54,7 +54,7 @@ function RouteComponent() {
 	return (
 		<article className="w-full min-h-svh flex flex-col items-center gap-0 relative mb-60">
 			<BackChevron to="/iluminacion/reportes/$id/medicion" />
-			<Title text="Editar Area" className="mt-15" />
+			<Title text="Editar Localizada" className="mt-15" />
 			<Suspense
 				fallback={
 					<Loading
@@ -106,9 +106,9 @@ function EditLocalizada({
 			onSubmit: updateLocalizadaValidator,
 		},
 		onSubmit: async ({ value }) => {
-			if (checkLocalizadaDifferences(value, localizada)) {
+			if (checkLocalizadaDifferences(value, planoFiles, localizada)) {
 				return navigate({
-					to: "/iluminacion/reportes/$id/medicion",
+					to: "/iluminacion/reportes/$id/medicion2",
 					params: {
 						id: id,
 					},
@@ -117,6 +117,7 @@ function EditLocalizada({
 			const newLocalizada: LocalizadaIluminacionType = {
 				...value,
 				userId: localizada.userId,
+				timestamps: [new Date()],
 				id: localizada.id,
 				imagenes: planoFiles,
 			}
@@ -127,7 +128,7 @@ function EditLocalizada({
 			}
 			console.log("La localizada actualizada exitosamente")
 			navigate({
-				to: "/iluminacion/reportes/$id/medicion",
+				to: "/iluminacion/reportes/$id/medicion2",
 				params: {
 					id: id,
 				},
@@ -163,7 +164,7 @@ function EditLocalizada({
 										onFocus={e => e.target.select()}
 										id={field.name}
 										name={field.name}
-										value={field.state.value.toUpperCase()}
+										value={field.state.value}
 										onBlur={field.handleBlur}
 										onChange={e => field.handleChange(e.target.value)}
 										aria-invalid={isInvalid}
@@ -196,7 +197,7 @@ function EditLocalizada({
 										onFocus={e => e.target.select()}
 										id={field.name}
 										name={field.name}
-										value={field.state.value.toUpperCase()}
+										value={field.state.value}
 										onBlur={field.handleBlur}
 										onChange={e => field.handleChange(e.target.value)}
 										aria-invalid={isInvalid}
@@ -533,10 +534,7 @@ function EditLocalizada({
 						text="Imágenes Area"
 						defaultValue={planoFiles}
 						onUploaded={url => {
-							// console.log("URL matricula", url)
-							if (url.length > 0 && url !== planoFiles) {
-								setPlanoFiles(url)
-							} else setPlanoFiles([])
+							setPlanoFiles(url)
 						}}
 					/>
 				</div>

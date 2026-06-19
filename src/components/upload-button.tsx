@@ -145,8 +145,11 @@ export function FilesDropzone({
 			alert("Error al eliminar archivo")
 			return
 		}
-		setFiles(prev => prev.filter(f => f !== file))
-		if (onUploaded) onUploaded(files.filter(f => f !== file))
+		setFiles(prev => {
+			const newFiles = prev.filter(f => f !== file)
+			if (onUploaded) onUploaded(newFiles)
+			return newFiles
+		})
 	}
 
 	return (
@@ -186,8 +189,11 @@ export function FilesDropzone({
 							setError("")
 							if (res) {
 								const urls = res.map(x => x.ufsUrl)
-								setFiles(prev => [...prev, ...urls])
-								if (onUploaded) onUploaded(urls)
+								setFiles(prev => {
+									const newFiles = [...prev, ...urls]
+									if (onUploaded) onUploaded(newFiles)
+									return newFiles
+								})
 							}
 						}}
 						onUploadError={error => {

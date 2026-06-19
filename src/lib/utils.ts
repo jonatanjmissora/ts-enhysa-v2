@@ -99,6 +99,7 @@ export const checkReporteGeneralDifferences = (
 
 export const checkAreaGeneralDifferences = (
 	formValues: AreaIluminacionType,
+	planoFiles: string[],
 	area: AreaIluminacionType
 ) => {
 	return (
@@ -112,12 +113,13 @@ export const checkAreaGeneralDifferences = (
 		formValues.largo === area.largo &&
 		formValues.ancho === area.ancho &&
 		formValues.alto === area.alto &&
-		JSON.stringify(formValues.imagenes) === JSON.stringify(area.imagenes)
+		JSON.stringify(planoFiles) === JSON.stringify(area.imagenes)
 	)
 }
 
 export const checkLocalizadaDifferences = (
 	formValues: LocalizadaIluminacionType,
+	planoFiles: string[],
 	localizada: LocalizadaIluminacionType
 ) => {
 	return (
@@ -129,7 +131,7 @@ export const checkLocalizadaDifferences = (
 		formValues.valorRequerido === localizada.valorRequerido &&
 		formValues.observaciones === localizada.observaciones &&
 		formValues.valor === localizada.valor &&
-		JSON.stringify(formValues.imagenes) === JSON.stringify(localizada.imagenes)
+		JSON.stringify(planoFiles) === JSON.stringify(localizada.imagenes)
 	)
 }
 

@@ -316,10 +316,7 @@ export function EditInstrumentoForm({
 										text="Imágen Calibración"
 										defaultValue={imagenesCalibracion}
 										onUploaded={url => {
-											// console.log("URL matricula", url)
-											if (url.length > 0 && url !== imagenesCalibracion) {
-												setimagenesCalibracion(url)
-											} else setimagenesCalibracion([])
+											setimagenesCalibracion(url)
 										}}
 									/>
 									{isInvalid && (
@@ -345,10 +342,7 @@ export function EditInstrumentoForm({
 										text="Imágen Instrumento"
 										defaultValue={instrumentoFiles}
 										onUploaded={url => {
-											// console.log("URL matricula", url)
-											if (url.length > 0 && url !== instrumentoFiles) {
-												setInstrumentoFiles(url)
-											} else setInstrumentoFiles([])
+											setInstrumentoFiles(url)
 										}}
 									/>
 									{isInvalid && (
