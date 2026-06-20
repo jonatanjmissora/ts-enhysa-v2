@@ -21,12 +21,12 @@ export default function Navbar() {
 			className={`w-full relative h-18 flex items-center justify-between p-4 text-foreground`}
 		>
 			<Link to="/" className="flex items-center gap-3">
-				<img src="/EnHySa_logo.webp" alt="logo EnHySa" className="size-10" />
+				<img src="/EnHySa_logo.webp" alt="logo EnHySa" className="size-10 object-cover" />
 
 				<p className="text-2xl">EnHySa App</p>
 			</Link>
 			{/* <div className="block sm:hidden"> */}
-			<button onClick={() => setIsOpen(!isOpen)}>
+			<button onClick={() => setIsOpen(!isOpen)} aria-label="Abrir menú de navegación">
 				<Menu className="size-7" />
 			</button>
 			<MovilMenuContent isOpen={isOpen} setIsOpen={setIsOpen} />
@@ -67,36 +67,42 @@ const MovilMenuContent = ({
 			className={` flex flex-col justify-between items-center fixed z-10 inset-0 bg-background w-screen h-svh  ${isOpen ? "translate-y-0" : "-translate-y-full"} transition-transform duration-500 text-foreground`}
 		>
 			<div className="h-25 w-full sm:max-w-2xl 2xl:max-w-3xl sm:mx-auto flex items-center justify-end p-8">
-				<button onClick={() => setIsOpen(!isOpen)}>
+				<button onClick={() => setIsOpen(!isOpen)} aria-label="Cerrar menú de navegación">
 					<X className="size-7" />
 				</button>
 			</div>
 
 			<ul className="flex flex-col gap-5 text-2xl tracking-widest font-semibold flex-1 items-center justify-center w-5/6 sm:max-w-2xl 2xl:max-w-3xl sm:mx-auto ">
-				<Link
-					to="/"
-					onClick={() => setIsOpen(!isOpen)}
-					resetScroll={true}
-					className="w-full py-2 text-center"
-				>
-					Inicio
-				</Link>
-				<Link
-					to="/perfil/tecnicos"
-					onClick={() => setIsOpen(!isOpen)}
-					resetScroll={true}
-					className="w-full py-2 text-center"
-				>
-					Mi Perfil
-				</Link>
-				<Link
-					to="/suscripcion"
-					onClick={() => setIsOpen(!isOpen)}
-					resetScroll={true}
-					className="w-full py-2 text-center"
-				>
-					Suscripción
-				</Link>
+				<li className="w-full">
+					<Link
+						to="/"
+						onClick={() => setIsOpen(!isOpen)}
+						resetScroll={true}
+						className="w-full py-2 text-center block"
+					>
+						Inicio
+					</Link>
+				</li>
+				<li className="w-full">
+					<Link
+						to="/perfil/tecnicos"
+						onClick={() => setIsOpen(!isOpen)}
+						resetScroll={true}
+						className="w-full py-2 text-center block"
+					>
+						Mi Perfil
+					</Link>
+				</li>
+				<li className="w-full">
+					<Link
+						to="/suscripcion"
+						onClick={() => setIsOpen(!isOpen)}
+						resetScroll={true}
+						className="w-full py-2 text-center block"
+					>
+						Suscripción
+					</Link>
+				</li>
 			</ul>
 			<User />
 			<div className="h-6"></div>
@@ -133,7 +139,7 @@ function User() {
 						to="/suscripcion"
 						className="sm:text-sm 2xl:text-base tracking-wider w-full flex items-end justify-end gap-1"
 					>
-						<Shield className="size-5 dark:text-amber-500/50 text-amber-700/70" />
+						<Shield className="size-5 dark:text-amber-300 text-amber-800/80" />
 						<span className="font-semibold text-gray-50/50 sm:text-foreground/50">
 							Plan Profesional
 						</span>
@@ -165,13 +171,13 @@ export function LogoutAlertDialog() {
 	return (
 		<AlertDialog open={open} onOpenChange={setOpen}>
 			<AlertDialogTrigger asChild className="m-4 hover:bg-accent">
-				<span className="flex p-2 rounded-sm cursor-pointer items-center justify-end sm:justify-start gap-2 text-left">
+				<button type="button" className="flex p-2 rounded-sm cursor-pointer items-center justify-end sm:justify-start gap-2 text-left">
 					<LogOut
 						size={16}
 						className="text-foreground/90 sm:text-foreground/80"
 					/>{" "}
 					Cerrar sesion
-				</span>
+				</button>
 			</AlertDialogTrigger>
 			<AlertDialogContent className="backdrop-blur-xl w-11/12 flex flex-col gap-4 py-20 justify-center items-center px-2">
 				<AlertDialogTitle className="text-center sm:text-lg 2xl:text-xl">

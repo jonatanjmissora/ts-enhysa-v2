@@ -19,7 +19,7 @@ export function CheckCircle({ className }: { className?: string }) {
 export function ClockComponent({ className }: { className?: string }) {
 	return (
 		<Clock
-			className={`size-12 rounded-lg  text-amber-600 dark:text-amber-600 p-2 bg-[#caa58c] dark:bg-amber-900 ${className}`}
+			className={`size-12 rounded-lg  text-amber-700 dark:text-amber-400 p-2 bg-[#caa58c] dark:bg-amber-900 ${className}`}
 		/>
 	)
 }

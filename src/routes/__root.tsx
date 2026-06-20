@@ -38,6 +38,11 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 			{
 				title: "Enhysa v2",
 			},
+			{
+				name: "description",
+				content:
+					"Enhysa - Plataforma de gestión de inspecciones de iluminación. Reportes técnicos, mediciones y certificaciones.",
+			},
 		],
 		links: [
 			{
@@ -68,7 +73,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 				<HeadContent />
 			</head>
 			<body className="overflow-x-hidden w-screen">
-				{children}
+				<main>{children}</main>
 				<TanStackDevtools
 					config={{
 						position: "bottom-right",

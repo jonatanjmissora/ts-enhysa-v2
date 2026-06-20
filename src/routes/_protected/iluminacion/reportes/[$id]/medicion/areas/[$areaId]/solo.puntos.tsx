@@ -196,7 +196,7 @@ function CargarPuntos({ area }: { area: AreaIluminacionType }) {
 					)}
 				</Button>
 				{puntosError && (
-					<span className="w-full text-amber-700/70 italic tracking-wide text-xs sm:w-1/2 text-center text-pretty">
+					<span className="w-full text-amber-800/80 italic tracking-wide text-xs sm:w-1/2 text-center text-pretty">
 						{puntosError}
 					</span>
 				)}

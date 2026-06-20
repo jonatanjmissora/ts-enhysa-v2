@@ -25,7 +25,7 @@ function RouteComponent() {
 			<div className="flex-1 flex justify-center items-center flex-col gap-6 pt-20 sm:py-10 2xl:py-20">
 				<div className="flex items-center gap-2 text-5xl 2xl:text-6xl font-bold tracking-wildest relative">
 					<span>Planes</span>
-					<Shield className="absolute top-1/2 left-full -translate-1/2 size-30 2xl:size-50 -rotate-15 dark:text-amber-500/30 text-amber-700/70 -z-10" />
+					<Shield className="absolute top-1/2 left-full -translate-1/2 size-30 2xl:size-50 -rotate-15 dark:text-amber-300/60 text-amber-800/80 -z-10" />
 				</div>
 				<div>
 					<p className="italic tracking-wider font-semibold text-pretty text-sm w-5/6 mx-auto text-center text-foreground/50">
@@ -76,7 +76,7 @@ const Plan = ({
 				<img
 					src="/EnHySa_logo.webp"
 					alt="logo EnHySa"
-					className="absolute -z-10 -top-20 -right-20 sm:size-70 2xl:size-80 -rotate-15 opacity-20"
+					className="absolute -z-10 -top-20 -right-20 sm:size-70 2xl:size-80 -rotate-15 opacity-20 object-cover"
 				/>
 			)}
 			<div className="flex flex-col gap-2">

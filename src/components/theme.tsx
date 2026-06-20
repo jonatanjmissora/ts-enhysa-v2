@@ -17,6 +17,7 @@ export const Theme = () => {
 	return (
 		<button
 			onClick={toggleTheme}
+			aria-label="Cambiar tema"
 			className="rounded-full p-2 px-3 cursor-pointer hover:ring hover:ring-foreground/50"
 		>
 			{theme === "dark" ? (

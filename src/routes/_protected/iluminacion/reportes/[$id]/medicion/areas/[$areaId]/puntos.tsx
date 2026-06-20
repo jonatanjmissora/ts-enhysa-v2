@@ -450,7 +450,7 @@ function AreaPuntosList({
 				>
 					<span>punto-{index + 1}</span>
 					<span>{punto === 0 ? "*" : punto}</span>
-					<button type="button" onClick={() => handleSetPunto(index)}>
+					<button type="button" aria-label={`Eliminar punto ${index + 1}`} onClick={() => handleSetPunto(index)}>
 						<Trash2 className="size-4 cursor-pointer text-red-700/50" />
 					</button>
 				</div>

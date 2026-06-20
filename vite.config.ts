@@ -6,6 +6,7 @@ import { tanstackStart } from '@tanstack/react-start/plugin/vite'
 import viteReact from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 import netlify from '@netlify/vite-plugin-tanstack-start'
+import { visualizer } from 'rollup-plugin-visualizer'
 
 const config = defineConfig({
   resolve: { tsconfigPaths: true },
@@ -14,11 +15,25 @@ const config = defineConfig({
   },
   plugins: [
     devtools(),
-    netlify(),
+    netlify({ edgeSSR: true }),
     tailwindcss(),
     tanstackStart(),
     viteReact(),
+    visualizer({ filename: 'stats.html' }),
   ],
+  build: {
+    sourcemap: 'hidden',
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes('node_modules/recharts')) return 'vendor-recharts'
+          if (id.includes('node_modules/@react-pdf')) return 'vendor-pdf-gen'
+          if (id.includes('node_modules/react-pdf')) return 'vendor-pdf-view'
+          if (id.includes('node_modules/better-auth')) return 'vendor-auth'
+        },
+      },
+    },
+  },
 })
 
 export default config

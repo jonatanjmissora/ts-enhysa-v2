@@ -59,6 +59,7 @@ export function FileDropzone({
 								/>
 								<button
 									type="button"
+									aria-label="Eliminar imagen"
 									className="absolute top-0 right-0"
 									onClick={deleteImage}
 								>
@@ -259,6 +260,7 @@ function FilesPreview({
 							/>
 							<button
 								type="button"
+								aria-label="Eliminar imagen"
 								onClick={() => deleteImage(url)}
 								className="absolute top-0 right-0"
 							>

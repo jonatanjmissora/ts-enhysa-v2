@@ -12,7 +12,7 @@ export default function Plan() {
 			<div className="flex flex-col tracking-wider">
 				<p className="text-2xl">Tu Suscripción</p>
 				<p className="text-base">Plan Profesional</p>
-				<p className="text-sm tracking-wider text-amber-700 dark:text-amber-500/50">
+				<p className="text-sm tracking-wider text-amber-800 dark:text-amber-300">
 					Expira en 245 días
 				</p>
 			</div>
@@ -58,7 +58,7 @@ export default function Plan() {
 			</Link>
 
 			<Shield
-				className="absolute top-0 right-0 -rotate-20  sm:top-10 sm:right-10 size-34 2xl:size-44 text-amber-700 dark:text-amber-500/50"
+				className="absolute top-0 right-0 -rotate-20  sm:top-10 sm:right-10 size-34 2xl:size-44 text-amber-800 dark:text-amber-300"
 				opacity={0.5}
 			/>
 		</div>

@@ -89,7 +89,7 @@ export function LoginForm({
 						<img
 							src="/EnHySa_logo.webp"
 							alt="logo EnHySa"
-							className="size-40"
+							className="size-40 object-cover"
 						/>
 
 						<p className="absolute bottom-3 left-1/2 -translate-x-1/2 textXL text-3xl w-full">
@@ -184,6 +184,7 @@ export function LoginForm({
 												<button
 													type="button"
 													onClick={() => setShowPassword(!showPassword)}
+													aria-label={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
 													className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 cursor-pointer"
 												>
 													{showPassword ? (

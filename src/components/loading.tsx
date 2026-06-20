@@ -12,7 +12,7 @@ export default function Loading({
 			<img
 				src="/EnHySa_logo.webp"
 				alt="logo EnHySa"
-				className="size-50 animate-pulse"
+				className="size-50 animate-pulse object-cover"
 			/>
 
 			<div className="flex leading-none text-[3rem] font-semibold tracking-[1rem]">
@@ -41,7 +41,7 @@ export function LoadingModal({ text, className }: { text?: string; className?: s
 			<img
 				src="/EnHySa_logo.webp"
 				alt="logo EnHySa"
-				className="size-30 animate-pulse"
+				className="size-30 animate-pulse object-cover"
 			/>
 
 			<div className="flex leading-none text-[2rem] font-semibold tracking-[1rem]">

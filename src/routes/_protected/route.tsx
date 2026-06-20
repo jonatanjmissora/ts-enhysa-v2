@@ -13,7 +13,9 @@ function RouteComponent() {
 	return (
 		<section className="w-screen sm:max-w-5xl 2xl:max-w-7xl sm:mx-auto flex flex-col items-center justify-center">
 			<Navbar />
-			<Outlet />
+			<main className="w-full flex flex-col flex-1">
+				<Outlet />
+			</main>
 			<Footer />
 		</section>
 	)
