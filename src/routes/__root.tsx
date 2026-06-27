@@ -11,6 +11,7 @@ if (typeof window !== "undefined") {
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools"
 import { TanStackDevtools } from "@tanstack/react-devtools"
 import TanStackQueryDevtools from "../integrations/tanstack-query/devtools"
+import { PWARegister } from "@/components/pwa-register"
 import appCss from "../styles.css?url"
 import type { QueryClient } from "@tanstack/react-query"
 import { DefaultCatchBoundary } from "#/components/DefaultCatchBoundary"
@@ -49,6 +50,10 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 				rel: "stylesheet",
 				href: appCss,
 			},
+			{
+				rel: "manifest",
+				href: "/manifest.json",
+			},
 		],
 	}),
 	beforeLoad: async () => ({
@@ -74,6 +79,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 			</head>
 			<body className="overflow-x-hidden w-screen">
 				<main>{children}</main>
+				<PWARegister />
 				<TanStackDevtools
 					config={{
 						position: "bottom-right",
