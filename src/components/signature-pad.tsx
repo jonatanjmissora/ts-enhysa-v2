@@ -110,13 +110,18 @@ function DrawingPad({
 		const canvas = canvasRef.current
 		if (!canvas) return { x: 0, y: 0 }
 		const rect = canvas.getBoundingClientRect()
+		const scaleX = canvas.width / rect.width
+		const scaleY = canvas.height / rect.height
 		if ("touches" in e) {
 			return {
-				x: e.touches[0].clientX - rect.left,
-				y: e.touches[0].clientY - rect.top,
+				x: (e.touches[0].clientX - rect.left) * scaleX,
+				y: (e.touches[0].clientY - rect.top) * scaleY,
 			}
 		}
-		return { x: e.clientX - rect.left, y: e.clientY - rect.top }
+		return {
+			x: (e.clientX - rect.left) * scaleX,
+			y: (e.clientY - rect.top) * scaleY,
+		}
 	}
 
 	const startDrawing = (e: React.MouseEvent | React.TouchEvent) => {
@@ -212,7 +217,7 @@ function DrawingPad({
 					onClick={() => setMode("upload")}
 				>
 					<X size={14} className="mr-1" />
-					Cancelar
+					<span className="hidden sm:block">Cancelar</span>
 				</Button>
 				<Button
 					type="button"
@@ -222,7 +227,7 @@ function DrawingPad({
 					disabled={!hasDrawn || isUploading}
 				>
 					<Eraser size={14} className="mr-1" />
-					Limpiar
+					<span className="hidden sm:block">Limpiar</span>
 				</Button>
 				<Button
 					type="button"
@@ -233,12 +238,12 @@ function DrawingPad({
 					{isUploading ? (
 						<>
 							<Loader size={14} className="animate-spin mr-1" />
-							Subiendo...
+							<span className="hidden sm:block">Subiendo...</span>
 						</>
 					) : (
 						<>
 							<Check size={14} className="mr-1" />
-							Confirmar
+							<span className="hidden sm:block">Confirmar</span>
 						</>
 					)}
 				</Button>
