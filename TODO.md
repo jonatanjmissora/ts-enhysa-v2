@@ -39,7 +39,7 @@ cargando imagenes... hay algunos que no tienen Suspense+fallback
 
 - agregar firma digital
 - agregar teoria, tablas
-- pantalla de inicio
+- pantalla de inicio con todos sus iconos
 - agregar PWA
 - agregar offline para mediciones
 - probar PWA y mediciones

@@ -1,7 +1,7 @@
 import BackChevron from "#/components/back-chevron"
 import { Button } from "#/components/ui/button"
 import { PLANS } from "@/lib/constants"
-import { createFileRoute } from "@tanstack/react-router"
+import { createFileRoute, Link } from "@tanstack/react-router"
 import { ArrowRight, Check, Shield } from "lucide-react"
 import { useState } from "react"
 import { z } from "zod"
@@ -19,7 +19,7 @@ function RouteComponent() {
 	const [actualPlan, setActualPlan] = useState<0 | 1 | 2>(1)
 
 	return (
-		<div className="min-h-svh flex flex-col relative">
+		<div className="min-h-svh flex flex-col relative mb-30">
 			<BackChevron className="top-4 left-4" />
 
 			<div className="flex-1 flex justify-center items-center flex-col gap-6 pt-20 sm:py-10 2xl:py-20">
@@ -43,6 +43,20 @@ function RouteComponent() {
 							setActualPlan={setActualPlan}
 						/>
 					))}
+				</div>
+				<div className="text-center flex gap-3 flex-col items-center justify-center">
+					<p>
+						Lee nuestra{" "}
+						<Link to="/teoria/politicas-de-privacidad" className="underline">
+							Política de Privacidad
+						</Link>
+					</p>
+					<p>
+						y nuestros{" "}
+						<Link to="/teoria/terminos-de-uso" className="underline">
+							Términos de Uso
+						</Link>
+					</p>
 				</div>
 			</div>
 		</div>

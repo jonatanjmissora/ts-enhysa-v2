@@ -15,8 +15,11 @@ import { Route as ProtectedIndexRouteImport } from './routes/_protected/index'
 import { Route as ApiUploadthingRouteImport } from './routes/api/uploadthing'
 import { Route as ProtectedSuscripcionRouteImport } from './routes/_protected/suscripcion'
 import { Route as ProtectedPerfilRouteRouteImport } from './routes/_protected/perfil/route'
+import { Route as ProtectedTeoriaIndexRouteImport } from './routes/_protected/teoria/index'
 import { Route as ProtectedIluminacionIndexRouteImport } from './routes/_protected/iluminacion/index'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
+import { Route as ProtectedTeoriaTerminosDeUsoRouteImport } from './routes/_protected/teoria/terminos-de-uso'
+import { Route as ProtectedTeoriaPoliticasDePrivacidadRouteImport } from './routes/_protected/teoria/politicas-de-privacidad'
 import { Route as ProtectedPerfilTecnicosIndexRouteImport } from './routes/_protected/perfil/tecnicos/index'
 import { Route as ProtectedPerfilInstrumentosIndexRouteImport } from './routes/_protected/perfil/instrumentos/index'
 import { Route as ProtectedPerfilEmpresasIndexRouteImport } from './routes/_protected/perfil/empresas/index'
@@ -71,6 +74,11 @@ const ProtectedPerfilRouteRoute = ProtectedPerfilRouteRouteImport.update({
   path: '/perfil',
   getParentRoute: () => ProtectedRouteRoute,
 } as any)
+const ProtectedTeoriaIndexRoute = ProtectedTeoriaIndexRouteImport.update({
+  id: '/teoria/',
+  path: '/teoria/',
+  getParentRoute: () => ProtectedRouteRoute,
+} as any)
 const ProtectedIluminacionIndexRoute =
   ProtectedIluminacionIndexRouteImport.update({
     id: '/iluminacion/',
@@ -82,6 +90,18 @@ const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   path: '/api/auth/$',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ProtectedTeoriaTerminosDeUsoRoute =
+  ProtectedTeoriaTerminosDeUsoRouteImport.update({
+    id: '/teoria/terminos-de-uso',
+    path: '/teoria/terminos-de-uso',
+    getParentRoute: () => ProtectedRouteRoute,
+  } as any)
+const ProtectedTeoriaPoliticasDePrivacidadRoute =
+  ProtectedTeoriaPoliticasDePrivacidadRouteImport.update({
+    id: '/teoria/politicas-de-privacidad',
+    path: '/teoria/politicas-de-privacidad',
+    getParentRoute: () => ProtectedRouteRoute,
+  } as any)
 const ProtectedPerfilTecnicosIndexRoute =
   ProtectedPerfilTecnicosIndexRouteImport.update({
     id: '/tecnicos/',
@@ -261,8 +281,11 @@ export interface FileRoutesByFullPath {
   '/suscripcion': typeof ProtectedSuscripcionRoute
   '/api/uploadthing': typeof ApiUploadthingRoute
   '/login/': typeof LoginIndexRoute
+  '/teoria/politicas-de-privacidad': typeof ProtectedTeoriaPoliticasDePrivacidadRoute
+  '/teoria/terminos-de-uso': typeof ProtectedTeoriaTerminosDeUsoRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/iluminacion/': typeof ProtectedIluminacionIndexRoute
+  '/teoria/': typeof ProtectedTeoriaIndexRoute
   '/iluminacion/reportes/': typeof ProtectedIluminacionReportesIndexRoute
   '/perfil/empresas/': typeof ProtectedPerfilEmpresasIndexRoute
   '/perfil/instrumentos/': typeof ProtectedPerfilInstrumentosIndexRoute
@@ -294,8 +317,11 @@ export interface FileRoutesByTo {
   '/api/uploadthing': typeof ApiUploadthingRoute
   '/': typeof ProtectedIndexRoute
   '/login': typeof LoginIndexRoute
+  '/teoria/politicas-de-privacidad': typeof ProtectedTeoriaPoliticasDePrivacidadRoute
+  '/teoria/terminos-de-uso': typeof ProtectedTeoriaTerminosDeUsoRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/iluminacion': typeof ProtectedIluminacionIndexRoute
+  '/teoria': typeof ProtectedTeoriaIndexRoute
   '/iluminacion/reportes': typeof ProtectedIluminacionReportesIndexRoute
   '/perfil/empresas': typeof ProtectedPerfilEmpresasIndexRoute
   '/perfil/instrumentos': typeof ProtectedPerfilInstrumentosIndexRoute
@@ -329,8 +355,11 @@ export interface FileRoutesById {
   '/api/uploadthing': typeof ApiUploadthingRoute
   '/_protected/': typeof ProtectedIndexRoute
   '/login/': typeof LoginIndexRoute
+  '/_protected/teoria/politicas-de-privacidad': typeof ProtectedTeoriaPoliticasDePrivacidadRoute
+  '/_protected/teoria/terminos-de-uso': typeof ProtectedTeoriaTerminosDeUsoRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/_protected/iluminacion/': typeof ProtectedIluminacionIndexRoute
+  '/_protected/teoria/': typeof ProtectedTeoriaIndexRoute
   '/_protected/iluminacion/reportes/': typeof ProtectedIluminacionReportesIndexRoute
   '/_protected/perfil/empresas/': typeof ProtectedPerfilEmpresasIndexRoute
   '/_protected/perfil/instrumentos/': typeof ProtectedPerfilInstrumentosIndexRoute
@@ -364,8 +393,11 @@ export interface FileRouteTypes {
     | '/suscripcion'
     | '/api/uploadthing'
     | '/login/'
+    | '/teoria/politicas-de-privacidad'
+    | '/teoria/terminos-de-uso'
     | '/api/auth/$'
     | '/iluminacion/'
+    | '/teoria/'
     | '/iluminacion/reportes/'
     | '/perfil/empresas/'
     | '/perfil/instrumentos/'
@@ -397,8 +429,11 @@ export interface FileRouteTypes {
     | '/api/uploadthing'
     | '/'
     | '/login'
+    | '/teoria/politicas-de-privacidad'
+    | '/teoria/terminos-de-uso'
     | '/api/auth/$'
     | '/iluminacion'
+    | '/teoria'
     | '/iluminacion/reportes'
     | '/perfil/empresas'
     | '/perfil/instrumentos'
@@ -431,8 +466,11 @@ export interface FileRouteTypes {
     | '/api/uploadthing'
     | '/_protected/'
     | '/login/'
+    | '/_protected/teoria/politicas-de-privacidad'
+    | '/_protected/teoria/terminos-de-uso'
     | '/api/auth/$'
     | '/_protected/iluminacion/'
+    | '/_protected/teoria/'
     | '/_protected/iluminacion/reportes/'
     | '/_protected/perfil/empresas/'
     | '/_protected/perfil/instrumentos/'
@@ -510,6 +548,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProtectedPerfilRouteRouteImport
       parentRoute: typeof ProtectedRouteRoute
     }
+    '/_protected/teoria/': {
+      id: '/_protected/teoria/'
+      path: '/teoria'
+      fullPath: '/teoria/'
+      preLoaderRoute: typeof ProtectedTeoriaIndexRouteImport
+      parentRoute: typeof ProtectedRouteRoute
+    }
     '/_protected/iluminacion/': {
       id: '/_protected/iluminacion/'
       path: '/iluminacion'
@@ -523,6 +568,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/api/auth/$'
       preLoaderRoute: typeof ApiAuthSplatRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_protected/teoria/terminos-de-uso': {
+      id: '/_protected/teoria/terminos-de-uso'
+      path: '/teoria/terminos-de-uso'
+      fullPath: '/teoria/terminos-de-uso'
+      preLoaderRoute: typeof ProtectedTeoriaTerminosDeUsoRouteImport
+      parentRoute: typeof ProtectedRouteRoute
+    }
+    '/_protected/teoria/politicas-de-privacidad': {
+      id: '/_protected/teoria/politicas-de-privacidad'
+      path: '/teoria/politicas-de-privacidad'
+      fullPath: '/teoria/politicas-de-privacidad'
+      preLoaderRoute: typeof ProtectedTeoriaPoliticasDePrivacidadRouteImport
+      parentRoute: typeof ProtectedRouteRoute
     }
     '/_protected/perfil/tecnicos/': {
       id: '/_protected/perfil/tecnicos/'
@@ -738,7 +797,10 @@ interface ProtectedRouteRouteChildren {
   ProtectedPerfilRouteRoute: typeof ProtectedPerfilRouteRouteWithChildren
   ProtectedSuscripcionRoute: typeof ProtectedSuscripcionRoute
   ProtectedIndexRoute: typeof ProtectedIndexRoute
+  ProtectedTeoriaPoliticasDePrivacidadRoute: typeof ProtectedTeoriaPoliticasDePrivacidadRoute
+  ProtectedTeoriaTerminosDeUsoRoute: typeof ProtectedTeoriaTerminosDeUsoRoute
   ProtectedIluminacionIndexRoute: typeof ProtectedIluminacionIndexRoute
+  ProtectedTeoriaIndexRoute: typeof ProtectedTeoriaIndexRoute
   ProtectedIluminacionReportesIndexRoute: typeof ProtectedIluminacionReportesIndexRoute
   ProtectedIluminacionReportesChar91idChar93MenuRouteRoute: typeof ProtectedIluminacionReportesChar91idChar93MenuRouteRouteWithChildren
   ProtectedIluminacionReportesPdfChar91idChar93CompletaRoute: typeof ProtectedIluminacionReportesPdfChar91idChar93CompletaRoute
@@ -762,7 +824,11 @@ const ProtectedRouteRouteChildren: ProtectedRouteRouteChildren = {
   ProtectedPerfilRouteRoute: ProtectedPerfilRouteRouteWithChildren,
   ProtectedSuscripcionRoute: ProtectedSuscripcionRoute,
   ProtectedIndexRoute: ProtectedIndexRoute,
+  ProtectedTeoriaPoliticasDePrivacidadRoute:
+    ProtectedTeoriaPoliticasDePrivacidadRoute,
+  ProtectedTeoriaTerminosDeUsoRoute: ProtectedTeoriaTerminosDeUsoRoute,
   ProtectedIluminacionIndexRoute: ProtectedIluminacionIndexRoute,
+  ProtectedTeoriaIndexRoute: ProtectedTeoriaIndexRoute,
   ProtectedIluminacionReportesIndexRoute:
     ProtectedIluminacionReportesIndexRoute,
   ProtectedIluminacionReportesChar91idChar93MenuRouteRoute:

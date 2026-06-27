@@ -8,7 +8,7 @@ import {
 } from "#/components/ui/select"
 import useScrollTop from "#/hooks/scroll-top"
 import { PROTOCOLOS } from "#/lib/constants"
-import { createFileRoute, useNavigate } from "@tanstack/react-router"
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router"
 import {
 	ClipboardList,
 	Factory,
@@ -25,16 +25,24 @@ function Home() {
 
 	return (
 		<article className="w-full sm:max-w-5xl 2xl:max-w-7xl sm:mx-auto min-h-svh flex flex-col items-center justify-center gap-20">
-			<div className="flex justify-between items-center flex-col mt-[70px] sm:mt-10 h-[550px] sm:h-[450px] relative overflow-visible px-6 sm:w-2/3 mx-auto">
+			<div className="flex justify-between items-center flex-col mt-[70px] sm:mt-10 h-[600px] sm:h-[1050px] relative overflow-visible px-6 sm:w-2/3 mx-auto">
 				<p className="text-[26px] text-center tracking-wider text-pretty px-3">
 					Selecciona tu nuevo informe.
 				</p>
 				<img
 					src="/movil-hero.webp"
 					alt="logo EnHySa"
-					className="absolute opacity-75 top-6 left-0 w-screen sm:w-full h-[500px] sm:h-[400px] bottom-0 -z-10 max-w-none mask-t-from-50% mask-b-from-80% sm:mask-r-from-95% sm:mask-l-from-5% object-cover object-[50%_40%]"
+					className="absolute opacity-75 top-6 left-0 w-screen sm:w-full h-[600px] sm:h-[1000px] bottom-0 -z-10 max-w-none sm:mask-radial sm:mask-radial-from-50% sm:mask-radial-to-80% sm:mask-l-from-95% sm:mask-l-to-100% sm:mask-r-from-95% sm:mask-r-to-100% mask-t-from-80% mask-t-to-90% mask-b-from-80% mask-b-to-95% object-cover"
 				/>
-				<Select
+				<Link
+					to="/iluminacion"
+					className="absolute top-[48.5%] sm:top-[43%] left-[45%] sm:left-[41%] size-18 sm:size-40"
+				/>
+				<Link
+					to="/teoria"
+					className="absolute top-[42%] sm:top-[35%] left-[24%] sm:left-[24%] size-18 sm:size-40"
+				/>
+				{/* <Select
 					onValueChange={value => {
 						const protocolo = PROTOCOLOS.find(p => p.id === value)
 						if (protocolo) {
@@ -56,10 +64,10 @@ function Home() {
 							</SelectItem>
 						))}
 					</SelectContent>
-				</Select>
+				</Select> */}
 			</div>
 
-			<div className="flex flex-col gap-20 w-5/6 mx-auto my-20">
+			<div className="flex flex-col gap-20 w-5/6 mx-auto mb-20">
 				<div className="">
 					<div className="shapeLeft flex items-center justify-center flex-col gap-2 bg-accent/50 ring-[1px] dark:ring-amber-500/20 ring-amber-700/40 rounded-md p-4 mr-4 dark:text-amber-600 text-amber-800">
 						<ShieldCheck size={30} />
