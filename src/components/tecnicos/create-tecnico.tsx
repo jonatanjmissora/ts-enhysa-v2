@@ -25,6 +25,7 @@ import {
 import { Button } from "../ui/button"
 import Title from "../title"
 import { FileDropzone } from "../upload-button"
+import { SignaturePad } from "../signature-pad"
 
 export default function CreateTecnico() {
 	const [open, setOpen] = useState(false)
@@ -266,11 +267,9 @@ export function CreateTecnicoForm({
 
 					<div className="flex-1 flex flex-col gap-1">
 						<Label>Firma Digital</Label>
-						<div className={`${firmaFile ? "bg-white/75" : ""}`}>
-							<FileDropzone
-								text="Imágen Firma"
+						<div className="bg-background rounded">
+							<SignaturePad
 								onUploaded={url => {
-									// console.log("URL", url)
 									if (url.length > 0 && url !== firmaFile) {
 										setFirmaFile(url)
 									} else setFirmaFile("")
