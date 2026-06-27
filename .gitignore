@@ -17,3 +17,11 @@ todos.json
 
 .agents
 .skills-lock.yaml
+
+graphify-out/
+.graphifyignore
+.opencode/
+count.txt
+routeTree.gen.ts
+pnpm-lock.yaml
+/SKILLS

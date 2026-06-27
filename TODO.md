@@ -37,3 +37,9 @@ LOCALIZADA
 ==============
 cargando imagenes... hay algunos que no tienen Suspense+fallback
 
+- agregar firma digital
+- agregar teoria, tablas
+- pantalla de inicio
+- agregar PWA
+- agregar offline para mediciones
+- probar PWA y mediciones
