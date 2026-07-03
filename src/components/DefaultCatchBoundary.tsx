@@ -7,8 +7,15 @@ import {
 } from "@tanstack/react-router"
 import type { ErrorComponentProps } from "@tanstack/react-router"
 import { Button } from "./ui/button"
+import { isOfflineNoCacheError } from "@/lib/offline/errors"
+import { OfflineRouteBlock } from "@/components/offline-route-block"
 
 export function DefaultCatchBoundary({ error }: ErrorComponentProps) {
+	// Si el error es offline sin cache, mostrar UI dedicada
+	if (isOfflineNoCacheError(error)) {
+		return <OfflineRouteBlock />
+	}
+
 	const router = useRouter()
 	const isRoot = useMatch({
 		strict: false,

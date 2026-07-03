@@ -44,6 +44,10 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 				content:
 					"Enhysa - Plataforma de gestión de inspecciones de iluminación. Reportes técnicos, mediciones y certificaciones.",
 			},
+			{
+				name: "theme-color",
+				content: "#09090b",
+			},
 		],
 		links: [
 			{

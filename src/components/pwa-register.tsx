@@ -6,11 +6,7 @@ export function PWARegister() {
 	useEffect(() => {
 		if (import.meta.env.DEV || !("serviceWorker" in navigator)) return
 
-		let registration: ServiceWorkerRegistration | undefined
-
 		navigator.serviceWorker.register("/sw.js").then((reg) => {
-			registration = reg
-
 			if (reg.waiting) {
 				setNeedRefresh(true)
 			}
@@ -34,9 +30,10 @@ export function PWARegister() {
 			window.location.reload()
 		})
 
-		return () => {
-			registration?.unregister()
-		}
+			return () => {
+				// NOTA: no desregistramos el SW al desmontar — eso rompe
+				// la funcionalidad offline si el componente se re-renderiza.
+			}
 	}, [])
 
 	if (import.meta.env.DEV) return null
