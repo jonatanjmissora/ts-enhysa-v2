@@ -9,10 +9,14 @@ function subscribe(callback: () => void) {
 	}
 }
 
+function getSnapshot() {
+	return navigator.onLine
+}
+
+function getServerSnapshot() {
+	return true
+}
+
 export function useOnlineStatus(): boolean {
-	return useSyncExternalStore(
-		subscribe,
-		() => navigator.onLine, // getSnapshot — cliente
-		() => true, // getServerSnapshot — SSR: asumir online
-	)
+	return useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot)
 }
