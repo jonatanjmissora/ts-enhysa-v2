@@ -3,6 +3,12 @@ import { getLocalizadasServer } from "../../../../server/reportes/iluminacion/lo
 import { getLocalizadaServer } from "../../../../server/reportes/iluminacion/localizadas/get-localizada-server"
 import type { LocalizadaIluminacionType } from "../../../../db/reportes/iluminacion/localizadas/schema"
 import { OfflineNoCacheError } from "@/lib/offline/errors"
+import {
+	getCachedEntitiesByField,
+	getCachedEntityById,
+	putEntityInCache,
+	saveEntityListToCache,
+} from "@/lib/offline/db"
 
 const isClient = typeof window !== "undefined"
 
@@ -11,13 +17,23 @@ export const localizadasQueryOptions = ({ reportId }: { reportId: string }) =>
 		queryKey: ["localizadas-iluminacion", reportId],
 		queryFn: async () => {
 			try {
-				return await getLocalizadasServer({ data: { reportId } })
+				const data = await getLocalizadasServer({ data: { reportId } })
+				if (isClient && data)
+					await saveEntityListToCache("localizadas-iluminacion-cache", data)
+				return data
 			} catch {
-				if (isClient && !navigator.onLine) throw new OfflineNoCacheError()
-				throw new Error("Error al cargar localizadas")
+				if (!isClient) throw new OfflineNoCacheError()
+				const cached = await getCachedEntitiesByField(
+					"localizadas-iluminacion-cache",
+					"reportId",
+					reportId
+				)
+				if (cached.length === 0) throw new OfflineNoCacheError()
+				return cached
 			}
 		},
 		enabled: !!reportId,
+		networkMode: "always",
 		// refetchInterval: 60 * 1000, // refrescar cada 60 segundos
 	})
 
@@ -31,17 +47,27 @@ export const localizadaQueryOptions = ({
 		queryKey: ["localizada-iluminacion", localizadaId],
 		queryFn: async () => {
 			try {
-				return await getLocalizadaServer({ data: { localizadaId } })
+				const data = await getLocalizadaServer({ data: { localizadaId } })
+				if (isClient && data)
+					await putEntityInCache("localizadas-iluminacion-cache", data)
+				return data
 			} catch {
-				if (isClient && !navigator.onLine) throw new OfflineNoCacheError()
-				throw new Error("Error al cargar la localizada")
+				if (!isClient) throw new OfflineNoCacheError()
+				const cached = await getCachedEntityById(
+					"localizadas-iluminacion-cache",
+					localizadaId
+				)
+				if (!cached) throw new OfflineNoCacheError()
+				return cached
 			}
 		},
 		enabled: !!localizadaId,
+		networkMode: "always",
 		initialData: () => {
-			const localizadas = queryClient.getQueryData<LocalizadaIluminacionType[]>(
-				["localizadas-iluminacion"]
-			)
+			const localizadaQueries = queryClient.getQueriesData<
+				LocalizadaIluminacionType[]
+			>({ queryKey: ["localizadas-iluminacion"] })
+			const localizadas = localizadaQueries.flatMap(([, data]) => data ?? [])
 			return localizadas?.find(item => item.id === localizadaId)
 		},
 	})

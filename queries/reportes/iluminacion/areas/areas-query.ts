@@ -3,6 +3,12 @@ import { getAreasServer } from "../../../../server/reportes/iluminacion/areas/ge
 import { getAreaServer } from "../../../../server/reportes/iluminacion/areas/get-area-server"
 import type { AreaIluminacionType } from "../../../../db/reportes/iluminacion/areas/schema"
 import { OfflineNoCacheError } from "@/lib/offline/errors"
+import {
+	getCachedEntitiesByField,
+	getCachedEntityById,
+	putEntityInCache,
+	saveEntityListToCache,
+} from "@/lib/offline/db"
 
 const isClient = typeof window !== "undefined"
 
@@ -11,13 +17,23 @@ export const areasQueryOptions = ({ reportId }: { reportId: string }) =>
 		queryKey: ["areas-iluminacion", reportId],
 		queryFn: async () => {
 			try {
-				return await getAreasServer({ data: { reportId } })
+				const data = await getAreasServer({ data: { reportId } })
+				if (isClient && data)
+					await saveEntityListToCache("areas-iluminacion-cache", data)
+				return data
 			} catch {
-				if (isClient && !navigator.onLine) throw new OfflineNoCacheError()
-				throw new Error("Error al cargar áreas")
+				if (!isClient) throw new OfflineNoCacheError()
+				const cached = await getCachedEntitiesByField(
+					"areas-iluminacion-cache",
+					"reportId",
+					reportId
+				)
+				if (cached.length === 0) throw new OfflineNoCacheError()
+				return cached
 			}
 		},
 		enabled: !!reportId,
+		networkMode: "always",
 		// refetchInterval: 60 * 1000, // refrescar cada 60 segundos
 	})
 
@@ -27,17 +43,27 @@ export const areaQueryOptions = ({ areaId }: { areaId: string }) => {
 		queryKey: ["area-iluminacion", areaId],
 		queryFn: async () => {
 			try {
-				return await getAreaServer({ data: { areaId } })
+				const data = await getAreaServer({ data: { areaId } })
+				if (isClient && data)
+					await putEntityInCache("areas-iluminacion-cache", data)
+				return data
 			} catch {
-				if (isClient && !navigator.onLine) throw new OfflineNoCacheError()
-				throw new Error("Error al cargar el área")
+				if (!isClient) throw new OfflineNoCacheError()
+				const cached = await getCachedEntityById(
+					"areas-iluminacion-cache",
+					areaId
+				)
+				if (!cached) throw new OfflineNoCacheError()
+				return cached
 			}
 		},
 		enabled: !!areaId,
+		networkMode: "always",
 		initialData: () => {
-			const areas = queryClient.getQueryData<AreaIluminacionType[]>([
-				"areas-iluminacion",
-			])
+			const areaQueries = queryClient.getQueriesData<AreaIluminacionType[]>({
+				queryKey: ["areas-iluminacion"],
+			})
+			const areas = areaQueries.flatMap(([, data]) => data ?? [])
 			return areas?.find(item => item.id === areaId)
 		},
 	})

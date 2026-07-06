@@ -45,14 +45,6 @@ export type MutationEntry = {
 	createdAt: number
 }
 
-interface EnhysaDB {
-	"mutation-queue": {
-		key: number
-		value: MutationEntry
-		indexes: { "by-created": number }
-	}
-}
-
 // db.ts define stores homogéneos por entidad; agregamos dinámicamente
 // los entity stores al schema del DB sin tiparlos individualmente en la
 // interfaz (se accede vía helpers genéricos con EntityMap).

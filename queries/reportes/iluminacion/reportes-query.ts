@@ -4,6 +4,12 @@ import { getReporteNuevoServer } from "../../../server/reportes/iluminacion/get-
 import { getReporteServer } from "../../../server/reportes/iluminacion/get-reporte-server"
 import type { ReporteIluminacionType } from "../../../db/reportes/iluminacion/schema"
 import { OfflineNoCacheError } from "@/lib/offline/errors"
+import {
+	getCachedEntityById,
+	getCachedEntityList,
+	putEntityInCache,
+	saveEntityListToCache,
+} from "@/lib/offline/db"
 
 const isClient = typeof window !== "undefined"
 
@@ -11,12 +17,18 @@ export const reportesQueryOptions = queryOptions({
 	queryKey: ["reportes-iluminacion"],
 	queryFn: async () => {
 		try {
-			return await getReportesServer()
+			const data = await getReportesServer()
+			if (isClient && data)
+				await saveEntityListToCache("reportes-iluminacion-cache", data)
+			return data
 		} catch {
-			if (isClient && !navigator.onLine) throw new OfflineNoCacheError()
-			throw new Error("Error al cargar reportes")
+			if (!isClient) throw new OfflineNoCacheError()
+			const cached = await getCachedEntityList("reportes-iluminacion-cache")
+			if (cached.length === 0) throw new OfflineNoCacheError()
+			return cached
 		}
 	},
+	networkMode: "always",
 	// refetchInterval: 60 * 1000, // refrescar cada 60 segundos
 })
 
@@ -26,12 +38,19 @@ export const reporteNuevoQueryOptions = () => {
 		queryKey: ["reporte-iluminacion-nuevo"],
 		queryFn: async () => {
 			try {
-				return await getReporteNuevoServer()
+				const data = await getReporteNuevoServer()
+				if (isClient && data)
+					await putEntityInCache("reportes-iluminacion-cache", data)
+				return data
 			} catch {
-				if (isClient && !navigator.onLine) throw new OfflineNoCacheError()
-				throw new Error("Error al cargar reporte en curso")
+				if (!isClient) throw new OfflineNoCacheError()
+				const cached = await getCachedEntityList("reportes-iluminacion-cache")
+				const draft = cached.find(item => !item.finishedAt)
+				if (!draft) throw new OfflineNoCacheError()
+				return draft
 			}
 		},
+		networkMode: "always",
 		initialData: () => {
 			const reportes = queryClient.getQueryData<ReporteIluminacionType[]>([
 				"reportes-iluminacion",
@@ -46,11 +65,20 @@ export const reporteQueryOptions = ({ id }: { id: string }) => {
 		queryKey: ["reporte-iluminacion", id],
 		queryFn: async () => {
 			try {
-				return await getReporteServer({ data: { id } })
+				const data = await getReporteServer({ data: { id } })
+				if (isClient && data)
+					await putEntityInCache("reportes-iluminacion-cache", data)
+				return data
 			} catch {
-				if (isClient && !navigator.onLine) throw new OfflineNoCacheError()
-				throw new Error("Error al cargar el reporte")
+				if (!isClient) throw new OfflineNoCacheError()
+				const cached = await getCachedEntityById(
+					"reportes-iluminacion-cache",
+					id
+				)
+				if (!cached) throw new OfflineNoCacheError()
+				return cached
 			}
 		},
+		networkMode: "always",
 	})
 }
