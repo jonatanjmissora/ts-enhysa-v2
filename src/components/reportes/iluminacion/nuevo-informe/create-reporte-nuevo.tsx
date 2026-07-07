@@ -74,12 +74,14 @@ function ReporteNuevoForm() {
 		},
 		onSubmit: async ({ value }) => {
 			if (!tecnico || !empresas || !instrumentos) return
+			const tecnicoData = Array.isArray(tecnico) ? tecnico[0] ?? null : tecnico
+			if (!tecnicoData) return
 
 			const title = getTitle(value.empresaId, empresas)
 
 			const newReport = {
 				...value,
-				tecnicoId: tecnico.id,
+				tecnicoId: tecnicoData.id,
 				title,
 			}
 			const result = await createReporteNuevo({ data: newReport })

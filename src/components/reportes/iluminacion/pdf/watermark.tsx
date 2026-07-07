@@ -1,4 +1,4 @@
-import { Page, Text, View, StyleSheet, Image } from "@react-pdf/renderer"
+import { Text, View, StyleSheet } from "@react-pdf/renderer"
 
 const styles = StyleSheet.create({
 	watermarkContainer: {

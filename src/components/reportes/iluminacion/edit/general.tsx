@@ -41,7 +41,7 @@ import { checkReporteGeneralDifferences } from "#/lib/utils"
 import type { InstrumentoType } from "../../../../../db/instrumentos/schema"
 import type { EmpresaType } from "../../../../../db/empresas/schema"
 import { LoadingModal } from "#/components/loading"
-import { useSuspenseQuery, useQueryClient } from "@tanstack/react-query"
+import { useSuspenseQuery } from "@tanstack/react-query"
 import { empresasQueryOptions } from "../../../../../queries/empresas/empresas-query"
 import { instrumentosQueryOptions } from "../../../../../queries/instrumentos/instrumentos-query"
 

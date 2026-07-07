@@ -3,7 +3,6 @@ import { getReportesServer } from "../../../server/reportes/iluminacion/get-repo
 import { getReporteNuevoServer } from "../../../server/reportes/iluminacion/get-reporte-nuevo-server"
 import { getReporteServer } from "../../../server/reportes/iluminacion/get-reporte-server"
 import type { ReporteIluminacionType } from "../../../db/reportes/iluminacion/schema"
-import { OfflineNoCacheError } from "@/lib/offline/errors"
 import {
 	getCachedEntityById,
 	getCachedEntityList,
@@ -11,21 +10,20 @@ import {
 	saveEntityListToCache,
 } from "@/lib/offline/db"
 
-const isClient = typeof window !== "undefined"
-
 export const reportesQueryOptions = queryOptions({
 	queryKey: ["reportes-iluminacion"],
 	queryFn: async () => {
 		try {
 			const data = await getReportesServer()
-			if (isClient && data)
+			if (typeof window !== "undefined" && data)
 				await saveEntityListToCache("reportes-iluminacion-cache", data)
 			return data
-		} catch {
-			if (!isClient) throw new OfflineNoCacheError()
-			const cached = await getCachedEntityList("reportes-iluminacion-cache")
-			if (cached.length === 0) throw new OfflineNoCacheError()
-			return cached
+		} catch (error) {
+			if (typeof window !== "undefined" && !navigator.onLine) {
+				const cached = await getCachedEntityList("reportes-iluminacion-cache")
+				if (cached.length > 0) return cached
+			}
+			throw error
 		}
 	},
 	networkMode: "always",
@@ -39,15 +37,16 @@ export const reporteNuevoQueryOptions = () => {
 		queryFn: async () => {
 			try {
 				const data = await getReporteNuevoServer()
-				if (isClient && data)
+				if (typeof window !== "undefined" && data)
 					await putEntityInCache("reportes-iluminacion-cache", data)
 				return data
-			} catch {
-				if (!isClient) throw new OfflineNoCacheError()
-				const cached = await getCachedEntityList("reportes-iluminacion-cache")
-				const draft = cached.find(item => !item.finishedAt)
-				if (!draft) throw new OfflineNoCacheError()
-				return draft
+			} catch (error) {
+				if (typeof window !== "undefined" && !navigator.onLine) {
+					const cached = await getCachedEntityList("reportes-iluminacion-cache")
+					const draft = cached.find(item => !item.finishedAt)
+					if (draft) return draft
+				}
+				throw error
 			}
 		},
 		networkMode: "always",
@@ -66,17 +65,18 @@ export const reporteQueryOptions = ({ id }: { id: string }) => {
 		queryFn: async () => {
 			try {
 				const data = await getReporteServer({ data: { id } })
-				if (isClient && data)
+				if (typeof window !== "undefined" && data)
 					await putEntityInCache("reportes-iluminacion-cache", data)
 				return data
-			} catch {
-				if (!isClient) throw new OfflineNoCacheError()
-				const cached = await getCachedEntityById(
-					"reportes-iluminacion-cache",
-					id
-				)
-				if (!cached) throw new OfflineNoCacheError()
-				return cached
+			} catch (error) {
+				if (typeof window !== "undefined" && !navigator.onLine) {
+					const cached = await getCachedEntityById(
+						"reportes-iluminacion-cache",
+						id
+					)
+					if (cached) return cached
+				}
+				throw error
 			}
 		},
 		networkMode: "always",

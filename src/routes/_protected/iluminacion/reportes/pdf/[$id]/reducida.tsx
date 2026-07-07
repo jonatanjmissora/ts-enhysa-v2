@@ -3,10 +3,9 @@ import Loading from "#/components/loading"
 import Title from "#/components/title"
 import { useSuspenseQuery } from "@tanstack/react-query"
 import { createFileRoute } from "@tanstack/react-router"
-import { Suspense } from "react"
+import { Suspense, lazy } from "react"
 import { reporteQueryOptions } from "../../../../../../../queries/reportes/iluminacion/reportes-query"
 import { ClientComponent } from "#/components/client-component"
-import { lazy } from "react"
 const MyDocumentReducida = lazy(() =>
 	import("#/components/reportes/iluminacion/pdf/my-document-reducida").then(
 		m => ({
@@ -17,6 +16,10 @@ const MyDocumentReducida = lazy(() =>
 import { areasQueryOptions } from "../../../../../../../queries/reportes/iluminacion/areas/areas-query"
 import useScrollTop from "#/hooks/scroll-top"
 import { localizadasQueryOptions } from "../../../../../../../queries/reportes/iluminacion/localizadas/localizadas-query"
+import type { TecnicoType } from "../../../../../../../db/tecnicos/schema"
+import type { EmpresaType } from "../../../../../../../db/empresas/schema"
+import type { InstrumentoType } from "../../../../../../../db/instrumentos/schema"
+import type { ReporteIluminacionType } from "../../../../../../../db/reportes/iluminacion/schema"
 
 export const Route = createFileRoute(
 	"/_protected/iluminacion/reportes/pdf/$id/reducida"
@@ -57,8 +60,13 @@ function Empresa() {
 		...reporteQueryOptions({ id }),
 		staleTime: 1000 * 60 * 5, // 5 minutos
 	})
+	const reporteConRelaciones = reporte as ReporteIluminacionType & {
+		empresa: EmpresaType
+		tecnico: TecnicoType
+		instrumento: InstrumentoType
+	}
 	return (
-		<span className="text-amber-600">{`${reporte?.empresa.razonSocial.toUpperCase()} - ${reporte?.finishedAt?.toLocaleDateString("it-IT")}`}</span>
+		<span className="text-amber-600">{`${reporteConRelaciones?.empresa.razonSocial.toUpperCase()} - ${reporte?.finishedAt?.toLocaleDateString("it-IT")}`}</span>
 	)
 }
 
@@ -79,6 +87,12 @@ function PDF() {
 
 	if (!reporte)
 		return <span className="text-red-500">Reporte no encontrado</span>
+
+	const reporteConRelaciones = reporte as ReporteIluminacionType & {
+		empresa: EmpresaType
+		tecnico: TecnicoType
+		instrumento: InstrumentoType
+	}
 
 	return (
 		<ClientComponent
@@ -101,9 +115,9 @@ function PDF() {
 					reporte={reporte}
 					localizadas={localizadas}
 					areas={areas}
-					tecnico={reporte.tecnico}
-					empresa={reporte.empresa}
-					instrumento={reporte.instrumento}
+					tecnico={reporteConRelaciones.tecnico}
+					empresa={reporteConRelaciones.empresa}
+					instrumento={reporteConRelaciones.instrumento}
 				/>
 			</Suspense>
 		</ClientComponent>

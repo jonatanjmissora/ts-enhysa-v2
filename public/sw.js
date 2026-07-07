@@ -11,7 +11,6 @@ const PRECACHE_URLS = [
 	"/robots.txt",
 ]
 
-// --- Install: precache assets clave ---
 self.addEventListener("install", (event) => {
 	event.waitUntil(
 		caches.open(STATIC_CACHE).then((cache) => cache.addAll(PRECACHE_URLS))
@@ -19,7 +18,6 @@ self.addEventListener("install", (event) => {
 	self.skipWaiting()
 })
 
-// --- Activate: limpiar caches viejas ---
 self.addEventListener("activate", (event) => {
 	event.waitUntil(
 		Promise.all([
@@ -37,31 +35,13 @@ self.addEventListener("activate", (event) => {
 
 self.addEventListener("fetch", (event) => {
 	const { request } = event
-
-	if (request.method !== "GET") return
-
 	const url = new URL(request.url)
 
+	if (request.method !== "GET") return
+	if (!url.protocol.startsWith("http")) return
+
 	if (url.pathname.startsWith("/_serverFn/")) {
-		event.respondWith(
-			caches.open(CACHE_NAME).then((cache) =>
-				cache.match(request).then((cached) => {
-					const fetched = fetch(request)
-						.then((response) => {
-							if (response.ok) {
-								cache.put(request, response.clone())
-							}
-							return response
-						})
-						.catch(() =>
-							cached
-								? cached
-								: new Response("Offline", { status: 503 })
-						)
-					return cached || fetched
-				})
-			)
-		)
+		event.respondWith(networkFirst(request, CACHE_NAME))
 		return
 	}
 
@@ -74,81 +54,18 @@ self.addEventListener("fetch", (event) => {
 		url.pathname.endsWith(".ico") ||
 		url.pathname.endsWith(".woff2")
 	) {
-		event.respondWith(
-			caches.open(STATIC_CACHE).then((cache) =>
-				cache.match(request).then((cached) => {
-					const fetched = fetch(request).then((response) => {
-						if (response.ok) {
-							cache.put(request, response.clone())
-						}
-						return response
-					})
-					return cached || fetched
-				})
-			)
-		)
+		event.respondWith(cacheFirst(request, STATIC_CACHE))
 		return
 	}
 
-	if (request.mode === "navigate") {
-		event.respondWith(
-			fetch(request)
-				.then((response) => {
-					if (response.ok) {
-						const clone = response.clone()
-						caches.open(CACHE_NAME).then((cache) => cache.put(request, clone))
-					}
-					return response
-				})
-				.catch(() =>
-					caches.match(request).then(
-						(cached) => cached || caches.match("/offline.html")
-					)
-				)
-		)
-		return
-	}
-
-	event.respondWith(
-		fetch(request)
-			.then((response) => {
-				if (response.ok) {
-					const clone = response.clone()
-					caches.open(CACHE_NAME).then((cache) => cache.put(request, clone))
-				}
-				return response
-			})
-			.catch(() => caches.match(request))
-	)
-})
-
-// --- Fetch: router de estrategias ---
-self.addEventListener("fetch", (event) => {
-	const { request } = event
-	const url = new URL(request.url)
-
-	// Solo interceptar GET
-	if (request.method !== "GET") return
-	// Ignorar protocolos non-http (chrome-extension, data, etc.)
-	if (!url.protocol.startsWith("http")) return
-
-	// API calls → networkFirst
-	if (url.pathname.startsWith("/api/")) {
-		event.respondWith(networkFirst(request, CACHE_API))
-		return
-	}
-
-	// Navegación (HTML pages) → networkFirstWithOffline
 	if (request.mode === "navigate") {
 		event.respondWith(networkFirstWithOffline(request))
 		return
 	}
 
-	// Todo lo demás (JS, CSS, imágenes, fuentes) → cacheFirst
-	event.respondWith(cacheFirst(request, CACHE_STATIC))
+	event.respondWith(networkFirst(request, CACHE_NAME))
 })
 
-// --- cacheFirst: servir del cache, si no está → fetch y guardar ---
 async function cacheFirst(request, cacheName) {
 	const cache = await caches.open(cacheName)
 	const cached = await cache.match(request)
@@ -163,7 +80,6 @@ async function cacheFirst(request, cacheName) {
 	}
 }
 
-// --- networkFirst: intentar red, si falla → cache, si no hay cache → 503 ---
 async function networkFirst(request, cacheName) {
 	const cache = await caches.open(cacheName)
 	try {
@@ -173,25 +89,24 @@ async function networkFirst(request, cacheName) {
 	} catch {
 		const cached = await cache.match(request)
 		if (cached) return cached
-		return new Response(JSON.stringify({ error: "offline" }), {
-			status: 503,
-			headers: { "Content-Type": "application/json" },
-		})
+		return new Response("Offline", { status: 503 })
 	}
 }
 
-// --- networkFirstWithOffline: intentar red → cache → offline.html ---
 async function networkFirstWithOffline(request) {
-	const pagesCache = await caches.open(CACHE_PAGES)
 	try {
-		const response = await fetch(request)
-		if (response.ok) pagesCache.put(request, response.clone())
+		const fetchRequest = new Request(request, { redirect: "follow" })
+		const response = await fetch(fetchRequest)
+		if (response.ok) {
+			const clone = response.clone()
+			caches.open(CACHE_NAME).then((cache) => cache.put(request, clone))
+		}
 		return response
 	} catch {
-		const cached = await pagesCache.match(request)
+		const cached = await caches.match(request)
 		if (cached) return cached
 
-		const staticCache = await caches.open(CACHE_STATIC)
+		const staticCache = await caches.open(STATIC_CACHE)
 		const offlinePage = await staticCache.match("/offline.html")
 		if (offlinePage) return offlinePage
 

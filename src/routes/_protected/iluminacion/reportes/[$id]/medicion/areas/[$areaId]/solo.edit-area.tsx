@@ -58,7 +58,7 @@ function RouteComponent() {
 	useScrollTop()
 	return (
 		<article className="w-full min-h-svh flex flex-col items-center gap-0 relative mb-60">
-			<BackChevron to="/iluminacion/reportes/$id/medicion/areass" />
+			<BackChevron to="/iluminacion/reportes/$id/areass" />
 			<Title text="Editar Area" className="mt-15" />
 			<Suspense
 				fallback={
@@ -97,7 +97,7 @@ function EditArea({ id, area }: { id: string; area: AreaIluminacionType }) {
 			onSubmit: updateAreaValidator,
 		},
 		onSubmit: async ({ value }) => {
-			if (checkAreaGeneralDifferences(value, area)) {
+			if (checkAreaGeneralDifferences(value, planoFiles, area)) {
 				return navigate({
 					to: "/iluminacion/reportes/$id/medicion/areas/$areaId/solo/puntos",
 					params: {
@@ -637,7 +637,7 @@ function EditArea({ id, area }: { id: string; area: AreaIluminacionType }) {
 
 				<Field className="flex flex-col sm:flex-row justify-center gap-4 items-center w-5/6 sm:w-full mx-auto mt-10">
 					<Link
-						to="/iluminacion/reportes/$id/medicion/areass"
+						to="/iluminacion/reportes/$id/areass"
 						params={{ id }}
 						className="flex-1"
 					>

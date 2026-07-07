@@ -1,14 +1,6 @@
 import Plan from "#/components/plan"
-import {
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from "#/components/ui/select"
 import useScrollTop from "#/hooks/scroll-top"
-import { PROTOCOLOS } from "#/lib/constants"
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router"
+import { createFileRoute, Link } from "@tanstack/react-router"
 import {
 	ClipboardList,
 	Factory,
@@ -21,7 +13,6 @@ export const Route = createFileRoute("/_protected/")({ component: Home })
 
 function Home() {
 	useScrollTop()
-	const navigate = useNavigate()
 
 	return (
 		<article className="w-full sm:max-w-5xl 2xl:max-w-7xl sm:mx-auto min-h-svh flex flex-col items-center justify-center gap-20">

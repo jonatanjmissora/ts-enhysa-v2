@@ -1,7 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import type { EmpresaType } from "../../db/empresas/schema"
 import { updateEmpresaServer } from "../../server/empresas/update-empresa-server"
-import { sortedByRazonSocial } from "#/lib/utils"
 import { addMutationToQueue, putEntityInCache } from "@/lib/offline/db"
 
 export function useUpdateEmpresa() {

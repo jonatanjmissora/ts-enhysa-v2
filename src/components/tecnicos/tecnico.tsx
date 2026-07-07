@@ -18,9 +18,9 @@ import useScrollTop from "#/hooks/scroll-top"
 
 export default function Tecnico() {
 	const { data: tecnico } = useSuspenseQuery(tecnicoQueryOptions)
-	// const tecnico = null
-	if (!tecnico) return <TecnicoVacio />
-	return <HayTecnico tecnico={tecnico} />
+	const tecnicoData = Array.isArray(tecnico) ? tecnico[0] ?? null : tecnico
+	if (!tecnicoData) return <TecnicoVacio />
+	return <HayTecnico tecnico={tecnicoData} />
 }
 
 function HayTecnico({ tecnico }: { tecnico: TecnicoType }) {

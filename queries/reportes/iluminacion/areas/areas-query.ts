@@ -2,7 +2,6 @@ import { queryOptions, useQueryClient } from "@tanstack/react-query"
 import { getAreasServer } from "../../../../server/reportes/iluminacion/areas/get-areas-server"
 import { getAreaServer } from "../../../../server/reportes/iluminacion/areas/get-area-server"
 import type { AreaIluminacionType } from "../../../../db/reportes/iluminacion/areas/schema"
-import { OfflineNoCacheError } from "@/lib/offline/errors"
 import {
 	getCachedEntitiesByField,
 	getCachedEntityById,
@@ -10,26 +9,25 @@ import {
 	saveEntityListToCache,
 } from "@/lib/offline/db"
 
-const isClient = typeof window !== "undefined"
-
 export const areasQueryOptions = ({ reportId }: { reportId: string }) =>
 	queryOptions({
 		queryKey: ["areas-iluminacion", reportId],
 		queryFn: async () => {
 			try {
 				const data = await getAreasServer({ data: { reportId } })
-				if (isClient && data)
+				if (typeof window !== "undefined" && data)
 					await saveEntityListToCache("areas-iluminacion-cache", data)
 				return data
-			} catch {
-				if (!isClient) throw new OfflineNoCacheError()
-				const cached = await getCachedEntitiesByField(
-					"areas-iluminacion-cache",
-					"reportId",
-					reportId
-				)
-				if (cached.length === 0) throw new OfflineNoCacheError()
-				return cached
+			} catch (error) {
+				if (typeof window !== "undefined" && !navigator.onLine) {
+					const cached = await getCachedEntitiesByField(
+						"areas-iluminacion-cache",
+						"reportId",
+						reportId
+					)
+					if (cached.length > 0) return cached
+				}
+				throw error
 			}
 		},
 		enabled: !!reportId,
@@ -44,17 +42,18 @@ export const areaQueryOptions = ({ areaId }: { areaId: string }) => {
 		queryFn: async () => {
 			try {
 				const data = await getAreaServer({ data: { areaId } })
-				if (isClient && data)
+				if (typeof window !== "undefined" && data)
 					await putEntityInCache("areas-iluminacion-cache", data)
 				return data
-			} catch {
-				if (!isClient) throw new OfflineNoCacheError()
-				const cached = await getCachedEntityById(
-					"areas-iluminacion-cache",
-					areaId
-				)
-				if (!cached) throw new OfflineNoCacheError()
-				return cached
+			} catch (error) {
+				if (typeof window !== "undefined" && !navigator.onLine) {
+					const cached = await getCachedEntityById(
+						"areas-iluminacion-cache",
+						areaId
+					)
+					if (cached) return cached
+				}
+				throw error
 			}
 		},
 		enabled: !!areaId,

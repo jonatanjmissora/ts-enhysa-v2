@@ -13,9 +13,9 @@ import { deleteReporteServer } from "../../../server/reportes/iluminacion/delete
 import { createAreaServer } from "../../../server/reportes/iluminacion/areas/create-area-server";
 import { updateAreaServer } from "../../../server/reportes/iluminacion/areas/update-area-server";
 import { deleteAreaServer } from "../../../server/reportes/iluminacion/areas/delete-area-server";
-import { createLocalizadaServer } from "../../../server/reportes/iluminacion/localidades/create-localizada-server";
-import { updateLocalizadaServer } from "../../../server/reportes/iluminacion/localidades/update-localizada-server";
-import { deleteLocalizadaServer } from "../../../server/reportes/iluminacion/localidades/delete-localizada-server";
+import { createLocalizadaServer } from "../../../server/reportes/iluminacion/localizadas/create-localizada-server";
+import { updateLocalizadaServer } from "../../../server/reportes/iluminacion/localizadas/update-localizada-server";
+import { deleteLocalizadaServer } from "../../../server/reportes/iluminacion/localizadas/delete-localizada-server";
 
 let isSyncing = false;
 
@@ -71,18 +71,16 @@ async function processOneMutation(entry: {
         throw new Error(`Unknown entity store: ${entity}`);
     }
   } catch (err) {
-    // Log but do not throw; allow continuing with other mutations.
     console.error("Failed to process mutation entry", entry, err);
-    throw err; // rethrow so caller knows this item failed; we'll keep it in queue.
+    throw err;
   }
 }
 
 /**
  * Process the mutation queue FIFO.
- * Returns true if the queue is empty after processing.
  */
 export async function processMutationQueue(): Promise<boolean> {
-  if (isSyncing) return false; // prevent concurrent syncs
+  if (isSyncing) return false;
   const count = await getPendingCount();
   if (count === 0) return false;
 
@@ -92,11 +90,9 @@ export async function processMutationQueue(): Promise<boolean> {
     for (const entry of queue) {
       try {
         await processOneMutation(entry);
-        // If successful, remove from queue
         if (entry.id != null) await removeMutationFromQueue(entry.id);
       } catch {
-        // Keep the item in queue for retry; continue with next.
-        // Optionally could implement a retry limit.
+        // keep in queue for retry
       }
     }
   } finally {
@@ -104,7 +100,6 @@ export async function processMutationQueue(): Promise<boolean> {
   }
 
   const remaining = await getPendingCount();
-  // If queue cleared, clear all entity caches to force fresh fetch from server (with correct IDs)
   if (remaining === 0) await clearAllEntityCaches();
   return remaining === 0;
 }
@@ -114,14 +109,15 @@ export async function processMutationQueue(): Promise<boolean> {
  */
 export async function clearAllEntityCaches() {
   const db = await openEnhysaDB();
-  for (const storeName of Object.keys({
-    "empresas-cache": 1,
-    "instrumentos-cache": 1,
-    "tecnicos-cache": 1,
-    "reportes-iluminacion-cache": 1,
-    "areas-iluminacion-cache": 1,
-    "localizadas-iluminacion-cache": 1,
-  }) as Array<keyof typeof EntityMap>) {
-    await db.clear(storeName as string);
+  const stores: Array<string> = [
+    "empresas-cache",
+    "instrumentos-cache",
+    "tecnicos-cache",
+    "reportes-iluminacion-cache",
+    "areas-iluminacion-cache",
+    "localizadas-iluminacion-cache",
+  ];
+  for (const storeName of stores) {
+    await db.clear(storeName);
   }
 }
