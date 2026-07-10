@@ -7,32 +7,13 @@ import {
 	putEntityInCache,
 } from "@/lib/offline/db"
 
-const MUTATION_TIMEOUT = 8_000
-
 export function useUpdateLocalizada() {
 	const queryClient = useQueryClient()
 
 	return useMutation({
 		mutationFn: async ({ data }: { data: UpdateLocalizadaType }) => {
-			if (typeof window !== "undefined" && !navigator.onLine) {
-				const updatedEntity: LocalizadaIluminacionType = {
-					...data,
-				}
-				await addMutationToQueue({
-					entity: "localizadas-iluminacion-cache",
-					type: "update",
-					payload: updatedEntity,
-				})
-				await putEntityInCache("localizadas-iluminacion-cache", updatedEntity)
-				return updatedEntity
-			}
 			try {
-				return await Promise.race([
-					updateLocalizadaServer({ data }),
-					new Promise<never>((_, reject) =>
-						setTimeout(() => reject(new Error("timeout")), MUTATION_TIMEOUT)
-					),
-				])
+				return await updateLocalizadaServer({ data })
 			} catch {
 				const updatedEntity: LocalizadaIluminacionType = {
 					...data,

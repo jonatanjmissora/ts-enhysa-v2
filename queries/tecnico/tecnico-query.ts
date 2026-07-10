@@ -4,6 +4,7 @@ import {
   putEntityInCache,
   getCachedEntityList,
 } from "@/lib/offline/db"
+import { OfflineNoCacheError } from "@/lib/offline/errors"
 
 export const tecnicoQueryOptions = queryOptions({
   queryKey: ["tecnico"],
@@ -12,14 +13,13 @@ export const tecnicoQueryOptions = queryOptions({
       const data = await getTecnicoServer()
       if (typeof window !== "undefined" && data) await putEntityInCache("tecnicos-cache", data)
       return data
-    } catch (error) {
-      if (typeof window !== "undefined" && !navigator.onLine) {
+    } catch {
+      if (typeof window !== "undefined") {
         const cached = await getCachedEntityList("tecnicos-cache")
         if (cached.length > 0) return cached
       }
-      throw error
+      throw new OfflineNoCacheError()
     }
   },
   networkMode: "always",
-  // refetchInterval: 60 * 1000, // refrescar cada 60 segundos
 })

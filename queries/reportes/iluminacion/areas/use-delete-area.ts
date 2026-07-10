@@ -6,29 +6,13 @@ import {
 	removeEntityFromCache,
 } from "@/lib/offline/db"
 
-const MUTATION_TIMEOUT = 8_000
-
 export function useDeleteArea(areaId: string, reportId: string) {
     const queryClient = useQueryClient()
 
     return useMutation({
         mutationFn: async ({ data }: { data: { id: string } }) => {
-			if (typeof window !== "undefined" && !navigator.onLine) {
-				await addMutationToQueue({
-					entity: "areas-iluminacion-cache",
-					type: "delete",
-					payload: data,
-				})
-				await removeEntityFromCache("areas-iluminacion-cache", data.id)
-				return data
-			}
 			try {
-				return await Promise.race([
-					deleteAreaServer({ data }),
-					new Promise<never>((_, reject) =>
-						setTimeout(() => reject(new Error("timeout")), MUTATION_TIMEOUT)
-					),
-				])
+				return await deleteAreaServer({ data })
 			} catch {
 				await addMutationToQueue({
 					entity: "areas-iluminacion-cache",

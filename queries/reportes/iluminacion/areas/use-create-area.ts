@@ -8,33 +8,13 @@ import {
 	putEntityInCache,
 } from "@/lib/offline/db"
 
-const MUTATION_TIMEOUT = 8_000
-
 export function useCreateArea() {
 	const queryClient = useQueryClient()
 
 	return useMutation({
 		mutationFn: async ({ data }: { data: AreaServerType }) => {
-			if (typeof window !== "undefined" && !navigator.onLine) {
-				const newEntity: AreaIluminacionType = {
-					...data,
-					userId: "",
-				}
-				await addMutationToQueue({
-					entity: "areas-iluminacion-cache",
-					type: "create",
-					payload: newEntity,
-				})
-				await putEntityInCache("areas-iluminacion-cache", newEntity)
-				return newEntity
-			}
 			try {
-				return await Promise.race([
-					createAreaServer({ data }),
-					new Promise<never>((_, reject) =>
-						setTimeout(() => reject(new Error("timeout")), MUTATION_TIMEOUT)
-					),
-				])
+				return await createAreaServer({ data })
 			} catch {
 				const newEntity: AreaIluminacionType = {
 					...data,

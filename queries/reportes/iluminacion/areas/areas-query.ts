@@ -8,6 +8,7 @@ import {
 	putEntityInCache,
 	saveEntityListToCache,
 } from "@/lib/offline/db"
+import { OfflineNoCacheError } from "@/lib/offline/errors"
 
 export const areasQueryOptions = ({ reportId }: { reportId: string }) =>
 	queryOptions({
@@ -18,8 +19,8 @@ export const areasQueryOptions = ({ reportId }: { reportId: string }) =>
 				if (typeof window !== "undefined" && data)
 					await saveEntityListToCache("areas-iluminacion-cache", data)
 				return data
-			} catch (error) {
-				if (typeof window !== "undefined" && !navigator.onLine) {
+			} catch {
+				if (typeof window !== "undefined") {
 					const cached = await getCachedEntitiesByField(
 						"areas-iluminacion-cache",
 						"reportId",
@@ -27,12 +28,11 @@ export const areasQueryOptions = ({ reportId }: { reportId: string }) =>
 					)
 					if (cached.length > 0) return cached
 				}
-				throw error
+				throw new OfflineNoCacheError()
 			}
 		},
 		enabled: !!reportId,
 		networkMode: "always",
-		// refetchInterval: 60 * 1000, // refrescar cada 60 segundos
 	})
 
 export const areaQueryOptions = ({ areaId }: { areaId: string }) => {
@@ -45,15 +45,15 @@ export const areaQueryOptions = ({ areaId }: { areaId: string }) => {
 				if (typeof window !== "undefined" && data)
 					await putEntityInCache("areas-iluminacion-cache", data)
 				return data
-			} catch (error) {
-				if (typeof window !== "undefined" && !navigator.onLine) {
+			} catch {
+				if (typeof window !== "undefined") {
 					const cached = await getCachedEntityById(
 						"areas-iluminacion-cache",
 						areaId
 					)
 					if (cached) return cached
 				}
-				throw error
+				throw new OfflineNoCacheError()
 			}
 		},
 		enabled: !!areaId,

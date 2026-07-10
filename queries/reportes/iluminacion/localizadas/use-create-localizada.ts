@@ -8,33 +8,13 @@ import {
 	putEntityInCache,
 } from "@/lib/offline/db"
 
-const MUTATION_TIMEOUT = 8_000
-
 export function useCreateLocalizada() {
 	const queryClient = useQueryClient()
 
 	return useMutation({
 		mutationFn: async ({ data }: { data: LocalizadaServerType }) => {
-			if (typeof window !== "undefined" && !navigator.onLine) {
-				const newEntity: LocalizadaIluminacionType = {
-					...data,
-					userId: "",
-				}
-				await addMutationToQueue({
-					entity: "localizadas-iluminacion-cache",
-					type: "create",
-					payload: newEntity,
-				})
-				await putEntityInCache("localizadas-iluminacion-cache", newEntity)
-				return newEntity
-			}
 			try {
-				return await Promise.race([
-					createLocalizadaServer({ data }),
-					new Promise<never>((_, reject) =>
-						setTimeout(() => reject(new Error("timeout")), MUTATION_TIMEOUT)
-					),
-				])
+				return await createLocalizadaServer({ data })
 			} catch {
 				const newEntity: LocalizadaIluminacionType = {
 					...data,

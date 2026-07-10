@@ -4,6 +4,7 @@ import {
 	saveEntityListToCache,
 	getCachedEntityList,
 } from "@/lib/offline/db"
+import { OfflineNoCacheError } from "@/lib/offline/errors"
 
 export const empresasQueryOptions = queryOptions({
 	queryKey: ["empresas"],
@@ -12,14 +13,13 @@ export const empresasQueryOptions = queryOptions({
 			const data = await getEmpresasServer()
 			if (typeof window !== "undefined" && data) await saveEntityListToCache("empresas-cache", data)
 			return data
-		} catch (error) {
-			if (typeof window !== "undefined" && !navigator.onLine) {
+		} catch {
+			if (typeof window !== "undefined") {
 				const cached = await getCachedEntityList("empresas-cache")
 				if (cached.length > 0) return cached
 			}
-			throw error
+			throw new OfflineNoCacheError()
 		}
 	},
 	networkMode: "always",
-	// refetchInterval: 60 * 1000, // refrescar cada 60 segundos
 })

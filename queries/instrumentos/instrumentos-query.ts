@@ -4,6 +4,7 @@ import {
 	saveEntityListToCache,
 	getCachedEntityList,
 } from "@/lib/offline/db"
+import { OfflineNoCacheError } from "@/lib/offline/errors"
 
 export const instrumentosQueryOptions = queryOptions({
 	queryKey: ["instrumentos"],
@@ -12,14 +13,13 @@ export const instrumentosQueryOptions = queryOptions({
 			const data = await getInstrumentosServer()
 			if (typeof window !== "undefined" && data) await saveEntityListToCache("instrumentos-cache", data)
 			return data
-		} catch (error) {
-			if (typeof window !== "undefined" && !navigator.onLine) {
+		} catch {
+			if (typeof window !== "undefined") {
 				const cached = await getCachedEntityList("instrumentos-cache")
 				if (cached.length > 0) return cached
 			}
-			throw error
+			throw new OfflineNoCacheError()
 		}
 	},
 	networkMode: "always",
-	// refetchInterval: 60 * 1000, // refrescar cada 60 segundos
 })

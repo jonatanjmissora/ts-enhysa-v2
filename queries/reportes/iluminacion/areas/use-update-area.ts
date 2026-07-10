@@ -7,30 +7,13 @@ import {
 	putEntityInCache,
 } from "@/lib/offline/db"
 
-const MUTATION_TIMEOUT = 8_000
-
 export function useUpdateArea() {
 	const queryClient = useQueryClient()
 
 	return useMutation({
 		mutationFn: async ({ data }: { data: UpdateAreaType }) => {
-			if (typeof window !== "undefined" && !navigator.onLine) {
-				const updatedEntity: AreaIluminacionType = { ...data }
-				await addMutationToQueue({
-					entity: "areas-iluminacion-cache",
-					type: "update",
-					payload: updatedEntity,
-				})
-				await putEntityInCache("areas-iluminacion-cache", updatedEntity)
-				return updatedEntity
-			}
 			try {
-				return await Promise.race([
-					updateAreaServer({ data }),
-					new Promise<never>((_, reject) =>
-						setTimeout(() => reject(new Error("timeout")), MUTATION_TIMEOUT)
-					),
-				])
+				return await updateAreaServer({ data })
 			} catch {
 				const updatedEntity: AreaIluminacionType = { ...data }
 				await addMutationToQueue({

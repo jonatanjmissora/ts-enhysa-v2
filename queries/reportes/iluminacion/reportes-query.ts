@@ -9,6 +9,7 @@ import {
 	putEntityInCache,
 	saveEntityListToCache,
 } from "@/lib/offline/db"
+import { OfflineNoCacheError } from "@/lib/offline/errors"
 
 export const reportesQueryOptions = queryOptions({
 	queryKey: ["reportes-iluminacion"],
@@ -18,16 +19,15 @@ export const reportesQueryOptions = queryOptions({
 			if (typeof window !== "undefined" && data)
 				await saveEntityListToCache("reportes-iluminacion-cache", data)
 			return data
-		} catch (error) {
-			if (typeof window !== "undefined" && !navigator.onLine) {
+		} catch {
+			if (typeof window !== "undefined") {
 				const cached = await getCachedEntityList("reportes-iluminacion-cache")
 				if (cached.length > 0) return cached
 			}
-			throw error
+			throw new OfflineNoCacheError()
 		}
 	},
 	networkMode: "always",
-	// refetchInterval: 60 * 1000, // refrescar cada 60 segundos
 })
 
 export const reporteNuevoQueryOptions = () => {
@@ -40,13 +40,13 @@ export const reporteNuevoQueryOptions = () => {
 				if (typeof window !== "undefined" && data)
 					await putEntityInCache("reportes-iluminacion-cache", data)
 				return data
-			} catch (error) {
-				if (typeof window !== "undefined" && !navigator.onLine) {
+			} catch {
+				if (typeof window !== "undefined") {
 					const cached = await getCachedEntityList("reportes-iluminacion-cache")
 					const draft = cached.find(item => !item.finishedAt)
 					if (draft) return draft
 				}
-				throw error
+				throw new OfflineNoCacheError()
 			}
 		},
 		networkMode: "always",
@@ -68,15 +68,15 @@ export const reporteQueryOptions = ({ id }: { id: string }) => {
 				if (typeof window !== "undefined" && data)
 					await putEntityInCache("reportes-iluminacion-cache", data)
 				return data
-			} catch (error) {
-				if (typeof window !== "undefined" && !navigator.onLine) {
+			} catch {
+				if (typeof window !== "undefined") {
 					const cached = await getCachedEntityById(
 						"reportes-iluminacion-cache",
 						id
 					)
 					if (cached) return cached
 				}
-				throw error
+				throw new OfflineNoCacheError()
 			}
 		},
 		networkMode: "always",
