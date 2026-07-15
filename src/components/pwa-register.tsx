@@ -5,7 +5,16 @@ export function PWARegister() {
 	const [offlineReady, setOfflineReady] = useState(false)
 
 	useEffect(() => {
-		if (import.meta.env.DEV || !("serviceWorker" in navigator)) return
+		if (import.meta.env.DEV) {
+			navigator.serviceWorker?.getRegistrations().then((regs) => {
+				for (const reg of regs) {
+					reg.active?.postMessage({ type: "UNREGISTER" })
+					reg.unregister()
+				}
+			})
+			return
+		}
+		if (!("serviceWorker" in navigator)) return
 
 		navigator.serviceWorker.register("/sw.js").then((reg) => {
 			if (reg.waiting) {

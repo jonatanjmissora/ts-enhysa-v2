@@ -32,6 +32,10 @@ function Home() {
 				<Link
 					to="/teoria"
 					className="absolute top-[42%] sm:top-[35%] left-[24%] sm:left-[24%] size-18 sm:size-40"
+					search={{
+						t: "iluminacion",
+						from: "root",
+					}}
 				/>
 				{/* <Select
 					onValueChange={value => {

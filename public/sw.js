@@ -11,6 +11,14 @@ const PRECACHE_URLS = [
 	"/robots.txt",
 ]
 
+self.addEventListener("message", (event) => {
+	if (event.data?.type === "SKIP_WAITING") self.skipWaiting()
+	if (event.data?.type === "UNREGISTER") {
+		self.registration.unregister()
+		caches.keys().then((keys) => Promise.all(keys.map((k) => caches.delete(k))))
+	}
+})
+
 self.addEventListener("install", (event) => {
 	event.waitUntil(
 		caches.open(STATIC_CACHE).then((cache) => cache.addAll(PRECACHE_URLS))
@@ -72,7 +80,8 @@ async function cacheFirst(request, cacheName) {
 	if (cached) return cached
 
 	try {
-		const response = await fetch(request)
+		const fetchRequest = new Request(request, { redirect: "follow" })
+		const response = await fetch(fetchRequest)
 		if (response.ok) cache.put(request, response.clone())
 		return response
 	} catch {
@@ -83,7 +92,8 @@ async function cacheFirst(request, cacheName) {
 async function networkFirst(request, cacheName) {
 	const cache = await caches.open(cacheName)
 	try {
-		const response = await fetch(request)
+		const fetchRequest = new Request(request, { redirect: "follow" })
+		const response = await fetch(fetchRequest)
 		if (response.ok) cache.put(request, response.clone())
 		return response
 	} catch {

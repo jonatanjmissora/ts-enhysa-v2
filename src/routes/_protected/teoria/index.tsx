@@ -13,6 +13,7 @@ const searchSchema = z.object({
 	t: z
 		.enum(["iluminacion", "ruido", "extintores", "pat"])
 		.default("iluminacion"),
+	from: z.enum(["root", "landing"]).default("root"),
 })
 
 export const Route = createFileRoute("/_protected/teoria/")({
@@ -177,7 +178,7 @@ const CONTENT: Record<string, () => React.ReactNode> = {
 }
 
 function RouteComponent() {
-	const { t } = Route.useSearch()
+	const { t, from } = Route.useSearch()
 	const navigate = useNavigate()
 	const Content = CONTENT[t]
 
@@ -185,7 +186,7 @@ function RouteComponent() {
 		<article className="w-full sm:max-w-3xl mx-auto py-10 px-4 space-y-8">
 			<header className="space-y-4">
 				<Link
-					to="/"
+					to={from === "landing" ? "/landing" : "/"}
 					className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors"
 				>
 					<ChevronLeft className="size-4" />

@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as LandingRouteImport } from './routes/landing'
 import { Route as ProtectedRouteRouteImport } from './routes/_protected/route'
 import { Route as LoginIndexRouteImport } from './routes/login/index'
 import { Route as ProtectedIndexRouteImport } from './routes/_protected/index'
@@ -45,6 +46,11 @@ import { Route as ProtectedIluminacionReportesChar91idChar93MedicionAreasChar91a
 import { Route as ProtectedIluminacionReportesChar91idChar93MedicionAreasChar91areaIdChar93SoloEditAreaRouteImport } from './routes/_protected/iluminacion/reportes/[$id]/medicion/areas/[$areaId]/solo.edit-area'
 import { Route as ProtectedIluminacionReportesChar91idChar93MedicionAreasChar91areaIdChar93SoloCreateAreaRouteImport } from './routes/_protected/iluminacion/reportes/[$id]/medicion/areas/[$areaId]/solo.create-area'
 
+const LandingRoute = LandingRouteImport.update({
+  id: '/landing',
+  path: '/landing',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ProtectedRouteRoute = ProtectedRouteRouteImport.update({
   id: '/_protected',
   getParentRoute: () => rootRouteImport,
@@ -277,6 +283,7 @@ const ProtectedIluminacionReportesChar91idChar93MedicionAreasChar91areaIdChar93S
 
 export interface FileRoutesByFullPath {
   '/': typeof ProtectedIndexRoute
+  '/landing': typeof LandingRoute
   '/perfil': typeof ProtectedPerfilRouteRouteWithChildren
   '/suscripcion': typeof ProtectedSuscripcionRoute
   '/api/uploadthing': typeof ApiUploadthingRoute
@@ -312,6 +319,7 @@ export interface FileRoutesByFullPath {
   '/iluminacion/reportes/$id/medicion/areas/$areaId/solo/puntos': typeof ProtectedIluminacionReportesChar91idChar93MedicionAreasChar91areaIdChar93SoloPuntosRoute
 }
 export interface FileRoutesByTo {
+  '/landing': typeof LandingRoute
   '/perfil': typeof ProtectedPerfilRouteRouteWithChildren
   '/suscripcion': typeof ProtectedSuscripcionRoute
   '/api/uploadthing': typeof ApiUploadthingRoute
@@ -350,6 +358,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_protected': typeof ProtectedRouteRouteWithChildren
+  '/landing': typeof LandingRoute
   '/_protected/perfil': typeof ProtectedPerfilRouteRouteWithChildren
   '/_protected/suscripcion': typeof ProtectedSuscripcionRoute
   '/api/uploadthing': typeof ApiUploadthingRoute
@@ -389,6 +398,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/landing'
     | '/perfil'
     | '/suscripcion'
     | '/api/uploadthing'
@@ -424,6 +434,7 @@ export interface FileRouteTypes {
     | '/iluminacion/reportes/$id/medicion/areas/$areaId/solo/puntos'
   fileRoutesByTo: FileRoutesByTo
   to:
+    | '/landing'
     | '/perfil'
     | '/suscripcion'
     | '/api/uploadthing'
@@ -461,6 +472,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/_protected'
+    | '/landing'
     | '/_protected/perfil'
     | '/_protected/suscripcion'
     | '/api/uploadthing'
@@ -499,6 +511,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   ProtectedRouteRoute: typeof ProtectedRouteRouteWithChildren
+  LandingRoute: typeof LandingRoute
   ApiUploadthingRoute: typeof ApiUploadthingRoute
   LoginIndexRoute: typeof LoginIndexRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
@@ -506,6 +519,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/landing': {
+      id: '/landing'
+      path: '/landing'
+      fullPath: '/landing'
+      preLoaderRoute: typeof LandingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_protected': {
       id: '/_protected'
       path: ''
@@ -871,6 +891,7 @@ const ProtectedRouteRouteWithChildren = ProtectedRouteRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   ProtectedRouteRoute: ProtectedRouteRouteWithChildren,
+  LandingRoute: LandingRoute,
   ApiUploadthingRoute: ApiUploadthingRoute,
   LoginIndexRoute: LoginIndexRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
