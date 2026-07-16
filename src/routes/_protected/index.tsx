@@ -16,53 +16,20 @@ function Home() {
 
 	return (
 		<article className="w-full sm:max-w-5xl 2xl:max-w-7xl sm:mx-auto min-h-svh flex flex-col items-center justify-center gap-20">
-			<div className="flex justify-between items-center flex-col mt-[70px] sm:mt-10 h-[600px] sm:h-[1050px] relative overflow-visible px-6 sm:w-2/3 mx-auto">
+			<div className="flex justify-between items-center flex-col mt-[70px] sm:mt-10 h-[550px] sm:h-[1050px] relative overflow-visible px-6 w-full mx-auto">
 				<p className="text-[26px] text-center tracking-wider text-pretty px-3">
 					Selecciona tu nuevo informe.
 				</p>
 				<img
-					src="/movil-hero.webp"
+					src="/hero-movil.webp"
 					alt="logo EnHySa"
-					className="absolute opacity-75 top-6 left-0 w-screen sm:w-full h-[600px] sm:h-[1000px] bottom-0 -z-10 max-w-none sm:mask-radial sm:mask-radial-from-50% sm:mask-radial-to-80% sm:mask-l-from-95% sm:mask-l-to-100% sm:mask-r-from-95% sm:mask-r-to-100% mask-t-from-80% mask-t-to-90% mask-b-from-80% mask-b-to-95% object-cover"
+					className="absolute opacity-75 top-1/2 -translate-y-1/2 left-0 w-full h-[280px] sm:h-auto bottom-0 -z-10 max-w-none  object-cover"
+					// className="sm:mask-radial sm:mask-radial-from-50% sm:mask-radial-to-80% sm:mask-l-from-95% sm:mask-l-to-100% sm:mask-r-from-95% sm:mask-r-to-100% mask-t-from-80% mask-t-to-90% mask-b-from-80% mask-b-to-95%"
 				/>
-				<Link
-					to="/iluminacion"
-					className="absolute top-[48.5%] sm:top-[43%] left-[45%] sm:left-[41%] size-18 sm:size-40"
-				/>
-				<Link
-					to="/teoria"
-					className="absolute top-[42%] sm:top-[35%] left-[24%] sm:left-[24%] size-18 sm:size-40"
-					search={{
-						t: "iluminacion",
-						from: "root",
-					}}
-				/>
-				{/* <Select
-					onValueChange={value => {
-						const protocolo = PROTOCOLOS.find(p => p.id === value)
-						if (protocolo) {
-							navigate({ to: protocolo.link, resetScroll: true })
-						}
-					}}
-				>
-					<SelectTrigger className="w-11/12 sm:w-1/2 ring-[1px] ring-foreground/30 py-6 tracking-widest font-semibold text-yellow-700 dark:bg-secondary bg-primary">
-						<SelectValue placeholder="Selecciona un protocolo" />
-					</SelectTrigger>
-					<SelectContent className="w-80 mx-auto truncate">
-						{PROTOCOLOS.map(protocolo => (
-							<SelectItem
-								key={protocolo.id}
-								value={protocolo.id}
-								className="text-right! text-nowrap! flex justify-start! py-2 text-base"
-							>
-								{protocolo.title}
-							</SelectItem>
-						))}
-					</SelectContent>
-				</Select> */}
+				<Icons />
 			</div>
 
-			<div className="flex flex-col gap-20 w-5/6 mx-auto mb-20">
+			<div className="flex flex-col gap-20 w-5/6 mx-auto my-20">
 				<div className="">
 					<div className="shapeLeft flex items-center justify-center flex-col gap-2 bg-accent/50 ring-[1px] dark:ring-amber-500/20 ring-amber-700/40 rounded-md p-4 mr-4 dark:text-amber-600 text-amber-800">
 						<ShieldCheck size={30} />
@@ -135,5 +102,112 @@ function Home() {
 
 			<Plan />
 		</article>
+	)
+}
+
+function Icons() {
+	const ICON_HEIGHT = 90
+
+	// 		 4
+	// 	  2  		7
+	// 1		5		9
+	//  	  3   	8
+	//   		 6
+	const iconsArray = [
+		{
+			id: 2,
+			nombre: "iluminacion",
+			link: "/iluminacion",
+			top: "17.5%",
+			left: "29%",
+			icon: "/icon-iluminacion.webp",
+		},
+		{
+			id: 4,
+			nombre: "capacitaciones",
+			link: "/capacitaciones",
+			top: "0%",
+			left: "50%",
+			icon: "/icon-capacitaciones.webp",
+		},
+		{
+			id: 7,
+			nombre: "ruido",
+			link: "/ruido",
+			top: "17.5%",
+			left: "71%",
+			icon: "/icon-ruido.webp",
+		},
+		{
+			id: 3,
+			nombre: "antisiniestral",
+			link: "/antisiniestral",
+			top: "50.5%",
+			left: "29%",
+			icon: "/icon-antisiniestral.webp",
+		},
+		{
+			id: 5,
+			nombre: "teoria",
+			link: "/teoria",
+			top: "33%",
+			left: "50%",
+			icon: "/icon-hse.webp",
+		},
+		{
+			id: 8,
+			nombre: "epp",
+			link: "/epp",
+			top: "50.5%",
+			left: "71%",
+			icon: "/icon-epp.webp",
+		},
+		{
+			id: 6,
+			nombre: "vehiculos",
+			link: "/vehiculos",
+			top: "66%",
+			left: "50%",
+			icon: "/icon-vehiculos.webp",
+		},
+		{
+			id: 1,
+			nombre: "extintores",
+			link: "/extintores",
+			top: "33%",
+			left: "8%",
+			icon: "/icon-extintores.webp",
+		},
+		{
+			id: 9,
+			nombre: "pat",
+			link: "/pat",
+			top: "33%",
+			left: "92%",
+			icon: "/icon-pat.webp",
+		},
+	]
+	return (
+		<div
+			className="relative w-full sm:scale-170 origin-bottom"
+			style={{ height: ICON_HEIGHT * 3, width: ICON_HEIGHT * 4 }}
+		>
+			{iconsArray.map(icon => (
+				<Link
+					key={icon.nombre}
+					to={icon.link}
+					style={{
+						top: icon.top,
+						left: icon.left,
+						translate: "-50% 0%",
+						height: ICON_HEIGHT,
+						aspectRatio: "1 / 1",
+					}}
+					className={`absolute `}
+				>
+					<img src={icon.icon} alt={icon.nombre} />
+				</Link>
+			))}
+		</div>
 	)
 }
