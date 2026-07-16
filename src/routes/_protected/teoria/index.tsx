@@ -183,7 +183,7 @@ function RouteComponent() {
 	const Content = CONTENT[t]
 
 	return (
-		<article className="w-full sm:max-w-3xl mx-auto py-10 px-4 space-y-8">
+		<article className="w-full sm:max-w-5xl mx-auto py-20 px-4 space-y-8">
 			<header className="space-y-4">
 				<Link
 					to={from === "landing" ? "/landing" : "/"}

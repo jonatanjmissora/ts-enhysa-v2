@@ -1,5 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router"
 import { useState, useEffect } from "react"
+import { Menu, X } from "lucide-react"
+import SuscriptionPlans from "#/components/suscripciones"
 
 export const Route = createFileRoute("/landing")({ component: Landing })
 
@@ -17,9 +19,11 @@ function Landing() {
 }
 
 function Navbar() {
+	const [isOpen, setIsOpen] = useState(false)
+
 	return (
 		<header className="sticky top-0 z-50 bg-[#1a1a1a] border-b border-[#2c2c2c] px-5">
-			<div className="w-full sm:max-w-5xl 2xl:max-w-7xl sm:mx-auto flex justify-between items-center p-4">
+			<div className="w-full sm:max-w-5xl 2xl:max-w-7xl sm:mx-auto flex justify-between items-center px-0 py-4 sm:p-4">
 				<div className="flex items-center gap-3">
 					<img
 						src="/EnHySa_logo.webp"
@@ -49,8 +53,66 @@ function Navbar() {
 						Probar Gratis
 					</a>
 				</nav>
+				<button
+					onClick={() => setIsOpen(true)}
+					className="md:hidden text-white"
+					aria-label="Abrir menú"
+				>
+					<Menu size={28} />
+				</button>
 			</div>
+			<MobileMenu isOpen={isOpen} setIsOpen={setIsOpen} />
 		</header>
+	)
+}
+
+function MobileMenu({
+	isOpen,
+	setIsOpen,
+}: {
+	isOpen: boolean
+	setIsOpen: (open: boolean) => void
+}) {
+	const close = () => setIsOpen(false)
+
+	return (
+		<div
+			className={`fixed inset-0 z-50 bg-[#121212] flex flex-col items-center justify-center gap-10 transition-transform duration-400 ${
+				isOpen ? "translate-y-0" : "-translate-y-full"
+			}`}
+		>
+			<button
+				onClick={close}
+				className="absolute top-6 right-6 text-white"
+				aria-label="Cerrar menú"
+			>
+				<X size={28} />
+			</button>
+			<Link
+				to="/landing"
+				hash="caracteristicas"
+				onClick={close}
+				className="text-2xl font-semibold no-underline text-white transition-colors hover:text-[#e2711d]"
+			>
+				Características
+			</Link>
+			<Link
+				to="/landing"
+				hash="modulos"
+				onClick={close}
+				className="text-2xl font-semibold no-underline text-white transition-colors hover:text-[#e2711d]"
+			>
+				Módulos
+			</Link>
+			<Link
+				to="/landing"
+				hash="contacto"
+				onClick={close}
+				className="bg-[#5cb85c] text-white rounded-md px-8 py-3 text-lg font-semibold no-underline transition-all hover:bg-[#4ca84c]"
+			>
+				Probar Gratis
+			</Link>
+		</div>
 	)
 }
 
@@ -248,40 +310,9 @@ function CtaSection() {
 					Unite a los profesionales de Higiene y Seguridad que ya digitalizaron
 					sus auditorías con EnHySa App.
 				</p>
-				<form
-					className="flex flex-col gap-4"
-					onSubmit={e => {
-						e.preventDefault()
-						alert(
-							"¡Gracias por tu interés! Nos comunicaremos a la brevedad para darte acceso de prueba."
-						)
-					}}
-				>
-					<input
-						type="text"
-						placeholder="Tu Nombre Completo"
-						required
-						className="bg-[#1e1e1e] border border-[#333] rounded-lg p-4 text-white text-base w-full outline-none focus:border-[#e2711d]"
-					/>
-					<input
-						type="email"
-						placeholder="Correo Electrónico Profesional"
-						required
-						className="bg-[#1e1e1e] border border-[#333] rounded-lg p-4 text-white text-base w-full outline-none focus:border-[#e2711d]"
-					/>
-					<input
-						type="text"
-						placeholder="Matrícula / Provincia (ej: LHS011021 PBA)"
-						required
-						className="bg-[#1e1e1e] border border-[#333] rounded-lg p-4 text-white text-base w-full outline-none focus:border-[#e2711d]"
-					/>
-					<button
-						type="submit"
-						className="bg-[#5cb85c] text-white rounded-md px-7 py-3.5 text-base font-semibold transition-all hover:bg-[#4ca84c] hover:shadow-[0_4px_12px_rgba(92,184,92,0.3)] cursor-pointer border-none"
-					>
-						Solicitar Acceso Beta
-					</button>
-				</form>
+			</div>
+			<div className="py-10 w-full sm:max-w-5xl 2xl:max-w-7xl sm:mx-auto flex flex-col justify-between items-center px-0 sm:px-4">
+				<SuscriptionPlans from="landing" />
 			</div>
 		</section>
 	)

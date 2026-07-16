@@ -7,19 +7,19 @@ export const Route = createFileRoute("/_protected/teoria/terminos-de-uso")({
 
 function RouteComponent() {
 	return (
-		<article className="max-w-3xl mx-auto py-10 px-4 space-y-8">
+		<article className="w-full sm:max-w-5xl mx-auto py-20 px-4 space-y-8">
 			<header className="space-y-4">
 				<Link
-					to="/"
+					to="/suscripcion"
 					className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors"
 				>
 					<ChevronLeft className="size-4" />
 					Volver
 				</Link>
-				<h1 className="text-3xl font-bold tracking-tight">
-					Términos de Uso
-				</h1>
-				<p className="text-sm text-muted-foreground">Última actualización: junio 2026</p>
+				<h1 className="text-3xl font-bold tracking-tight">Términos de Uso</h1>
+				<p className="text-sm text-muted-foreground">
+					Última actualización: junio 2026
+				</p>
 			</header>
 
 			<section className="space-y-4 text-sm leading-relaxed text-muted-foreground">
@@ -36,9 +36,9 @@ function RouteComponent() {
 				<p>
 					EnHySa es una plataforma web que permite a profesionales de seguridad
 					e higiene crear, gestionar y almacenar informes técnicos de
-					iluminación, ruido, extintores, PAT y continuidad de masas, conforme
-					a las normativas vigentes. El usuario es responsable de la veracidad
-					de los datos ingresados y del uso que dé a los informes generados.
+					iluminación, ruido, extintores, PAT y continuidad de masas, conforme a
+					las normativas vigentes. El usuario es responsable de la veracidad de
+					los datos ingresados y del uso que dé a los informes generados.
 				</p>
 
 				<h2 className="text-lg font-semibold text-foreground">
@@ -68,10 +68,10 @@ function RouteComponent() {
 				</h2>
 				<p>
 					EnHySa no se hace responsable por: daños directos o indirectos
-					derivados del uso de la plataforma, decisiones basadas en los
-					informes generados, ni por la interpretación legal o técnica de los
-					datos ingresados por el usuario. Los informes son herramientas de
-					asistencia técnica y no reemplazan la evaluación profesional in situ.
+					derivados del uso de la plataforma, decisiones basadas en los informes
+					generados, ni por la interpretación legal o técnica de los datos
+					ingresados por el usuario. Los informes son herramientas de asistencia
+					técnica y no reemplazan la evaluación profesional in situ.
 				</p>
 
 				<h2 className="text-lg font-semibold text-foreground">
@@ -87,10 +87,9 @@ function RouteComponent() {
 					6. Cancelación y suspensión
 				</h2>
 				<p>
-					El usuario puede cancelar su suscripción en cualquier momento desde
-					la configuración de su cuenta. EnHySa se reserva el derecho de
-					suspender o cancelar cuentas que violen estos términos, sin derecho a
-					reembolso.
+					El usuario puede cancelar su suscripción en cualquier momento desde la
+					configuración de su cuenta. EnHySa se reserva el derecho de suspender
+					o cancelar cuentas que violen estos términos, sin derecho a reembolso.
 				</p>
 
 				<h2 className="text-lg font-semibold text-foreground">

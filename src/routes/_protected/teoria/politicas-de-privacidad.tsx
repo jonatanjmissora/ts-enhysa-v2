@@ -1,16 +1,18 @@
 import { createFileRoute, Link } from "@tanstack/react-router"
 import { ChevronLeft } from "lucide-react"
 
-export const Route = createFileRoute("/_protected/teoria/politicas-de-privacidad")({
+export const Route = createFileRoute(
+	"/_protected/teoria/politicas-de-privacidad"
+)({
 	component: RouteComponent,
 })
 
 function RouteComponent() {
 	return (
-		<article className="max-w-3xl mx-auto py-10 px-4 space-y-8">
+		<article className="w-full sm:max-w-5xl mx-auto py-20 px-4 space-y-8">
 			<header className="space-y-4">
 				<Link
-					to="/"
+					to="/suscripcion"
 					className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors"
 				>
 					<ChevronLeft className="size-4" />
@@ -19,15 +21,17 @@ function RouteComponent() {
 				<h1 className="text-3xl font-bold tracking-tight">
 					Políticas de Privacidad
 				</h1>
-				<p className="text-sm text-muted-foreground">Última actualización: junio 2026</p>
+				<p className="text-sm text-muted-foreground">
+					Última actualización: junio 2026
+				</p>
 			</header>
 
 			<section className="space-y-4 text-sm leading-relaxed text-muted-foreground">
 				<p>
-					En <strong>EnHySa</strong> nos comprometemos a proteger la privacidad de
-					los datos personales de nuestros usuarios. Esta política describe cómo
-					recopilamos, usamos, almacenamos y protegemos la información dentro de
-					nuestra plataforma SaaS de seguridad e higiene laboral.
+					En <strong>EnHySa</strong> nos comprometemos a proteger la privacidad
+					de los datos personales de nuestros usuarios. Esta política describe
+					cómo recopilamos, usamos, almacenamos y protegemos la información
+					dentro de nuestra plataforma SaaS de seguridad e higiene laboral.
 				</p>
 
 				<h2 className="text-lg font-semibold text-foreground">
@@ -48,8 +52,8 @@ function RouteComponent() {
 					Los datos recopilados se utilizan exclusivamente para: (a) proveer y
 					mejorar los servicios de la plataforma, (b) generar informes técnicos
 					solicitados por el usuario, (c) gestionar la suscripción y facturación
-					de los planes contratados, y (d) comunicaciones operativas relacionadas
-					con el servicio.
+					de los planes contratados, y (d) comunicaciones operativas
+					relacionadas con el servicio.
 				</p>
 
 				<h2 className="text-lg font-semibold text-foreground">
@@ -57,9 +61,9 @@ function RouteComponent() {
 				</h2>
 				<p>
 					Los datos se almacenan en servidores seguros con cifrado en tránsito
-					(TLS) y en reposo. Implementamos medidas técnicas y organizativas
-					para proteger la información contra accesos no autorizados, pérdidas o
-					usos indebidos.
+					(TLS) y en reposo. Implementamos medidas técnicas y organizativas para
+					proteger la información contra accesos no autorizados, pérdidas o usos
+					indebidos.
 				</p>
 
 				<h2 className="text-lg font-semibold text-foreground">
@@ -101,9 +105,7 @@ function RouteComponent() {
 					aceptación de la versión vigente.
 				</p>
 
-				<h2 className="text-lg font-semibold text-foreground">
-					8. Contacto
-				</h2>
+				<h2 className="text-lg font-semibold text-foreground">8. Contacto</h2>
 				<p>
 					Ante cualquier consulta sobre esta política, puede comunicarse a
 					través de los canales de soporte disponibles en la aplicación.

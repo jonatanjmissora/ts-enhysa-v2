@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as LandingRouteImport } from './routes/landing'
+import { Route as CheckoutRouteImport } from './routes/checkout'
 import { Route as ProtectedRouteRouteImport } from './routes/_protected/route'
 import { Route as LoginIndexRouteImport } from './routes/login/index'
 import { Route as ProtectedIndexRouteImport } from './routes/_protected/index'
@@ -49,6 +50,11 @@ import { Route as ProtectedIluminacionReportesChar91idChar93MedicionAreasChar91a
 const LandingRoute = LandingRouteImport.update({
   id: '/landing',
   path: '/landing',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CheckoutRoute = CheckoutRouteImport.update({
+  id: '/checkout',
+  path: '/checkout',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProtectedRouteRoute = ProtectedRouteRouteImport.update({
@@ -283,6 +289,7 @@ const ProtectedIluminacionReportesChar91idChar93MedicionAreasChar91areaIdChar93S
 
 export interface FileRoutesByFullPath {
   '/': typeof ProtectedIndexRoute
+  '/checkout': typeof CheckoutRoute
   '/landing': typeof LandingRoute
   '/perfil': typeof ProtectedPerfilRouteRouteWithChildren
   '/suscripcion': typeof ProtectedSuscripcionRoute
@@ -319,6 +326,7 @@ export interface FileRoutesByFullPath {
   '/iluminacion/reportes/$id/medicion/areas/$areaId/solo/puntos': typeof ProtectedIluminacionReportesChar91idChar93MedicionAreasChar91areaIdChar93SoloPuntosRoute
 }
 export interface FileRoutesByTo {
+  '/checkout': typeof CheckoutRoute
   '/landing': typeof LandingRoute
   '/perfil': typeof ProtectedPerfilRouteRouteWithChildren
   '/suscripcion': typeof ProtectedSuscripcionRoute
@@ -358,6 +366,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_protected': typeof ProtectedRouteRouteWithChildren
+  '/checkout': typeof CheckoutRoute
   '/landing': typeof LandingRoute
   '/_protected/perfil': typeof ProtectedPerfilRouteRouteWithChildren
   '/_protected/suscripcion': typeof ProtectedSuscripcionRoute
@@ -398,6 +407,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/checkout'
     | '/landing'
     | '/perfil'
     | '/suscripcion'
@@ -434,6 +444,7 @@ export interface FileRouteTypes {
     | '/iluminacion/reportes/$id/medicion/areas/$areaId/solo/puntos'
   fileRoutesByTo: FileRoutesByTo
   to:
+    | '/checkout'
     | '/landing'
     | '/perfil'
     | '/suscripcion'
@@ -472,6 +483,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/_protected'
+    | '/checkout'
     | '/landing'
     | '/_protected/perfil'
     | '/_protected/suscripcion'
@@ -511,6 +523,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   ProtectedRouteRoute: typeof ProtectedRouteRouteWithChildren
+  CheckoutRoute: typeof CheckoutRoute
   LandingRoute: typeof LandingRoute
   ApiUploadthingRoute: typeof ApiUploadthingRoute
   LoginIndexRoute: typeof LoginIndexRoute
@@ -524,6 +537,13 @@ declare module '@tanstack/react-router' {
       path: '/landing'
       fullPath: '/landing'
       preLoaderRoute: typeof LandingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/checkout': {
+      id: '/checkout'
+      path: '/checkout'
+      fullPath: '/checkout'
+      preLoaderRoute: typeof CheckoutRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_protected': {
@@ -891,6 +911,7 @@ const ProtectedRouteRouteWithChildren = ProtectedRouteRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   ProtectedRouteRoute: ProtectedRouteRouteWithChildren,
+  CheckoutRoute: CheckoutRoute,
   LandingRoute: LandingRoute,
   ApiUploadthingRoute: ApiUploadthingRoute,
   LoginIndexRoute: LoginIndexRoute,

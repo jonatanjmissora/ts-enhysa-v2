@@ -200,3 +200,6 @@ export const capitalizeString = (str: string) => {
 		.map(word => word.charAt(0).toUpperCase() + word.slice(1))
 		.join(" ")
 }
+
+export const montoFormat = (number: number) =>
+	new Intl.NumberFormat("de-DE", { minimumFractionDigits: 0 }).format(number)

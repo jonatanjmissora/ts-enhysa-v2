@@ -13,9 +13,18 @@ export default function Footer() {
 			/>
 			<p className="textL py-2 border-b border-foreground/20">Mapa del sitio</p>
 			<ul className="p-4 flex flex-col gap-4">
-				<li><Link to="/">Inicio</Link></li>
-				<li><Link to="/perfil/tecnicos">Mi Perfil</Link></li>
-				<li><Link to="/suscripcion">Suscripción</Link></li>
+				<li className="w-full">
+					<Link to="/landing">¿Qué es EnHySa App?</Link>
+				</li>
+				<li>
+					<Link to="/">Inicio</Link>
+				</li>
+				<li>
+					<Link to="/perfil/tecnicos">Mi Perfil</Link>
+				</li>
+				<li>
+					<Link to="/suscripcion">Suscripción</Link>
+				</li>
 			</ul>
 			<p className="text-xs w-full text-center z-10">
 				© {actualYear} Enhysa. Todos los derechos reservados.
