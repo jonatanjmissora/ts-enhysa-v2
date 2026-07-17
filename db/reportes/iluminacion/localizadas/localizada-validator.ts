@@ -2,9 +2,11 @@ import {
 	ILUMINACION,
 	ILUMINACION_FUENTE,
 	ILUMINACION_TIPO,
-	VALORES_REQUERIDOS,
+	VALORES_REQUERIDOS_OBJ,
 } from "#/lib/constants"
 import { z } from "zod"
+
+const ALL_VALORES_REQUERIDOS = Object.values(VALORES_REQUERIDOS_OBJ).flat()
 
 export const localizadaFormValidator = z.object({
 	nombre: z.string().min(3, "Mínimo de 3 caracteres"),
@@ -12,7 +14,9 @@ export const localizadaFormValidator = z.object({
 	iluminacionTipo: z.enum(ILUMINACION_TIPO),
 	iluminacionFuente: z.enum(ILUMINACION_FUENTE),
 	iluminacion: z.enum(ILUMINACION),
-	valorRequerido: z.enum(VALORES_REQUERIDOS),
+	valorRequerido: z.enum(
+		ALL_VALORES_REQUERIDOS as [string, ...string[]],
+	),
 	observaciones: z.string(),
 	valor: z.number().positive("Debe ser un valor positivo"),
 	imagenes: z.array(z.string()),

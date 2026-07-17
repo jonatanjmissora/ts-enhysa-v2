@@ -146,7 +146,7 @@ function User() {
 							className="sm:size-10 2xl:size-14 rounded-full"
 						/>
 					) : (
-						<div className="bg-accent p-2 rounded-full">
+						<div className="bg-green-600 p-2 px-3 rounded-full">
 							{fullName?.charAt(0).toUpperCase()}
 						</div>
 					)}

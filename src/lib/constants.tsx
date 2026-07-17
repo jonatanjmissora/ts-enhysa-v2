@@ -73,14 +73,24 @@ export const ILUMINACION = ["general", "localizada", "mixta"] as const
 
 export type IluminacionType = (typeof ILUMINACION)[number]
 
+export const VALORES_REQUERIDOS_OBJ: {
+	[key: string]: readonly string[]
+} = {
+	"1": ["10", "100", "150", "1000", "1200", "1500", "100 a 300", "1500 a 3000"],
+	"2": ["200", "250", "2000"],
+	"3": ["300", "3000", "300 a 750", "3000 a 5000"],
+	"4": ["400", "450"],
+	"5": ["50", "500", "5000 a 10000"],
+	"6": ["600"],
+	"7": ["70", "700", "750", "750 a 1500"],
+	"8": ["80"],
+	"9": ["900"],
+} as const
+
+export type ValoresRequeridosObjType = typeof VALORES_REQUERIDOS_OBJ
+
 export const VALORES_REQUERIDOS = [
-	"100",
-	"100 a 300",
-	"300 a 750",
-	"750 a 1500",
-	"1500 a 3000",
-	"3000",
-	"3000 a 10.000",
+	...new Set(Object.values(VALORES_REQUERIDOS_OBJ).flat()),
 ] as const
 
 export type ValoresRequeridosType = (typeof VALORES_REQUERIDOS)[number]

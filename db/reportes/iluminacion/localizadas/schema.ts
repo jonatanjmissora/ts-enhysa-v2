@@ -32,7 +32,7 @@ export const localizadas_iluminacion = pgTable("localizadas_iluminacion", {
 	}).notNull(),
 
 	valorRequerido: text("valor_requerido", {
-		enum: VALORES_REQUERIDOS,
+		enum: VALORES_REQUERIDOS as [string, ...string[]],
 	}).notNull(),
 
 	observaciones: text("observaciones").notNull(),

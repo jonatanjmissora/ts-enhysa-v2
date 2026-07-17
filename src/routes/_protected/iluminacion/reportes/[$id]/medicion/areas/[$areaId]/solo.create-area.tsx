@@ -26,12 +26,11 @@ import {
 	ILUMINACION,
 	ILUMINACION_FUENTE,
 	ILUMINACION_TIPO,
-	VALORES_REQUERIDOS,
 	type IluminacionFuenteType,
 	type IluminacionTipoType,
 	type IluminacionType,
-	type ValoresRequeridosType,
 } from "#/lib/constants"
+import { ValorRequeridoField } from "#/components/reportes/iluminacion/valor-requerido-field"
 import { Textarea } from "#/components/ui/textarea"
 import { Label } from "#/components/ui/label"
 import { FilesDropzone } from "#/components/upload-button"
@@ -379,74 +378,14 @@ function CreateArea() {
 						}}
 					/>
 
-					<form.Field
-						name="valorRequerido"
-						children={field => {
-							const isInvalid =
-								field.state.meta.isTouched && !field.state.meta.isValid
-
-							return (
-								<Field data-invalid={isInvalid} className="relative gap-1">
-									<FieldLabel
-										htmlFor={field.name}
-										className="flex items-center gap-3 textL"
-									>
-										Valor Requerido
-										<Link
-											to="/teoria"
-											search={{
-												t: "iluminacionValoresRequeridos",
-												from: `/iluminacion/reportes/${id}/medicion/areas/${crypto.randomUUID()}/solo/create-area`,
-											}}
-											className="ml-auto border-b border-orange-500/75 text-xs text-orange-500"
-										>
-											Ver Tablas
-										</Link>
-									</FieldLabel>
-
-									<Select
-										value={field.state.value || ""}
-										onValueChange={value =>
-											field.handleChange(value as ValoresRequeridosType)
-										}
-									>
-										<SelectTrigger
-											id={field.name}
-											name={field.name}
-											onBlur={field.handleBlur}
-											aria-invalid={isInvalid}
-											className="w-full justify-end"
-										>
-											<SelectValue placeholder="Seleccione Valor" />
-										</SelectTrigger>
-
-										<SelectContent position="popper">
-											<SelectGroup>
-												<SelectLabel>Valores</SelectLabel>
-
-												{VALORES_REQUERIDOS?.map(valorRequerido => (
-													<SelectItem
-														key={valorRequerido}
-														value={valorRequerido}
-														className="justify-center"
-													>
-														{valorRequerido.toUpperCase()}
-													</SelectItem>
-												))}
-											</SelectGroup>
-										</SelectContent>
-									</Select>
-
-									{isInvalid && (
-										<FieldError
-											errors={field.state.meta.errors}
-											className="text-xs 2xl:text-sm absolute -bottom-4 left-0"
-										/>
-									)}
-								</Field>
-							)
-						}}
-					/>
+					<form.Field name="valorRequerido">
+						{field => (
+							<ValorRequeridoField
+								field={field}
+								from={`/iluminacion/reportes/${id}/medicion/areas/${crypto.randomUUID()}/solo/create-area`}
+							/>
+						)}
+					</form.Field>
 
 					<form.Field
 						name="observaciones"

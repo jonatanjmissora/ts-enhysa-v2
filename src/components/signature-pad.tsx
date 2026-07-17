@@ -193,7 +193,7 @@ function DrawingPad({
 				<canvas
 					ref={canvasRef}
 					width={600}
-					height={200}
+					height={300}
 					onMouseDown={startDrawing}
 					onMouseMove={draw}
 					onMouseUp={stopDrawing}
