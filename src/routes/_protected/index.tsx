@@ -16,15 +16,14 @@ function Home() {
 
 	return (
 		<article className="w-full sm:max-w-5xl 2xl:max-w-7xl sm:mx-auto min-h-svh flex flex-col items-center justify-center gap-20">
-			<div className="flex justify-between items-center flex-col mt-[70px] sm:mt-10 h-[550px] sm:h-[1050px] relative overflow-visible px-6 w-full mx-auto">
+			<div className="flex justify-between items-center flex-col mt-[70px] sm:mt-10 h-[520px] sm:h-[800px] relative overflow-visible px-6 w-full mx-auto">
 				<p className="text-[26px] text-center tracking-wider text-pretty px-3">
 					Selecciona tu nuevo informe.
 				</p>
 				<img
 					src="/hero-movil.webp"
 					alt="logo EnHySa"
-					className="absolute opacity-75 top-1/2 -translate-y-1/2 left-0 w-full h-[280px] sm:h-auto bottom-0 -z-10 max-w-none  object-cover"
-					// className="sm:mask-radial sm:mask-radial-from-50% sm:mask-radial-to-80% sm:mask-l-from-95% sm:mask-l-to-100% sm:mask-r-from-95% sm:mask-r-to-100% mask-t-from-80% mask-t-to-90% mask-b-from-80% mask-b-to-95%"
+					className="absolute opacity-75 top-1/2 -translate-y-1/2 left-0 w-full h-[280px] sm:h-auto bottom-0 -z-10 max-w-none  object-cover sm:mask-radial sm:mask-radial-from-80% sm:mask-radial-to-90% sm:mask-l-from-95% sm:mask-l-to-100% sm:mask-r-from-95% sm:mask-r-to-100% mask-t-from-90% mask-t-to-100% mask-b-from-90% mask-b-to-100%"
 				/>
 				<Icons />
 			</div>
@@ -108,17 +107,17 @@ function Home() {
 function Icons() {
 	const ICON_HEIGHT = 90
 
-	// 		 4
+	// 		   	4
 	// 	  2  		7
-	// 1		5		9
-	//  	  3   	8
-	//   		 6
+	// 1		  5		9
+	//    3   	    8
+	//   		  6
 	const iconsArray = [
 		{
 			id: 2,
 			nombre: "iluminacion",
 			link: "/iluminacion",
-			top: "17.5%",
+			top: "16.5%",
 			left: "29%",
 			icon: "/icon-iluminacion.webp",
 		},
@@ -134,7 +133,7 @@ function Icons() {
 			id: 7,
 			nombre: "ruido",
 			link: "/ruido",
-			top: "17.5%",
+			top: "17%",
 			left: "71%",
 			icon: "/icon-ruido.webp",
 		},
@@ -142,7 +141,7 @@ function Icons() {
 			id: 3,
 			nombre: "antisiniestral",
 			link: "/antisiniestral",
-			top: "50.5%",
+			top: "51.5%",
 			left: "29%",
 			icon: "/icon-antisiniestral.webp",
 		},
@@ -150,7 +149,7 @@ function Icons() {
 			id: 5,
 			nombre: "teoria",
 			link: "/teoria",
-			top: "33%",
+			top: "34%",
 			left: "50%",
 			icon: "/icon-hse.webp",
 		},
@@ -158,15 +157,15 @@ function Icons() {
 			id: 8,
 			nombre: "epp",
 			link: "/epp",
-			top: "50.5%",
-			left: "71%",
+			top: "51.5%",
+			left: "71.5%",
 			icon: "/icon-epp.webp",
 		},
 		{
 			id: 6,
 			nombre: "vehiculos",
 			link: "/vehiculos",
-			top: "66%",
+			top: "70%",
 			left: "50%",
 			icon: "/icon-vehiculos.webp",
 		},
@@ -174,23 +173,23 @@ function Icons() {
 			id: 1,
 			nombre: "extintores",
 			link: "/extintores",
-			top: "33%",
-			left: "8%",
+			top: "34%",
+			left: "7%",
 			icon: "/icon-extintores.webp",
 		},
 		{
 			id: 9,
 			nombre: "pat",
 			link: "/pat",
-			top: "33%",
-			left: "92%",
+			top: "34%",
+			left: "93.5%",
 			icon: "/icon-pat.webp",
 		},
 	]
 	return (
 		<div
 			className="relative w-full sm:scale-170 origin-bottom"
-			style={{ height: ICON_HEIGHT * 3, width: ICON_HEIGHT * 4 }}
+			style={{ height: ICON_HEIGHT * 2.5, width: ICON_HEIGHT * 3.5 }}
 		>
 			{iconsArray.map(icon => (
 				<Link
