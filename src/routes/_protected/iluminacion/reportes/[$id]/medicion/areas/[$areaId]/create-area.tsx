@@ -436,6 +436,16 @@ function CreateArea() {
 						}}
 					/>
 
+					<Link
+						to={`/teoria/iluminacion/valores-reqiueridos`}
+						search={{
+							from: `/reportes/${id}/medicion/areas/${crypto.randomUUID()}/create-area`,
+						}}
+						className="ml-auto border-b border-orange-500/75 text-xs text-orange-500"
+					>
+						Ver Tablas
+					</Link>
+
 					<form.Field
 						name="observaciones"
 						children={field => {

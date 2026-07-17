@@ -22,6 +22,6 @@ si no espero al 100% para cargar la foto, no puedo seguir
 [x] implementar mercadopago
 [x] actualizar usuario con plan adquirido
 [x] usuario de demo
-[x] iconos en pagina de inicio
+[✔] iconos en pagina de inicio
 [✔] planes
 [x] probar PWA en celular
