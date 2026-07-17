@@ -402,6 +402,16 @@ function EditArea({ id, area }: { id: string; area: AreaIluminacionType }) {
 										className="flex items-center gap-3 textL"
 									>
 										Valor Requerido
+										<Link
+											to="/teoria"
+											search={{
+												t: "iluminacionValoresRequeridos",
+												from: `/iluminacion/reportes/${id}/medicion/areas/${area.id}/edit-area`,
+											}}
+											className="ml-auto border-b border-orange-500/75 text-xs text-orange-500"
+										>
+											Ver Tablas
+										</Link>
 									</FieldLabel>
 
 									<Select
@@ -447,16 +457,6 @@ function EditArea({ id, area }: { id: string; area: AreaIluminacionType }) {
 							)
 						}}
 					/>
-
-					<Link
-						to={`/teoria/iluminacion/valores-reqiueridos`}
-						search={{
-							from: `/reportes/${id}/medicion/areas/${area.id}/edit-area`,
-						}}
-						className="ml-auto border-b border-orange-500/75 text-xs text-orange-500"
-					>
-						Ver Tablas
-					</Link>
 
 					<form.Field
 						name="observaciones"

@@ -15,13 +15,14 @@ si trabajo para 2 empresas, poder elegir logos distintos
 si no espero al 100% para cargar la foto, no puedo seguir
 
 
-[✔] pantalla de presentacion
-[x] teoria
-[x] boton de teoria en valor requerido
-[x] input de valores requeridos
-[x] implementar mercadopago
-[x] actualizar usuario con plan adquirido
-[x] usuario de demo
-[✔] iconos en pagina de inicio
-[✔] planes
-[x] probar PWA en celular
+[✅] pantalla de presentacion
+[🔨] teoria
+[✅] teoria de valor requerido
+[✅] boton de teoria en valor requerido
+[❌] input de valores requeridos
+[❌] implementar mercadopago
+[❌] actualizar usuario con plan adquirido
+[❌] usuario de demo
+[✅] iconos en pagina de inicio
+[✅] planes
+[🔨] probar PWA en celular
