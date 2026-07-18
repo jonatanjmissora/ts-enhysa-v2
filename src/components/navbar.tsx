@@ -13,6 +13,9 @@ import { Link, useLoaderData, useNavigate } from "@tanstack/react-router"
 import { LogOut, Shield } from "lucide-react"
 import { useState } from "react"
 import { Theme } from "./theme"
+import { resetDemoData } from "../../server/reset-demo-data-server"
+
+const DEMO_EMAIL = "demouser@enhysa.demo"
 
 export default function Navbar() {
 	const [isOpen, setIsOpen] = useState(false)
@@ -177,11 +180,22 @@ function User() {
 export function LogoutAlertDialog() {
 	const [open, setOpen] = useState(false)
 	const navigate = useNavigate()
+	const { session } = useLoaderData({ from: "__root__" })
+	const isDemo = session?.user.email === DEMO_EMAIL
+	const [resetting, setResetting] = useState(false)
+
 	const logout = async () => {
+		if (isDemo) {
+			setResetting(true)
+			try {
+				await resetDemoData()
+			} catch (_err) {
+				// si falla el reset, igual cerramos sesión
+			}
+		}
 		await authClient.signOut({
 			fetchOptions: {
 				onSuccess: () => {
-					// Redirect to home page after successful logout
 					navigate({ to: "/login" })
 				},
 			},
@@ -204,23 +218,28 @@ export function LogoutAlertDialog() {
 			</AlertDialogTrigger>
 			<AlertDialogContent className="backdrop-blur-xl w-11/12 flex flex-col gap-4 py-20 justify-center items-center px-2">
 				<AlertDialogTitle className="text-center sm:text-lg 2xl:text-xl">
-					¿Estás seguro de que quieres cerrar sesión?
+					{isDemo
+						? "¿Cerrar sesión? Se eliminarán los datos de la demo."
+						: "¿Estás seguro de que quieres cerrar sesión?"}
 				</AlertDialogTitle>
 				<AlertDialogDescription className="text-center w-3/4 text-pretty mx-auto">
-					Esto cerrará tu sesión y necesitarás iniciar sesión de nuevo.
+					{isDemo
+						? "Todos los reportes y datos creados en esta sesión demo serán eliminados."
+						: "Esto cerrará tu sesión y necesitarás iniciar sesión de nuevo."}
 				</AlertDialogDescription>
 				<div className="flex items-center justify-center gap-4 w-11/12">
 					<Button
 						variant={"outline"}
 						className="cursor-pointer w-1/2"
+						disabled={resetting}
 						onClick={() => {
 							setOpen(false)
 						}}
 					>
 						Cancelar
 					</Button>
-					<Button className="cursor-pointer w-1/2" onClick={logout}>
-						Confirmar
+					<Button className="cursor-pointer w-1/2" onClick={logout} disabled={resetting}>
+						{resetting ? "Limpiando..." : "Confirmar"}
 					</Button>
 				</div>
 			</AlertDialogContent>

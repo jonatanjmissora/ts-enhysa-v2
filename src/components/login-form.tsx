@@ -22,6 +22,7 @@ import { authClient } from "@/lib/auth-client"
 import { Eye, EyeClosed } from "lucide-react"
 // import { PreferencesMenu } from "./layout/preferences-menu"
 import { Input } from "./ui/input"
+import { ensureDemoUser } from "../../server/seed-demo-user-server"
 
 const formSchema = z.object({
 	email: z.email("Email inválido"),
@@ -78,6 +79,28 @@ export function LoginForm({
 		}
 	}
 
+	const [demoLoading, setDemoLoading] = useState(false)
+	const demoLogin = async () => {
+		setDemoLoading(true)
+		try {
+			const creds = await ensureDemoUser()
+			const result = await authClient.signIn.email({
+				email: creds.email,
+				password: creds.password,
+				callbackURL: "/",
+			})
+			if (result.error) {
+				console.error("Error al iniciar sesión demo", result.error)
+				return
+			}
+			router.invalidate()
+		} catch (err) {
+			console.error("Error en demo login", err)
+		} finally {
+			setDemoLoading(false)
+		}
+	}
+
 	return (
 		<div className={cn("w-90 relative", className)} {...props}>
 			{/*<div className="absolute top-4 left-4 right-4">
@@ -127,6 +150,11 @@ export function LoginForm({
 											Google
 										</div>
 									)}
+								</Button>
+							</Field>
+							<Field>
+								<Button variant="secondary" type="button" onClick={demoLogin} disabled={demoLoading} className="w-full">
+									{demoLoading ? "Iniciando..." : "Demo — Probar sin registrarse"}
 								</Button>
 							</Field>
 							<FieldSeparator className="hidden sm:block">

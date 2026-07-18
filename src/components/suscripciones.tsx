@@ -4,6 +4,8 @@ import { Link } from "@tanstack/react-router"
 import { useState } from "react"
 import { Label } from "./ui/label"
 import { Check } from "lucide-react"
+import { authClient } from "@/lib/auth-client"
+import { ensureDemoUser } from "../../server/seed-demo-user-server"
 
 export default function SuscriptionPlans({ from }: { from?: string }) {
 	const [actualPlan, setActualPlan] = useState<0 | 1 | 2>(1)
@@ -72,6 +74,22 @@ const Plan = ({
 	setActualPlan,
 	from,
 }: PlanProps) => {
+	const [demoLoading, setDemoLoading] = useState(false)
+
+	const handleDemoLogin = async () => {
+		setDemoLoading(true)
+		try {
+			const creds = await ensureDemoUser()
+			await authClient.signIn.email({
+				email: creds.email,
+				password: creds.password,
+				callbackURL: "/",
+			})
+		} catch (_err) {
+			setDemoLoading(false)
+		}
+	}
+
 	return (
 		<button
 			onClick={() => setActualPlan(index as 0 | 1 | 2)}
@@ -104,18 +122,31 @@ const Plan = ({
 				))}
 			</div>
 
-			<Link
-				to={index === 0 ? "/" : "/checkout"}
-				search={{
-					plan: index === 0 ? "Prueba Gratis" : title,
-					...(from ? { from } : {}),
-				}}
-				className={`w-full py-3 text-primary-foreground rounded-md text-center font-semibold block no-underline ${
-					index === actualPlan ? "bg-green-400" : "bg-primary"
-				}`}
-			>
-				{index === 0 ? "Prueba Gratis" : "Adquirir Plan"}
-			</Link>
+			{index === 0 ? (
+				<button
+					type="button"
+					onClick={e => { e.stopPropagation(); handleDemoLogin() }}
+					disabled={demoLoading}
+					className={`w-full py-3 text-primary-foreground rounded-md text-center font-semibold block no-underline ${
+						index === actualPlan ? "bg-green-400" : "bg-primary"
+					}`}
+				>
+					{demoLoading ? "Iniciando..." : "Prueba Gratis"}
+				</button>
+			) : (
+				<Link
+					to="/checkout"
+					search={{
+						plan: title,
+						...(from ? { from } : {}),
+					}}
+					className={`w-full py-3 text-primary-foreground rounded-md text-center font-semibold block no-underline ${
+						index === actualPlan ? "bg-green-400" : "bg-primary"
+					}`}
+				>
+					Adquirir Plan
+				</Link>
+			)}
 		</button>
 	)
 }

@@ -1,4 +1,4 @@
-import { pgTable, text, timestamp } from "drizzle-orm/pg-core"
+import { pgTable, text, timestamp, boolean } from "drizzle-orm/pg-core"
 import { user } from "../../users/schema"
 import { tecnicos } from "../../tecnicos/schema"
 import { empresas } from "../../empresas/schema"
@@ -38,6 +38,9 @@ export const reportes_iluminacion = pgTable("reportes_iluminacion", {
 		.references(() => user.id, { onDelete: "cascade" }),
 
 	finishedAt: timestamp("finished_at"),
+
+	creditConsumed: boolean("credit_consumed").default(false).notNull(),
+	creditConsumedAt: timestamp("credit_consumed_at"),
 })
 
 export type ReporteIluminacionType = typeof reportes_iluminacion.$inferSelect

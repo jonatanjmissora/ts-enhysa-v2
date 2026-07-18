@@ -21,10 +21,11 @@ si no espero al 100% para cargar la foto, no puedo seguir
 [✅] boton de teoria en valor requerido
 [✅] input de valores requeridos
 [❌] implementar mercadopago
-[❌] asociar un plan de suscripcion al user
-[❌] actualizar usuario con plan adquirido
-[❌] usuario de demo
-no puedo cargar el logo de la empresa, me sale del formulario
+[✅] asociar un plan de suscripcion al user
+[✅] actualizar usuario con plan adquirido
+[❌] usuario de demo con reset si hago reload, u otro usuario utiliza el demo user
+	no puedo cargar el logo de la empresa, me sale del formulario
 [✅] iconos en pagina de inicio
 [✅] planes
 [🔨] probar PWA en celular
+[❌] calculadora presupuestos

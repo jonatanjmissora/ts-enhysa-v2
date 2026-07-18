@@ -31,13 +31,15 @@ const styles = StyleSheet.create({
 export default function Page05({
 	tecnico,
 	empresa,
+	showWatermark = true,
 }: {
 	tecnico: TecnicoType
 	empresa: EmpresaType
+	showWatermark?: boolean
 }) {
 	return (
 		<Page size="A4" style={styles.page}>
-			<Watermark />
+			{showWatermark && <Watermark />}
 
 			<MembreteSuperior empresa={empresa} />
 

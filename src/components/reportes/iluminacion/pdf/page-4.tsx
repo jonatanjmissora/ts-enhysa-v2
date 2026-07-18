@@ -63,14 +63,16 @@ export default function Page4({
 	tecnico,
 	empresa,
 	instrumento,
+	showWatermark = true,
 }: {
 	tecnico: TecnicoType
 	empresa: EmpresaType
 	instrumento: InstrumentoType
+	showWatermark?: boolean
 }) {
 	return (
 		<Page size="A4" style={styles.page}>
-			<Watermark />
+			{showWatermark && <Watermark />}
 			<MembreteSuperior empresa={empresa} />
 			<Text
 				style={{

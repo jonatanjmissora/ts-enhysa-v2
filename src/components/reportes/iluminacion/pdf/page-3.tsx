@@ -65,10 +65,12 @@ export default function Page3({
 	reporte,
 	tecnico,
 	empresa,
+	showWatermark = true,
 }: {
 	reporte: ReporteIluminacionType
 	tecnico: TecnicoType
 	empresa: EmpresaType
+	showWatermark?: boolean
 }) {
 	const conclusionChunks = reporte.conclusion.split("\n")
 	const recomendacionChunks = reporte.recomendacion.split("\n")
@@ -120,6 +122,7 @@ export default function Page3({
 					empresa={empresa}
 					conclusionChunk={conclusionChunksFormated[index]}
 					recomendacionChunk={recomendacionChunksFormated[index]}
+					showWatermark={showWatermark}
 				/>
 			))}
 		</>
@@ -131,15 +134,17 @@ function ResumePage({
 	empresa,
 	conclusionChunk,
 	recomendacionChunk,
+	showWatermark = true,
 }: {
 	tecnico: TecnicoType
 	empresa: EmpresaType
 	conclusionChunk: string[]
 	recomendacionChunk: string[]
+	showWatermark?: boolean
 }) {
 	return (
 		<Page size="A4" orientation="landscape" style={styles.page}>
-			<Watermark />
+			{showWatermark && <Watermark />}
 			<MembreteSuperior empresa={empresa} />
 			<Text
 				style={{

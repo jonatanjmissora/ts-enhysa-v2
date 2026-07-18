@@ -63,15 +63,17 @@ export default function Page5({
 	areas,
 	tecnico,
 	empresa,
+	showWatermark = true,
 }: {
 	areas: AreaIluminacionType[]
 	tecnico: TecnicoType
 	empresa: EmpresaType
+	showWatermark?: boolean
 }) {
 	return (
 		<>
 			{areas.map(area => (
-				<Area key={area.id} area={area} tecnico={tecnico} empresa={empresa} />
+				<Area key={area.id} area={area} tecnico={tecnico} empresa={empresa} showWatermark={showWatermark} />
 			))}
 		</>
 	)
@@ -81,10 +83,12 @@ function Area({
 	area,
 	tecnico,
 	empresa,
+	showWatermark = true,
 }: {
 	area: AreaIluminacionType
 	tecnico: TecnicoType
 	empresa: EmpresaType
+	showWatermark?: boolean
 }) {
 	const ancho = area.ancho
 	const largo = area.largo
@@ -110,7 +114,7 @@ function Area({
 
 	return (
 		<Page size="A4" style={styles.page}>
-			<Watermark />
+			{showWatermark && <Watermark />}
 			<MembreteSuperior empresa={empresa} />
 			<Text
 				style={{

@@ -18,3 +18,6 @@ export * from "./reportes/iluminacion/areas/schema"
 
 // Iluminacion Localizadas
 export * from "./reportes/iluminacion/localizadas/schema"
+
+// Credits
+export * from "./credits/schema"

@@ -1,4 +1,4 @@
-import { memo, useState, useEffect } from "react"
+import { useState, useEffect } from "react"
 import {
 	Document as PDFRendererDocument,
 	Font,
@@ -9,6 +9,8 @@ Font.register({
 	family: "Roboto",
 	src: "https://cdnjs.cloudflare.com/ajax/libs/ink/3.1.10/fonts/Roboto/roboto-regular-webfont.ttf",
 })
+
+import { Link } from "@tanstack/react-router"
 
 import type { ReporteIluminacionType } from "../../../../../db/reportes/iluminacion/schema"
 import Page1 from "./page-1"
@@ -26,77 +28,166 @@ import Page6 from "./page-6"
 import Page2Reducida from "./page-2-reducida"
 import Page05 from "./page-0-5"
 import type { LocalizadaIluminacionType } from "../../../../../db/reportes/iluminacion/localizadas/schema"
+import { useUnlockReporte } from "../../../../../queries/reportes/iluminacion/use-unlock-reporte"
 
-export const MyDocumentReducida = memo(
-	({
-		reporte,
-		localizadas,
-		areas,
-		tecnico,
-		empresa,
-		instrumento,
-	}: {
-		reporte: ReporteIluminacionType
-		localizadas: LocalizadaIluminacionType[]
-		areas: AreaIluminacionType[]
-		tecnico: TecnicoType
-		empresa: EmpresaType
-		instrumento: InstrumentoType
-	}) => {
-		const [instance] = usePDF({
-			document: (
-				<MyDocumentData
-					reporte={reporte}
-					localizadas={localizadas}
-					areas={areas}
-					tecnico={tecnico}
-					empresa={empresa}
-					instrumento={instrumento}
-				/>
-			),
-		})
+export function MyDocumentReducida({
+	reporte,
+	localizadas,
+	areas,
+	tecnico,
+	empresa,
+	instrumento,
+	credits,
+}: {
+	reporte: ReporteIluminacionType
+	localizadas: LocalizadaIluminacionType[]
+	areas: AreaIluminacionType[]
+	tecnico: TecnicoType
+	empresa: EmpresaType
+	instrumento: InstrumentoType
+	credits: number | undefined
+}) {
+	const showWatermark = !reporte.creditConsumed
+	const unlockMutation = useUnlockReporte()
 
-		if (instance.loading) {
-			return (
-				<Loading
-					text="generando pdf..."
-					className="scale-50 justify-start  max-h-[50svh]"
-				/>
-			)
-		}
+	const [instance] = usePDF({
+		document: (
+			<MyDocumentData
+				reporte={reporte}
+				localizadas={localizadas}
+				areas={areas}
+				tecnico={tecnico}
+				empresa={empresa}
+				instrumento={instrumento}
+				showWatermark={showWatermark}
+			/>
+		),
+	})
 
-		if (instance.error) {
-			return <div>Error al generar el PDF: {String(instance.error)}</div>
-		}
-
+	if (instance.loading && !instance.url) {
 		return (
-			<div className="flex flex-col items-center w-full gap-4 pb-12">
-				<div className="flex justify-center w-full mb-6">
+			<Loading
+				text="generando pdf..."
+				className="scale-50 justify-start  max-h-[50svh]"
+			/>
+		)
+	}
+
+	if (instance.error) {
+		return <div>Error al generar el PDF: {String(instance.error)}</div>
+	}
+
+	return (
+		<div className="flex flex-col items-center w-full gap-4 pb-20">
+			<div className="flex flex-col items-center gap-3 mb-6">
+				{reporte.creditConsumed ? (
 					<a
-						// biome-ignore lint/style/noNonNullAssertion: <la conozco>
 						href={instance.url!}
 						download={`Informe Iluminacion ${empresa.razonSocial} - ${reporte.finishedAt?.toLocaleDateString("it-IT")}.pdf`}
-						className=""
 					>
 						<Button>Descargar PDF</Button>
 					</a>
-				</div>
-
-				<div className="w-full max-w-full overflow-hidden flex flex-col items-center bg-muted/20 py-8">
-					<PdfViewerClient
-						url={instance.url}
-						loading={
-							<Loading
-								text="cargando visor..."
-								className="scale-50 justify-start  max-h-[50svh]"
-							/>
-						}
-					/>
-				</div>
+				) : (
+					<>
+						<Button
+							onClick={() =>
+								unlockMutation.mutate({
+									data: { reporteId: reporte.id },
+								})
+							}
+							disabled={unlockMutation.isPending}
+						>
+							{unlockMutation.isPending
+								? "Desbloqueando..."
+								: "Desbloquear PDF (1 crédito)"}
+						</Button>
+						<div className="text-xs text-muted-foreground">
+							Créditos disponibles:{" "}
+							<span className="font-semibold text-foreground">
+								{credits ?? "..."}
+							</span>
+						</div>
+						{credits !== undefined && credits < 1 && (
+							<div className="flex flex-col items-center gap-2 text-xs mt-6">
+								<span>Ud no posee créditos para desbloquear el PDF.</span>
+								<Link to="/suscripcion">
+									<Button variant="outline" className="py-0">
+										Comprar créditos
+									</Button>
+								</Link>
+							</div>
+						)}
+						{unlockMutation.isError && (
+							<div className="text-xs text-destructive">
+								{unlockMutation.error?.message ?? "Error al desbloquear el PDF"}
+							</div>
+						)}
+					</>
+				)}
 			</div>
-		)
-	}
-)
+
+			<div className="w-full max-w-full overflow-hidden flex flex-col items-center bg-muted/20 py-8">
+				<PdfViewerClient
+					url={instance.url}
+					key={instance.url}
+					loading={
+						<Loading
+							text="cargando visor..."
+							className="scale-50 justify-start  max-h-[50svh]"
+						/>
+					}
+				/>
+			</div>
+
+			<div className="flex flex-col items-center gap-3 mb-6">
+				{reporte.creditConsumed ? (
+					<a
+						href={instance.url!}
+						download={`Informe Iluminacion ${empresa.razonSocial} - ${reporte.finishedAt?.toLocaleDateString("it-IT")}.pdf`}
+					>
+						<Button>Descargar PDF</Button>
+					</a>
+				) : (
+					<>
+						<Button
+							onClick={() =>
+								unlockMutation.mutate({
+									data: { reporteId: reporte.id },
+								})
+							}
+							disabled={unlockMutation.isPending}
+						>
+							{unlockMutation.isPending
+								? "Desbloqueando..."
+								: "Desbloquear PDF (1 crédito)"}
+						</Button>
+						<div className="text-xs text-muted-foreground">
+							Créditos disponibles:{" "}
+							<span className="font-semibold text-foreground">
+								{credits ?? "..."}
+							</span>
+						</div>
+						{credits !== undefined && credits < 1 && (
+							<div className="flex flex-col items-center gap-2 text-xs mt-6">
+								<span>Ud no posee créditos para desbloquear el PDF.</span>
+								<Link to="/suscripcion">
+									<Button variant="outline" className="py-0">
+										Comprar créditos
+									</Button>
+								</Link>
+							</div>
+						)}
+						{unlockMutation.isError && (
+							<div className="text-xs text-destructive">
+								{unlockMutation.error?.message ?? "Error al desbloquear el PDF"}
+							</div>
+						)}
+					</>
+				)}
+			</div>
+		</div>
+	)
+}
 
 function MyDocumentData({
 	reporte,
@@ -105,6 +196,7 @@ function MyDocumentData({
 	tecnico,
 	empresa,
 	instrumento,
+	showWatermark,
 }: {
 	reporte: ReporteIluminacionType
 	localizadas: LocalizadaIluminacionType[]
@@ -112,27 +204,58 @@ function MyDocumentData({
 	tecnico: TecnicoType
 	empresa: EmpresaType
 	instrumento: InstrumentoType
+	showWatermark: boolean
 }) {
 	return (
 		<PDFRendererDocument title={reporte.title}>
-			<Page0 tecnico={tecnico} empresa={empresa} />
-			<Page05 tecnico={tecnico} empresa={empresa} />
+			<Page0
+				tecnico={tecnico}
+				empresa={empresa}
+				showWatermark={showWatermark}
+			/>
+			<Page05
+				tecnico={tecnico}
+				empresa={empresa}
+				showWatermark={showWatermark}
+			/>
 			<Page1
 				reporte={reporte}
 				tecnico={tecnico}
 				empresa={empresa}
 				instrumento={instrumento}
+				showWatermark={showWatermark}
 			/>
 			<Page2Reducida
 				localizadas={localizadas}
 				areas={areas}
 				tecnico={tecnico}
 				empresa={empresa}
+				showWatermark={showWatermark}
 			/>
-			<Page3 reporte={reporte} tecnico={tecnico} empresa={empresa} />
-			<Page4 tecnico={tecnico} empresa={empresa} instrumento={instrumento} />
-			<Page5 areas={areas} tecnico={tecnico} empresa={empresa} />
-			<Page6 areas={areas} tecnico={tecnico} empresa={empresa} />
+			<Page3
+				reporte={reporte}
+				tecnico={tecnico}
+				empresa={empresa}
+				showWatermark={showWatermark}
+			/>
+			<Page4
+				tecnico={tecnico}
+				empresa={empresa}
+				instrumento={instrumento}
+				showWatermark={showWatermark}
+			/>
+			<Page5
+				areas={areas}
+				tecnico={tecnico}
+				empresa={empresa}
+				showWatermark={showWatermark}
+			/>
+			<Page6
+				areas={areas}
+				tecnico={tecnico}
+				empresa={empresa}
+				showWatermark={showWatermark}
+			/>
 		</PDFRendererDocument>
 	)
 }

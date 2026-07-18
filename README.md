@@ -1,6 +1,14 @@
 
 npx drizzle-kit push
 
+userCredits
+INSERT INTO user_credits (user_id, credits)
+VALUES ('edcHwOgxkTHDf0r2uC2c46QJ0V7Y9nh9', 1);
+
+creditsHistory
+INSERT INTO credit_history (id, user_id, type, credits, report_id, payment_id)
+VALUES (gen_random_uuid(), 'edcHwOgxkTHDf0r2uC2c46QJ0V7Y9nh9', 'bonus', 1, NULL, NULL);
+
 Vamos a crear una aplicacion con el siguiente stack:
 - Pnpm package manager
 - Vite build tool 

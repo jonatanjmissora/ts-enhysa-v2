@@ -18,6 +18,8 @@ export const createReporteNuevoServer = createServerFn({ method: "POST" })
 			observacion: "",
 			conclusion: "",
 			recomendacion: "",
+			creditConsumed: false,
+			creditConsumedAt: null,
 		}
 
 		const result = await createReporteNuevoDB(newReport)

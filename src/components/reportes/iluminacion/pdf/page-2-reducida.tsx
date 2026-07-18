@@ -71,11 +71,13 @@ export default function Page2({
 	areas,
 	tecnico,
 	empresa,
+	showWatermark = true,
 }: {
 	localizadas: LocalizadaIluminacionType[]
 	areas: AreaIluminacionType[]
 	empresa: EmpresaType
 	tecnico: TecnicoType
+	showWatermark?: boolean
 }) {
 	return (
 		<>
@@ -85,6 +87,7 @@ export default function Page2({
 					areas={areas}
 					tecnico={tecnico}
 					empresa={empresa}
+					showWatermark={showWatermark}
 				/>
 			) : (
 				<TableMultiPage
@@ -92,6 +95,7 @@ export default function Page2({
 					areas={areas}
 					tecnico={tecnico}
 					empresa={empresa}
+					showWatermark={showWatermark}
 				/>
 			)}
 		</>
@@ -104,16 +108,18 @@ function TableOnePage({
 	tecnico,
 	empresa,
 	muestreoOffset = 0,
+	showWatermark = true,
 }: {
 	localizadas: LocalizadaIluminacionType[]
 	areas: AreaIluminacionType[]
 	empresa: EmpresaType
 	tecnico: TecnicoType
 	muestreoOffset?: number
+	showWatermark?: boolean
 }) {
 	return (
 		<Page size="A4" orientation="landscape" style={styles.page}>
-			<Watermark />
+			{showWatermark && <Watermark />}
 			<MembreteSuperior empresa={empresa} />
 			<Text
 				style={{
@@ -566,11 +572,13 @@ function TableMultiPage({
 	areas,
 	tecnico,
 	empresa,
+	showWatermark = true,
 }: {
 	localizadas: LocalizadaIluminacionType[]
 	areas: AreaIluminacionType[]
 	tecnico: TecnicoType
 	empresa: EmpresaType
+	showWatermark?: boolean
 }) {
 	const pages = chunkPages(localizadas, areas)
 	let offset = 0
@@ -586,6 +594,7 @@ function TableMultiPage({
 				tecnico={tecnico}
 				empresa={empresa}
 				muestreoOffset={currentOffset}
+				showWatermark={showWatermark}
 			/>
 		)
 	})
