@@ -20,8 +20,9 @@ export const ensureDemoUser = createServerFn({ method: "GET" }).handler(async ()
 
 	const userId = crypto.randomUUID()
 	const salt = randomBytes(16).toString("hex")
+	const N = 16384, r = 16
 	const key = await new Promise<Buffer>((resolve, reject) =>
-		scrypt(DEMO_PASSWORD.normalize("NFKC"), salt, 64, { N: 16384, r: 16, p: 1 }, (err, key) =>
+		scrypt(DEMO_PASSWORD.normalize("NFKC"), salt, 64, { N, r, p: 1, maxmem: 128 * N * r * 2 }, (err, key) =>
 			err ? reject(err) : resolve(key)
 		)
 	)

@@ -27,5 +27,7 @@ si no espero al 100% para cargar la foto, no puedo seguir
 	no puedo cargar el logo de la empresa, me sale del formulario
 [✅] iconos en pagina de inicio
 [✅] planes
+
+[❌] colocar header en el login / register
 [🔨] probar PWA en celular
 [❌] calculadora presupuestos

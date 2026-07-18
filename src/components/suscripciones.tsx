@@ -91,8 +91,11 @@ const Plan = ({
 	}
 
 	return (
-		<button
+		<div
 			onClick={() => setActualPlan(index as 0 | 1 | 2)}
+			role="button"
+			tabIndex={0}
+			onKeyDown={e => { if (e.key === "Enter" || e.key === " ") setActualPlan(index as 0 | 1 | 2) }}
 			className={`card overflow-hidden relative sm:w-80 2xl:w-100 rounded-lg p-8 flex flex-col items-start gap-10 duration-300 cursor-pointer ${actualPlan === index ? "dark:bg-[#1f301f] bg-[#8dac8d] scale-100 sm:scale-120 z-5 " : "bg-accent"}`}
 		>
 			{actualPlan === index && (
@@ -147,7 +150,7 @@ const Plan = ({
 					Adquirir Plan
 				</Link>
 			)}
-		</button>
+		</div>
 	)
 }
 
