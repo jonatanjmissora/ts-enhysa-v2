@@ -9,12 +9,13 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as LandingRouteImport } from './routes/landing'
-import { Route as CheckoutRouteImport } from './routes/checkout'
+import { Route as WithHeaderRouteRouteImport } from './routes/_with-header/route'
 import { Route as ProtectedRouteRouteImport } from './routes/_protected/route'
-import { Route as LoginIndexRouteImport } from './routes/login/index'
 import { Route as ProtectedIndexRouteImport } from './routes/_protected/index'
 import { Route as ApiUploadthingRouteImport } from './routes/api/uploadthing'
+import { Route as WithHeaderLoginRouteImport } from './routes/_with-header/login'
+import { Route as WithHeaderLandingRouteImport } from './routes/_with-header/landing'
+import { Route as WithHeaderCheckoutRouteImport } from './routes/_with-header/checkout'
 import { Route as ProtectedSuscripcionRouteImport } from './routes/_protected/suscripcion'
 import { Route as ProtectedPerfilRouteRouteImport } from './routes/_protected/perfil/route'
 import { Route as ProtectedTeoriaIndexRouteImport } from './routes/_protected/teoria/index'
@@ -47,23 +48,12 @@ import { Route as ProtectedIluminacionReportesChar91idChar93MedicionAreasChar91a
 import { Route as ProtectedIluminacionReportesChar91idChar93MedicionAreasChar91areaIdChar93SoloEditAreaRouteImport } from './routes/_protected/iluminacion/reportes/[$id]/medicion/areas/[$areaId]/solo.edit-area'
 import { Route as ProtectedIluminacionReportesChar91idChar93MedicionAreasChar91areaIdChar93SoloCreateAreaRouteImport } from './routes/_protected/iluminacion/reportes/[$id]/medicion/areas/[$areaId]/solo.create-area'
 
-const LandingRoute = LandingRouteImport.update({
-  id: '/landing',
-  path: '/landing',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CheckoutRoute = CheckoutRouteImport.update({
-  id: '/checkout',
-  path: '/checkout',
+const WithHeaderRouteRoute = WithHeaderRouteRouteImport.update({
+  id: '/_with-header',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProtectedRouteRoute = ProtectedRouteRouteImport.update({
   id: '/_protected',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LoginIndexRoute = LoginIndexRouteImport.update({
-  id: '/login/',
-  path: '/login/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProtectedIndexRoute = ProtectedIndexRouteImport.update({
@@ -75,6 +65,21 @@ const ApiUploadthingRoute = ApiUploadthingRouteImport.update({
   id: '/api/uploadthing',
   path: '/api/uploadthing',
   getParentRoute: () => rootRouteImport,
+} as any)
+const WithHeaderLoginRoute = WithHeaderLoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => WithHeaderRouteRoute,
+} as any)
+const WithHeaderLandingRoute = WithHeaderLandingRouteImport.update({
+  id: '/landing',
+  path: '/landing',
+  getParentRoute: () => WithHeaderRouteRoute,
+} as any)
+const WithHeaderCheckoutRoute = WithHeaderCheckoutRouteImport.update({
+  id: '/checkout',
+  path: '/checkout',
+  getParentRoute: () => WithHeaderRouteRoute,
 } as any)
 const ProtectedSuscripcionRoute = ProtectedSuscripcionRouteImport.update({
   id: '/suscripcion',
@@ -289,12 +294,12 @@ const ProtectedIluminacionReportesChar91idChar93MedicionAreasChar91areaIdChar93S
 
 export interface FileRoutesByFullPath {
   '/': typeof ProtectedIndexRoute
-  '/checkout': typeof CheckoutRoute
-  '/landing': typeof LandingRoute
   '/perfil': typeof ProtectedPerfilRouteRouteWithChildren
   '/suscripcion': typeof ProtectedSuscripcionRoute
+  '/checkout': typeof WithHeaderCheckoutRoute
+  '/landing': typeof WithHeaderLandingRoute
+  '/login': typeof WithHeaderLoginRoute
   '/api/uploadthing': typeof ApiUploadthingRoute
-  '/login/': typeof LoginIndexRoute
   '/teoria/politicas-de-privacidad': typeof ProtectedTeoriaPoliticasDePrivacidadRoute
   '/teoria/terminos-de-uso': typeof ProtectedTeoriaTerminosDeUsoRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
@@ -326,13 +331,13 @@ export interface FileRoutesByFullPath {
   '/iluminacion/reportes/$id/medicion/areas/$areaId/solo/puntos': typeof ProtectedIluminacionReportesChar91idChar93MedicionAreasChar91areaIdChar93SoloPuntosRoute
 }
 export interface FileRoutesByTo {
-  '/checkout': typeof CheckoutRoute
-  '/landing': typeof LandingRoute
+  '/': typeof ProtectedIndexRoute
   '/perfil': typeof ProtectedPerfilRouteRouteWithChildren
   '/suscripcion': typeof ProtectedSuscripcionRoute
+  '/checkout': typeof WithHeaderCheckoutRoute
+  '/landing': typeof WithHeaderLandingRoute
+  '/login': typeof WithHeaderLoginRoute
   '/api/uploadthing': typeof ApiUploadthingRoute
-  '/': typeof ProtectedIndexRoute
-  '/login': typeof LoginIndexRoute
   '/teoria/politicas-de-privacidad': typeof ProtectedTeoriaPoliticasDePrivacidadRoute
   '/teoria/terminos-de-uso': typeof ProtectedTeoriaTerminosDeUsoRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
@@ -366,13 +371,14 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_protected': typeof ProtectedRouteRouteWithChildren
-  '/checkout': typeof CheckoutRoute
-  '/landing': typeof LandingRoute
+  '/_with-header': typeof WithHeaderRouteRouteWithChildren
   '/_protected/perfil': typeof ProtectedPerfilRouteRouteWithChildren
   '/_protected/suscripcion': typeof ProtectedSuscripcionRoute
+  '/_with-header/checkout': typeof WithHeaderCheckoutRoute
+  '/_with-header/landing': typeof WithHeaderLandingRoute
+  '/_with-header/login': typeof WithHeaderLoginRoute
   '/api/uploadthing': typeof ApiUploadthingRoute
   '/_protected/': typeof ProtectedIndexRoute
-  '/login/': typeof LoginIndexRoute
   '/_protected/teoria/politicas-de-privacidad': typeof ProtectedTeoriaPoliticasDePrivacidadRoute
   '/_protected/teoria/terminos-de-uso': typeof ProtectedTeoriaTerminosDeUsoRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
@@ -407,12 +413,12 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/checkout'
-    | '/landing'
     | '/perfil'
     | '/suscripcion'
+    | '/checkout'
+    | '/landing'
+    | '/login'
     | '/api/uploadthing'
-    | '/login/'
     | '/teoria/politicas-de-privacidad'
     | '/teoria/terminos-de-uso'
     | '/api/auth/$'
@@ -444,13 +450,13 @@ export interface FileRouteTypes {
     | '/iluminacion/reportes/$id/medicion/areas/$areaId/solo/puntos'
   fileRoutesByTo: FileRoutesByTo
   to:
-    | '/checkout'
-    | '/landing'
+    | '/'
     | '/perfil'
     | '/suscripcion'
-    | '/api/uploadthing'
-    | '/'
+    | '/checkout'
+    | '/landing'
     | '/login'
+    | '/api/uploadthing'
     | '/teoria/politicas-de-privacidad'
     | '/teoria/terminos-de-uso'
     | '/api/auth/$'
@@ -483,13 +489,14 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/_protected'
-    | '/checkout'
-    | '/landing'
+    | '/_with-header'
     | '/_protected/perfil'
     | '/_protected/suscripcion'
+    | '/_with-header/checkout'
+    | '/_with-header/landing'
+    | '/_with-header/login'
     | '/api/uploadthing'
     | '/_protected/'
-    | '/login/'
     | '/_protected/teoria/politicas-de-privacidad'
     | '/_protected/teoria/terminos-de-uso'
     | '/api/auth/$'
@@ -523,27 +530,18 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   ProtectedRouteRoute: typeof ProtectedRouteRouteWithChildren
-  CheckoutRoute: typeof CheckoutRoute
-  LandingRoute: typeof LandingRoute
+  WithHeaderRouteRoute: typeof WithHeaderRouteRouteWithChildren
   ApiUploadthingRoute: typeof ApiUploadthingRoute
-  LoginIndexRoute: typeof LoginIndexRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/landing': {
-      id: '/landing'
-      path: '/landing'
-      fullPath: '/landing'
-      preLoaderRoute: typeof LandingRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/checkout': {
-      id: '/checkout'
-      path: '/checkout'
-      fullPath: '/checkout'
-      preLoaderRoute: typeof CheckoutRouteImport
+    '/_with-header': {
+      id: '/_with-header'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof WithHeaderRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_protected': {
@@ -551,13 +549,6 @@ declare module '@tanstack/react-router' {
       path: ''
       fullPath: '/'
       preLoaderRoute: typeof ProtectedRouteRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/login/': {
-      id: '/login/'
-      path: '/login'
-      fullPath: '/login/'
-      preLoaderRoute: typeof LoginIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_protected/': {
@@ -573,6 +564,27 @@ declare module '@tanstack/react-router' {
       fullPath: '/api/uploadthing'
       preLoaderRoute: typeof ApiUploadthingRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_with-header/login': {
+      id: '/_with-header/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof WithHeaderLoginRouteImport
+      parentRoute: typeof WithHeaderRouteRoute
+    }
+    '/_with-header/landing': {
+      id: '/_with-header/landing'
+      path: '/landing'
+      fullPath: '/landing'
+      preLoaderRoute: typeof WithHeaderLandingRouteImport
+      parentRoute: typeof WithHeaderRouteRoute
+    }
+    '/_with-header/checkout': {
+      id: '/_with-header/checkout'
+      path: '/checkout'
+      fullPath: '/checkout'
+      preLoaderRoute: typeof WithHeaderCheckoutRouteImport
+      parentRoute: typeof WithHeaderRouteRoute
     }
     '/_protected/suscripcion': {
       id: '/_protected/suscripcion'
@@ -909,12 +921,26 @@ const ProtectedRouteRouteWithChildren = ProtectedRouteRoute._addFileChildren(
   ProtectedRouteRouteChildren,
 )
 
+interface WithHeaderRouteRouteChildren {
+  WithHeaderCheckoutRoute: typeof WithHeaderCheckoutRoute
+  WithHeaderLandingRoute: typeof WithHeaderLandingRoute
+  WithHeaderLoginRoute: typeof WithHeaderLoginRoute
+}
+
+const WithHeaderRouteRouteChildren: WithHeaderRouteRouteChildren = {
+  WithHeaderCheckoutRoute: WithHeaderCheckoutRoute,
+  WithHeaderLandingRoute: WithHeaderLandingRoute,
+  WithHeaderLoginRoute: WithHeaderLoginRoute,
+}
+
+const WithHeaderRouteRouteWithChildren = WithHeaderRouteRoute._addFileChildren(
+  WithHeaderRouteRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   ProtectedRouteRoute: ProtectedRouteRouteWithChildren,
-  CheckoutRoute: CheckoutRoute,
-  LandingRoute: LandingRoute,
+  WithHeaderRouteRoute: WithHeaderRouteRouteWithChildren,
   ApiUploadthingRoute: ApiUploadthingRoute,
-  LoginIndexRoute: LoginIndexRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
 }
 export const routeTree = rootRouteImport

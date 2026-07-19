@@ -22,7 +22,6 @@ import { authClient } from "@/lib/auth-client"
 import { Eye, EyeClosed } from "lucide-react"
 // import { PreferencesMenu } from "./layout/preferences-menu"
 import { Input } from "./ui/input"
-import { ensureDemoUser } from "../../server/seed-demo-user-server"
 
 const formSchema = z.object({
 	email: z.email("Email inválido"),
@@ -79,28 +78,6 @@ export function LoginForm({
 		}
 	}
 
-	const [demoLoading, setDemoLoading] = useState(false)
-	const demoLogin = async () => {
-		setDemoLoading(true)
-		try {
-			const creds = await ensureDemoUser()
-			const result = await authClient.signIn.email({
-				email: creds.email,
-				password: creds.password,
-				callbackURL: "/",
-			})
-			if (result.error) {
-				console.error("Error al iniciar sesión demo", result.error)
-				return
-			}
-			router.invalidate()
-		} catch (err) {
-			console.error("Error en demo login", err)
-		} finally {
-			setDemoLoading(false)
-		}
-	}
-
 	return (
 		<div className={cn("w-90 relative", className)} {...props}>
 			{/*<div className="absolute top-4 left-4 right-4">
@@ -108,17 +85,6 @@ export function LoginForm({
 			</div>*/}
 			<div className="w-11/12 mx-auto">
 				<CardHeader className="text-center">
-					<div className="w-full flex flex-col items-center pb-4 relative">
-						<img
-							src="/EnHySa_logo.webp"
-							alt="logo EnHySa"
-							className="size-40 object-cover"
-						/>
-
-						<p className="absolute bottom-3 left-1/2 -translate-x-1/2 textXL text-3xl w-full">
-							EnHySa App
-						</p>
-					</div>
 					<CardTitle className="hidden sm:block text-xl">
 						Bienvenido de nuevo
 					</CardTitle>
@@ -128,14 +94,13 @@ export function LoginForm({
 				</CardHeader>
 				<CardContent className="p-0 sm:px-4">
 					<form
-						className=""
 						id="login-form"
 						onSubmit={e => {
 							e.preventDefault()
 							form.handleSubmit()
 						}}
 					>
-						<FieldGroup className="">
+						<FieldGroup className="gap-5">
 							<Field>
 								<Button variant="outline" type="button" onClick={signIn}>
 									{loading ? (
@@ -152,11 +117,6 @@ export function LoginForm({
 									)}
 								</Button>
 							</Field>
-							<Field>
-								<Button variant="secondary" type="button" onClick={demoLogin} disabled={demoLoading} className="w-full">
-									{demoLoading ? "Iniciando..." : "Demo — Probar sin registrarse"}
-								</Button>
-							</Field>
 							<FieldSeparator className="hidden sm:block">
 								<span className="text-foreground/75 bg-accent">
 									O continua con
@@ -169,7 +129,7 @@ export function LoginForm({
 									const isInvalid =
 										field.state.meta.isTouched && !field.state.meta.isValid
 									return (
-										<Field data-invalid={isInvalid}>
+										<Field data-invalid={isInvalid} className="gap-0">
 											<FieldLabel htmlFor={field.name}>Email</FieldLabel>
 											<Input
 												onFocus={e => e.target.select()}
@@ -195,7 +155,7 @@ export function LoginForm({
 									const isInvalid =
 										field.state.meta.isTouched && !field.state.meta.isValid
 									return (
-										<Field data-invalid={isInvalid}>
+										<Field data-invalid={isInvalid} className="gap-0">
 											<FieldLabel htmlFor={field.name}>Contraseña</FieldLabel>
 											<div className="relative">
 												<Input
@@ -212,7 +172,11 @@ export function LoginForm({
 												<button
 													type="button"
 													onClick={() => setShowPassword(!showPassword)}
-													aria-label={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
+													aria-label={
+														showPassword
+															? "Ocultar contraseña"
+															: "Mostrar contraseña"
+													}
 													className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 cursor-pointer"
 												>
 													{showPassword ? (

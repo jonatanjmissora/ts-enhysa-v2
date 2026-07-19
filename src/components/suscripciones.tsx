@@ -15,7 +15,7 @@ export default function SuscriptionPlans({ from }: { from?: string }) {
 	const combinedPlan = anual ? PLANS[3] : PLANS[2]
 	return (
 		<>
-			<div className="flex flex-col sm:flex-row gap-20 my-15 w-5/6">
+			<div className="flex flex-col sm:flex-row gap-20 my-15 w-full">
 				{DISPLAY_PLANS.map((plan, index) => (
 					<Plan
 						key={plan.title}
@@ -75,6 +75,7 @@ const Plan = ({
 	from,
 }: PlanProps) => {
 	const [demoLoading, setDemoLoading] = useState(false)
+	const { data: session } = authClient.useSession()
 
 	const handleDemoLogin = async () => {
 		setDemoLoading(true)
@@ -96,7 +97,7 @@ const Plan = ({
 			role="button"
 			tabIndex={0}
 			onKeyDown={e => { if (e.key === "Enter" || e.key === " ") setActualPlan(index as 0 | 1 | 2) }}
-			className={`card overflow-hidden relative sm:w-80 2xl:w-100 rounded-lg p-8 flex flex-col items-start gap-10 duration-300 cursor-pointer ${actualPlan === index ? "dark:bg-[#1f301f] bg-[#8dac8d] scale-100 sm:scale-120 z-5 " : "bg-accent"}`}
+			className={`card border border-foreground/10 overflow-hidden relative sm:w-80 2xl:w-100 rounded-lg p-8 flex flex-col items-start gap-10 duration-300 cursor-pointer ${actualPlan === index ? "dark:bg-[#1f301f] bg-[#8dac8d] scale-100 sm:scale-120 z-5 " : "bg-accent"}`}
 		>
 			{actualPlan === index && (
 				<img
@@ -126,16 +127,29 @@ const Plan = ({
 			</div>
 
 			{index === 0 ? (
-				<button
-					type="button"
-					onClick={e => { e.stopPropagation(); handleDemoLogin() }}
-					disabled={demoLoading}
-					className={`w-full py-3 text-primary-foreground rounded-md text-center font-semibold block no-underline ${
-						index === actualPlan ? "bg-green-400" : "bg-primary"
-					}`}
-				>
-					{demoLoading ? "Iniciando..." : "Prueba Gratis"}
-				</button>
+				<div className="flex flex-col gap-2 w-full">
+					<button
+						type="button"
+						onClick={e => {
+							e.stopPropagation()
+							handleDemoLogin()
+						}}
+						disabled={demoLoading || !!session?.user}
+						className={`w-full py-3 text-primary-foreground rounded-md text-center font-semibold block no-underline ${
+							index === actualPlan ? "bg-green-400" : "bg-primary"
+						} ${session?.user ? "opacity-50 cursor-not-allowed" : ""}`}
+					>
+						{demoLoading ? "Iniciando..." : "Prueba Gratis"}
+					</button>
+					{!session?.user && (
+						<Link
+							to="/login"
+							className="w-full py-2 text-center text-sm underline text-foreground/60 hover:text-foreground"
+						>
+							Iniciar Sesión
+						</Link>
+					)}
+				</div>
 			) : (
 				<Link
 					to="/checkout"
@@ -173,7 +187,7 @@ function CombinedPlan({
 		<button
 			onClick={onSelect}
 			type="button"
-			className={`card overflow-hidden relative sm:w-80 2xl:w-100 rounded-lg p-8 flex flex-col items-start gap-10 duration-300 cursor-pointer text-left ${isActive ? "dark:bg-[#1f301f] bg-[#8dac8d] scale-100 sm:scale-120 z-5 " : "bg-accent"}`}
+			className={`card border border-foreground/10 overflow-hidden relative sm:w-80 2xl:w-100 rounded-lg p-8 flex flex-col items-start gap-10 duration-300 cursor-pointer text-left ${isActive ? "dark:bg-[#1f301f] bg-[#8dac8d] scale-100 sm:scale-120 z-5 " : "bg-accent"}`}
 		>
 			{isActive && (
 				<img

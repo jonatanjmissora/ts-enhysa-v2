@@ -1,14 +1,14 @@
 import { createFileRoute, Link } from "@tanstack/react-router"
 import { useState, useEffect } from "react"
-import { Menu, X } from "lucide-react"
 import SuscriptionPlans from "#/components/suscripciones"
 
-export const Route = createFileRoute("/landing")({ component: Landing })
+export const Route = createFileRoute("/_with-header/landing")({
+	component: Landing,
+})
 
 function Landing() {
 	return (
-		<div className="bg-[#121212] text-white min-h-svh font-sans antialiased">
-			<Navbar />
+		<div className="text-white font-sans antialiased">
 			<Hero />
 			<Features />
 			<Modules />
@@ -18,110 +18,12 @@ function Landing() {
 	)
 }
 
-function Navbar() {
-	const [isOpen, setIsOpen] = useState(false)
-
-	return (
-		<header className="sticky top-0 z-50 bg-[#1a1a1a] border-b border-[#2c2c2c] px-5">
-			<div className="w-full sm:max-w-5xl 2xl:max-w-7xl sm:mx-auto flex justify-between items-center px-0 py-4 sm:p-4">
-				<div className="flex items-center gap-3">
-					<img
-						src="/EnHySa_logo.webp"
-						alt="logo EnHySa"
-						className="size-10 object-cover"
-					/>
-
-					<p className="text-2xl">EnHySa App</p>
-				</div>
-				<nav className="flex items-center gap-6 max-md:hidden">
-					<a
-						href="#caracteristicas"
-						className="text-white no-underline text-sm transition-colors hover:text-[#e2711d]"
-					>
-						Características
-					</a>
-					<a
-						href="#modulos"
-						className="text-white no-underline text-sm transition-colors hover:text-[#e2711d]"
-					>
-						Módulos
-					</a>
-					<a
-						href="#contacto"
-						className="bg-[#5cb85c] text-white rounded-md px-5 py-2 text-sm font-semibold no-underline transition-all hover:bg-[#4ca84c] hover:shadow-[0_4px_12px_rgba(92,184,92,0.3)]"
-					>
-						Probar Gratis
-					</a>
-				</nav>
-				<button
-					onClick={() => setIsOpen(true)}
-					className="md:hidden text-white"
-					aria-label="Abrir menú"
-				>
-					<Menu size={28} />
-				</button>
-			</div>
-			<MobileMenu isOpen={isOpen} setIsOpen={setIsOpen} />
-		</header>
-	)
-}
-
-function MobileMenu({
-	isOpen,
-	setIsOpen,
-}: {
-	isOpen: boolean
-	setIsOpen: (open: boolean) => void
-}) {
-	const close = () => setIsOpen(false)
-
-	return (
-		<div
-			className={`fixed inset-0 z-50 bg-[#121212] flex flex-col items-center justify-center gap-10 transition-transform duration-400 ${
-				isOpen ? "translate-y-0" : "-translate-y-full"
-			}`}
-		>
-			<button
-				onClick={close}
-				className="absolute top-6 right-6 text-white"
-				aria-label="Cerrar menú"
-			>
-				<X size={28} />
-			</button>
-			<Link
-				to="/landing"
-				hash="caracteristicas"
-				onClick={close}
-				className="text-2xl font-semibold no-underline text-white transition-colors hover:text-[#e2711d]"
-			>
-				Características
-			</Link>
-			<Link
-				to="/landing"
-				hash="modulos"
-				onClick={close}
-				className="text-2xl font-semibold no-underline text-white transition-colors hover:text-[#e2711d]"
-			>
-				Módulos
-			</Link>
-			<Link
-				to="/landing"
-				hash="contacto"
-				onClick={close}
-				className="bg-[#5cb85c] text-white rounded-md px-8 py-3 text-lg font-semibold no-underline transition-all hover:bg-[#4ca84c]"
-			>
-				Probar Gratis
-			</Link>
-		</div>
-	)
-}
-
 function Hero() {
 	return (
-		<section className="pt-20 pb-50 sm:py-10 2xl:py-50 bg-[radial-gradient(circle_at_80%_20%,rgba(226,113,29,0.05)_0%,transparent_50%)]">
+		<section className="pt-20 pb-50 sm:py-10 2xl:py-50">
 			<div className="w-full sm:max-w-5xl 2xl:max-w-7xl sm:mx-auto grid grid-cols-1 md:grid-cols-[1.2fr_0.8fr] gap-32 md:gap-12 items-center justify-center max-md:text-center px-0 sm:px-4">
 				<div className="flex flex-col items-center justify-center gap-8">
-					<span className="inline-block bg-[rgba(226,113,29,0.1)] text-[#e2711d] px-3.5 py-1.5 rounded-full text-sm font-semibold mb-5 border border-[rgba(226,113,29,0.2)]">
+					<span className="inline-block text-[#e2711d] px-3.5 py-1.5 rounded-full text-sm font-semibold mb-5 border border-[rgba(226,113,29,0.2)]">
 						Resolución 84/12 & 85/12 SRT Automáticas
 					</span>
 					<h1 className="text-2xl md:text-5xl text-pretty leading-tight font-bold mb-5 text-center">
@@ -190,7 +92,7 @@ function Features() {
 	return (
 		<section
 			id="caracteristicas"
-			className="py-50 px-5 bg-[#1a1a1a] border-t border-b border-[#2c2c2c]"
+			className="py-50 px-5 border-t border-b border-[#2c2c2c]"
 		>
 			<div className="w-full sm:max-w-5xl 2xl:max-w-7xl sm:mx-auto px-0 sm:px-4">
 				<h2 className="text-2xl md:text-4xl text-pretty  text-center mb-2.5 font-semibold">
@@ -202,7 +104,7 @@ function Features() {
 					datos en la oficina.
 				</p>
 				<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-					<div className="bg-[#121212] border border-[#333] rounded-xl p-8 transition-transform hover:-translate-y-1 hover:border-[#e2711d]">
+					<div className="border border-[#333] rounded-xl p-8 transition-transform hover:-translate-y-1 hover:border-[#e2711d]">
 						<div className="text-4xl mb-5 text-[#e2711d]">📊</div>
 						<h3 className="text-xl mb-3">Cálculos Automatizados</h3>
 						<p className="text-[#aaaaaa] text-sm">
@@ -211,7 +113,7 @@ function Features() {
 							legales del Dec. 351/79.
 						</p>
 					</div>
-					<div className="bg-[#121212] border border-[#333] rounded-xl p-8 transition-transform hover:-translate-y-1 hover:border-[#e2711d]">
+					<div className="border border-[#333] rounded-xl p-8 transition-transform hover:-translate-y-1 hover:border-[#e2711d]">
 						<div className="text-4xl mb-5 text-[#5cb85c]">🔒</div>
 						<h3 className="text-xl mb-3">Matrícula y Firma Digital</h3>
 						<p className="text-[#aaaaaa] text-sm">
@@ -220,7 +122,7 @@ function Features() {
 							de la SRT.
 						</p>
 					</div>
-					<div className="bg-[#121212] border border-[#333] rounded-xl p-8 transition-transform hover:-translate-y-1 hover:border-[#e2711d]">
+					<div className="border border-[#333] rounded-xl p-8 transition-transform hover:-translate-y-1 hover:border-[#e2711d]">
 						<div className="text-4xl mb-5" style={{ color: "#5197ff" }}>
 							📱
 						</div>
@@ -279,7 +181,7 @@ function Modules() {
 								from: "landing",
 							}}
 							key={item.title}
-							className="bg-[#1a1a1a] rounded-lg p-5 flex gap-4 items-start border-l-4 border-[#333] hover:border-l-[#5cb85c] transition-colors"
+							className="rounded-lg p-5 flex gap-4 items-start border-l-4 border-[#333] hover:border-l-[#5cb85c] transition-colors"
 						>
 							<div
 								className={`w-2.5 h-2.5 rounded-full mt-1.5 shrink-0 ${item.dot}`}
@@ -298,10 +200,7 @@ function Modules() {
 
 function CtaSection() {
 	return (
-		<section
-			id="contacto"
-			className="py-50 px-5 bg-linear-to-b from-[#121212] to-[#17120e]"
-		>
+		<section id="suscriptions" className="py-50 px-5 bg-linear-to-b">
 			<div className="max-w-[650px] mx-auto text-center">
 				<h2 className="text-2xl md:text-4xl text-pretty  mb-4 font-semibold">
 					Jerarquiza tu servicio técnico hoy mismo
@@ -320,7 +219,7 @@ function CtaSection() {
 
 function Footer() {
 	return (
-		<footer className="bg-[#1a1a1a] py-8 px-5 border-t border-[#2c2c2c] text-center text-sm text-[#aaaaaa]">
+		<footer className="py-8 px-5 border-t border-[#2c2c2c] text-center text-sm text-[#aaaaaa]">
 			<div className="w-full sm:max-w-5xl 2xl:max-w-7xl sm:mx-auto">
 				&copy; 2026 EnHySa Consultora. Todos los derechos reservados.
 				Desarrollado conforme a normativas de la Superintendencia de Riesgos del

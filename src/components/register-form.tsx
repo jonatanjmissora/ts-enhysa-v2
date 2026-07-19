@@ -92,17 +92,6 @@ export function RegisterForm({
 			</div>*/}
 			<div className="w-11/12 mx-auto">
 				<CardHeader className="text-center">
-					<div className="w-full sm:hidden flex flex-col items-center pb-4 relative">
-						<img
-							src="/EnHySa_logo.webp"
-							alt="logo EnHySa"
-							className="size-40 object-cover"
-						/>
-
-						<p className="absolute bottom-3 left-1/2 -translate-x-1/2 textXL text-3xl w-full">
-							EnHySa App
-						</p>
-					</div>
 					<CardTitle className="hidden sm:block text-xl">
 						Bienvenido a la app
 					</CardTitle>
@@ -118,7 +107,7 @@ export function RegisterForm({
 							form.handleSubmit()
 						}}
 					>
-						<FieldGroup>
+						<FieldGroup className="gap-5">
 							<Field>
 								<Button variant="outline" type="button" onClick={signIn}>
 									{loading ? (
@@ -147,7 +136,7 @@ export function RegisterForm({
 									const isInvalid =
 										field.state.meta.isTouched && !field.state.meta.isValid
 									return (
-										<Field data-invalid={isInvalid}>
+										<Field data-invalid={isInvalid} className="gap-0">
 											<FieldLabel htmlFor={field.name}>Nombre</FieldLabel>
 											<Input
 												onFocus={e => e.target.select()}
@@ -174,7 +163,7 @@ export function RegisterForm({
 									const isInvalid =
 										field.state.meta.isTouched && !field.state.meta.isValid
 									return (
-										<Field data-invalid={isInvalid}>
+										<Field data-invalid={isInvalid} className="gap-0">
 											<FieldLabel htmlFor={field.name}>Email</FieldLabel>
 											<Input
 												onFocus={e => e.target.select()}
@@ -201,7 +190,7 @@ export function RegisterForm({
 									const isInvalid =
 										field.state.meta.isTouched && !field.state.meta.isValid
 									return (
-										<Field data-invalid={isInvalid}>
+										<Field data-invalid={isInvalid} className="gap-0">
 											<FieldLabel htmlFor={field.name}>Contraseña</FieldLabel>
 											<div className="relative">
 												<Input
@@ -218,7 +207,11 @@ export function RegisterForm({
 												<button
 													type="button"
 													onClick={() => setShowPassword(!showPassword)}
-													aria-label={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
+													aria-label={
+														showPassword
+															? "Ocultar contraseña"
+															: "Mostrar contraseña"
+													}
 													className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 cursor-pointer"
 												>
 													{showPassword ? (
