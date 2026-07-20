@@ -75,7 +75,7 @@ export function CreateTecnicoForm({
 				...value,
 				firmaImg: firmaFile,
 				matriculaImg: matriculaFile,
-				empresaLogoImg: empresaLogoFile,
+				empresaLogo: empresaLogoFile,
 			}
 			const result = await createTecnicoMutation({ data: newTecnico })
 			if (!result) {

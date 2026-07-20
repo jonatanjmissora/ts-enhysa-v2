@@ -365,6 +365,72 @@ Conexión: `drizzle(process.env.DATABASE_URL as string, { schema })`.
 - Tailwind v4: usar `@import "tailwindcss"` en CSS, no config file.
 - Las rutas TanStack Router son lazy-load por defecto.
 
+## Demo User Pattern
+
+El sistema de demo user permite probar la app sin registrarse, con datos aislados por sesión y límites anti-spam.
+
+### Diseño
+
+- Se crean hasta **5 demo users** simultáneos con credenciales secuenciales: `demo1@enhysa.demo` / `demo1`, `demo2@enhysa.demo` / `demo2`, etc.
+- Cada sesión demo tiene su propio `userId` → datos completamente aislados (privacidad).
+- TTL de **24 horas**: al solicitar un nuevo demo user, se borran los demo users con `createdAt > 24h` (y sus datos en cascada).
+- Al cerrar sesión, `resetDemoDataServer` solo borra datos si es la **única sesión activa** del demo user (cuenta sesiones en tabla `session` con `expiresAt > now()`).
+- Si hay otra sesión activa del mismo demo user, no se borra nada, para no interrumpir a otro usuario.
+
+### Server Functions
+
+```ts
+// server/seed-demo-user-server.ts
+export const ensureDemoUser = createServerFn({ method: "GET" }).handler(async () => {
+  // 1. Borrar demo users con createdAt < hace 24h (cascade)
+  // 2. Contar demo users activos restantes
+  // 3. Si < 5: crear nuevo user + account con email demo{N}@enhysa.demo, password demo{N}
+  // 4. Si >= 5: devolver error
+})
+
+// server/reset-demo-data-server.ts
+export const resetDemoData = createServerFn({ method: "POST" }).handler(async () => {
+  // 1. Verificar sesión actual
+  // 2. Contar sesiones activas del demo userId (expiresAt > now())
+  // 3. Si count > 1: no borrar (hay otro usuario activo)
+  // 4. Si count === 1: borrar todos los datos del userId
+})
+```
+
+### Password Hashing
+
+```ts
+import { randomBytes, scrypt } from "node:crypto"
+const salt = randomBytes(16).toString("hex")
+const key = await new Promise<Buffer>((resolve, reject) =>
+  scrypt(password.normalize("NFKC"), salt, 64, { N: 16384, r: 16, p: 1, maxmem: 128 * 16384 * 16 * 2 }, (err, key) =>
+    err ? reject(err) : resolve(key)
+  )
+)
+// Formato: "${salt}:${key.toString("hex")}"
+// maxmem: 64MB evita ERR_SSL_MEMORY_LIMIT_EXCEEDED
+```
+
+### UI Integration
+
+- **login-form.tsx**: botón "Demo — Probar sin registrarse" → `ensureDemoUser()` → muestra modal con credenciales → al confirmar, `authClient.signIn.email()`.
+- **suscripciones.tsx**: card "Prueba Gratis" → redirige a `/login` para que el usuario use el botón demo desde allí.
+- **navbar.tsx**: `LogoutAlertDialog` → si es demo user, `resetDemoDataServer()` + `authClient.signOut()`.
+- **demo-credentials-modal.tsx**: modal que muestra email/password al usuario para que pueda usarlos desde otro dispositivo.
+
+### Créditos
+
+Demo users nunca tienen créditos. `getUserCreditsServer` retorna `0`. PDFs siempre con watermark y botón "Comprar créditos".
+
+### Archivos relevantes
+
+- `server/seed-demo-user-server.ts`
+- `server/reset-demo-data-server.ts`
+- `src/components/login-form.tsx`
+- `src/components/suscripciones.tsx`
+- `src/components/navbar.tsx`
+- `src/components/demo-credentials-modal.tsx`
+
 ## graphify
 
 This project has a knowledge graph at graphify-out/ with god nodes, community structure, and cross-file relationships.

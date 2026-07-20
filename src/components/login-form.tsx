@@ -19,9 +19,11 @@ import { cn } from "@/lib/utils"
 import { useRouter } from "@tanstack/react-router"
 import { useState } from "react"
 import { authClient } from "@/lib/auth-client"
+import { ensureDemoUser } from "../../server/seed-demo-user-server"
 import { Eye, EyeClosed } from "lucide-react"
 // import { PreferencesMenu } from "./layout/preferences-menu"
 import { Input } from "./ui/input"
+import { DemoCredentialsModal } from "./demo-credentials-modal"
 
 const formSchema = z.object({
 	email: z.email("Email inválido"),
@@ -117,6 +119,7 @@ export function LoginForm({
 									)}
 								</Button>
 							</Field>
+							<DemoButton />
 							<FieldSeparator className="hidden sm:block">
 								<span className="text-foreground/75 bg-accent">
 									O continua con
@@ -218,5 +221,54 @@ export function LoginForm({
 				</CardContent>
 			</div>
 		</div>
+	)
+}
+
+function DemoButton() {
+	const [loading, setLoading] = useState(false)
+	const [demoCreds, setDemoCreds] = useState<{
+		email: string
+		password: string
+	} | null>(null)
+
+	const handleDemo = async () => {
+		setLoading(true)
+		try {
+			const creds = await ensureDemoUser()
+			setDemoCreds(creds)
+		} catch (_err) {
+			setLoading(false)
+		}
+	}
+
+	const confirmDemo = async () => {
+		if (!demoCreds) return
+		await authClient.signIn.email({
+			email: demoCreds.email,
+			password: demoCreds.password,
+			callbackURL: "/",
+		})
+	}
+
+	return (
+		<>
+			{demoCreds && (
+				<DemoCredentialsModal
+					email={demoCreds.email}
+					password={demoCreds.password}
+					onConfirm={confirmDemo}
+				/>
+			)}
+			<Field>
+				<Button
+					type="button"
+					onClick={handleDemo}
+					disabled={loading}
+					className="bg-green-600 hover:bg-green-500"
+				>
+					{loading ? "Iniciando..." : "Demo — Probar sin registrarse"}
+				</Button>
+			</Field>
+		</>
 	)
 }

@@ -164,7 +164,7 @@ export const PLANS = [
 			"navegacion por los dashboards.",
 			"acceso a legislacion y protocolos.",
 			"informes personalizados.",
-			"tres (3) informes con marca de agua.",
+			"informes con marca de agua.",
 		],
 	},
 	{

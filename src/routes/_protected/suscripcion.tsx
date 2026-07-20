@@ -1,8 +1,8 @@
 import BackChevron from "#/components/back-chevron"
 import SuscriptionPlans from "#/components/suscripciones"
 import useScrollTop from "#/hooks/scroll-top"
-import { createFileRoute } from "@tanstack/react-router"
-import { Shield } from "lucide-react"
+import { createFileRoute, useNavigate } from "@tanstack/react-router"
+import { ChevronLeft, Shield } from "lucide-react"
 import { z } from "zod"
 
 const fromSearchSchema = z.object({
@@ -17,9 +17,22 @@ export const Route = createFileRoute("/_protected/suscripcion")({
 function RouteComponent() {
 	const { from } = Route.useSearch()
 	useScrollTop()
+	const navigate = useNavigate()
 	return (
 		<div className="min-h-svh flex flex-col relative mb-30">
-			<BackChevron className="top-4 left-4" />
+			<button
+				type="button"
+				onClick={() => {
+					if (from === "root") navigate({ to: "/" })
+					else if (from === "landing")
+						navigate({ to: "/landing", hash: "modulos" })
+					else navigate({ to: `/${from}` as never })
+				}}
+				className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors"
+			>
+				<ChevronLeft className="size-4" />
+				Volver
+			</button>
 
 			<div className="flex-1 flex justify-center items-center flex-col gap-6 pt-20 sm:py-10 2xl:py-20">
 				<div className="flex items-center gap-2 text-5xl 2xl:text-6xl font-bold tracking-wildest relative">

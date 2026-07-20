@@ -1,4 +1,4 @@
-import { Menu, X } from "lucide-react"
+import { Menu, UserRound, X } from "lucide-react"
 import {
 	AlertDialog,
 	AlertDialogContent,
@@ -14,8 +14,11 @@ import { LogOut, Shield } from "lucide-react"
 import { useState } from "react"
 import { Theme } from "./theme"
 import { resetDemoData } from "../../server/reset-demo-data-server"
+import { useQuery } from "@tanstack/react-query"
+import { userCreditsOptions } from "../../queries/credits/user-credits-query"
 
-const DEMO_EMAIL = "demouser@enhysa.demo"
+const DEMO_EMAIL_PREFIX = "demo"
+const DEMO_EMAIL_DOMAIN = "@enhysa.demo"
 
 export default function Navbar() {
 	const [isOpen, setIsOpen] = useState(false)
@@ -32,7 +35,6 @@ export default function Navbar() {
 
 				<p className="text-2xl">EnHySa App</p>
 			</Link>
-			{/* <div className="block sm:hidden"> */}
 			<button
 				onClick={() => setIsOpen(!isOpen)}
 				aria-label="Abrir menú de navegación"
@@ -40,27 +42,6 @@ export default function Navbar() {
 				<Menu className="size-7" />
 			</button>
 			<MovilMenuContent isOpen={isOpen} setIsOpen={setIsOpen} />
-			{/* </div> */}
-			{/* <ul className="sm:flex hidden flex-1 justify-end gap-40 items-center">
-					<Link
-						to="/"
-						resetScroll={true}
-					>
-						Inicio
-					</Link>
-					<Link
-						to="/perfil/tecnicos"
-						resetScroll={true}
-					>
-						Mi Perfil
-					</Link>
-					<Link
-						to="/suscripcion"
-						resetScroll={true}
-					>
-						Suscripción
-					</Link>
-				</ul> */}
 		</header>
 	)
 }
@@ -119,6 +100,9 @@ const MovilMenuContent = ({
 				<li className="w-full">
 					<Link
 						to="/suscripcion"
+						search={{
+							from: "root",
+						}}
 						onClick={() => setIsOpen(!isOpen)}
 						resetScroll={true}
 						className="w-full py-2 text-center block"
@@ -127,13 +111,13 @@ const MovilMenuContent = ({
 					</Link>
 				</li>
 			</ul>
-			<User />
+			<User setIsOpen={setIsOpen} />
 			<div className="h-6"></div>
 		</div>
 	)
 }
 
-function User() {
+function User({ setIsOpen }: { setIsOpen: (open: boolean) => void }) {
 	const { session } = useLoaderData({ from: "__root__" })
 	const { avatar, fullName } = getUserInfo(session)
 	return (
@@ -149,24 +133,16 @@ function User() {
 							className="sm:size-10 2xl:size-14 rounded-full"
 						/>
 					) : (
-						<div className="bg-green-600 p-2 px-3 rounded-full">
-							{fullName?.charAt(0).toUpperCase()}
+						<div className="bg-green-600 p-2 rounded-full">
+							<UserRound />
 						</div>
 					)}
 				</div>
-				<div className="flex flex-col items-end w-full">
+				<div className="flex items-center justify-between w-full">
 					<p className="sm:text-base 2xl:text-lg font-semibold tracking-wider text-left w-full">
 						{fullName || "Usuario"}
 					</p>
-					<Link
-						to="/suscripcion"
-						className="sm:text-sm 2xl:text-base tracking-wider w-full flex items-end justify-end gap-1"
-					>
-						<Shield className="size-5 dark:text-amber-300 text-amber-800/80" />
-						<span className="font-semibold text-gray-50/50 sm:text-foreground/50">
-							Plan Profesional
-						</span>
-					</Link>
+					<UserSuscriptionInfo setIsOpen={setIsOpen} />
 				</div>
 			</div>
 			<div className="w-full flex itemx-center justify-between">
@@ -177,11 +153,42 @@ function User() {
 	)
 }
 
+function UserSuscriptionInfo({
+	setIsOpen,
+}: {
+	setIsOpen: (open: boolean) => void
+}) {
+	const { data: credits } = useQuery(userCreditsOptions)
+	return (
+		<div className="w-full flex flex-col items-end justify-end gap-1">
+			<div className="flex justify-end items-center gap-2 w-full">
+				<Shield className="size-5 dark:text-amber-300 text-amber-800/80" />
+				<span className="font-semibold text-gray-50/50 sm:text-foreground/50 text-sm">
+					creditos disponibles: {credits}
+				</span>
+			</div>
+			<Link
+				to="/suscripcion"
+				search={{
+					from: "root",
+				}}
+				onClick={() => setIsOpen(prev => !prev)}
+				className="text:sm sm:text-xs tracking-wider flex items-center justify-end gap-1 bg-primary rounded p-1 px-2"
+			>
+				Agregar Creditos
+			</Link>
+		</div>
+	)
+}
+
 export function LogoutAlertDialog() {
 	const [open, setOpen] = useState(false)
 	const navigate = useNavigate()
 	const { session } = useLoaderData({ from: "__root__" })
-	const isDemo = session?.user.email === DEMO_EMAIL
+	const isDemo = !!(
+		session?.user.email?.startsWith(DEMO_EMAIL_PREFIX) &&
+		session?.user.email?.endsWith(DEMO_EMAIL_DOMAIN)
+	)
 	const [resetting, setResetting] = useState(false)
 
 	const logout = async () => {
@@ -238,7 +245,11 @@ export function LogoutAlertDialog() {
 					>
 						Cancelar
 					</Button>
-					<Button className="cursor-pointer w-1/2" onClick={logout} disabled={resetting}>
+					<Button
+						className="cursor-pointer w-1/2"
+						onClick={logout}
+						disabled={resetting}
+					>
 						{resetting ? "Limpiando..." : "Confirmar"}
 					</Button>
 				</div>

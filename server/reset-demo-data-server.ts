@@ -2,30 +2,41 @@ import { createServerFn } from "@tanstack/react-start"
 import { getRequest } from "@tanstack/react-start/server"
 import { auth } from "../src/lib/auth"
 import { db } from "../db"
-import { reportes_iluminacion } from "../db/reportes/iluminacion/schema"
-import { creditHistory, userCredits } from "../db/credits/schema"
-import { empresas } from "../db/empresas/schema"
-import { tecnicos } from "../db/tecnicos/schema"
-import { instrumentos } from "../db/instrumentos/schema"
-import { eq } from "drizzle-orm"
+import { user, session as sessionTable } from "../db/users/schema"
+import { and, eq, gt, count } from "drizzle-orm"
 
-const DEMO_EMAIL = "demouser@enhysa.demo"
+const DEMO_EMAIL_DOMAIN = "@enhysa.demo"
+const DEMO_EMAIL_PREFIX = "demo"
 
 export const resetDemoData = createServerFn({ method: "POST" }).handler(async () => {
 	const request = getRequest()
-	const session = await auth.api.getSession({ headers: request.headers })
+	const userSession = await auth.api.getSession({ headers: request.headers })
 
-	if (!session) throw new Error("No autorizado")
-	if (session.user.email !== DEMO_EMAIL) throw new Error("No es el usuario demo")
+	if (!userSession) throw new Error("No autorizado")
 
-	const userId = session.user.id
+	const email = userSession.user.email
+	if (!email?.startsWith(DEMO_EMAIL_PREFIX) || !email?.endsWith(DEMO_EMAIL_DOMAIN))
+		throw new Error("No es un usuario demo")
 
-	await db.delete(reportes_iluminacion).where(eq(reportes_iluminacion.userId, userId))
-	await db.delete(empresas).where(eq(empresas.userId, userId))
-	await db.delete(tecnicos).where(eq(tecnicos.userId, userId))
-	await db.delete(instrumentos).where(eq(instrumentos.userId, userId))
-	await db.delete(creditHistory).where(eq(creditHistory.userId, userId))
-	await db.delete(userCredits).where(eq(userCredits.userId, userId))
+	const userId = userSession.user.id
 
-	return { success: true }
+	const result = await db
+		.select({ count: count() })
+		.from(sessionTable)
+		.where(
+			and(
+				eq(sessionTable.userId, userId),
+				gt(sessionTable.expiresAt, new Date())
+			)
+		)
+
+	const activeSessions = Number(result[0]?.count ?? 0)
+
+	if (activeSessions > 1) {
+		return { success: true, skipped: true }
+	}
+
+	await db.delete(user).where(eq(user.id, userId))
+
+	return { success: true, skipped: false }
 })

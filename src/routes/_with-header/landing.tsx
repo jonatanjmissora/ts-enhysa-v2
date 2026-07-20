@@ -39,7 +39,7 @@ function Hero() {
 						Digitalizá tus Auditorías de{" "}
 						<span className="text-[#e2711d]">Seguridad e Higiene</span>
 					</h1>
-					<p className="text-[#aaaaaa] mb-8 px-4 sm:px-0 max-w-[600px] max-md:mx-auto">
+					<p className="text-[#aaaaaa] mb-8 px-4 sm:px-0 max-w-150 max-md:mx-auto">
 						La plataforma técnica definitiva para profesionales en Argentina.
 						Automatizá el cálculo del Índice de Local (K), gestioná tus
 						mediciones con luxómetros y generá protocolos listos para firmar en
@@ -220,7 +220,7 @@ function Modules() {
 function CtaSection() {
 	return (
 		<section id="suscriptions" className="pt-10 pb-50 px-5 bg-linear-to-b">
-			<div className="max-w-[650px] mx-auto text-center">
+			<div className="max-w-162.5 mx-auto text-center">
 				<h2 className="text-2xl md:text-4xl text-pretty  mb-4 font-semibold">
 					Jerarquiza tu servicio técnico hoy mismo
 				</h2>

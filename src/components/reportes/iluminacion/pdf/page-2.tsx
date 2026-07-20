@@ -74,11 +74,13 @@ export default function Page2({
 	areas,
 	tecnico,
 	empresa,
+	showWatermark = true,
 }: {
 	localizadas: LocalizadaIluminacionType[]
 	areas: AreaIluminacionType[]
 	empresa: EmpresaType
 	tecnico: TecnicoType
+	showWatermark?: boolean
 }) {
 	const rows = flattenRows(localizadas, areas)
 	const chunks = chunkRows(rows)
@@ -96,6 +98,7 @@ export default function Page2({
 				tecnico={tecnico}
 				empresa={empresa}
 				muestreoOffset={currentOffset}
+				showWatermark={showWatermark}
 			/>
 		)
 	})
@@ -133,6 +136,7 @@ function PageContent({
 	tecnico,
 	empresa,
 	muestreoOffset,
+	showWatermark = true,
 }: {
 	rows: RowData[]
 	localizadas: LocalizadaIluminacionType[]
@@ -140,6 +144,7 @@ function PageContent({
 	tecnico: TecnicoType
 	empresa: EmpresaType
 	muestreoOffset: number
+	showWatermark?: boolean
 }) {
 	const allObs = [...localizadas, ...areas]
 	const observaciones = allObs
@@ -149,7 +154,7 @@ function PageContent({
 
 	return (
 		<Page size="A4" orientation="landscape" style={styles.page}>
-			<Watermark />
+			{showWatermark && <Watermark />}
 			<MembreteSuperior empresa={empresa} />
 			<Text
 				style={{

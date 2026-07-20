@@ -4,8 +4,6 @@ import { Link } from "@tanstack/react-router"
 import { useState } from "react"
 import { Label } from "./ui/label"
 import { Check } from "lucide-react"
-import { authClient } from "@/lib/auth-client"
-import { ensureDemoUser } from "../../server/seed-demo-user-server"
 
 export default function SuscriptionPlans({ from }: { from?: string }) {
 	const [actualPlan, setActualPlan] = useState<0 | 1 | 2>(1)
@@ -83,23 +81,6 @@ const Plan = ({
 	setActualPlan,
 	from,
 }: PlanProps) => {
-	const [demoLoading, setDemoLoading] = useState(false)
-	const { data: session } = authClient.useSession()
-
-	const handleDemoLogin = async () => {
-		setDemoLoading(true)
-		try {
-			const creds = await ensureDemoUser()
-			await authClient.signIn.email({
-				email: creds.email,
-				password: creds.password,
-				callbackURL: "/",
-			})
-		} catch (_err) {
-			setDemoLoading(false)
-		}
-	}
-
 	return (
 		<div
 			onClick={() => setActualPlan(index as 0 | 1 | 2)}
@@ -111,7 +92,7 @@ const Plan = ({
 			}}
 			className={`card border border-foreground/10 overflow-hidden relative sm:w-80 2xl:w-100 rounded-lg p-8 flex flex-col items-start gap-10 duration-300 cursor-pointer ${actualPlan === index ? "dark:bg-[#1f301f] bg-[#8dac8d] scale-100 sm:scale-120 z-5 " : "bg-accent"}`}
 		>
-			{actualPlan === index && (
+				{actualPlan === index && (
 				<img
 					src="/EnHySa_logo.webp"
 					alt="logo EnHySa"
@@ -140,19 +121,14 @@ const Plan = ({
 
 			{index === 0 ? (
 				<div className="flex flex-col gap-2 w-full">
-					<button
-						type="button"
-						onClick={e => {
-							e.stopPropagation()
-							handleDemoLogin()
-						}}
-						disabled={demoLoading || !!session?.user}
-						className={`w-full py-3 text-primary-foreground rounded-md cursor-pointer text-center font-semibold block no-underline ${
+					<Link
+						to="/login"
+						className={`w-full py-3 text-primary-foreground rounded-md text-center font-semibold block no-underline ${
 							index === actualPlan ? "bg-green-400" : "bg-primary"
-						} ${session?.user ? "opacity-50 cursor-not-allowed" : ""}`}
+						}`}
 					>
-						{demoLoading ? "Iniciando..." : "Prueba Gratis"}
-					</button>
+						Prueba Gratis
+					</Link>
 				</div>
 			) : (
 				<Link

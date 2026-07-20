@@ -23,7 +23,7 @@ si no espero al 100% para cargar la foto, no puedo seguir
 [❌] implementar mercadopago
 [✅] asociar un plan de suscripcion al user
 [✅] actualizar usuario con plan adquirido
-[❌] usuario de demo con reset si hago reload, u otro usuario utiliza el demo user
+[✅] usuario de demo (hasta 5)
 	no puedo cargar el logo de la empresa, me sale del formulario
 [✅] iconos en pagina de inicio
 [✅] planes
@@ -32,3 +32,5 @@ si no espero al 100% para cargar la foto, no puedo seguir
 [❌] calculadora presupuestos
 
 probar el demo user
+controlar que para cuando se comprar creditos, este logueado, y si compro, luego del checkout, me re dirige a dashboard
+	el usuario debe de estar logueado, y no debe de ser demo user.
