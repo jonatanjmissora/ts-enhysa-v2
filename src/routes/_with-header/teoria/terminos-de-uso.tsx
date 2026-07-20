@@ -1,21 +1,33 @@
-import { createFileRoute, Link } from "@tanstack/react-router"
+import { createFileRoute, useNavigate } from "@tanstack/react-router"
 import { ChevronLeft } from "lucide-react"
+import { z } from "zod"
 
-export const Route = createFileRoute("/_protected/teoria/terminos-de-uso")({
+const fromSchema = z.object({
+	from: z.string().optional().default("suscripcion"),
+})
+
+export const Route = createFileRoute("/_with-header/teoria/terminos-de-uso")({
+	validateSearch: fromSchema,
 	component: RouteComponent,
 })
 
 function RouteComponent() {
+	const { from } = Route.useSearch()
+	const navigate = useNavigate()
 	return (
 		<article className="w-full sm:max-w-5xl mx-auto py-20 px-4 space-y-8">
 			<header className="space-y-4">
-				<Link
-					to="/suscripcion"
+				<button
+					type="button"
+					onClick={() => {
+						if (from === "landing") navigate({ to: "/landing", hash: "suscriptions" })
+						else navigate({ to: `/${from}` as never })
+					}}
 					className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors"
 				>
 					<ChevronLeft className="size-4" />
 					Volver
-				</Link>
+				</button>
 				<h1 className="text-3xl font-bold tracking-tight">Términos de Uso</h1>
 				<p className="text-sm text-muted-foreground">
 					Última actualización: junio 2026

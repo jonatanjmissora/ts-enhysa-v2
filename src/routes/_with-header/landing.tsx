@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router"
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router"
 import { useState, useEffect } from "react"
 import SuscriptionPlans from "#/components/suscripciones"
 
@@ -19,6 +19,15 @@ function Landing() {
 }
 
 function Hero() {
+	const navigate = useNavigate()
+
+	const scrollToHash = (hash: string) => () => {
+		navigate({ to: "/landing", hash })
+		requestAnimationFrame(() => {
+			document.getElementById(hash)?.scrollIntoView({ behavior: "smooth" })
+		})
+	}
+
 	return (
 		<section className="pt-20 pb-50 sm:py-10 2xl:py-50">
 			<div className="w-full sm:max-w-5xl 2xl:max-w-7xl sm:mx-auto grid grid-cols-1 md:grid-cols-[1.2fr_0.8fr] gap-32 md:gap-12 items-center justify-center max-md:text-center px-0 sm:px-4">
@@ -36,19 +45,21 @@ function Hero() {
 						mediciones con luxómetros y generá protocolos listos para firmar en
 						minutos.
 					</p>
-					<div className="flex gap-8 flex-wrap max-md:justify-center">
-						<a
-							href="#contacto"
-							className="bg-[#5cb85c] text-white rounded-md px-7 py-3.5 text-base font-semibold no-underline transition-all hover:bg-[#4ca84c] hover:shadow-[0_4px_12px_rgba(92,184,92,0.3)]"
+					<div className="flex gap-12 flex-wrap max-md:justify-center">
+						<button
+							type="button"
+							onClick={scrollToHash("suscriptions")}
+							className="bg-[#5cb85c] text-white rounded-md px-7 py-3.5 text-base font-semibold transition-all hover:bg-[#4ca84c] hover:shadow-[0_4px_12px_rgba(92,184,92,0.3)]"
 						>
 							Comenzar Período de Prueba
-						</a>
-						<a
-							href="#modulos"
-							className="bg-[#1a1a1a] text-white rounded-md px-7 py-3.5 text-base font-semibold no-underline border border-[#333] transition-all hover:bg-[#222]"
+						</button>
+						<button
+							type="button"
+							onClick={scrollToHash("modulos")}
+							className="bg-[#1a1a1a] text-white rounded-md px-7 py-3.5 text-base font-semibold border border-[#333] transition-all hover:bg-[#222]"
 						>
 							Ver Módulos Técnicos
-						</a>
+						</button>
 					</div>
 				</div>
 				<PhoneMockup />
@@ -104,7 +115,7 @@ function Features() {
 					datos en la oficina.
 				</p>
 				<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-					<div className="border border-[#333] rounded-xl p-8 transition-transform hover:-translate-y-1 hover:border-[#e2711d]">
+					<div className="border rounded-xl p-8 border-[#e2711d] bg-[radial-gradient(ellipse_at_bottom_left,rgba(226,113,29,0.15)_0%,transparent_70%)]">
 						<div className="text-4xl mb-5 text-[#e2711d]">📊</div>
 						<h3 className="text-xl mb-3">Cálculos Automatizados</h3>
 						<p className="text-[#aaaaaa] text-sm">
@@ -113,7 +124,7 @@ function Features() {
 							legales del Dec. 351/79.
 						</p>
 					</div>
-					<div className="border border-[#333] rounded-xl p-8 transition-transform hover:-translate-y-1 hover:border-[#e2711d]">
+					<div className="border rounded-xl p-8 border-[#5cb85c] bg-[radial-gradient(ellipse_at_top_left,rgba(92,184,92,0.12)_0%,transparent_70%)]">
 						<div className="text-4xl mb-5 text-[#5cb85c]">🔒</div>
 						<h3 className="text-xl mb-3">Matrícula y Firma Digital</h3>
 						<p className="text-[#aaaaaa] text-sm">
@@ -122,7 +133,7 @@ function Features() {
 							de la SRT.
 						</p>
 					</div>
-					<div className="border border-[#333] rounded-xl p-8 transition-transform hover:-translate-y-1 hover:border-[#e2711d]">
+					<div className="border rounded-xl p-8 border-[#5197ff] bg-[radial-gradient(ellipse_at_bottom_left,rgba(81,151,255,0.12)_0%,transparent_70%)]">
 						<div className="text-4xl mb-5" style={{ color: "#5197ff" }}>
 							📱
 						</div>
@@ -143,24 +154,32 @@ function Modules() {
 	const items = [
 		{
 			dot: "bg-[#5cb85c]",
+			borderColor: "border-[#5cb85c]",
+			bg: "bg-[radial-gradient(ellipse_at_bottom_left,rgba(92,184,92,0.15)_0%,transparent_65%)]",
 			title: "Estudio de Iluminación",
 			desc: "Protocolo oficial según Res. 84/2012 SRT. Gestión de luminarias y fuentes mixtas.",
 			t: "iluminacion",
 		},
 		{
 			dot: "bg-[#e2711d]",
+			borderColor: "border-[#e2711d]",
+			bg: "bg-[radial-gradient(ellipse_at_bottom_left,rgba(226,113,29,0.15)_0%,transparent_65%)]",
 			title: "Estudio de Ruido",
 			desc: "Evaluación de puestos de trabajo conforme a la Res. 85/2012 SRT.",
 			t: "ruido",
 		},
 		{
 			dot: "bg-[#5197ff]",
+			borderColor: "border-[#5197ff]",
+			bg: "bg-[radial-gradient(ellipse_at_bottom_left,rgba(81,151,255,0.15)_0%,transparent_65%)]",
 			title: "Puesta a Tierra (PAT)",
 			desc: "Verificación de continuidad de masas y resistencia bajo la Res. 900/15 SRT.",
 			t: "pat",
 		},
 		{
 			dot: "bg-[#a551ff]",
+			borderColor: "border-[#a551ff]",
+			bg: "bg-[radial-gradient(ellipse_at_bottom_left,rgba(165,81,255,0.15)_0%,transparent_65%)]",
 			title: "Control de Extintores",
 			desc: "Seguimiento de carga, vencimientos y pruebas hidráulicas según Dec. 351/79 Cap. 18.",
 			t: "extintores",
@@ -181,7 +200,7 @@ function Modules() {
 								from: "landing",
 							}}
 							key={item.title}
-							className="rounded-lg p-5 flex gap-4 items-start border-l-4 border-[#333] hover:border-l-[#5cb85c] transition-colors"
+							className={`rounded-lg p-5 flex gap-4 items-start border-2 ${item.borderColor} ${item.bg}`}
 						>
 							<div
 								className={`w-2.5 h-2.5 rounded-full mt-1.5 shrink-0 ${item.dot}`}
@@ -200,7 +219,7 @@ function Modules() {
 
 function CtaSection() {
 	return (
-		<section id="suscriptions" className="py-50 px-5 bg-linear-to-b">
+		<section id="suscriptions" className="pt-10 pb-50 px-5 bg-linear-to-b">
 			<div className="max-w-[650px] mx-auto text-center">
 				<h2 className="text-2xl md:text-4xl text-pretty  mb-4 font-semibold">
 					Jerarquiza tu servicio técnico hoy mismo

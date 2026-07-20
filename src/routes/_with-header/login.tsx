@@ -10,17 +10,17 @@ export const Route = createFileRoute("/_with-header/login")({
 function RouteComponent() {
 	const [activeForm, setActiveForm] = useState<"login" | "register">("login")
 	const authPosition =
-		activeForm === "login" ? "translate-x-[0px]" : "-translate-x-[100dvw]"
+		activeForm === "login" ? "translate-x-[0px]" : "-translate-x-1/2"
 
 	return (
 		<section className="w-screen flex-1 overflow-hidden">
 			<section
-				className={`${authPosition} w-[200dvw] flex items-center justify-between gap-10 relative transition-transform duration-500`}
+				className={`${authPosition} w-[200dvw] sm:max-w-510 2xl:max-w-640 flex items-center justify-between gap-10 relative transition-transform duration-500`}
 			>
-				<div className="absolute left-0 top-20 sm:top-10 2xl:top-20 w-screen flex justify-center items-center px-6 bw">
+				<div className="absolute left-0 top-20 sm:top-10 2xl:top-20 w-screen sm:max-w-5xl 2xl:max-w-7xl flex justify-center items-center">
 					<LoginForm setActiveForm={setActiveForm} />
 				</div>
-				<div className="absolute right-0 top-20 sm:top-10 2xl:top-20 w-screen flex justify-center items-center px-6">
+				<div className="absolute right-0 top-20 sm:top-10 2xl:top-20 w-screen sm:max-w-5xl 2xl:max-w-7xl flex justify-center items-center">
 					<RegisterForm setActiveForm={setActiveForm} />
 				</div>
 			</section>

@@ -15,7 +15,7 @@ export const Route = createFileRoute("/_with-header/checkout")({
 
 function RouteComponent() {
 	const { plan, from } = Route.useSearch()
-	const backTo = from === "landing" ? "/landing#suscriptions" : "/suscripcion"
+	const backTo = from === "landing" ? "/landing" : "/suscripcion"
 	const found = PLANS.find(p => p.title.toLowerCase() === plan?.toLowerCase())
 
 	return (
@@ -23,6 +23,7 @@ function RouteComponent() {
 			<div className="py-10 w-full sm:max-w-5xl 2xl:max-w-7xl sm:mx-auto flex flex-col gap-8 justify-center items-center px-0 sm:px-4">
 				<Link
 					to={backTo}
+					hash={from === "landing" ? "suscriptions" : ""}
 					className="self-start flex items-center gap-2 text-sm text-foreground/60 hover:text-foreground transition-colors"
 				>
 					<ArrowLeft size={16} />

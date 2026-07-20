@@ -18,11 +18,11 @@ import { Route as WithHeaderLandingRouteImport } from './routes/_with-header/lan
 import { Route as WithHeaderCheckoutRouteImport } from './routes/_with-header/checkout'
 import { Route as ProtectedSuscripcionRouteImport } from './routes/_protected/suscripcion'
 import { Route as ProtectedPerfilRouteRouteImport } from './routes/_protected/perfil/route'
-import { Route as ProtectedTeoriaIndexRouteImport } from './routes/_protected/teoria/index'
+import { Route as WithHeaderTeoriaIndexRouteImport } from './routes/_with-header/teoria/index'
 import { Route as ProtectedIluminacionIndexRouteImport } from './routes/_protected/iluminacion/index'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
-import { Route as ProtectedTeoriaTerminosDeUsoRouteImport } from './routes/_protected/teoria/terminos-de-uso'
-import { Route as ProtectedTeoriaPoliticasDePrivacidadRouteImport } from './routes/_protected/teoria/politicas-de-privacidad'
+import { Route as WithHeaderTeoriaTerminosDeUsoRouteImport } from './routes/_with-header/teoria/terminos-de-uso'
+import { Route as WithHeaderTeoriaPoliticasDePrivacidadRouteImport } from './routes/_with-header/teoria/politicas-de-privacidad'
 import { Route as ProtectedPerfilTecnicosIndexRouteImport } from './routes/_protected/perfil/tecnicos/index'
 import { Route as ProtectedPerfilInstrumentosIndexRouteImport } from './routes/_protected/perfil/instrumentos/index'
 import { Route as ProtectedPerfilEmpresasIndexRouteImport } from './routes/_protected/perfil/empresas/index'
@@ -91,10 +91,10 @@ const ProtectedPerfilRouteRoute = ProtectedPerfilRouteRouteImport.update({
   path: '/perfil',
   getParentRoute: () => ProtectedRouteRoute,
 } as any)
-const ProtectedTeoriaIndexRoute = ProtectedTeoriaIndexRouteImport.update({
+const WithHeaderTeoriaIndexRoute = WithHeaderTeoriaIndexRouteImport.update({
   id: '/teoria/',
   path: '/teoria/',
-  getParentRoute: () => ProtectedRouteRoute,
+  getParentRoute: () => WithHeaderRouteRoute,
 } as any)
 const ProtectedIluminacionIndexRoute =
   ProtectedIluminacionIndexRouteImport.update({
@@ -107,17 +107,17 @@ const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   path: '/api/auth/$',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ProtectedTeoriaTerminosDeUsoRoute =
-  ProtectedTeoriaTerminosDeUsoRouteImport.update({
+const WithHeaderTeoriaTerminosDeUsoRoute =
+  WithHeaderTeoriaTerminosDeUsoRouteImport.update({
     id: '/teoria/terminos-de-uso',
     path: '/teoria/terminos-de-uso',
-    getParentRoute: () => ProtectedRouteRoute,
+    getParentRoute: () => WithHeaderRouteRoute,
   } as any)
-const ProtectedTeoriaPoliticasDePrivacidadRoute =
-  ProtectedTeoriaPoliticasDePrivacidadRouteImport.update({
+const WithHeaderTeoriaPoliticasDePrivacidadRoute =
+  WithHeaderTeoriaPoliticasDePrivacidadRouteImport.update({
     id: '/teoria/politicas-de-privacidad',
     path: '/teoria/politicas-de-privacidad',
-    getParentRoute: () => ProtectedRouteRoute,
+    getParentRoute: () => WithHeaderRouteRoute,
   } as any)
 const ProtectedPerfilTecnicosIndexRoute =
   ProtectedPerfilTecnicosIndexRouteImport.update({
@@ -300,11 +300,11 @@ export interface FileRoutesByFullPath {
   '/landing': typeof WithHeaderLandingRoute
   '/login': typeof WithHeaderLoginRoute
   '/api/uploadthing': typeof ApiUploadthingRoute
-  '/teoria/politicas-de-privacidad': typeof ProtectedTeoriaPoliticasDePrivacidadRoute
-  '/teoria/terminos-de-uso': typeof ProtectedTeoriaTerminosDeUsoRoute
+  '/teoria/politicas-de-privacidad': typeof WithHeaderTeoriaPoliticasDePrivacidadRoute
+  '/teoria/terminos-de-uso': typeof WithHeaderTeoriaTerminosDeUsoRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/iluminacion/': typeof ProtectedIluminacionIndexRoute
-  '/teoria/': typeof ProtectedTeoriaIndexRoute
+  '/teoria/': typeof WithHeaderTeoriaIndexRoute
   '/iluminacion/reportes/': typeof ProtectedIluminacionReportesIndexRoute
   '/perfil/empresas/': typeof ProtectedPerfilEmpresasIndexRoute
   '/perfil/instrumentos/': typeof ProtectedPerfilInstrumentosIndexRoute
@@ -338,11 +338,11 @@ export interface FileRoutesByTo {
   '/landing': typeof WithHeaderLandingRoute
   '/login': typeof WithHeaderLoginRoute
   '/api/uploadthing': typeof ApiUploadthingRoute
-  '/teoria/politicas-de-privacidad': typeof ProtectedTeoriaPoliticasDePrivacidadRoute
-  '/teoria/terminos-de-uso': typeof ProtectedTeoriaTerminosDeUsoRoute
+  '/teoria/politicas-de-privacidad': typeof WithHeaderTeoriaPoliticasDePrivacidadRoute
+  '/teoria/terminos-de-uso': typeof WithHeaderTeoriaTerminosDeUsoRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/iluminacion': typeof ProtectedIluminacionIndexRoute
-  '/teoria': typeof ProtectedTeoriaIndexRoute
+  '/teoria': typeof WithHeaderTeoriaIndexRoute
   '/iluminacion/reportes': typeof ProtectedIluminacionReportesIndexRoute
   '/perfil/empresas': typeof ProtectedPerfilEmpresasIndexRoute
   '/perfil/instrumentos': typeof ProtectedPerfilInstrumentosIndexRoute
@@ -379,11 +379,11 @@ export interface FileRoutesById {
   '/_with-header/login': typeof WithHeaderLoginRoute
   '/api/uploadthing': typeof ApiUploadthingRoute
   '/_protected/': typeof ProtectedIndexRoute
-  '/_protected/teoria/politicas-de-privacidad': typeof ProtectedTeoriaPoliticasDePrivacidadRoute
-  '/_protected/teoria/terminos-de-uso': typeof ProtectedTeoriaTerminosDeUsoRoute
+  '/_with-header/teoria/politicas-de-privacidad': typeof WithHeaderTeoriaPoliticasDePrivacidadRoute
+  '/_with-header/teoria/terminos-de-uso': typeof WithHeaderTeoriaTerminosDeUsoRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/_protected/iluminacion/': typeof ProtectedIluminacionIndexRoute
-  '/_protected/teoria/': typeof ProtectedTeoriaIndexRoute
+  '/_with-header/teoria/': typeof WithHeaderTeoriaIndexRoute
   '/_protected/iluminacion/reportes/': typeof ProtectedIluminacionReportesIndexRoute
   '/_protected/perfil/empresas/': typeof ProtectedPerfilEmpresasIndexRoute
   '/_protected/perfil/instrumentos/': typeof ProtectedPerfilInstrumentosIndexRoute
@@ -497,11 +497,11 @@ export interface FileRouteTypes {
     | '/_with-header/login'
     | '/api/uploadthing'
     | '/_protected/'
-    | '/_protected/teoria/politicas-de-privacidad'
-    | '/_protected/teoria/terminos-de-uso'
+    | '/_with-header/teoria/politicas-de-privacidad'
+    | '/_with-header/teoria/terminos-de-uso'
     | '/api/auth/$'
     | '/_protected/iluminacion/'
-    | '/_protected/teoria/'
+    | '/_with-header/teoria/'
     | '/_protected/iluminacion/reportes/'
     | '/_protected/perfil/empresas/'
     | '/_protected/perfil/instrumentos/'
@@ -600,12 +600,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProtectedPerfilRouteRouteImport
       parentRoute: typeof ProtectedRouteRoute
     }
-    '/_protected/teoria/': {
-      id: '/_protected/teoria/'
+    '/_with-header/teoria/': {
+      id: '/_with-header/teoria/'
       path: '/teoria'
       fullPath: '/teoria/'
-      preLoaderRoute: typeof ProtectedTeoriaIndexRouteImport
-      parentRoute: typeof ProtectedRouteRoute
+      preLoaderRoute: typeof WithHeaderTeoriaIndexRouteImport
+      parentRoute: typeof WithHeaderRouteRoute
     }
     '/_protected/iluminacion/': {
       id: '/_protected/iluminacion/'
@@ -621,19 +621,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAuthSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_protected/teoria/terminos-de-uso': {
-      id: '/_protected/teoria/terminos-de-uso'
+    '/_with-header/teoria/terminos-de-uso': {
+      id: '/_with-header/teoria/terminos-de-uso'
       path: '/teoria/terminos-de-uso'
       fullPath: '/teoria/terminos-de-uso'
-      preLoaderRoute: typeof ProtectedTeoriaTerminosDeUsoRouteImport
-      parentRoute: typeof ProtectedRouteRoute
+      preLoaderRoute: typeof WithHeaderTeoriaTerminosDeUsoRouteImport
+      parentRoute: typeof WithHeaderRouteRoute
     }
-    '/_protected/teoria/politicas-de-privacidad': {
-      id: '/_protected/teoria/politicas-de-privacidad'
+    '/_with-header/teoria/politicas-de-privacidad': {
+      id: '/_with-header/teoria/politicas-de-privacidad'
       path: '/teoria/politicas-de-privacidad'
       fullPath: '/teoria/politicas-de-privacidad'
-      preLoaderRoute: typeof ProtectedTeoriaPoliticasDePrivacidadRouteImport
-      parentRoute: typeof ProtectedRouteRoute
+      preLoaderRoute: typeof WithHeaderTeoriaPoliticasDePrivacidadRouteImport
+      parentRoute: typeof WithHeaderRouteRoute
     }
     '/_protected/perfil/tecnicos/': {
       id: '/_protected/perfil/tecnicos/'
@@ -849,10 +849,7 @@ interface ProtectedRouteRouteChildren {
   ProtectedPerfilRouteRoute: typeof ProtectedPerfilRouteRouteWithChildren
   ProtectedSuscripcionRoute: typeof ProtectedSuscripcionRoute
   ProtectedIndexRoute: typeof ProtectedIndexRoute
-  ProtectedTeoriaPoliticasDePrivacidadRoute: typeof ProtectedTeoriaPoliticasDePrivacidadRoute
-  ProtectedTeoriaTerminosDeUsoRoute: typeof ProtectedTeoriaTerminosDeUsoRoute
   ProtectedIluminacionIndexRoute: typeof ProtectedIluminacionIndexRoute
-  ProtectedTeoriaIndexRoute: typeof ProtectedTeoriaIndexRoute
   ProtectedIluminacionReportesIndexRoute: typeof ProtectedIluminacionReportesIndexRoute
   ProtectedIluminacionReportesChar91idChar93MenuRouteRoute: typeof ProtectedIluminacionReportesChar91idChar93MenuRouteRouteWithChildren
   ProtectedIluminacionReportesPdfChar91idChar93CompletaRoute: typeof ProtectedIluminacionReportesPdfChar91idChar93CompletaRoute
@@ -876,11 +873,7 @@ const ProtectedRouteRouteChildren: ProtectedRouteRouteChildren = {
   ProtectedPerfilRouteRoute: ProtectedPerfilRouteRouteWithChildren,
   ProtectedSuscripcionRoute: ProtectedSuscripcionRoute,
   ProtectedIndexRoute: ProtectedIndexRoute,
-  ProtectedTeoriaPoliticasDePrivacidadRoute:
-    ProtectedTeoriaPoliticasDePrivacidadRoute,
-  ProtectedTeoriaTerminosDeUsoRoute: ProtectedTeoriaTerminosDeUsoRoute,
   ProtectedIluminacionIndexRoute: ProtectedIluminacionIndexRoute,
-  ProtectedTeoriaIndexRoute: ProtectedTeoriaIndexRoute,
   ProtectedIluminacionReportesIndexRoute:
     ProtectedIluminacionReportesIndexRoute,
   ProtectedIluminacionReportesChar91idChar93MenuRouteRoute:
@@ -925,12 +918,19 @@ interface WithHeaderRouteRouteChildren {
   WithHeaderCheckoutRoute: typeof WithHeaderCheckoutRoute
   WithHeaderLandingRoute: typeof WithHeaderLandingRoute
   WithHeaderLoginRoute: typeof WithHeaderLoginRoute
+  WithHeaderTeoriaPoliticasDePrivacidadRoute: typeof WithHeaderTeoriaPoliticasDePrivacidadRoute
+  WithHeaderTeoriaTerminosDeUsoRoute: typeof WithHeaderTeoriaTerminosDeUsoRoute
+  WithHeaderTeoriaIndexRoute: typeof WithHeaderTeoriaIndexRoute
 }
 
 const WithHeaderRouteRouteChildren: WithHeaderRouteRouteChildren = {
   WithHeaderCheckoutRoute: WithHeaderCheckoutRoute,
   WithHeaderLandingRoute: WithHeaderLandingRoute,
   WithHeaderLoginRoute: WithHeaderLoginRoute,
+  WithHeaderTeoriaPoliticasDePrivacidadRoute:
+    WithHeaderTeoriaPoliticasDePrivacidadRoute,
+  WithHeaderTeoriaTerminosDeUsoRoute: WithHeaderTeoriaTerminosDeUsoRoute,
+  WithHeaderTeoriaIndexRoute: WithHeaderTeoriaIndexRoute,
 }
 
 const WithHeaderRouteRouteWithChildren = WithHeaderRouteRoute._addFileChildren(

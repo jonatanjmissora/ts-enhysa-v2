@@ -28,10 +28,7 @@ si no espero al 100% para cargar la foto, no puedo seguir
 [✅] iconos en pagina de inicio
 [✅] planes
 
-[❌] colocar header en el login / register
 [🔨] probar PWA en celular
 [❌] calculadora presupuestos
 
 hacer lo que hicimos para el pdf reducido, en completo tambien
-mejorar los layout para _header
-arreglar los regresos a "Vovler" de las /suscripciones que no anda

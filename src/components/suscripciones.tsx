@@ -35,19 +35,28 @@ export default function SuscriptionPlans({ from }: { from?: string }) {
 					from={from}
 				/>
 			</div>
-			<div className="text-center flex gap-3 flex-col items-center justify-center py-20 ml-auto">
-				<p>
-					Lee nuestra{" "}
-					<Link to="/teoria/politicas-de-privacidad" className="underline">
-						Política de Privacidad
-					</Link>
-				</p>
-				<p>
-					y nuestros{" "}
-					<Link to="/teoria/terminos-de-uso" className="underline">
-						Términos de Uso
-					</Link>
-				</p>
+			<div className="flex flex-col sm:flex-row w-full items-center">
+				<Link
+					to="/"
+					className="bg-[#5cb85c] text-white rounded-md px-7 py-3.5 text-base font-semibold transition-all hover:bg-[#4ca84c] hover:shadow-[0_4px_12px_rgba(92,184,92,0.3)] flex-1 text-center"
+				>
+					Tengo mi Cuenta
+				</Link>
+
+				<div className="text-center flex gap-3 flex-col items-end justify-center py-20 ml-auto flex-1">
+					<p>
+						Lee nuestra{" "}
+						<Link to="/teoria/politicas-de-privacidad" search={{ from: from ?? "suscripcion" }} className="underline">
+							Política de Privacidad
+						</Link>
+					</p>
+					<p>
+						y nuestros{" "}
+						<Link to="/teoria/terminos-de-uso" search={{ from: from ?? "suscripcion" }} className="underline">
+							Términos de Uso
+						</Link>
+					</p>
+				</div>
 			</div>
 		</>
 	)
@@ -96,7 +105,10 @@ const Plan = ({
 			onClick={() => setActualPlan(index as 0 | 1 | 2)}
 			role="button"
 			tabIndex={0}
-			onKeyDown={e => { if (e.key === "Enter" || e.key === " ") setActualPlan(index as 0 | 1 | 2) }}
+			onKeyDown={e => {
+				if (e.key === "Enter" || e.key === " ")
+					setActualPlan(index as 0 | 1 | 2)
+			}}
 			className={`card border border-foreground/10 overflow-hidden relative sm:w-80 2xl:w-100 rounded-lg p-8 flex flex-col items-start gap-10 duration-300 cursor-pointer ${actualPlan === index ? "dark:bg-[#1f301f] bg-[#8dac8d] scale-100 sm:scale-120 z-5 " : "bg-accent"}`}
 		>
 			{actualPlan === index && (
@@ -135,20 +147,12 @@ const Plan = ({
 							handleDemoLogin()
 						}}
 						disabled={demoLoading || !!session?.user}
-						className={`w-full py-3 text-primary-foreground rounded-md text-center font-semibold block no-underline ${
+						className={`w-full py-3 text-primary-foreground rounded-md cursor-pointer text-center font-semibold block no-underline ${
 							index === actualPlan ? "bg-green-400" : "bg-primary"
 						} ${session?.user ? "opacity-50 cursor-not-allowed" : ""}`}
 					>
 						{demoLoading ? "Iniciando..." : "Prueba Gratis"}
 					</button>
-					{!session?.user && (
-						<Link
-							to="/login"
-							className="w-full py-2 text-center text-sm underline text-foreground/60 hover:text-foreground"
-						>
-							Iniciar Sesión
-						</Link>
-					)}
 				</div>
 			) : (
 				<Link

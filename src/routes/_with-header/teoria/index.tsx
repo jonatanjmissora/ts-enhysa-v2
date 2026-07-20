@@ -7,7 +7,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "#/components/ui/select"
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router"
+import { createFileRoute, useNavigate } from "@tanstack/react-router"
 import { ChevronLeft } from "lucide-react"
 import { z } from "zod"
 
@@ -24,7 +24,7 @@ const searchSchema = z.object({
 	from: z.string().optional().default("root"),
 })
 
-export const Route = createFileRoute("/_protected/teoria/")({
+export const Route = createFileRoute("/_with-header/teoria/")({
 	validateSearch: searchSchema,
 	component: RouteComponent,
 })
@@ -80,13 +80,18 @@ function RouteComponent() {
 	return (
 		<article className="w-full sm:max-w-5xl mx-auto py-20 px-4 space-y-8">
 			<header className="space-y-4">
-				<Link
-					to={from === "root" ? "/" : from}
+				<button
+					type="button"
+					onClick={() => {
+						if (from === "root") navigate({ to: "/" })
+						else if (from === "landing") navigate({ to: "/landing", hash: "suscriptions" })
+						else navigate({ to: `/${from}` as never })
+					}}
 					className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors"
 				>
 					<ChevronLeft className="size-4" />
 					Volver
-				</Link>
+				</button>
 				<Select
 					value={t}
 					onValueChange={value =>
