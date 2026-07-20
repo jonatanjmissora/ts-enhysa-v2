@@ -1,7 +1,7 @@
 import BackChevron from "#/components/back-chevron"
 import Loading from "#/components/loading"
 import Title from "#/components/title"
-import { useSuspenseQuery } from "@tanstack/react-query"
+import { useSuspenseQuery, useQuery } from "@tanstack/react-query"
 import { createFileRoute } from "@tanstack/react-router"
 import { Suspense, lazy } from "react"
 import { reporteQueryOptions } from "../../../../../../../queries/reportes/iluminacion/reportes-query"
@@ -18,6 +18,7 @@ import type { TecnicoType } from "../../../../../../../db/tecnicos/schema"
 import type { EmpresaType } from "../../../../../../../db/empresas/schema"
 import type { InstrumentoType } from "../../../../../../../db/instrumentos/schema"
 import type { ReporteIluminacionType } from "../../../../../../../db/reportes/iluminacion/schema"
+import { userCreditsOptions } from "../../../../../../../queries/credits/user-credits-query"
 
 export const Route = createFileRoute(
 	"/_protected/iluminacion/reportes/pdf/$id/completa"
@@ -82,6 +83,7 @@ function PDF() {
 		...areasQueryOptions({ reportId: reporte?.id || "" }),
 		staleTime: 1000 * 60 * 5,
 	})
+	const { data: credits } = useQuery(userCreditsOptions)
 
 	if (!reporte)
 		return <span className="text-red-500">Reporte no encontrado</span>
@@ -110,12 +112,14 @@ function PDF() {
 				}
 			>
 				<MyDocument
+					key={reporte.creditConsumed ? "unlocked" : "locked"}
 					reporte={reporte}
 					localizadas={localizadas}
 					areas={areas}
 					tecnico={reporteConRelaciones.tecnico}
 					empresa={reporteConRelaciones.empresa}
 					instrumento={reporteConRelaciones.instrumento}
+					credits={credits}
 				/>
 			</Suspense>
 		</ClientComponent>

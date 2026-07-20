@@ -31,4 +31,4 @@ si no espero al 100% para cargar la foto, no puedo seguir
 [🔨] probar PWA en celular
 [❌] calculadora presupuestos
 
-hacer lo que hicimos para el pdf reducido, en completo tambien
+probar el demo user
