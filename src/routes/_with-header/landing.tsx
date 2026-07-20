@@ -115,8 +115,8 @@ function Features() {
 					datos en la oficina.
 				</p>
 				<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-					<div className="border rounded-xl p-8 border-[#e2711d] bg-[radial-gradient(ellipse_at_bottom_left,rgba(226,113,29,0.15)_0%,transparent_70%)]">
-						<div className="text-4xl mb-5 text-[#e2711d]">📊</div>
+					<div className="border rounded-xl p-8 border-[#e2711d70] bg-[radial-gradient(ellipse_at_bottom_left,rgba(226,113,29,0.05)_0%,transparent_70%)]">
+						<div className="text-4xl mb-5 text-[#e2711d80]">📊</div>
 						<h3 className="text-xl mb-3">Cálculos Automatizados</h3>
 						<p className="text-[#aaaaaa] text-sm">
 							Carga directa de luxes en campo, determinación automática del
@@ -124,8 +124,8 @@ function Features() {
 							legales del Dec. 351/79.
 						</p>
 					</div>
-					<div className="border rounded-xl p-8 border-[#5cb85c] bg-[radial-gradient(ellipse_at_top_left,rgba(92,184,92,0.12)_0%,transparent_70%)]">
-						<div className="text-4xl mb-5 text-[#5cb85c]">🔒</div>
+					<div className="border rounded-xl p-8 border-[#5cb85c70] bg-[radial-gradient(ellipse_at_top_left,rgba(92,184,92,0.05)_0%,transparent_70%)]">
+						<div className="text-4xl mb-5 text-[#5cb85c80]">🔒</div>
 						<h3 className="text-xl mb-3">Matrícula y Firma Digital</h3>
 						<p className="text-[#aaaaaa] text-sm">
 							Integración directa de tu credencial del Colegio de Profesionales
@@ -133,8 +133,8 @@ function Features() {
 							de la SRT.
 						</p>
 					</div>
-					<div className="border rounded-xl p-8 border-[#5197ff] bg-[radial-gradient(ellipse_at_bottom_left,rgba(81,151,255,0.12)_0%,transparent_70%)]">
-						<div className="text-4xl mb-5" style={{ color: "#5197ff" }}>
+					<div className="border rounded-xl p-8 border-[#5197ff70] bg-[radial-gradient(ellipse_at_bottom_left,rgba(81,151,255,0.05)_0%,transparent_70%)]">
+						<div className="text-4xl mb-5" style={{ color: "#5197ff80" }}>
 							📱
 						</div>
 						<h3 className="text-xl mb-3">Uso Off-line en Planta</h3>
@@ -153,33 +153,33 @@ function Features() {
 function Modules() {
 	const items = [
 		{
-			dot: "bg-[#5cb85c]",
-			borderColor: "border-[#5cb85c]",
-			bg: "bg-[radial-gradient(ellipse_at_bottom_left,rgba(92,184,92,0.15)_0%,transparent_65%)]",
+			dot: "bg-[#5cb85c70]",
+			borderColor: "border-[#5cb85c70]",
+			bg: "bg-[radial-gradient(ellipse_at_bottom_left,rgba(92,184,92,0.05)_0%,transparent_65%)]",
 			title: "Estudio de Iluminación",
 			desc: "Protocolo oficial según Res. 84/2012 SRT. Gestión de luminarias y fuentes mixtas.",
 			t: "iluminacion",
 		},
 		{
-			dot: "bg-[#e2711d]",
-			borderColor: "border-[#e2711d]",
-			bg: "bg-[radial-gradient(ellipse_at_bottom_left,rgba(226,113,29,0.15)_0%,transparent_65%)]",
+			dot: "bg-[#e2711d70]",
+			borderColor: "border-[#e2711d70]",
+			bg: "bg-[radial-gradient(ellipse_at_bottom_left,rgba(226,113,29,0.05)_0%,transparent_65%)]",
 			title: "Estudio de Ruido",
 			desc: "Evaluación de puestos de trabajo conforme a la Res. 85/2012 SRT.",
 			t: "ruido",
 		},
 		{
-			dot: "bg-[#5197ff]",
-			borderColor: "border-[#5197ff]",
-			bg: "bg-[radial-gradient(ellipse_at_bottom_left,rgba(81,151,255,0.15)_0%,transparent_65%)]",
+			dot: "bg-[#5197ff70]",
+			borderColor: "border-[#5197ff70]",
+			bg: "bg-[radial-gradient(ellipse_at_bottom_left,rgba(81,151,255,0.05)_0%,transparent_65%)]",
 			title: "Puesta a Tierra (PAT)",
 			desc: "Verificación de continuidad de masas y resistencia bajo la Res. 900/15 SRT.",
 			t: "pat",
 		},
 		{
-			dot: "bg-[#a551ff]",
-			borderColor: "border-[#a551ff]",
-			bg: "bg-[radial-gradient(ellipse_at_bottom_left,rgba(165,81,255,0.15)_0%,transparent_65%)]",
+			dot: "bg-[#a551ff70]",
+			borderColor: "border-[#a551ff70]",
+			bg: "bg-[radial-gradient(ellipse_at_bottom_left,rgba(165,81,255,0.05)_0%,transparent_65%)]",
 			title: "Control de Extintores",
 			desc: "Seguimiento de carga, vencimientos y pruebas hidráulicas según Dec. 351/79 Cap. 18.",
 			t: "extintores",
@@ -200,7 +200,7 @@ function Modules() {
 								from: "landing",
 							}}
 							key={item.title}
-							className={`rounded-lg p-5 flex gap-4 items-start border-2 ${item.borderColor} ${item.bg}`}
+							className={`rounded-lg p-5 flex gap-4 items-start border ${item.borderColor} ${item.bg}`}
 						>
 							<div
 								className={`w-2.5 h-2.5 rounded-full mt-1.5 shrink-0 ${item.dot}`}

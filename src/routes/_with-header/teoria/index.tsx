@@ -84,7 +84,8 @@ function RouteComponent() {
 					type="button"
 					onClick={() => {
 						if (from === "root") navigate({ to: "/" })
-						else if (from === "landing") navigate({ to: "/landing", hash: "suscriptions" })
+						else if (from === "landing")
+							navigate({ to: "/landing", hash: "modulos" })
 						else navigate({ to: `/${from}` as never })
 					}}
 					className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors"
