@@ -32,5 +32,20 @@ si no espero al 100% para cargar la foto, no puedo seguir
 [❌] calculadora presupuestos
 
 probar el demo user
+	que pasa cuando el demo user quiere comprar creditos?
+
 controlar que para cuando se comprar creditos, este logueado, y si compro, luego del checkout, me re dirige a dashboard
 	el usuario debe de estar logueado, y no debe de ser demo user.
+
+
+mandra hacer:
+	teoria faltante,
+	iconos nuevos
+
+
+kato hacer:
+	calculadora de presupuestos cambiar empresa que genera informe
+	mercadopago
+	como se usa?
+	mejorar foto de "/"
+	arreglar teoria de tablas

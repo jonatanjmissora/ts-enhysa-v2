@@ -27,6 +27,9 @@ import { Route as ProtectedPerfilTecnicosIndexRouteImport } from './routes/_prot
 import { Route as ProtectedPerfilInstrumentosIndexRouteImport } from './routes/_protected/perfil/instrumentos/index'
 import { Route as ProtectedPerfilEmpresasIndexRouteImport } from './routes/_protected/perfil/empresas/index'
 import { Route as ProtectedIluminacionReportesIndexRouteImport } from './routes/_protected/iluminacion/reportes/index'
+import { Route as ProtectedPerfilTecnicosEditarRouteImport } from './routes/_protected/perfil/tecnicos/editar'
+import { Route as ProtectedPerfilInstrumentosIdEditarRouteImport } from './routes/_protected/perfil/instrumentos/$id/editar'
+import { Route as ProtectedPerfilEmpresasIdEditarRouteImport } from './routes/_protected/perfil/empresas/$id/editar'
 import { Route as ProtectedIluminacionReportesChar91idChar93MenuRouteRouteImport } from './routes/_protected/iluminacion/reportes/[$id]/_menu/route'
 import { Route as ProtectedIluminacionReportesChar91idChar93MedicionIndexRouteImport } from './routes/_protected/iluminacion/reportes/[$id]/medicion/index'
 import { Route as ProtectedIluminacionReportesPdfChar91idChar93ReducidaRouteImport } from './routes/_protected/iluminacion/reportes/pdf/[$id]/reducida'
@@ -142,6 +145,24 @@ const ProtectedIluminacionReportesIndexRoute =
     id: '/iluminacion/reportes/',
     path: '/iluminacion/reportes/',
     getParentRoute: () => ProtectedRouteRoute,
+  } as any)
+const ProtectedPerfilTecnicosEditarRoute =
+  ProtectedPerfilTecnicosEditarRouteImport.update({
+    id: '/tecnicos/editar',
+    path: '/tecnicos/editar',
+    getParentRoute: () => ProtectedPerfilRouteRoute,
+  } as any)
+const ProtectedPerfilInstrumentosIdEditarRoute =
+  ProtectedPerfilInstrumentosIdEditarRouteImport.update({
+    id: '/instrumentos/$id/editar',
+    path: '/instrumentos/$id/editar',
+    getParentRoute: () => ProtectedPerfilRouteRoute,
+  } as any)
+const ProtectedPerfilEmpresasIdEditarRoute =
+  ProtectedPerfilEmpresasIdEditarRouteImport.update({
+    id: '/empresas/$id/editar',
+    path: '/empresas/$id/editar',
+    getParentRoute: () => ProtectedPerfilRouteRoute,
   } as any)
 const ProtectedIluminacionReportesChar91idChar93MenuRouteRoute =
   ProtectedIluminacionReportesChar91idChar93MenuRouteRouteImport.update({
@@ -305,11 +326,14 @@ export interface FileRoutesByFullPath {
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/iluminacion/': typeof ProtectedIluminacionIndexRoute
   '/teoria/': typeof WithHeaderTeoriaIndexRoute
+  '/perfil/tecnicos/editar': typeof ProtectedPerfilTecnicosEditarRoute
   '/iluminacion/reportes/': typeof ProtectedIluminacionReportesIndexRoute
   '/perfil/empresas/': typeof ProtectedPerfilEmpresasIndexRoute
   '/perfil/instrumentos/': typeof ProtectedPerfilInstrumentosIndexRoute
   '/perfil/tecnicos/': typeof ProtectedPerfilTecnicosIndexRoute
   '/iluminacion/reportes/$id': typeof ProtectedIluminacionReportesChar91idChar93MenuRouteRouteWithChildren
+  '/perfil/empresas/$id/editar': typeof ProtectedPerfilEmpresasIdEditarRoute
+  '/perfil/instrumentos/$id/editar': typeof ProtectedPerfilInstrumentosIdEditarRoute
   '/iluminacion/reportes/$id/areass': typeof ProtectedIluminacionReportesChar91idChar93MenuAreassRoute
   '/iluminacion/reportes/$id/general': typeof ProtectedIluminacionReportesChar91idChar93MenuGeneralRoute
   '/iluminacion/reportes/$id/medicion2': typeof ProtectedIluminacionReportesChar91idChar93MenuMedicion2Route
@@ -343,11 +367,14 @@ export interface FileRoutesByTo {
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/iluminacion': typeof ProtectedIluminacionIndexRoute
   '/teoria': typeof WithHeaderTeoriaIndexRoute
+  '/perfil/tecnicos/editar': typeof ProtectedPerfilTecnicosEditarRoute
   '/iluminacion/reportes': typeof ProtectedIluminacionReportesIndexRoute
   '/perfil/empresas': typeof ProtectedPerfilEmpresasIndexRoute
   '/perfil/instrumentos': typeof ProtectedPerfilInstrumentosIndexRoute
   '/perfil/tecnicos': typeof ProtectedPerfilTecnicosIndexRoute
   '/iluminacion/reportes/$id': typeof ProtectedIluminacionReportesChar91idChar93MenuRouteRouteWithChildren
+  '/perfil/empresas/$id/editar': typeof ProtectedPerfilEmpresasIdEditarRoute
+  '/perfil/instrumentos/$id/editar': typeof ProtectedPerfilInstrumentosIdEditarRoute
   '/iluminacion/reportes/$id/areass': typeof ProtectedIluminacionReportesChar91idChar93MenuAreassRoute
   '/iluminacion/reportes/$id/general': typeof ProtectedIluminacionReportesChar91idChar93MenuGeneralRoute
   '/iluminacion/reportes/$id/medicion2': typeof ProtectedIluminacionReportesChar91idChar93MenuMedicion2Route
@@ -384,11 +411,14 @@ export interface FileRoutesById {
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/_protected/iluminacion/': typeof ProtectedIluminacionIndexRoute
   '/_with-header/teoria/': typeof WithHeaderTeoriaIndexRoute
+  '/_protected/perfil/tecnicos/editar': typeof ProtectedPerfilTecnicosEditarRoute
   '/_protected/iluminacion/reportes/': typeof ProtectedIluminacionReportesIndexRoute
   '/_protected/perfil/empresas/': typeof ProtectedPerfilEmpresasIndexRoute
   '/_protected/perfil/instrumentos/': typeof ProtectedPerfilInstrumentosIndexRoute
   '/_protected/perfil/tecnicos/': typeof ProtectedPerfilTecnicosIndexRoute
   '/_protected/iluminacion/reportes/$id/_menu': typeof ProtectedIluminacionReportesChar91idChar93MenuRouteRouteWithChildren
+  '/_protected/perfil/empresas/$id/editar': typeof ProtectedPerfilEmpresasIdEditarRoute
+  '/_protected/perfil/instrumentos/$id/editar': typeof ProtectedPerfilInstrumentosIdEditarRoute
   '/_protected/iluminacion/reportes/$id/_menu/areass': typeof ProtectedIluminacionReportesChar91idChar93MenuAreassRoute
   '/_protected/iluminacion/reportes/$id/_menu/general': typeof ProtectedIluminacionReportesChar91idChar93MenuGeneralRoute
   '/_protected/iluminacion/reportes/$id/_menu/medicion2': typeof ProtectedIluminacionReportesChar91idChar93MenuMedicion2Route
@@ -424,11 +454,14 @@ export interface FileRouteTypes {
     | '/api/auth/$'
     | '/iluminacion/'
     | '/teoria/'
+    | '/perfil/tecnicos/editar'
     | '/iluminacion/reportes/'
     | '/perfil/empresas/'
     | '/perfil/instrumentos/'
     | '/perfil/tecnicos/'
     | '/iluminacion/reportes/$id'
+    | '/perfil/empresas/$id/editar'
+    | '/perfil/instrumentos/$id/editar'
     | '/iluminacion/reportes/$id/areass'
     | '/iluminacion/reportes/$id/general'
     | '/iluminacion/reportes/$id/medicion2'
@@ -462,11 +495,14 @@ export interface FileRouteTypes {
     | '/api/auth/$'
     | '/iluminacion'
     | '/teoria'
+    | '/perfil/tecnicos/editar'
     | '/iluminacion/reportes'
     | '/perfil/empresas'
     | '/perfil/instrumentos'
     | '/perfil/tecnicos'
     | '/iluminacion/reportes/$id'
+    | '/perfil/empresas/$id/editar'
+    | '/perfil/instrumentos/$id/editar'
     | '/iluminacion/reportes/$id/areass'
     | '/iluminacion/reportes/$id/general'
     | '/iluminacion/reportes/$id/medicion2'
@@ -502,11 +538,14 @@ export interface FileRouteTypes {
     | '/api/auth/$'
     | '/_protected/iluminacion/'
     | '/_with-header/teoria/'
+    | '/_protected/perfil/tecnicos/editar'
     | '/_protected/iluminacion/reportes/'
     | '/_protected/perfil/empresas/'
     | '/_protected/perfil/instrumentos/'
     | '/_protected/perfil/tecnicos/'
     | '/_protected/iluminacion/reportes/$id/_menu'
+    | '/_protected/perfil/empresas/$id/editar'
+    | '/_protected/perfil/instrumentos/$id/editar'
     | '/_protected/iluminacion/reportes/$id/_menu/areass'
     | '/_protected/iluminacion/reportes/$id/_menu/general'
     | '/_protected/iluminacion/reportes/$id/_menu/medicion2'
@@ -663,6 +702,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProtectedIluminacionReportesIndexRouteImport
       parentRoute: typeof ProtectedRouteRoute
     }
+    '/_protected/perfil/tecnicos/editar': {
+      id: '/_protected/perfil/tecnicos/editar'
+      path: '/tecnicos/editar'
+      fullPath: '/perfil/tecnicos/editar'
+      preLoaderRoute: typeof ProtectedPerfilTecnicosEditarRouteImport
+      parentRoute: typeof ProtectedPerfilRouteRoute
+    }
+    '/_protected/perfil/instrumentos/$id/editar': {
+      id: '/_protected/perfil/instrumentos/$id/editar'
+      path: '/instrumentos/$id/editar'
+      fullPath: '/perfil/instrumentos/$id/editar'
+      preLoaderRoute: typeof ProtectedPerfilInstrumentosIdEditarRouteImport
+      parentRoute: typeof ProtectedPerfilRouteRoute
+    }
+    '/_protected/perfil/empresas/$id/editar': {
+      id: '/_protected/perfil/empresas/$id/editar'
+      path: '/empresas/$id/editar'
+      fullPath: '/perfil/empresas/$id/editar'
+      preLoaderRoute: typeof ProtectedPerfilEmpresasIdEditarRouteImport
+      parentRoute: typeof ProtectedPerfilRouteRoute
+    }
     '/_protected/iluminacion/reportes/$id/_menu': {
       id: '/_protected/iluminacion/reportes/$id/_menu'
       path: '/iluminacion/reportes/$id'
@@ -807,15 +867,22 @@ declare module '@tanstack/react-router' {
 }
 
 interface ProtectedPerfilRouteRouteChildren {
+  ProtectedPerfilTecnicosEditarRoute: typeof ProtectedPerfilTecnicosEditarRoute
   ProtectedPerfilEmpresasIndexRoute: typeof ProtectedPerfilEmpresasIndexRoute
   ProtectedPerfilInstrumentosIndexRoute: typeof ProtectedPerfilInstrumentosIndexRoute
   ProtectedPerfilTecnicosIndexRoute: typeof ProtectedPerfilTecnicosIndexRoute
+  ProtectedPerfilEmpresasIdEditarRoute: typeof ProtectedPerfilEmpresasIdEditarRoute
+  ProtectedPerfilInstrumentosIdEditarRoute: typeof ProtectedPerfilInstrumentosIdEditarRoute
 }
 
 const ProtectedPerfilRouteRouteChildren: ProtectedPerfilRouteRouteChildren = {
+  ProtectedPerfilTecnicosEditarRoute: ProtectedPerfilTecnicosEditarRoute,
   ProtectedPerfilEmpresasIndexRoute: ProtectedPerfilEmpresasIndexRoute,
   ProtectedPerfilInstrumentosIndexRoute: ProtectedPerfilInstrumentosIndexRoute,
   ProtectedPerfilTecnicosIndexRoute: ProtectedPerfilTecnicosIndexRoute,
+  ProtectedPerfilEmpresasIdEditarRoute: ProtectedPerfilEmpresasIdEditarRoute,
+  ProtectedPerfilInstrumentosIdEditarRoute:
+    ProtectedPerfilInstrumentosIdEditarRoute,
 }
 
 const ProtectedPerfilRouteRouteWithChildren =

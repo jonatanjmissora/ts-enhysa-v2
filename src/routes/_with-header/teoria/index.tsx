@@ -35,7 +35,7 @@ const TEORIAS = [
 		id: "iluminacionValoresRequeridos",
 		label: "➖ Tabla de Valores Requeridos",
 	},
-	{ id: "ruido", label: "Estudio de Ruido Res. 84/2012 SRT" },
+	{ id: "ruido", label: "Estudio de Ruido Res. 85/2012 SRT" },
 	{ id: "extintores", label: "Control de Extintores, Recarga y PH" },
 	{ id: "pat", label: "Estudio de PAT y Continuidad de las Masas" },
 ] as const
@@ -43,7 +43,7 @@ const TEORIAS = [
 function RuidoContent() {
 	return (
 		<p className="text-muted-foreground">
-			Contenido próximo — Estudio de Ruido Res. 84/2012 SRT.
+			Contenido próximo — Estudio de Ruido Res. 85/2012 SRT.
 		</p>
 	)
 }

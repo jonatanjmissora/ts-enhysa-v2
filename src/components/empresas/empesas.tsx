@@ -18,10 +18,10 @@ import {
 	DropdownMenuTrigger,
 } from "../ui/dropdown-menu"
 import { Button } from "../ui/button"
-import { Ellipsis } from "lucide-react"
+import { Ellipsis, Pencil } from "lucide-react"
 import { useState } from "react"
-import { EditEmpresa } from "./edit-empresa"
 import DeleteEmpresa from "./delete-empresa"
+import { Link } from "@tanstack/react-router"
 
 export default function Empresas() {
 	const { data: empresas } = useSuspenseQuery(empresasQueryOptions)
@@ -204,7 +204,15 @@ function EmpresaDropdownMenu({ empresa }: { empresa: EmpresaType }) {
 			</DropdownMenuTrigger>
 			<DropdownMenuContent className="p-6" align="end">
 				<DropdownMenuGroup className="flex flex-col bg-accent ring-[1px] ring-foreground/20 rounded-lg p-2">
-					<EditEmpresa empresa={empresa} setIsMenuOpen={setIsMenuOpen} />
+					<Link
+						to="/perfil/empresas/$id/editar"
+						params={{ id: empresa.id }}
+						onClick={() => setIsMenuOpen(false)}
+						className="w-full flex items-center gap-2 p-4 rounded-md hover:bg-background"
+					>
+						<Pencil size={14} className="text-foreground" />
+						Editar
+					</Link>
 					<DropdownMenuSeparator className="bg-foreground/20 w-5/6 mx-auto" />
 					<DeleteEmpresa empresa={empresa} setIsMenuOpen={setIsMenuOpen} />
 				</DropdownMenuGroup>

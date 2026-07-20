@@ -54,7 +54,7 @@ export function EditInstrumento({
 					<div className="text-center">
 						<EditInstrumentoForm
 							instrumento={instrumento}
-							setOpen={setOpen}
+							onClose={() => setOpen(false)}
 							setIsMenuOpen={setIsMenuOpen}
 						/>
 					</div>
@@ -66,11 +66,11 @@ export function EditInstrumento({
 
 export function EditInstrumentoForm({
 	instrumento,
-	setOpen,
+	onClose,
 	setIsMenuOpen,
 }: {
 	instrumento: InstrumentoType
-	setOpen: (open: boolean) => void
+	onClose?: () => void
 	setIsMenuOpen?: (open: boolean) => void
 }) {
 	const [openPopover, setOpenPopover] = useState(false)
@@ -105,7 +105,7 @@ export function EditInstrumentoForm({
 			}
 
 			if (checkInstrumentoDiference(updateInstrumento, instrumento)) {
-				setOpen(false)
+				onClose?.()
 				return
 			}
 
@@ -116,7 +116,7 @@ export function EditInstrumentoForm({
 				console.error("Error al actualizar el instrumento", error)
 			}
 			if (setIsMenuOpen) setIsMenuOpen(false)
-			setOpen(false)
+			onClose?.()
 			console.log("Instrumento actualizado exitosamente")
 		},
 	})
@@ -368,7 +368,7 @@ export function EditInstrumentoForm({
 					<Button
 						variant="outline"
 						onClick={() => {
-							setOpen(false)
+							onClose?.()
 							if (setIsMenuOpen) setIsMenuOpen(false)
 						}}
 						type="button"

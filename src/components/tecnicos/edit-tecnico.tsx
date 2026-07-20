@@ -49,7 +49,7 @@ export default function EditTecnico({
 					<div className="text-center">
 						<EditTecnicoForm
 							tecnico={tecnico}
-							setOpen={setOpen}
+							onClose={() => setOpen(false)}
 							setIsMenuOpen={setIsMenuOpen}
 						/>
 					</div>
@@ -61,11 +61,11 @@ export default function EditTecnico({
 
 export function EditTecnicoForm({
 	tecnico,
-	setOpen,
+	onClose,
 	setIsMenuOpen,
 }: {
 	tecnico: TecnicoType
-	setOpen: (open: boolean) => void
+	onClose?: () => void
 	setIsMenuOpen?: (open: boolean) => void
 }) {
 	const [matriculaFile, setMatriculaFile] = useState<string>(
@@ -95,7 +95,7 @@ export function EditTecnicoForm({
 				empresaLogo: empresaLogoFile,
 			}
 			if (checkTecnicoDiference(newTecnico, tecnico)) {
-				setOpen(false)
+				onClose?.()
 				return
 			}
 			const result = await editTecnicoMutation({ data: newTecnico })
@@ -103,7 +103,7 @@ export function EditTecnicoForm({
 				console.error("Error al editar técnico", error)
 			}
 			if (setIsMenuOpen) setIsMenuOpen(false)
-			setOpen(false)
+			onClose?.()
 			console.log("Técnico editado exitosamente")
 		},
 	})
@@ -343,7 +343,7 @@ export function EditTecnicoForm({
 						<Button
 							variant="outline"
 							onClick={() => {
-								setOpen(false)
+								onClose?.()
 								if (setIsMenuOpen) setIsMenuOpen(false)
 							}}
 							type="button"

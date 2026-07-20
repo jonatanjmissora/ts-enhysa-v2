@@ -494,6 +494,13 @@ export default function IluminacionValoresRequeridosContent() {
 				<h2 className="text-xl font-semibold tracking-tight">
 					Requisitos de Uniformidad
 				</h2>
+				<p>
+					Es un parámetro crítico en luminotecnia que mide cuán homogénea es la
+					distribución de la luz en un plano de trabajo específico. Su objetivo
+					es garantizar que no existan contrastes severos o zonas de sombra que
+					fuercen la acomodación visual del trabajador, previniendo así la
+					fatiga ocular y disminuyendo el riesgo de accidentes.
+				</p>
 				<p className="text-sm text-muted-foreground leading-relaxed">
 					Para asegurar una uniformidad razonable en la iluminancia de un local,
 					se exige una relación no menor de <strong>0,5</strong> entre sus
@@ -508,6 +515,30 @@ export default function IluminacionValoresRequeridosContent() {
 					sobre las superficies de trabajo o sobre un plano horizontal a 0,80 m
 					del suelo. No aplica a lugares de tránsito, ingreso/egreso de personal
 					ni iluminación de emergencia.
+				</p>
+				<p>
+					Emin Valor mínimo en Lux tomado en la grilla de medición. Emax Valor
+					máximo en Lux tomado en la grilla de medición. Emed Iluminancia Media,
+					es la media aritmética en Lux calculada, teniendo en cuenta todas las
+					mediciones de la grilla. • Uniformidad General U0 = Emin / Emed Es el
+					indicador más utilizado por la legislación para validar si el ambiente
+					en general está bien iluminado de manera equilibrada. • Uniformidad
+					Localizada U1 = Emin / Emax Se utiliza para analizar áreas específicas
+					o puestos de trabajo puntuales, asegurando que no existan picos de
+					brillo excesivos respecto a la zona menos iluminada. Criterio de
+					Validación: El cociente U0 obtenido es menor al límite establecido por
+					la normativa para esa actividad, el estudio se dictamina como "No
+					Conforme", aun cuando el valor medio Emed cumpla con los lux mínimos
+					requeridos. Esto obligaría a rediseñar la distribución de las
+					luminarias o modificar sus potencias. Los valores para U0 {">"} 0,60,
+					pero va a depender de la actividad. Para área interior sería
+				</p>
+				<p>TABLA</p>
+				<p>
+					En el marco legal y técnico aplicable (como la Resolución SRT 84/2012
+					y la Norma IRAM AADDL J 20-06 en Argentina, o la ISO 8995-1 a nivel
+					internacional), el cálculo y control de este factor es obligatorio al
+					confeccionar los protocolos de medición.
 				</p>
 			</section>
 		</>

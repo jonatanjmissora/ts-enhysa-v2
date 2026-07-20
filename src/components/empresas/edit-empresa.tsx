@@ -48,7 +48,7 @@ export function EditEmpresa({
 					<div className="text-center">
 						<EditEmpresaForm
 							empresa={empresa}
-							setOpen={setOpen}
+							onClose={() => setOpen(false)}
 							setIsMenuOpen={setIsMenuOpen}
 						/>
 					</div>
@@ -60,11 +60,11 @@ export function EditEmpresa({
 
 export function EditEmpresaForm({
 	empresa,
-	setOpen,
+	onClose,
 	setIsMenuOpen,
 }: {
 	empresa: EmpresaType
-	setOpen: (open: boolean) => void
+	onClose?: () => void
 	setIsMenuOpen?: (open: boolean) => void
 }) {
 	const [logoFile, setLogoFile] = useState<string>(empresa.logo ?? "")
@@ -85,7 +85,7 @@ export function EditEmpresaForm({
 				logo: logoFile,
 			}
 			if (checkEmpresaDiference(newEmpresa, empresa)) {
-				setOpen(false)
+				onClose?.()
 				return
 			}
 
@@ -99,7 +99,7 @@ export function EditEmpresaForm({
 				console.error("Error al actualizar la empresa", error)
 			}
 			if (setIsMenuOpen) setIsMenuOpen(false)
-			setOpen(false)
+			onClose?.()
 			console.log("Empresa actualizada exitosamente")
 		},
 	})
@@ -367,7 +367,7 @@ export function EditEmpresaForm({
 					<Button
 						variant="outline"
 						onClick={() => {
-							setOpen(false)
+							onClose?.()
 							if (setIsMenuOpen) setIsMenuOpen(false)
 						}}
 						type="button"

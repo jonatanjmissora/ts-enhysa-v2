@@ -4,7 +4,6 @@ import type { TecnicoType } from "../../../db/tecnicos/schema"
 import CreateTecnico from "./create-tecnico"
 import { Label } from "../ui/label"
 import { Input } from "../ui/input"
-import EditTecnico from "./edit-tecnico"
 import { useState } from "react"
 import {
 	DropdownMenu,
@@ -13,8 +12,9 @@ import {
 	DropdownMenuTrigger,
 } from "../ui/dropdown-menu"
 import { Button } from "../ui/button"
-import { Ellipsis } from "lucide-react"
+import { Ellipsis, Pencil } from "lucide-react"
 import useScrollTop from "#/hooks/scroll-top"
+import { Link } from "@tanstack/react-router"
 
 export default function Tecnico() {
 	const { data: tecnico } = useSuspenseQuery(tecnicoQueryOptions)
@@ -29,7 +29,7 @@ function HayTecnico({ tecnico }: { tecnico: TecnicoType }) {
 	return (
 		<div className="w-5/6 mx-auto my-12 mb-80 relative pt-10">
 			<div className="absolute top-0 left-6">
-				<TecnicoDropdownMenu tecnico={tecnico} />
+				<TecnicoDropdownMenu />
 			</div>
 			<div className="grid-cols-1 grid sm:grid-cols-2 gap-8 w-5/6 my-10 mx-auto">
 				<div className="flex flex-col gap-1">
@@ -160,7 +160,7 @@ function TecnicoVacio() {
 	)
 }
 
-function TecnicoDropdownMenu({ tecnico }: { tecnico: TecnicoType }) {
+	function TecnicoDropdownMenu() {
 	const [isMenuOpen, setIsMenuOpen] = useState(false)
 	return (
 		<DropdownMenu open={isMenuOpen} onOpenChange={setIsMenuOpen}>
@@ -171,7 +171,14 @@ function TecnicoDropdownMenu({ tecnico }: { tecnico: TecnicoType }) {
 			</DropdownMenuTrigger>
 			<DropdownMenuContent className="" align="end">
 				<DropdownMenuGroup className="flex flex-col gap-4 p-6">
-					<EditTecnico tecnico={tecnico} setIsMenuOpen={setIsMenuOpen} />
+					<Link
+						to="/perfil/tecnicos/editar"
+						onClick={() => setIsMenuOpen(false)}
+						className="w-40 p-5 flex items-center gap-2 rounded-md ring-[1px] ring-foreground/20 hover:bg-accent"
+					>
+						<Pencil size={14} className="text-foreground/70" />
+						Editar
+					</Link>
 				</DropdownMenuGroup>
 			</DropdownMenuContent>
 		</DropdownMenu>
