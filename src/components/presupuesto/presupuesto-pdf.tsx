@@ -1,0 +1,347 @@
+import { Document, Page, View, Text, Image, StyleSheet } from "@react-pdf/renderer"
+
+type Perfil = "licenciado" | "tecnico"
+
+interface TareaRow {
+	id: string
+	cantidad: number
+	servicioKey: string
+	subOpcionIndex: number
+}
+
+interface AdicionalRow {
+	id: string
+	cantidad: number
+	nombre: string
+	valorUnitario: number
+}
+
+interface HonorarioOpcion {
+	label: string
+	valor: number
+}
+
+interface HonorarioServicio {
+	nombre: string
+	opciones: HonorarioOpcion[]
+}
+
+type HonorariosDb = Record<Perfil, Record<string, HonorarioServicio>>
+
+const honorariosDb: HonorariosDb = {
+	licenciado: {
+		capacitacion: { nombre: "Capacitación (Hasta 4 hs)", opciones: [{ label: "Estándar", valor: 120000 }] },
+		autoelevadores: { nombre: "Capacitación Autoelevadores", opciones: [{ label: "Curso y Credencial", valor: 350000 }] },
+		puesta_tierra: { nombre: "Medición Puesta a Tierra", opciones: [{ label: "1 Jabalina / 3 Disyuntores", valor: 220000 }, { label: "Jabalina Adicional", valor: 44000 }, { label: "Disyuntor Adicional", valor: 44000 }] },
+		ergonomia_puesto: { nombre: "Estudio de Ergonomía por Puesto (Res. 295/03)", opciones: [{ label: "Por puesto", valor: 94000 }] },
+		ruido_ambiental: { nombre: "Ruido Ambiental", opciones: [{ label: "Hasta 30 minutos", valor: 118000 }] },
+		dosimetria_ruido: { nombre: "Dosimetría de Ruido", opciones: [{ label: "Hasta 2 hs", valor: 145000 }, { label: "Hasta 4 hs", valor: 210000 }, { label: "Hasta 8 hs", valor: 290000 }] },
+		iluminacion: { nombre: "Medición de Iluminación", opciones: [{ label: "Punto Individual", valor: 26000 }, { label: "Sector (9 a 16 puntos con protocolo)", valor: 94000 }, { label: "Sector (Más de 16 puntos con protocolo)", valor: 140000 }] },
+		vibraciones: { nombre: "Medición de Vibraciones", opciones: [{ label: "Miembros Superiores", valor: 160000 }, { label: "Cuerpo Entero", valor: 200000 }] },
+		carga_fuego: { nombre: "Estudio Carga de Fuego", opciones: [{ label: "0 a 300 m²", valor: 315000 }, { label: "301 a 600 m²", valor: 410000 }, { label: "601 a 1000 m²", valor: 500000 }] },
+		antisiniestral: { nombre: "Informe Antisiniestral", opciones: [{ label: "0 a 300 m²", valor: 315000 }, { label: "301 a 600 m²", valor: 410000 }, { label: "601 a 1000 m²", valor: 500000 }] },
+	},
+	tecnico: {
+		capacitacion: { nombre: "Capacitación (Hasta 4 hs)", opciones: [{ label: "Estándar", valor: 118000 }] },
+		autoelevadores: { nombre: "Capacitación Autoelevadores", opciones: [{ label: "Curso y Credencial", valor: 355000 }] },
+		puesta_tierra: { nombre: "Medición Puesta a Tierra", opciones: [{ label: "1 Jabalina / 3 Disyuntores", valor: 220000 }, { label: "Jabalina Adicional", valor: 44000 }, { label: "Disyuntor Adicional", valor: 44000 }] },
+		ergonomia_puesto: { nombre: "Estudio de Ergonomía por Puesto (Res. 295/03)", opciones: [{ label: "Por puesto", valor: 94000 }] },
+		ruido_ambiental: { nombre: "Ruido Ambiental", opciones: [{ label: "Hasta 30 minutos", valor: 118000 }] },
+		dosimetria_ruido: { nombre: "Dosimetría de Ruido", opciones: [{ label: "Hasta 2 hs", valor: 145000 }, { label: "Hasta 4 hs", valor: 210000 }, { label: "Hasta 8 hs", valor: 290000 }] },
+		iluminacion: { nombre: "Medición de Iluminación", opciones: [{ label: "Punto Individual", valor: 26000 }, { label: "Sector (9 a 16 puntos con protocolo)", valor: 94000 }, { label: "Sector (Más de 16 puntos con protocolo)", valor: 140000 }] },
+		vibraciones: { nombre: "Medición de Vibraciones", opciones: [{ label: "Miembros Superiores", valor: 160000 }, { label: "Cuerpo Entero", valor: 200000 }] },
+		carga_fuego: { nombre: "Estudio Carga de Fuego", opciones: [{ label: "0 a 300 m²", valor: 315000 }, { label: "301 a 600 m²", valor: 410000 }, { label: "601 a 1000 m²", valor: 500000 }] },
+		antisiniestral: { nombre: "Informe Antisiniestral", opciones: [{ label: "0 a 300 m²", valor: 315000 }, { label: "301 a 600 m²", valor: 410000 }, { label: "601 a 1000 m²", valor: 500000 }] },
+	},
+}
+
+function formatPrice(n: number) {
+	return new Intl.NumberFormat("es-AR", {
+		style: "currency",
+		currency: "ARS",
+		minimumFractionDigits: 2,
+	}).format(n)
+}
+
+function getPrecioBase(perfil: Perfil, servicioKey: string, subOpcionIndex: number): number {
+	const servicio = honorariosDb[perfil]?.[servicioKey]
+	if (!servicio) return 0
+	return servicio.opciones[subOpcionIndex]?.valor ?? 0
+}
+
+const styles = StyleSheet.create({
+	page: {
+		flexDirection: "column",
+		backgroundColor: "#fff",
+		fontFamily: "Helvetica",
+		padding: 40,
+		fontSize: 9,
+	},
+	header: {
+		flexDirection: "column",
+		alignItems: "center",
+		textAlign: "center",
+		borderBottomWidth: 2,
+		borderBottomColor: "#1b5e20",
+		paddingBottom: 12,
+		marginBottom: 16,
+	},
+	logoWrapper: {
+		width: 199,
+		height: 112,
+		borderRadius: 8,
+		overflow: "hidden",
+		alignItems: "center",
+		justifyContent: "center",
+		marginBottom: 8,
+	},
+	logoImage: {
+		width: "100%",
+		height: "100%",
+		objectFit: "contain",
+	},
+	companyName: {
+		fontSize: 18,
+		fontWeight: "bold",
+		textTransform: "uppercase",
+		letterSpacing: 1,
+		color: "#111",
+	},
+	subtitle: {
+		fontSize: 10,
+		fontWeight: "bold",
+		color: "#1b5e20",
+		letterSpacing: 2,
+		marginTop: 2,
+	},
+	sectionTitle: {
+		fontSize: 11,
+		fontWeight: "bold",
+		color: "#1b5e20",
+		borderBottomWidth: 1,
+		borderBottomColor: "#ccc",
+		paddingBottom: 4,
+		marginTop: 14,
+		marginBottom: 8,
+		textTransform: "uppercase",
+		letterSpacing: 0.5,
+	},
+	infoRow: {
+		flexDirection: "row",
+		marginBottom: 4,
+	},
+	infoLabel: {
+		fontWeight: "bold",
+		width: 130,
+		fontSize: 9,
+	},
+	infoValue: {
+		flex: 1,
+		fontSize: 9,
+	},
+	tableHeader: {
+		flexDirection: "row",
+		borderBottomWidth: 2,
+		borderBottomColor: "#1b5e20",
+		paddingVertical: 4,
+		marginTop: 4,
+	},
+	tableHeaderText: {
+		fontSize: 8,
+		fontWeight: "bold",
+		color: "#1b5e20",
+		textTransform: "uppercase",
+	},
+	tableRow: {
+		flexDirection: "row",
+		borderBottomWidth: 1,
+		borderBottomColor: "#ddd",
+		paddingVertical: 4,
+		alignItems: "center",
+	},
+	tableCell: {
+		fontSize: 8,
+	},
+	condiciones: {
+		backgroundColor: "#f9f9f9",
+		borderLeftWidth: 3,
+		borderLeftColor: "#1b5e20",
+		padding: 10,
+		marginTop: 14,
+		fontSize: 8,
+		lineHeight: 1.5,
+		color: "#333",
+	},
+	totalPanel: {
+		backgroundColor: "#f5f5f5",
+		borderWidth: 1,
+		borderColor: "#1b5e20",
+		padding: 14,
+		marginTop: 12,
+		alignItems: "flex-end",
+	},
+	totalLabel: {
+		fontSize: 12,
+		fontWeight: "bold",
+		color: "#111",
+	},
+	totalAmount: {
+		fontSize: 22,
+		fontWeight: "bold",
+		color: "#1b5e20",
+		marginTop: 4,
+	},
+})
+
+export function PresupuestoPDF({
+	perfil,
+	actividad,
+	logo,
+	cliente,
+	tareas,
+	adicionales,
+	nombreEmpresa = "EnHySa Consultora",
+}: {
+	perfil: Perfil
+	actividad: number
+	logo: string | null
+	cliente: { nombre: string; cuit: string; direccion: string; fecha: string }
+	tareas: TareaRow[]
+	adicionales: AdicionalRow[]
+	nombreEmpresa?: string
+}) {
+	const perfilLabel = perfil === "licenciado" ? "Licenciado en Higiene y Seguridad" : "Técnico en Higiene y Seguridad"
+	const actividadLabel = actividad === 0 ? "Estándar (Sin Adicional)" : "Química, Energía, Minería, Gas o Petróleo (+30%)"
+
+	const total = (() => {
+		let sum = 0
+		for (const t of tareas) {
+			const base = getPrecioBase(perfil, t.servicioKey, t.subOpcionIndex)
+			sum += base * (1 + actividad) * t.cantidad
+		}
+		for (const a of adicionales) {
+			sum += a.valorUnitario * a.cantidad
+		}
+		return sum
+	})()
+
+	return (
+		<Document>
+			<Page size="A4" style={styles.page}>
+				<View style={styles.header}>
+					<View style={styles.logoWrapper}>
+						{logo ? (
+							<Image src={logo} style={styles.logoImage} />
+						) : null}
+					</View>
+					<Text style={styles.companyName}>{nombreEmpresa}</Text>
+					<Text style={styles.subtitle}>COTIZADOR PROFESIONAL HSE</Text>
+				</View>
+
+				<Text style={styles.sectionTitle}>Información del Cliente</Text>
+				<View style={styles.infoRow}>
+					<Text style={styles.infoLabel}>Razón Social:</Text>
+					<Text style={styles.infoValue}>{cliente.nombre || "-"}</Text>
+				</View>
+				<View style={styles.infoRow}>
+					<Text style={styles.infoLabel}>CUIT:</Text>
+					<Text style={styles.infoValue}>{cliente.cuit || "-"}</Text>
+				</View>
+				<View style={styles.infoRow}>
+					<Text style={styles.infoLabel}>Dirección / Planta:</Text>
+					<Text style={styles.infoValue}>{cliente.direccion || "-"}</Text>
+				</View>
+				<View style={styles.infoRow}>
+					<Text style={styles.infoLabel}>Fecha de Emisión:</Text>
+					<Text style={styles.infoValue}>{cliente.fecha || "-"}</Text>
+				</View>
+
+				<Text style={styles.sectionTitle}>1. Definición de Perfil Profesional</Text>
+				<View style={styles.infoRow}>
+					<Text style={styles.infoLabel}>Categoría Profesional:</Text>
+					<Text style={styles.infoValue}>{perfilLabel}</Text>
+				</View>
+				<View style={styles.infoRow}>
+					<Text style={styles.infoLabel}>Adicional por Actividad:</Text>
+					<Text style={styles.infoValue}>{actividadLabel}</Text>
+				</View>
+
+				{tareas.length > 0 && (
+					<>
+						<Text style={styles.sectionTitle}>2. Tareas y Protocolos Requeridos</Text>
+						<View style={styles.tableHeader}>
+							<Text style={[styles.tableHeaderText, { width: "10%" }]}>Cant.</Text>
+							<Text style={[styles.tableHeaderText, { width: "30%" }]}>Servicio</Text>
+							<Text style={[styles.tableHeaderText, { width: "35%" }]}>Detalle</Text>
+							<Text style={[styles.tableHeaderText, { width: "15%", textAlign: "right" }]}>Precio Unit.</Text>
+							<Text style={[styles.tableHeaderText, { width: "10%", textAlign: "right" }]}>Subtotal</Text>
+						</View>
+						{tareas.map(t => {
+							const servicio = t.servicioKey ? honorariosDb[perfil][t.servicioKey] : null
+							const precioBase = getPrecioBase(perfil, t.servicioKey, t.subOpcionIndex)
+							const detalle = servicio ? servicio.opciones[t.subOpcionIndex]?.label ?? "" : ""
+							const subtotal = precioBase * (1 + actividad) * t.cantidad
+							return (
+								<View key={t.id} style={styles.tableRow}>
+									<Text style={[styles.tableCell, { width: "10%" }]}>{t.cantidad}</Text>
+									<Text style={[styles.tableCell, { width: "30%" }]}>{servicio?.nombre ?? "-"}</Text>
+									<Text style={[styles.tableCell, { width: "35%" }]}>{detalle}</Text>
+									<Text style={[styles.tableCell, { width: "15%", textAlign: "right" }]}>
+										{precioBase > 0 ? formatPrice(precioBase) : "-"}
+									</Text>
+									<Text style={[styles.tableCell, { width: "10%", textAlign: "right", fontWeight: "bold" }]}>
+										{subtotal > 0 ? formatPrice(subtotal) : "-"}
+									</Text>
+								</View>
+							)
+						})}
+					</>
+				)}
+
+				{adicionales.length > 0 && (
+					<>
+						<Text style={styles.sectionTitle}>3. Adicionales, Gastos y Logística</Text>
+						<View style={styles.tableHeader}>
+							<Text style={[styles.tableHeaderText, { width: "10%" }]}>Cant.</Text>
+							<Text style={[styles.tableHeaderText, { width: "45%" }]}>Concepto</Text>
+							<Text style={[styles.tableHeaderText, { width: "25%", textAlign: "right" }]}>Valor Unit.</Text>
+							<Text style={[styles.tableHeaderText, { width: "20%", textAlign: "right" }]}>Subtotal</Text>
+						</View>
+						{adicionales.map(a => {
+							const subtotal = a.valorUnitario * a.cantidad
+							return (
+								<View key={a.id} style={styles.tableRow}>
+									<Text style={[styles.tableCell, { width: "10%" }]}>{a.cantidad}</Text>
+									<Text style={[styles.tableCell, { width: "45%" }]}>{a.nombre || "-"}</Text>
+									<Text style={[styles.tableCell, { width: "25%", textAlign: "right" }]}>
+										{a.valorUnitario > 0 ? formatPrice(a.valorUnitario) : "-"}
+									</Text>
+									<Text style={[styles.tableCell, { width: "20%", textAlign: "right", fontWeight: "bold" }]}>
+										{subtotal > 0 ? formatPrice(subtotal) : "-"}
+									</Text>
+								</View>
+							)
+						})}
+					</>
+				)}
+
+				<View style={styles.condiciones}>
+					<Text style={{ fontWeight: "bold", color: "#111", marginBottom: 4, fontSize: 9 }}>
+						Condiciones del Servicio y Datos Comerciales:
+					</Text>
+					<Text>• Facturación: Emisión de comprobante Factura Tipo C.</Text>
+					<Text>• Forma de Pago: Mediante transferencia bancaria directa en cuenta.</Text>
+					<Text>• Equipamiento: Todo instrumental de medición utilizado se encuentra calibrado con certificación oficial vigente.</Text>
+					<Text>• Responsable Técnico: Licenciado en Higiene y Seguridad en el Trabajo.</Text>
+					<Text>• Matrícula Profesional: Habilitado bajo regulaciones de Ley e Higiene correspondientes.</Text>
+					<Text>• Contacto: EnHySa Consultora.</Text>
+				</View>
+
+				<View style={styles.totalPanel}>
+					<Text style={styles.totalLabel}>Presupuesto Estimado Neto</Text>
+					<Text style={styles.totalAmount}>{formatPrice(total)}</Text>
+				</View>
+			</Page>
+		</Document>
+	)
+}

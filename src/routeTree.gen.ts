@@ -22,6 +22,7 @@ import { Route as WithHeaderTeoriaIndexRouteImport } from './routes/_with-header
 import { Route as ProtectedIluminacionIndexRouteImport } from './routes/_protected/iluminacion/index'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 import { Route as WithHeaderTeoriaTerminosDeUsoRouteImport } from './routes/_with-header/teoria/terminos-de-uso'
+import { Route as WithHeaderTeoriaPresupuestoRouteImport } from './routes/_with-header/teoria/presupuesto'
 import { Route as WithHeaderTeoriaPoliticasDePrivacidadRouteImport } from './routes/_with-header/teoria/politicas-de-privacidad'
 import { Route as ProtectedPerfilTecnicosIndexRouteImport } from './routes/_protected/perfil/tecnicos/index'
 import { Route as ProtectedPerfilInstrumentosIndexRouteImport } from './routes/_protected/perfil/instrumentos/index'
@@ -114,6 +115,12 @@ const WithHeaderTeoriaTerminosDeUsoRoute =
   WithHeaderTeoriaTerminosDeUsoRouteImport.update({
     id: '/teoria/terminos-de-uso',
     path: '/teoria/terminos-de-uso',
+    getParentRoute: () => WithHeaderRouteRoute,
+  } as any)
+const WithHeaderTeoriaPresupuestoRoute =
+  WithHeaderTeoriaPresupuestoRouteImport.update({
+    id: '/teoria/presupuesto',
+    path: '/teoria/presupuesto',
     getParentRoute: () => WithHeaderRouteRoute,
   } as any)
 const WithHeaderTeoriaPoliticasDePrivacidadRoute =
@@ -322,6 +329,7 @@ export interface FileRoutesByFullPath {
   '/login': typeof WithHeaderLoginRoute
   '/api/uploadthing': typeof ApiUploadthingRoute
   '/teoria/politicas-de-privacidad': typeof WithHeaderTeoriaPoliticasDePrivacidadRoute
+  '/teoria/presupuesto': typeof WithHeaderTeoriaPresupuestoRoute
   '/teoria/terminos-de-uso': typeof WithHeaderTeoriaTerminosDeUsoRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/iluminacion/': typeof ProtectedIluminacionIndexRoute
@@ -363,6 +371,7 @@ export interface FileRoutesByTo {
   '/login': typeof WithHeaderLoginRoute
   '/api/uploadthing': typeof ApiUploadthingRoute
   '/teoria/politicas-de-privacidad': typeof WithHeaderTeoriaPoliticasDePrivacidadRoute
+  '/teoria/presupuesto': typeof WithHeaderTeoriaPresupuestoRoute
   '/teoria/terminos-de-uso': typeof WithHeaderTeoriaTerminosDeUsoRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/iluminacion': typeof ProtectedIluminacionIndexRoute
@@ -407,6 +416,7 @@ export interface FileRoutesById {
   '/api/uploadthing': typeof ApiUploadthingRoute
   '/_protected/': typeof ProtectedIndexRoute
   '/_with-header/teoria/politicas-de-privacidad': typeof WithHeaderTeoriaPoliticasDePrivacidadRoute
+  '/_with-header/teoria/presupuesto': typeof WithHeaderTeoriaPresupuestoRoute
   '/_with-header/teoria/terminos-de-uso': typeof WithHeaderTeoriaTerminosDeUsoRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/_protected/iluminacion/': typeof ProtectedIluminacionIndexRoute
@@ -450,6 +460,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/api/uploadthing'
     | '/teoria/politicas-de-privacidad'
+    | '/teoria/presupuesto'
     | '/teoria/terminos-de-uso'
     | '/api/auth/$'
     | '/iluminacion/'
@@ -491,6 +502,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/api/uploadthing'
     | '/teoria/politicas-de-privacidad'
+    | '/teoria/presupuesto'
     | '/teoria/terminos-de-uso'
     | '/api/auth/$'
     | '/iluminacion'
@@ -534,6 +546,7 @@ export interface FileRouteTypes {
     | '/api/uploadthing'
     | '/_protected/'
     | '/_with-header/teoria/politicas-de-privacidad'
+    | '/_with-header/teoria/presupuesto'
     | '/_with-header/teoria/terminos-de-uso'
     | '/api/auth/$'
     | '/_protected/iluminacion/'
@@ -665,6 +678,13 @@ declare module '@tanstack/react-router' {
       path: '/teoria/terminos-de-uso'
       fullPath: '/teoria/terminos-de-uso'
       preLoaderRoute: typeof WithHeaderTeoriaTerminosDeUsoRouteImport
+      parentRoute: typeof WithHeaderRouteRoute
+    }
+    '/_with-header/teoria/presupuesto': {
+      id: '/_with-header/teoria/presupuesto'
+      path: '/teoria/presupuesto'
+      fullPath: '/teoria/presupuesto'
+      preLoaderRoute: typeof WithHeaderTeoriaPresupuestoRouteImport
       parentRoute: typeof WithHeaderRouteRoute
     }
     '/_with-header/teoria/politicas-de-privacidad': {
@@ -986,6 +1006,7 @@ interface WithHeaderRouteRouteChildren {
   WithHeaderLandingRoute: typeof WithHeaderLandingRoute
   WithHeaderLoginRoute: typeof WithHeaderLoginRoute
   WithHeaderTeoriaPoliticasDePrivacidadRoute: typeof WithHeaderTeoriaPoliticasDePrivacidadRoute
+  WithHeaderTeoriaPresupuestoRoute: typeof WithHeaderTeoriaPresupuestoRoute
   WithHeaderTeoriaTerminosDeUsoRoute: typeof WithHeaderTeoriaTerminosDeUsoRoute
   WithHeaderTeoriaIndexRoute: typeof WithHeaderTeoriaIndexRoute
 }
@@ -996,6 +1017,7 @@ const WithHeaderRouteRouteChildren: WithHeaderRouteRouteChildren = {
   WithHeaderLoginRoute: WithHeaderLoginRoute,
   WithHeaderTeoriaPoliticasDePrivacidadRoute:
     WithHeaderTeoriaPoliticasDePrivacidadRoute,
+  WithHeaderTeoriaPresupuestoRoute: WithHeaderTeoriaPresupuestoRoute,
   WithHeaderTeoriaTerminosDeUsoRoute: WithHeaderTeoriaTerminosDeUsoRoute,
   WithHeaderTeoriaIndexRoute: WithHeaderTeoriaIndexRoute,
 }
