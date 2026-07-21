@@ -303,12 +303,12 @@ export default function RouteComponent() {
 								className="w-full h-full object-contain"
 							/>
 						) : (
-							<span className="text-muted-foreground text-xs">Logo</span>
+							<span className="text-muted-foreground">Logo</span>
 						)}
 					</div>
-					<label className="block text-xs text-foreground/50 underline mt-2 cursor-pointer uppercase tracking-wide">
+					<label className="block text-xs text-foreground/50 mt-2 cursor-pointer uppercase tracking-wide">
 						<Upload className="size-3 inline mr-1" />
-						Seleccionar logo
+						Seleccionar
 						<input
 							type="file"
 							accept="image/*"
@@ -463,13 +463,13 @@ export default function RouteComponent() {
 					2. Tareas y Protocolos Requeridos
 				</h2>
 				<div className="overflow-x-auto">
-					<table className="w-full text-sm">
+					<table className="w-200 sm:w-full text-sm">
 						<thead>
 							<tr className="border-b-2 border-primary text-foreground/50 uppercase text-xs tracking-wider">
-								<th className="p-3 text-left w-[10%]">Cantidad</th>
-								<th className="p-3 text-left w-[35%]">Servicio</th>
-								<th className="p-3 text-left w-[30%]">Parámetro / Detalle</th>
-								<th className="p-3 text-right w-[15%]">Subtotal $</th>
+								<th className="p-3 text-center w-[10%] ">Cantidad</th>
+								<th className="p-3 text-left w-[40%]">Servicio</th>
+								<th className="p-3 text-center w-[25%]">Parámetro / Detalle</th>
+								<th className="p-3 text-center w-[15%]">Subtotal $</th>
 								<th className="p-3 w-[10%]" />
 							</tr>
 						</thead>
@@ -518,7 +518,7 @@ export default function RouteComponent() {
 												))}
 											</select>
 										</td>
-										<td className="p-2">
+										<td className="p-2 text-center">
 											{servicio && servicio.opciones.length > 1 ? (
 												<select
 													className={inputClass}
@@ -538,12 +538,12 @@ export default function RouteComponent() {
 													))}
 												</select>
 											) : (
-												<span className="font-semibold text-foreground/50">
+												<span className="text-center font-semibold text-foreground/50">
 													{precioBase > 0 ? formatPrice(precioBase) : ""}
 												</span>
 											)}
 										</td>
-										<td className="p-2 text-right font-semibold text-foreground/50">
+										<td className="p-2 text-center font-semibold text-foreground/50">
 											{subtotal > 0 ? formatPrice(subtotal) : ""}
 										</td>
 										<td className="p-2 text-center">
@@ -576,14 +576,14 @@ export default function RouteComponent() {
 					3. Adicionales, Gastos y Logística
 				</h2>
 				<div className="overflow-x-auto">
-					<table className="w-full text-sm">
+					<table className="w-200 sm:w-full text-sm">
 						<thead>
 							<tr className="border-b-2 border-primary text-foreground/50 uppercase text-xs tracking-wider">
-								<th className="p-3 text-left w-[12%]">Cantidad / Km</th>
-								<th className="p-3 text-left w-[45%]">Concepto Adicional</th>
-								<th className="p-3 text-right w-[20%]">Valor Unitario ($)</th>
-								<th className="p-3 text-right w-[15%]">Subtotal $</th>
-								<th className="p-3 w-[8%]" />
+								<th className="p-3 text-center w-[15%]">Cant / Km</th>
+								<th className="p-3 text-left w-[40%]">Concepto Adicional</th>
+								<th className="p-3 text-center w-[20%]">Valor Unitario ($)</th>
+								<th className="p-3 text-center w-[15%]">Subtotal $</th>
+								<th className="p-3 w-[10%]" />
 							</tr>
 						</thead>
 						<tbody>
@@ -632,7 +632,7 @@ export default function RouteComponent() {
 												}
 											/>
 										</td>
-										<td className="p-2 text-right font-semibold text-foreground/50">
+										<td className="p-2 text-center font-semibold text-foreground/50">
 											{subtotal > 0 ? formatPrice(subtotal) : ""}
 										</td>
 										<td className="p-2 text-center">
@@ -703,7 +703,7 @@ export default function RouteComponent() {
 				</div>
 			</section>
 
-			<section className="bg-card border border-primary rounded-lg p-6 text-right shadow-[inset_0_0_10px] shadow-primary/10">
+			<section className="bg-card border border-primary rounded-lg p-6 text-center sm:text-right shadow-[inset_0_0_10px] shadow-primary/10">
 				<h2 className="text-lg font-semibold text-foreground">
 					Presupuesto Estimado Neto
 				</h2>

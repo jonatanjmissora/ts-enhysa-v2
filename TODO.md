@@ -44,6 +44,5 @@ mandra hacer:
 
 
 kato hacer:
-	calculadora de presupuestos cambiar empresa que genera informe
 	mercadopago
 	como se usa?
