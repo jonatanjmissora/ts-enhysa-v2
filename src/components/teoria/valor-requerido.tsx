@@ -494,7 +494,7 @@ export default function IluminacionValoresRequeridosContent() {
 				<h2 className="text-xl font-semibold tracking-tight">
 					Requisitos de Uniformidad
 				</h2>
-				<p>
+				<p className="text-sm text-muted-foreground leading-relaxed">
 					Es un parámetro crítico en luminotecnia que mide cuán homogénea es la
 					distribución de la luz en un plano de trabajo específico. Su objetivo
 					es garantizar que no existan contrastes severos o zonas de sombra que
@@ -509,32 +509,46 @@ export default function IluminacionValoresRequeridosContent() {
 				<div className="bg-muted/20 rounded-xl px-4 py-3 font-mono text-sm text-center">
 					E mínima ≥ E media / 2
 				</div>
-				<p className="text-xs text-muted-foreground">
+				<p className="text-sm text-muted-foreground leading-relaxed">
 					La iluminancia media se determina por media aritmética de la
 					iluminancia general del local. La iluminancia mínima es el menor valor
 					sobre las superficies de trabajo o sobre un plano horizontal a 0,80 m
 					del suelo. No aplica a lugares de tránsito, ingreso/egreso de personal
 					ni iluminación de emergencia.
 				</p>
-				<p>
-					Emin Valor mínimo en Lux tomado en la grilla de medición. Emax Valor
-					máximo en Lux tomado en la grilla de medición. Emed Iluminancia Media,
-					es la media aritmética en Lux calculada, teniendo en cuenta todas las
-					mediciones de la grilla. • Uniformidad General U0 = Emin / Emed Es el
-					indicador más utilizado por la legislación para validar si el ambiente
-					en general está bien iluminado de manera equilibrada. • Uniformidad
-					Localizada U1 = Emin / Emax Se utiliza para analizar áreas específicas
-					o puestos de trabajo puntuales, asegurando que no existan picos de
-					brillo excesivos respecto a la zona menos iluminada. Criterio de
-					Validación: El cociente U0 obtenido es menor al límite establecido por
-					la normativa para esa actividad, el estudio se dictamina como "No
-					Conforme", aun cuando el valor medio Emed cumpla con los lux mínimos
-					requeridos. Esto obligaría a rediseñar la distribución de las
-					luminarias o modificar sus potencias. Los valores para U0 {">"} 0,60,
-					pero va a depender de la actividad. Para área interior sería
+				<div className="flex flex-col gap-1">
+					<p className="text-sm text-muted-foreground leading-relaxed">
+						Emin Valor mínimo en Lux tomado en la grilla de medición.
+					</p>
+					<p className="text-sm text-muted-foreground leading-relaxed">
+						Emax Valormáximo en Lux tomado en la grilla de medición.
+					</p>
+					<p className="text-sm text-muted-foreground leading-relaxed">
+						Emed Iluminancia Media, es la media aritmética en Lux calculada,
+						teniendo en cuenta todas las mediciones de la grilla.
+					</p>
+				</div>
+				<p className="text-sm text-muted-foreground leading-relaxed">
+					• Uniformidad General U0 = Emin / Emed Es el indicador más utilizado
+					por la legislación para validar si el ambiente en general está bien
+					iluminado de manera equilibrada.
 				</p>
-				<p>TABLA</p>
-				<p>
+				<p className="text-sm text-muted-foreground leading-relaxed">
+					• Uniformidad Localizada U1 = Emin / Emax Se utiliza para analizar
+					áreas específicas o puestos de trabajo puntuales, asegurando que no
+					existan picos de brillo excesivos respecto a la zona menos iluminada.
+				</p>
+				<p className="text-sm text-muted-foreground leading-relaxed">
+					Criterio de Validación: El cociente U0 obtenido es menor al límite
+					establecido por la normativa para esa actividad, el estudio se
+					dictamina como "No Conforme", aun cuando el valor medio Emed cumpla
+					con los lux mínimos requeridos. Esto obligaría a rediseñar la
+					distribución de las luminarias o modificar sus potencias. Los valores
+					para U0 {">"} 0,60, pero va a depender de la actividad. Para área
+					interior sería
+				</p>
+				<Tabla />
+				<p className="text-sm text-muted-foreground leading-relaxed">
 					En el marco legal y técnico aplicable (como la Resolución SRT 84/2012
 					y la Norma IRAM AADDL J 20-06 en Argentina, o la ISO 8995-1 a nivel
 					internacional), el cálculo y control de este factor es obligatorio al
@@ -542,5 +556,66 @@ export default function IluminacionValoresRequeridosContent() {
 				</p>
 			</section>
 		</>
+	)
+}
+
+function Tabla() {
+	return (
+		<div className="overflow-x-auto">
+			<table className="w-full text-xs border-collapse border text-muted-foreground leading-relaxed">
+				<thead>
+					<tr className="bg-muted/50">
+						<th className="text-center p-3 font-medium border-r">
+							Área interior
+						</th>
+						<th className="text-center p-3 font-medium border-r">Almacenes</th>
+						<th className="text-center p-3 font-medium border-r">
+							Áreas de manipulación de embalaje de despacho
+						</th>
+						<th className="text-center p-3 font-medium border-r">
+							Aparcamientos públicos
+						</th>
+						<th className="text-center p-3 font-medium border-r">
+							Salas de exposiciones
+						</th>
+						<th className="text-center p-3 font-medium border-r">
+							Fundición a presión
+						</th>
+						<th className="text-center p-3 font-medium border-r">
+							Fabricación de cables y alambres
+						</th>
+						<th className="text-center p-3 font-medium">
+							Talleres electrónicos, pruebas, ajustes
+						</th>
+					</tr>
+				</thead>
+				<tbody className="divide-y divide-border/60">
+					<tr className="even:bg-muted/20">
+						<td className="p-3 font-mono tabular-nums text-center border-r">
+							Uniformidad
+						</td>
+						<td className="p-3 font-mono tabular-nums text-center border-r">
+							0.4
+						</td>
+						<td className="p-3 font-mono tabular-nums text-center border-r">
+							0.6
+						</td>
+						<td className="p-3 font-mono tabular-nums text-center border-r">
+							0.4
+						</td>
+						<td className="p-3 font-mono tabular-nums text-center border-r">
+							0.4
+						</td>
+						<td className="p-3 font-mono tabular-nums text-center border-r">
+							0.6
+						</td>
+						<td className="p-3 font-mono tabular-nums text-center border-r">
+							0.6
+						</td>
+						<td className="p-3 font-mono tabular-nums text-center">0.7</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
 	)
 }
