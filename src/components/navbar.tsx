@@ -123,25 +123,25 @@ function User({ setIsOpen }: { setIsOpen: (open: boolean) => void }) {
 	return (
 		<div className="flex flex-col sm:gap-2 2xl:gap-4 m-6 w-5/6 sm:max-w-2xl 2xl:max-w-3xl sm:mx-auto ">
 			<div
-				className={`gap-4 p-8 py-4 rounded-lg flex bg-accent ring-[1px] ring-foreground/10`}
+				className={`gap-4 p-8 py-4 rounded-lg flex flex-col sm:flex-row sm:justify-around bg-accent ring-[1px] ring-foreground/10`}
 			>
-				<div className="bg-accent rounded-full flex justify-center items-center">
+				<div className="bg-accent flex gap-3 justify-start items-center">
 					{avatar ? (
 						<img
 							src={avatar}
 							alt="User avatar"
-							className="sm:size-10 2xl:size-14 rounded-full"
+							className="size-12 sm:size-10 2xl:size-14 rounded-full"
 						/>
 					) : (
 						<div className="bg-green-600 p-2 rounded-full">
 							<UserRound />
 						</div>
 					)}
-				</div>
-				<div className="flex items-center justify-between w-full">
-					<p className="sm:text-base 2xl:text-lg font-semibold tracking-wider text-left w-full">
+					<p className="sm:text-base 2xl:text-lg font-semibold tracking-wider text-left">
 						{fullName || "Usuario"}
 					</p>
+				</div>
+				<div className="flex items-center justify-between">
 					<UserSuscriptionInfo setIsOpen={setIsOpen} />
 				</div>
 			</div>

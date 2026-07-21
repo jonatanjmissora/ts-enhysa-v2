@@ -16,14 +16,14 @@ function Home() {
 
 	return (
 		<article className="w-full sm:max-w-5xl 2xl:max-w-7xl sm:mx-auto min-h-svh flex flex-col items-center justify-center gap-20">
-			<div className="flex justify-between items-center flex-col mt-17 sm:mt-10 h-150 sm:h-300 relative overflow-visible px-6 w-full mx-auto">
-				<p className="text-[26px] text-center tracking-wider text-pretty px-3">
+			<div className="flex justify-between items-center flex-col mt-17 sm:mt-10 h-150 sm:h-180 relative overflow-visible px-6 w-full sm:w-5/6 mx-auto">
+				<p className="text-[26px] sm:text-[30px] 2xl:text-[36px] text-center tracking-wider text-pretty px-3">
 					Selecciona tu nuevo informe.
 				</p>
 				<img
 					src="/hero.webp"
 					alt="logo EnHySa"
-					className="absolute opacity-75  left-0 w-full h-130 sm:h-full bottom-0 -z-10 max-w-none  object-cover sm:mask-radial sm:mask-radial-from-80% sm:mask-radial-to-90% sm:mask-l-from-95% sm:mask-l-to-100% sm:mask-r-from-95% sm:mask-r-to-100% mask-t-from-90% mask-t-to-100% mask-b-from-90% mask-b-to-100%"
+					className="absolute opacity-75  left-0 w-full h-130 sm:h-full bottom-0 -z-10 max-w-none  object-cover sm:mask-radial sm:mask-radial-from-60% sm:mask-radial-to-90% sm:mask-l-from-95% sm:mask-l-to-100% sm:mask-r-from-95% sm:mask-r-to-100% mask-t-from-70% mask-t-to-100% mask-b-from-70% mask-b-to-100%"
 				/>
 				<Icons />
 			</div>
@@ -188,7 +188,7 @@ function Icons() {
 	]
 	return (
 		<div
-			className="relative w-full sm:scale-170 origin-bottom"
+			className="relative w-full sm:scale-140 origin-bottom"
 			style={{ height: ICON_HEIGHT * 2.5, width: ICON_HEIGHT * 3.5 }}
 		>
 			{iconsArray.map(icon => (
@@ -198,11 +198,11 @@ function Icons() {
 					style={{
 						top: icon.top,
 						left: icon.left,
-						translate: "-50% -30%",
+						transform: "translateX(-50%)",
 						height: ICON_HEIGHT,
 						aspectRatio: "1 / 1",
 					}}
-					className={`absolute `}
+					className={`absolute -translate-y-12 sm:-translate-y-20 2xl:-translate-y-10`}
 				>
 					<img src={icon.icon} alt={icon.nombre} />
 				</Link>

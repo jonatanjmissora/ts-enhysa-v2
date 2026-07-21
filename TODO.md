@@ -47,5 +47,3 @@ kato hacer:
 	calculadora de presupuestos cambiar empresa que genera informe
 	mercadopago
 	como se usa?
-	mejorar foto de "/"
-	arreglar teoria de tablas
