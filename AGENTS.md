@@ -431,6 +431,38 @@ Demo users nunca tienen créditos. `getUserCreditsServer` retorna `0`. PDFs siem
 - `src/components/navbar.tsx`
 - `src/components/demo-credentials-modal.tsx`
 
+## Credit Unlock — Read-Only Report Policy
+
+### Problema
+
+Al desbloquear un PDF con 1 crédito, el `unlocked` quedaba asociado al `reporteId`. Si el usuario modificaba todos los datos del reporte (áreas, mediciones, localizadas, etc.) después del unlock, podía descargar un PDF completamente nuevo sin gastar otro crédito → múltiples informes por 1 crédito.
+
+### Solución elegida (Opción 2)
+
+Una vez que un reporte se desbloquea (crédito consumido), pasa a ser **solo-lectura**:
+
+- Mientras el reporte **no esté desbloqueado**, el usuario puede modificarlo libremente (prueba y error con PDF con marca de agua)
+- Una vez desbloqueado, el usuario **no puede modificar** ningún dato del reporte (datos generales, áreas, mediciones, localizadas, imágenes, etc.)
+- Solo puede **eliminar** el reporte completo
+- Si encuentra un error y necesita modificar algo, debe contactar a los desarrolladores mediante un ticket
+- Los desarrolladores evalúan el caso y, si corresponde, otorgan un crédito extra o desbloquean manualmente el reporte desde la base de datos
+
+### Implementación
+
+- Al hacer click en "Desbloquear PDF" (consumir crédito), el server marca `reporte.credito_usado = true` en la DB
+- En el `_menu/route.tsx` del reporte, el loader verifica `credito_usado`:
+  - Si `true` → los botones de edición (general, áreas, mediciones, localizadas) se ocultan o deshabilitan
+  - Solo queda visible el botón de "Eliminar reporte"
+- Los CRUD routes también deben verificar este flag y redirigir o mostrar error si se intenta acceder directamente
+- El botón "Generar PDF" y las vistas PDF (completa/reducida) siguen funcionando normalmente
+
+### Archivos relevantes
+
+- Esquema DB: columna `credito_usado` en tabla `reportes`
+- `src/routes/_protected/iluminacion/reportes/[$id]/_menu/route.tsx` — ocultar ediciones si `credito_usado`
+- `src/routes/_protected/iluminacion/reportes/[$id]/_CRUD/` — cada ruta CRUD debe rechazar acceso si `credito_usado`
+- Server function de unlock: setea `credito_usado = true`
+
 ## graphify
 
 This project has a knowledge graph at graphify-out/ with god nodes, community structure, and cross-file relationships.

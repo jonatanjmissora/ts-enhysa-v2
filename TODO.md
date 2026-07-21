@@ -45,3 +45,7 @@ mandra hacer:
 
 kato hacer:
 	mercadopago
+	agregar contactos
+	cambiar logica de negocios. creditConsumed == true, no se puede modificar nada del informe.
+	deshabilitar el boton "Siguiente" en areas, si es que no hay areas o localizadas creadas
+	
