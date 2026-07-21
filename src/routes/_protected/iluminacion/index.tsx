@@ -6,6 +6,7 @@ import {
 	ChartPie,
 	FileChartColumn,
 	Handshake,
+	Info,
 } from "lucide-react"
 
 export const Route = createFileRoute("/_protected/iluminacion/")({
@@ -15,7 +16,7 @@ export const Route = createFileRoute("/_protected/iluminacion/")({
 function RouteComponent() {
 	const id = crypto.randomUUID().toString()
 	return (
-		<article className="w-full sm:max-w-5xl 2xl:max-w-7xl sm:mx-auto min-h-svh flex flex-col items-center justify-center gap-20">
+		<article className="w-full sm:max-w-5xl 2xl:max-w-7xl sm:mx-auto min-h-svh flex flex-col items-center justify-center gap-10">
 			<div className="flex justify-between items-center flex-col mt-[70px] sm:mt-10 h-[550px] sm:h-[450px] relative overflow-visible px-6 sm:w-2/3 mx-auto">
 				<p className="text-[26px] text-center tracking-wider text-pretty px-0">
 					Informes de iluminación SRT 84/12.
@@ -36,6 +37,16 @@ function RouteComponent() {
 					Nuevo Informe
 				</Link>
 			</div>
+
+			<Link
+				to="/iluminacion/reportes/instructivo"
+				search={{
+					from: "/iluminacion",
+				}}
+				className="w-11/12 italic text-foreground/60 tracking-wider text-sm underline text-right"
+			>
+				Instructivo: Mi primer Informe !
+			</Link>
 
 			<InformesRecientes />
 

@@ -87,13 +87,5 @@
 		"vite": "^8.0.0",
 		"vitest": "^4.1.5"
 	},
-	"pnpm": {
-		"allowBuilds": {
-			"@parcel/watcher": true,
-			"esbuild": true,
-			"lightningcss": true,
-			"sharp": true
-		}
-	},
 	"packageManager": "pnpm@11.9.0"
 }

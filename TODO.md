@@ -45,4 +45,3 @@ mandra hacer:
 
 kato hacer:
 	mercadopago
-	como se usa?

@@ -38,6 +38,15 @@ function RouteComponent() {
 		<article className="w-full min-h-svh flex flex-col items-center gap-0 relative mb-60">
 			<BackChevron to="/iluminacion" />
 			<Title text="Informes Iluminación" className="mt-15" />
+			<Link
+				to="/iluminacion/reportes/instructivo"
+				search={{
+					from: "/iluminacion/reportes",
+				}}
+				className="w-11/12 italic text-foreground/60 tracking-wider text-sm underline text-right"
+			>
+				Instructivo: Mi primer Informe !
+			</Link>
 			<IluminacionReportes />
 		</article>
 	)
