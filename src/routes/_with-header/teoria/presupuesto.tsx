@@ -194,7 +194,7 @@ function getPrecioBase(
 	return opcion?.valor ?? 0
 }
 
-export default function RouteComponent() {
+function RouteComponent() {
 	const [perfil, setPerfil] = useState<Perfil>("licenciado")
 	const [actividad, setActividad] = useState(0)
 	const [logo, setLogo] = useState<string | null>(null)

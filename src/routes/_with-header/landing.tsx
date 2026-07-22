@@ -1,6 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router"
 import { useState, useEffect } from "react"
 import SuscriptionPlans from "#/components/suscripciones"
+import { authClient } from "#/lib/auth-client"
 
 export const Route = createFileRoute("/_with-header/landing")({
 	component: Landing,
@@ -19,6 +20,7 @@ function Landing() {
 }
 
 function Hero() {
+	const { data: session } = authClient.useSession()
 	const navigate = useNavigate()
 
 	const scrollToHash = (hash: string) => () => {
@@ -48,10 +50,12 @@ function Hero() {
 					<div className="flex gap-12 flex-wrap max-md:justify-center">
 						<button
 							type="button"
-							onClick={scrollToHash("suscriptions")}
+							onClick={() => navigate({ to: "/" })}
 							className="bg-[#5cb85c] text-white rounded-md px-7 py-3.5 text-base font-semibold transition-all hover:bg-[#4ca84c] hover:shadow-[0_4px_12px_rgba(92,184,92,0.3)]"
 						>
-							Comenzar Período de Prueba
+							{session?.user
+								? "Continuar con la App"
+								: "Comenzar a Probar la App"}
 						</button>
 						<button
 							type="button"

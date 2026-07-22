@@ -1,3 +1,4 @@
+import { authClient } from "#/lib/auth-client"
 import {
 	createFileRoute,
 	Link,
@@ -23,6 +24,7 @@ function RouteComponent() {
 }
 
 function Navbar() {
+	const { data: session } = authClient.useSession()
 	const [isOpen, setIsOpen] = useState(false)
 	const navigate = useNavigate()
 
@@ -77,7 +79,7 @@ function Navbar() {
 					to="/"
 					className="bg-[#5cb85c] text-white rounded-md px-5 py-2 text-sm font-semibold no-underline transition-all hover:bg-[#4ca84c] hover:shadow-[0_4px_12px_rgba(92,184,92,0.3)]"
 				>
-					Ingresar
+					{session?.user ? "Ir a Mi App" : "Ingresar"}
 				</Link>
 			</nav>
 			<button

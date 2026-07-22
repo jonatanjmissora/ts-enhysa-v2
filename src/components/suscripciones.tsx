@@ -4,8 +4,10 @@ import { Link } from "@tanstack/react-router"
 import { useState } from "react"
 import { Label } from "./ui/label"
 import { Check } from "lucide-react"
+import { authClient } from "#/lib/auth-client"
 
 export default function SuscriptionPlans({ from }: { from?: string }) {
+	const { data: session } = authClient.useSession()
 	const [actualPlan, setActualPlan] = useState<0 | 1 | 2>(1)
 	const [anual, setAnual] = useState(false)
 
@@ -38,19 +40,27 @@ export default function SuscriptionPlans({ from }: { from?: string }) {
 					to="/"
 					className="bg-[#5cb85c] text-white rounded-md px-7 py-3.5 text-base font-semibold transition-all hover:bg-[#4ca84c] hover:shadow-[0_4px_12px_rgba(92,184,92,0.3)] flex-1 text-center"
 				>
-					Tengo mi Cuenta
+					{session?.user ? "Continuar con Mi Cuenta" : "Ingresar con Mi Cuenta"}
 				</Link>
 
 				<div className="text-center flex gap-3 flex-col items-end justify-center py-20 ml-auto flex-1">
 					<p>
 						Lee nuestra{" "}
-						<Link to="/teoria/politicas-de-privacidad" search={{ from: from ?? "suscripcion" }} className="underline">
+						<Link
+							to="/teoria/politicas-de-privacidad"
+							search={{ from: from ?? "suscripcion" }}
+							className="underline"
+						>
 							Política de Privacidad
 						</Link>
 					</p>
 					<p>
 						y nuestros{" "}
-						<Link to="/teoria/terminos-de-uso" search={{ from: from ?? "suscripcion" }} className="underline">
+						<Link
+							to="/teoria/terminos-de-uso"
+							search={{ from: from ?? "suscripcion" }}
+							className="underline"
+						>
 							Términos de Uso
 						</Link>
 					</p>
@@ -92,7 +102,7 @@ const Plan = ({
 			}}
 			className={`card border border-foreground/10 overflow-hidden relative sm:w-80 2xl:w-100 rounded-lg p-8 flex flex-col items-start gap-10 duration-300 cursor-pointer ${actualPlan === index ? "dark:bg-[#1f301f] bg-[#8dac8d] scale-100 sm:scale-120 z-5 " : "bg-accent"}`}
 		>
-				{actualPlan === index && (
+			{actualPlan === index && (
 				<img
 					src="/EnHySa_logo.webp"
 					alt="logo EnHySa"
@@ -122,7 +132,7 @@ const Plan = ({
 			{index === 0 ? (
 				<div className="flex flex-col gap-2 w-full">
 					<Link
-						to="/login"
+						to="/"
 						className={`w-full py-3 text-primary-foreground rounded-md text-center font-semibold block no-underline ${
 							index === actualPlan ? "bg-green-400" : "bg-primary"
 						}`}

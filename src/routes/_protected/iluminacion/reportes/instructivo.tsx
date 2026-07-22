@@ -54,7 +54,7 @@ En (1) son los datos del técnico, en (2) son los datos de la empresa a la que b
 	},
 	{
 		nro: 7,
-		texto: `En el siguiente formulario encontraremos el apartado de Áreas. Pueden ser áreas de trabajo (1) o de una medición localizada (2). Un informe puede tener una o ambas, y pueden ser más de una por categoría. Cuando pulsemos en la opción deseada, se nos abrirán los formularios correspondientes, luego de cargar los datos, retornaremos a esta pantalla, habilitándose el botón de "Siguiente" para continuar.`,
+		texto: `En el siguiente formulario encontraremos el apartado de Áreas. Pueden ser áreas de trabajo (1) o de una medición localizada (2). Un informe puede tener una o ambas, y pueden ser más de una por categoría. Cuando pulsemos en la opción deseada, se nos abrirán los formularios correspondientes, luego de cargar los datos, retornaremos a esta pantalla, pulsaremos el botón "Siguiente" para continuar.`,
 		img: "/pasos/paso7.webp",
 	},
 	{
@@ -79,7 +79,7 @@ En (1) son los datos del técnico, en (2) son los datos de la empresa a la que b
 	},
 	{
 		nro: 12,
-		texto: `En esta pantalla existirán tanto los informes finalizados como el que tenga en proceso. Solo podrá existir un solo informe en proceso, que todavía no haya finalizado, y todos los informes finalizados que desee. Pulsando la flecha (1) de cada informe, podrá acceder nuevamente a los datos ingresados.`,
+		texto: `En esta pantalla existirán tanto los informes finalizados (3) como el que tenga en proceso (1). Solo podrá existir un solo informe en proceso, que todavía no haya finalizado, y todos los informes finalizados que desee. El icono con candado (2) muestra los informes que todavia estan bloqueados. Pulsando la flecha (4) de cada informe, podrá acceder nuevamente a los datos ingresados.`,
 		img: "/pasos/paso12.webp",
 	},
 	{
