@@ -92,11 +92,11 @@ const SuspenseTitle = () => {
 
 	return (
 		<div className="flex items-center gap-2">
-			<span className="text-sm tracking-wider text-foreground/50">
+			<span className="text-sm tracking-wider text-foreground-soft">
 				{empresa?.razonSocial.toUpperCase()} -{" "}
 				{reporte?.finishedAt?.toLocaleDateString("it-IT")}
 			</span>
-			<CalendarDays className="size-3 text-foreground/50" />
+			<CalendarDays className="size-3 text-foreground-soft" />
 		</div>
 	)
 }

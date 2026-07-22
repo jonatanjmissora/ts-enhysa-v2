@@ -18,7 +18,7 @@ import { Link } from "@tanstack/react-router"
 
 export default function Tecnico() {
 	const { data: tecnico } = useSuspenseQuery(tecnicoQueryOptions)
-	const tecnicoData = Array.isArray(tecnico) ? tecnico[0] ?? null : tecnico
+	const tecnicoData = Array.isArray(tecnico) ? (tecnico[0] ?? null) : tecnico
 	if (!tecnicoData) return <TecnicoVacio />
 	return <HayTecnico tecnico={tecnicoData} />
 }
@@ -160,13 +160,13 @@ function TecnicoVacio() {
 	)
 }
 
-	function TecnicoDropdownMenu() {
+function TecnicoDropdownMenu() {
 	const [isMenuOpen, setIsMenuOpen] = useState(false)
 	return (
 		<DropdownMenu open={isMenuOpen} onOpenChange={setIsMenuOpen}>
 			<DropdownMenuTrigger asChild>
 				<Button variant="ghost" className="cursor-pointer">
-					<Ellipsis className="size-7 text-foreground/50" />
+					<Ellipsis className="size-7 text-foreground-soft" />
 				</Button>
 			</DropdownMenuTrigger>
 			<DropdownMenuContent className="" align="end">
@@ -176,7 +176,7 @@ function TecnicoVacio() {
 						onClick={() => setIsMenuOpen(false)}
 						className="w-40 p-5 flex items-center gap-2 rounded-md ring-[1px] ring-foreground/20 hover:bg-accent"
 					>
-						<Pencil size={14} className="text-foreground/70" />
+						<Pencil size={14} className="text-foreground-soft" />
 						Editar
 					</Link>
 				</DropdownMenuGroup>

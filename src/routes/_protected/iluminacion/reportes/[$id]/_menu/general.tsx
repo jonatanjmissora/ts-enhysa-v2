@@ -52,7 +52,7 @@ function General() {
 
 	if (!reporte || !empresa || !instrumento)
 		return (
-			<div className="italic text-foreground/50 tracking-wider text-sm p-10">
+			<div className="italic text-foreground-soft tracking-wider text-sm p-10">
 				No se encontro el reporte
 			</div>
 		)
@@ -183,7 +183,7 @@ function ReporteDropdownMenu({ reporte }: { reporte: ReporteIluminacionType }) {
 		<DropdownMenu open={isMenuOpen} onOpenChange={setIsMenuOpen}>
 			<DropdownMenuTrigger asChild>
 				<Button variant="ghost" className="cursor-pointer">
-					<Ellipsis className="size-7 text-foreground/50" />
+					<Ellipsis className="size-7 text-foreground-soft" />
 				</Button>
 			</DropdownMenuTrigger>
 			<DropdownMenuContent className="p-6" align="end">

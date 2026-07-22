@@ -24,7 +24,7 @@ function RouteComponent() {
 				<Link
 					to={backTo}
 					hash={from === "landing" ? "suscriptions" : ""}
-					className="self-start flex items-center gap-2 text-sm text-foreground/60 hover:text-foreground transition-colors"
+					className="self-start flex items-center gap-2 text-sm text-foreground-soft hover:text-foreground transition-colors"
 				>
 					<ArrowLeft size={16} />
 					Volver
@@ -36,14 +36,14 @@ function RouteComponent() {
 							Estás a punto de adquirir el plan{" "}
 							<strong className="text-[#e2711d]">{found.title}</strong>.
 						</p>
-						<p className="text-2xl font-semibold text-foreground/50">
+						<p className="text-2xl font-semibold text-foreground-soft">
 							${found.price.toLocaleString("es-AR")}
 						</p>
 					</div>
 				) : (
 					<div className="text-center space-y-4">
 						<h1 className="text-3xl font-bold">Plan no encontrado</h1>
-						<p className="text-foreground/60">
+						<p className="text-foreground-soft">
 							El plan <strong>{plan}</strong> no existe.
 						</p>
 						<Link

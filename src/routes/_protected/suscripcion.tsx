@@ -28,7 +28,7 @@ function RouteComponent() {
 						navigate({ to: "/landing", hash: "modulos" })
 					else navigate({ to: `/${from}` as never })
 				}}
-				className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors"
+				className="inline-flex items-center gap-1 text-sm text-foreground-soft hover:text-foreground transition-colors"
 			>
 				<ChevronLeft className="size-4" />
 				Volver
@@ -40,7 +40,7 @@ function RouteComponent() {
 					<Shield className="absolute top-1/2 left-full -translate-1/2 size-30 2xl:size-50 -rotate-15 dark:text-amber-300/60 text-amber-800/80 -z-10" />
 				</div>
 				<div>
-					<p className="italic tracking-wider font-semibold text-pretty text-sm w-5/6 mx-auto text-center text-foreground/50">
+					<p className="italic tracking-wider font-semibold text-pretty text-sm w-5/6 mx-auto text-center text-foreground-soft">
 						Tu actual plan es el "Plan Profesional". ¿Deseas cambiar a plan
 						Empresarial? Checkea los beneficios de subir de plan.
 					</p>

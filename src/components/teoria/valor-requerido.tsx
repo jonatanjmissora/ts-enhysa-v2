@@ -244,7 +244,7 @@ export default function IluminacionValoresRequeridosContent() {
 	return (
 		<>
 			<div className="space-y-4">
-				<p className="text-muted-foreground leading-relaxed">
+				<p className="text-foreground-soft leading-relaxed">
 					Anexo IV — Decreto 351/79, Capítulo 12 (Iluminación y Color).
 					Establece las intensidades mínimas de iluminación sobre el plano de
 					trabajo según la dificultad de la tarea visual y el destino del local.
@@ -257,7 +257,7 @@ export default function IluminacionValoresRequeridosContent() {
 				<h2 className="text-xl font-semibold tracking-tight">
 					Tabla 1 — Clases de Tarea Visual
 				</h2>
-				<p className="text-sm text-muted-foreground">
+				<p className="text-sm text-foreground-soft">
 					Intensidad media de iluminación según IRAM-AADL J 20-06. Usar estos
 					valores para tareas no incluidas en la Tabla 2.
 				</p>
@@ -278,7 +278,7 @@ export default function IluminacionValoresRequeridosContent() {
 							<tr className="even:bg-muted/20">
 								<td className="p-3">Visión ocasional solamente</td>
 								<td className="p-3 font-mono tabular-nums">100 lux</td>
-								<td className="p-3 text-muted-foreground text-xs">
+								<td className="p-3 text-foreground-soft text-xs">
 									Lugares de poco tránsito: sala de calderas, depósito de
 									materiales voluminosos
 								</td>
@@ -289,7 +289,7 @@ export default function IluminacionValoresRequeridosContent() {
 									fuertes
 								</td>
 								<td className="p-3 font-mono tabular-nums">100 – 300 lux</td>
-								<td className="p-3 text-muted-foreground text-xs">
+								<td className="p-3 text-foreground-soft text-xs">
 									Trabajos simples e intermitentes, inspección general, contado
 									de partes de stock, colocación de maquinaria pesada
 								</td>
@@ -300,7 +300,7 @@ export default function IluminacionValoresRequeridosContent() {
 									medianos
 								</td>
 								<td className="p-3 font-mono tabular-nums">300 – 750 lux</td>
-								<td className="p-3 text-muted-foreground text-xs">
+								<td className="p-3 text-foreground-soft text-xs">
 									Trabajos medianos mecánicos y manuales, inspección y montaje;
 									trabajos comunes de oficina: lectura, escritura y archivo
 								</td>
@@ -310,7 +310,7 @@ export default function IluminacionValoresRequeridosContent() {
 									Tareas severas y prolongadas, de poco contraste
 								</td>
 								<td className="p-3 font-mono tabular-nums">750 – 1500 lux</td>
-								<td className="p-3 text-muted-foreground text-xs">
+								<td className="p-3 text-foreground-soft text-xs">
 									Trabajos finos mecánicos y manuales, montaje e inspección;
 									pintura extrafina, sopleteado, costura de ropa oscura
 								</td>
@@ -321,7 +321,7 @@ export default function IluminacionValoresRequeridosContent() {
 									muy poco contraste
 								</td>
 								<td className="p-3 font-mono tabular-nums">1500 – 3000 lux</td>
-								<td className="p-3 text-muted-foreground text-xs">
+								<td className="p-3 text-foreground-soft text-xs">
 									Montaje e inspección de mecanismos delicados, fabricación de
 									herramientas y matrices, trabajo de molienda fina
 								</td>
@@ -331,7 +331,7 @@ export default function IluminacionValoresRequeridosContent() {
 									Tareas excepcionales, difíciles o importantes
 								</td>
 								<td className="p-3 font-mono tabular-nums">3000 lux</td>
-								<td className="p-3 text-muted-foreground text-xs">
+								<td className="p-3 text-foreground-soft text-xs">
 									Trabajo fino de relojería y reparación
 								</td>
 							</tr>
@@ -342,7 +342,7 @@ export default function IluminacionValoresRequeridosContent() {
 								<td className="p-3 font-mono tabular-nums">
 									5000 – 10.000 lux
 								</td>
-								<td className="p-3 text-muted-foreground text-xs">
+								<td className="p-3 text-foreground-soft text-xs">
 									Casos especiales: iluminación del campo operatorio en sala de
 									cirugía
 								</td>
@@ -356,7 +356,7 @@ export default function IluminacionValoresRequeridosContent() {
 				<h2 className="text-xl font-semibold tracking-tight">
 					Tabla 2 — Intensidad Mínima por Tipo de Edificio y Local
 				</h2>
-				<p className="text-sm text-muted-foreground">
+				<p className="text-sm text-foreground-soft">
 					Valor mínimo de servicio de iluminación (lux) según IRAM-AADL J 20-06,
 					organizado por industria y sector.
 				</p>
@@ -369,7 +369,7 @@ export default function IluminacionValoresRequeridosContent() {
 							<summary className="flex items-center justify-between px-4 py-3 cursor-pointer bg-muted/30 hover:bg-muted/50 transition-colors list-none marker:hidden select-none">
 								<span className="font-medium text-sm">{industria.label}</span>
 								<svg
-									className="size-4 text-muted-foreground transition-transform group-open:rotate-180"
+									className="size-4 text-foreground-soft transition-transform group-open:rotate-180"
 									viewBox="0 0 24 24"
 									fill="none"
 									stroke="currentColor"
@@ -404,7 +404,7 @@ export default function IluminacionValoresRequeridosContent() {
 				<h2 className="text-xl font-semibold tracking-tight">
 					Tabla 3 — Relación de Máximas Luminancias
 				</h2>
-				<p className="text-sm text-muted-foreground">
+				<p className="text-sm text-foreground-soft">
 					Relaciones máximas admisibles para evitar diferencias de iluminancias
 					causantes de incomodidad visual o deslumbramiento.
 				</p>
@@ -454,7 +454,7 @@ export default function IluminacionValoresRequeridosContent() {
 				<h2 className="text-xl font-semibold tracking-tight">
 					Tabla 4 — Iluminación General Mínima
 				</h2>
-				<p className="text-sm text-muted-foreground">
+				<p className="text-sm text-foreground-soft">
 					Iluminación general mínima en función de la iluminancia localizada.
 					Cuando se ilumine en forma localizada, la iluminación general no podrá
 					tener una intensidad menor a la indicada.
@@ -494,14 +494,14 @@ export default function IluminacionValoresRequeridosContent() {
 				<h2 className="text-xl font-semibold tracking-tight">
 					Requisitos de Uniformidad
 				</h2>
-				<p className="text-sm text-muted-foreground leading-relaxed">
+				<p className="text-sm text-foreground-soft leading-relaxed">
 					Es un parámetro crítico en luminotecnia que mide cuán homogénea es la
 					distribución de la luz en un plano de trabajo específico. Su objetivo
 					es garantizar que no existan contrastes severos o zonas de sombra que
 					fuercen la acomodación visual del trabajador, previniendo así la
 					fatiga ocular y disminuyendo el riesgo de accidentes.
 				</p>
-				<p className="text-sm text-muted-foreground leading-relaxed">
+				<p className="text-sm text-foreground-soft leading-relaxed">
 					Para asegurar una uniformidad razonable en la iluminancia de un local,
 					se exige una relación no menor de <strong>0,5</strong> entre sus
 					valores mínimo y medio:
@@ -509,7 +509,7 @@ export default function IluminacionValoresRequeridosContent() {
 				<div className="bg-muted/20 rounded-xl px-4 py-3 font-mono text-sm text-center">
 					E mínima ≥ E media / 2
 				</div>
-				<p className="text-sm text-muted-foreground leading-relaxed">
+				<p className="text-sm text-foreground-soft leading-relaxed">
 					La iluminancia media se determina por media aritmética de la
 					iluminancia general del local. La iluminancia mínima es el menor valor
 					sobre las superficies de trabajo o sobre un plano horizontal a 0,80 m
@@ -517,28 +517,28 @@ export default function IluminacionValoresRequeridosContent() {
 					ni iluminación de emergencia.
 				</p>
 				<div className="flex flex-col gap-1">
-					<p className="text-sm text-muted-foreground leading-relaxed">
+					<p className="text-sm text-foreground-soft leading-relaxed">
 						Emin Valor mínimo en Lux tomado en la grilla de medición.
 					</p>
-					<p className="text-sm text-muted-foreground leading-relaxed">
+					<p className="text-sm text-foreground-soft leading-relaxed">
 						Emax Valormáximo en Lux tomado en la grilla de medición.
 					</p>
-					<p className="text-sm text-muted-foreground leading-relaxed">
+					<p className="text-sm text-foreground-soft leading-relaxed">
 						Emed Iluminancia Media, es la media aritmética en Lux calculada,
 						teniendo en cuenta todas las mediciones de la grilla.
 					</p>
 				</div>
-				<p className="text-sm text-muted-foreground leading-relaxed">
+				<p className="text-sm text-foreground-soft leading-relaxed">
 					• Uniformidad General U0 = Emin / Emed Es el indicador más utilizado
 					por la legislación para validar si el ambiente en general está bien
 					iluminado de manera equilibrada.
 				</p>
-				<p className="text-sm text-muted-foreground leading-relaxed">
+				<p className="text-sm text-foreground-soft leading-relaxed">
 					• Uniformidad Localizada U1 = Emin / Emax Se utiliza para analizar
 					áreas específicas o puestos de trabajo puntuales, asegurando que no
 					existan picos de brillo excesivos respecto a la zona menos iluminada.
 				</p>
-				<p className="text-sm text-muted-foreground leading-relaxed">
+				<p className="text-sm text-foreground-soft leading-relaxed">
 					Criterio de Validación: El cociente U0 obtenido es menor al límite
 					establecido por la normativa para esa actividad, el estudio se
 					dictamina como "No Conforme", aun cuando el valor medio Emed cumpla
@@ -548,7 +548,7 @@ export default function IluminacionValoresRequeridosContent() {
 					interior sería
 				</p>
 				<Tabla />
-				<p className="text-sm text-muted-foreground leading-relaxed">
+				<p className="text-sm text-foreground-soft leading-relaxed">
 					En el marco legal y técnico aplicable (como la Resolución SRT 84/2012
 					y la Norma IRAM AADDL J 20-06 en Argentina, o la ISO 8995-1 a nivel
 					internacional), el cálculo y control de este factor es obligatorio al
@@ -562,7 +562,7 @@ export default function IluminacionValoresRequeridosContent() {
 function Tabla() {
 	return (
 		<div className="overflow-x-auto">
-			<table className="w-full text-xs border-collapse border text-muted-foreground leading-relaxed">
+			<table className="w-full text-xs border-collapse border text-foreground-soft leading-relaxed">
 				<thead>
 					<tr className="bg-muted/50">
 						<th className="text-center p-3 font-medium border-r">

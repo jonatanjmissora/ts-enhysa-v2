@@ -44,7 +44,7 @@ function RouteComponent() {
 				search={{
 					from: "/iluminacion/reportes",
 				}}
-				className="w-11/12 italic text-foreground/60 tracking-wider text-sm underline text-right"
+				className="w-11/12 italic text-foreground-soft tracking-wider text-sm underline text-right"
 			>
 				Instructivo: Mi primer Informe !
 			</Link>
@@ -111,7 +111,7 @@ function ReportesIluminacion() {
 		<article className="w-5/6 sm:w-2/3 flex flex-col gap-8 mt-20">
 			{/* Barra de filtros */}
 			<div className="flex justify-between items-center w-full pb-2 border-b border-foreground/10">
-				<span className="text-sm text-foreground/60 font-medium">
+				<span className="text-sm text-foreground-soft font-medium">
 					{filteredReportes.length === reportes.length
 						? `${reportes.length} reportes`
 						: `${filteredReportes.length} de ${reportes.length} filtrados`}
@@ -126,7 +126,7 @@ function ReportesIluminacion() {
 								setHasta("")
 								setEmpresaId("all")
 							}}
-							className="h-8 text-xs text-foreground/60 hover:text-foreground flex gap-1 items-center px-2"
+							className="h-8 text-xs text-foreground-soft hover:text-foreground flex gap-1 items-center px-2"
 						>
 							<FilterX className="size-4" />
 							Limpiar
@@ -170,7 +170,7 @@ function ReportesIluminacion() {
 						<div className="flex flex-col gap-1.5 grow min-w-[200px]">
 							<Label
 								htmlFor="empresa-filter"
-								className="text-xs font-semibold text-foreground/70"
+								className="text-xs font-semibold text-foreground-soft"
 							>
 								Empresa
 							</Label>
@@ -201,7 +201,7 @@ function ReportesIluminacion() {
 						<div className="flex flex-col gap-1.5 grow sm:max-w-[200px] min-w-[150px]">
 							<Label
 								htmlFor="desde-filter"
-								className="text-xs font-semibold text-foreground/70"
+								className="text-xs font-semibold text-foreground-soft"
 							>
 								Fecha Desde
 							</Label>
@@ -218,7 +218,7 @@ function ReportesIluminacion() {
 						<div className="flex flex-col gap-1.5 grow sm:max-w-[200px] min-w-[150px]">
 							<Label
 								htmlFor="hasta-filter"
-								className="text-xs font-semibold text-foreground/70"
+								className="text-xs font-semibold text-foreground-soft"
 							>
 								Fecha Hasta
 							</Label>
@@ -258,7 +258,7 @@ function ReportesList({
 	return (
 		<div className="flex flex-col gap-4">
 			{filteredReportes.length === 0 ? (
-				<div className="text-center py-10 text-sm text-foreground/50 italic bg-accent/20 rounded-lg border border-dashed border-foreground/10">
+				<div className="text-center py-10 text-sm text-foreground-soft italic bg-accent/20 rounded-lg border border-dashed border-foreground/10">
 					No se encontraron reportes que coincidan con los filtros.
 				</div>
 			) : (
@@ -280,12 +280,12 @@ function ReportesList({
 									{reporte.title.toUpperCase()}
 								</span>
 								{reporte.finishedAt ? (
-									<span className="text-xs text-foreground/50">
+									<span className="text-xs text-foreground-soft">
 										Realizado el{" "}
 										{reporte.finishedAt?.toLocaleDateString("it-IT")}
 									</span>
 								) : (
-									<span className="text-xs text-foreground/50">En curso</span>
+									<span className="text-xs text-foreground-soft">En curso</span>
 								)}
 							</div>
 						</div>
@@ -297,7 +297,7 @@ function ReportesList({
 							}
 							params={{ id: reporte.id }}
 						>
-							<ChevronRight className="size-8 text-foreground/50" />
+							<ChevronRight className="size-8 text-foreground-soft" />
 						</Link>
 					</div>
 				))
@@ -310,7 +310,7 @@ function NoReports() {
 	const id = crypto.randomUUID().toString()
 	return (
 		<article className="w-5/6 mx-auto flex flex-col items-center justify-center gap-10 mt-20">
-			<span className="text-center text-foreground/70 text-sm italic tracking-wide">
+			<span className="text-center text-foreground-soft text-sm italic tracking-wide">
 				No posee informes de Iluminación. Realice su primer reporte ...
 			</span>
 			<Link

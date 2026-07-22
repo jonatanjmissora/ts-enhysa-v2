@@ -36,7 +36,7 @@ function RouteComponent() {
 			<div className="flex flex-col gap-0 items-center justify-center w-full mb-12">
 				<Title text="Informe Iluminación PDF" className="mt-15" />
 				<Suspense
-					fallback={<span className="text-muted-foreground">. . .</span>}
+					fallback={<span className="text-foreground-soft">. . .</span>}
 				>
 					<Empresa />
 				</Suspense>

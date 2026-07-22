@@ -101,7 +101,7 @@ export function MyDocumentReducida({
 								? "Desbloqueando..."
 								: "Desbloquear PDF (1 crédito)"}
 						</Button>
-						<div className="text-xs text-muted-foreground">
+						<div className="text-xs text-foreground-soft">
 							Créditos disponibles:{" "}
 							<span className="font-semibold text-foreground">
 								{credits ?? "..."}
@@ -161,7 +161,7 @@ export function MyDocumentReducida({
 								? "Desbloqueando..."
 								: "Desbloquear PDF (1 crédito)"}
 						</Button>
-						<div className="text-xs text-muted-foreground">
+						<div className="text-xs text-foreground-soft">
 							Créditos disponibles:{" "}
 							<span className="font-semibold text-foreground">
 								{credits ?? "..."}

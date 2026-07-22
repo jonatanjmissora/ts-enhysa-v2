@@ -163,7 +163,7 @@ function UserSuscriptionInfo({
 		<div className="w-full flex flex-col items-end justify-end gap-1">
 			<div className="flex justify-end items-center gap-2 w-full">
 				<Shield className="size-5 dark:text-amber-300 text-amber-800/80" />
-				<span className="font-semibold text-gray-50/50 sm:text-foreground/50 text-sm">
+				<span className="font-semibold text-gray-50/50 sm:text-foreground-soft text-sm">
 					creditos disponibles: {credits}
 				</span>
 			</div>
@@ -218,7 +218,7 @@ export function LogoutAlertDialog() {
 				>
 					<LogOut
 						size={16}
-						className="text-foreground/90 sm:text-foreground/80"
+						className="text-foreground/90 sm:text-foreground-soft"
 					/>{" "}
 					Cerrar sesion
 				</button>

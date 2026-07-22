@@ -53,7 +53,7 @@ export function SignaturePad({ defaultValue, onUploaded }: SignaturePadProps) {
 					className={`flex items-center gap-1 px-5 py-2 text-xs rounded-md transition-colors ${
 						mode === "draw"
 							? "bg-amber-700 text-white"
-							: "bg-accent text-foreground/70 hover:bg-accent/80"
+							: "bg-accent text-foreground-soft hover:bg-accent/80"
 					}`}
 				>
 					<Pen size={14} />
@@ -65,7 +65,7 @@ export function SignaturePad({ defaultValue, onUploaded }: SignaturePadProps) {
 					className={`flex items-center gap-1 px-5 py-2 text-xs rounded-md transition-colors ${
 						mode === "upload"
 							? "bg-amber-700 text-white"
-							: "bg-accent text-foreground/70 hover:bg-accent/80"
+							: "bg-accent text-foreground-soft hover:bg-accent/80"
 					}`}
 				>
 					<Upload size={14} />
@@ -205,7 +205,7 @@ function DrawingPad({
 				/>
 				{!hasDrawn && (
 					<div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none">
-						<span className="text-muted-foreground/30 text-sm">Firma aquí</span>
+						<span className="text-foreground-soft/30 text-sm">Firma aquí</span>
 					</div>
 				)}
 			</div>

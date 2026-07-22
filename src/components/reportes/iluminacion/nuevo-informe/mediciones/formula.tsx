@@ -15,7 +15,7 @@ export default function Formula({
 }) {
 	return (
 		<div className="w-5/6 sm:w-full mx-auto flex flex-col items-stretch justify-between gap-3">
-			<span className="w-full italic font-semibold text-foreground/50 tracking-widest border-b border-foreground/10 text-left">
+			<span className="w-full italic font-semibold text-foreground-soft tracking-widest border-b border-foreground/10 text-left">
 				Indice del local{" "}
 			</span>
 
@@ -49,7 +49,7 @@ export default function Formula({
 				</div>
 			</div>
 
-			<span className="italic  border-t border-foreground/10 py-2 w-full text-right text-xs text-foreground/50">
+			<span className="italic  border-t border-foreground/10 py-2 w-full text-right text-xs text-foreground-soft">
 				Res. 84/2012 S.R.T.
 			</span>
 		</div>

@@ -14,7 +14,7 @@ export default function InformesRecientes() {
 			</header>
 			<Suspense
 				fallback={
-					<span className="animate-pulse text-sm italic text-foreground/50 p-7 bg-secondary/50 rounded-lg ring-[1px] ring-foreground/15 flex items-center justify-center w-full sm:w-2/3 mx-auto">
+					<span className="animate-pulse text-sm italic text-foreground-soft p-7 bg-secondary/50 rounded-lg ring-[1px] ring-foreground/15 flex items-center justify-center w-full sm:w-2/3 mx-auto">
 						Obteniendo Reportes...
 					</span>
 				}
@@ -24,7 +24,7 @@ export default function InformesRecientes() {
 
 			<Link
 				to="/iluminacion/reportes"
-				className=" text-sm text-foreground/70 hover:underline py-2 border-t border-foreground/10 w-full text-right"
+				className=" text-sm text-foreground-soft hover:underline py-2 border-t border-foreground/10 w-full text-right"
 			>
 				Ver todos
 			</Link>
@@ -63,7 +63,7 @@ function Reportes() {
 								<span className="textM font-semibold w-60 truncate">
 									{reporte.title.toUpperCase()}
 								</span>
-								<span className="text-xs text-foreground/50">
+								<span className="text-xs text-foreground-soft">
 									{reporte.finishedAt
 										? `Realizado el ${reporte.finishedAt?.toLocaleDateString("it-IT")}`
 										: "En curso"}
@@ -80,7 +80,7 @@ function NoReports() {
 	const id = crypto.randomUUID().toString()
 	return (
 		<article className="w-5/6 mx-auto flex flex-col items-center justify-center gap-10 mt-20">
-			<span className="text-center text-foreground/70 text-sm italic tracking-wide">
+			<span className="text-center text-foreground-soft text-sm italic tracking-wide">
 				No posee informes de Iluminación. Realice su primer reporte ...
 			</span>
 			<Link

@@ -80,7 +80,7 @@ export function FileDropzone({
 								if (isUploading) return `Subiendo ${uploadProgress}%`
 								if (ready)
 									return (
-										<CloudUpload className="size-8 text-muted-foreground/70" />
+										<CloudUpload className="size-8 text-foreground-soft/70" />
 									)
 								return "Cargando..."
 							},
@@ -115,7 +115,7 @@ export function FileDropzone({
 						appearance={{
 							container:
 								"border-1 border-dashed rounded-xl bg-accent/50 !p-0 !my-2 !gap-0 flex flex-row-reverse w-full",
-							label: "text-sm text-muted-foreground font-medium !mt-0",
+							label: "text-sm text-foreground-soft font-medium !mt-0",
 							allowedContent: "hidden",
 							button: "bg-transparent w-30 text-sm tracking-wide !mt-0",
 							uploadIcon: "hidden",
@@ -167,7 +167,7 @@ export function FilesDropzone({
 								if (isUploading) return `Subiendo ${uploadProgress}%`
 								if (ready)
 									return (
-										<CloudUpload className="size-8 text-muted-foreground/70" />
+										<CloudUpload className="size-8 text-foreground-soft/70" />
 									)
 								return "Cargando..."
 							},
@@ -205,8 +205,8 @@ export function FilesDropzone({
 						appearance={{
 							container:
 								"border-1 border-dashed rounded-xl bg-accent/50 !p-3 !my-2 !gap-0 flex-col-reverse w-full",
-							label: "text-sm text-muted-foreground font-medium !m-0 !p-0",
-							allowedContent: "text-xs text-muted-foreground/70",
+							label: "text-sm text-foreground-soft font-medium !m-0 !p-0",
+							allowedContent: "text-xs text-foreground-soft/70",
 							button: "bg-transparent w-max text-sm tracking-wide !mt-0",
 							uploadIcon: "hidden",
 						}}

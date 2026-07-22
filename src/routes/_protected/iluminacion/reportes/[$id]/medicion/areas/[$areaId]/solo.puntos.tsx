@@ -384,7 +384,7 @@ function InputMenu({
 			onSubmit={handleSetPunto}
 			className="min-h-[500px] bg-accent rounded-lg ring-[1px] ring-foreground/15 flex items-center justify-center gap-10 flex-col w-full p-10"
 		>
-			<span className="border-b py-2 border-foreground/50 w-full text-left text-foreground/70">
+			<span className="border-b py-2 border-foreground/50 w-full text-left text-foreground-soft">
 				Punto {actualPunto !== null ? actualPunto + 1 : ""}
 			</span>
 			<Input

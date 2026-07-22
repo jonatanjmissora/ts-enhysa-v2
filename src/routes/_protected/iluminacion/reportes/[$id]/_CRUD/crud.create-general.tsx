@@ -66,7 +66,7 @@ function ReporteEnCurso({
 				<TriangleAlert className="size-16 dark:text-amber-500 text-amber-700/70" />
 				<span className="tracking-wider text-lg">Atención</span>
 			</div>
-			<span className="tracking-widest text-center text-pretty w-5/6 mx-auto italic text-foreground/50">
+			<span className="tracking-widest text-center text-pretty w-5/6 mx-auto italic text-foreground-soft">
 				¿Existe un reporte en curso, desea continuarlo o crear uno nuevo?
 			</span>
 

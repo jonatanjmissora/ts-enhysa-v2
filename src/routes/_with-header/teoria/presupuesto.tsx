@@ -303,10 +303,10 @@ function RouteComponent() {
 								className="w-full h-full object-contain"
 							/>
 						) : (
-							<span className="text-muted-foreground">Logo</span>
+							<span className="text-foreground-soft">Logo</span>
 						)}
 					</div>
-					<label className="block text-xs text-foreground/50 mt-2 cursor-pointer uppercase tracking-wide">
+					<label className="block text-xs text-foreground-soft mt-2 cursor-pointer uppercase tracking-wide">
 						<Upload className="size-3 inline mr-1" />
 						Seleccionar
 						<input
@@ -323,13 +323,13 @@ function RouteComponent() {
 					onChange={e => setNombreEmpresa(e.target.value)}
 				/>
 
-				<p className="text-foreground/50 font-bold text-sm tracking-widest">
+				<p className="text-foreground-soft font-bold text-sm tracking-widest">
 					COTIZADOR PROFESIONAL HSE
 				</p>
 			</header>
 
 			<section className="space-y-4">
-				<h2 className="text-foreground/50 border-b border-border pb-2 text-lg uppercase tracking-wider font-semibold">
+				<h2 className="text-foreground-soft border-b border-border pb-2 text-lg uppercase tracking-wider font-semibold">
 					Información del Cliente
 				</h2>
 				<div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -408,7 +408,7 @@ function RouteComponent() {
 			</section>
 
 			<section className="space-y-4">
-				<h2 className="text-foreground/50 border-b border-border pb-2 text-lg uppercase tracking-wider font-semibold">
+				<h2 className="text-foreground-soft border-b border-border pb-2 text-lg uppercase tracking-wider font-semibold">
 					1. Definición de Perfil Profesional
 				</h2>
 				<div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -459,13 +459,13 @@ function RouteComponent() {
 			</section>
 
 			<section className="space-y-4">
-				<h2 className="text-foreground/50 border-b border-border pb-2 text-lg uppercase tracking-wider font-semibold">
+				<h2 className="text-foreground-soft border-b border-border pb-2 text-lg uppercase tracking-wider font-semibold">
 					2. Tareas y Protocolos Requeridos
 				</h2>
 				<div className="overflow-x-auto">
 					<table className="w-200 sm:w-full text-sm">
 						<thead>
-							<tr className="border-b-2 border-primary text-foreground/50 uppercase text-xs tracking-wider">
+							<tr className="border-b-2 border-primary text-foreground-soft uppercase text-xs tracking-wider">
 								<th className="p-3 text-center w-[10%] ">Cantidad</th>
 								<th className="p-3 text-left w-[40%]">Servicio</th>
 								<th className="p-3 text-center w-[25%]">Parámetro / Detalle</th>
@@ -538,12 +538,12 @@ function RouteComponent() {
 													))}
 												</select>
 											) : (
-												<span className="text-center font-semibold text-foreground/50">
+												<span className="text-center font-semibold text-foreground-soft">
 													{precioBase > 0 ? formatPrice(precioBase) : ""}
 												</span>
 											)}
 										</td>
-										<td className="p-2 text-center font-semibold text-foreground/50">
+										<td className="p-2 text-center font-semibold text-foreground-soft">
 											{subtotal > 0 ? formatPrice(subtotal) : ""}
 										</td>
 										<td className="p-2 text-center">
@@ -564,7 +564,7 @@ function RouteComponent() {
 				<button
 					type="button"
 					onClick={agregarTarea}
-					className="w-full py-3 border-2 border-dashed border-primary/50 text-foreground/50 font-bold rounded-md hover:bg-primary/10 transition-all flex items-center justify-center gap-2"
+					className="w-full py-3 border-2 border-dashed border-primary/50 text-foreground-soft font-bold rounded-md hover:bg-primary/10 transition-all flex items-center justify-center gap-2"
 				>
 					<Plus className="size-4" />
 					Agregar Tarea / Protocolo
@@ -572,13 +572,13 @@ function RouteComponent() {
 			</section>
 
 			<section className="space-y-4">
-				<h2 className="text-foreground/50 border-b border-border pb-2 text-lg uppercase tracking-wider font-semibold">
+				<h2 className="text-foreground-soft border-b border-border pb-2 text-lg uppercase tracking-wider font-semibold">
 					3. Adicionales, Gastos y Logística
 				</h2>
 				<div className="overflow-x-auto">
 					<table className="w-200 sm:w-full text-sm">
 						<thead>
-							<tr className="border-b-2 border-primary text-foreground/50 uppercase text-xs tracking-wider">
+							<tr className="border-b-2 border-primary text-foreground-soft uppercase text-xs tracking-wider">
 								<th className="p-3 text-center w-[15%]">Cant / Km</th>
 								<th className="p-3 text-left w-[40%]">Concepto Adicional</th>
 								<th className="p-3 text-center w-[20%]">Valor Unitario ($)</th>
@@ -632,7 +632,7 @@ function RouteComponent() {
 												}
 											/>
 										</td>
-										<td className="p-2 text-center font-semibold text-foreground/50">
+										<td className="p-2 text-center font-semibold text-foreground-soft">
 											{subtotal > 0 ? formatPrice(subtotal) : ""}
 										</td>
 										<td className="p-2 text-center">
@@ -653,14 +653,14 @@ function RouteComponent() {
 				<button
 					type="button"
 					onClick={agregarAdicional}
-					className="w-full py-3 border-2 border-dashed border-primary/50 text-foreground/50 font-bold rounded-md hover:bg-primary/10 transition-all flex items-center justify-center gap-2"
+					className="w-full py-3 border-2 border-dashed border-primary/50 text-foreground-soft font-bold rounded-md hover:bg-primary/10 transition-all flex items-center justify-center gap-2"
 				>
 					<Plus className="size-4" />
 					Agregar Item (Viáticos, Viandas, Ropa, EPP, Horas Extras, etc.)
 				</button>
 			</section>
 
-			<section className="bg-muted/50 border-l-[3px] border-primary rounded-r-md p-4 text-sm text-muted-foreground space-y-2 leading-relaxed">
+			<section className="bg-muted/50 border-l-[3px] border-primary rounded-r-md p-4 text-sm text-foreground-soft space-y-2 leading-relaxed">
 				<p className="font-semibold text-foreground">
 					Condiciones del Servicio y Datos Comerciales:
 				</p>
@@ -707,7 +707,7 @@ function RouteComponent() {
 				<h2 className="text-lg font-semibold text-foreground">
 					Presupuesto Estimado Neto
 				</h2>
-				<p className="text-4xl font-bold text-foreground/50 mt-2">
+				<p className="text-4xl font-bold text-foreground-soft mt-2">
 					{formatPrice(total)}
 				</p>
 				<PDFDownloadLink

@@ -37,7 +37,7 @@ export default function EditTecnico({
 		<AlertDialog open={open} onOpenChange={setOpen}>
 			<AlertDialogTrigger asChild>
 				<Button className="w-40 p-5">
-					<Pencil size={14} className="text-foreground/70" />
+					<Pencil size={14} className="text-foreground-soft" />
 					Editar
 				</Button>
 			</AlertDialogTrigger>

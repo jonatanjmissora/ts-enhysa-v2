@@ -38,7 +38,7 @@ export default function SuscriptionPlans({ from }: { from?: string }) {
 			<div className="flex flex-col sm:flex-row w-full items-center">
 				<Link
 					to="/"
-					className="bg-[#5cb85c] text-white rounded-md px-7 py-3.5 text-base font-semibold transition-all hover:bg-[#4ca84c] hover:shadow-[0_4px_12px_rgba(92,184,92,0.3)] flex-1 text-center"
+					className="bg-green-400 text-foreground border border-foreground/10 rounded-md px-7 py-3.5 text-base font-semibold transition-all hover:shadow-[0_4px_12px_rgba(92,184,92,0.3)] flex-1 text-center"
 				>
 					{session?.user ? "Continuar con Mi Cuenta" : "Ingresar con Mi Cuenta"}
 				</Link>
@@ -113,11 +113,11 @@ const Plan = ({
 				<span className="sm:text-xl 2xl:text-3xl font-semibold tracking-widest">
 					{title}
 				</span>
-				<span className="text-5xl font-semibold text-foreground/50">
+				<span className="text-5xl font-semibold text-foreground-soft">
 					${montoFormat(price)}
 				</span>
 			</div>
-			<span className="sm:text-base 2xl:text-lg font-medium tracking-wider text-foreground/70">
+			<span className="sm:text-base 2xl:text-lg font-medium tracking-wider text-foreground-soft">
 				{subtitle}
 			</span>
 			<div className="flex flex-col gap-2">
@@ -133,7 +133,7 @@ const Plan = ({
 				<div className="flex flex-col gap-2 w-full">
 					<Link
 						to="/"
-						className={`w-full py-3 text-primary-foreground rounded-md text-center font-semibold block no-underline ${
+						className={`w-full py-3 rounded-md text-center font-semibold block no-underline ${
 							index === actualPlan ? "bg-green-400" : "bg-primary"
 						}`}
 					>
@@ -147,7 +147,7 @@ const Plan = ({
 						plan: title,
 						...(from ? { from } : {}),
 					}}
-					className={`w-full py-3 text-primary-foreground rounded-md text-center font-semibold block no-underline ${
+					className={`w-full py-3 rounded-md text-center font-semibold block no-underline ${
 						index === actualPlan ? "bg-green-400" : "bg-primary"
 					}`}
 				>
@@ -191,7 +191,7 @@ function CombinedPlan({
 					{plan.title}
 				</span>
 				<div className="flex flex-col gap-4">
-					<span className="text-5xl font-semibold text-foreground/50">
+					<span className="text-5xl font-semibold text-foreground-soft">
 						${montoFormat(plan.price)}
 					</span>
 					<div>
@@ -205,7 +205,7 @@ function CombinedPlan({
 								onChange={e => setAnual(e.target.checked)}
 								className="size-4 accent-[#5cb85c] rounded-[80%]"
 							/>
-							<span className="text-sm tracking-wider text-foreground/70">
+							<span className="text-sm tracking-wider text-foreground-soft">
 								Pago anual (ahorro 16%)
 							</span>
 						</Label>
@@ -213,7 +213,7 @@ function CombinedPlan({
 				</div>
 			</div>
 
-			<span className="sm:text-base 2xl:text-lg font-medium tracking-wider text-foreground/70">
+			<span className="sm:text-base 2xl:text-lg font-medium tracking-wider text-foreground-soft">
 				{plan.subtitle}
 			</span>
 			<div className="flex flex-col gap-2">
@@ -228,7 +228,7 @@ function CombinedPlan({
 			<Link
 				to="/checkout"
 				search={{ plan: plan.title, ...(from ? { from } : {}) }}
-				className={`w-full py-3 text-primary-foreground rounded-md text-center font-semibold block no-underline ${
+				className={`w-full py-3 rounded-md text-center font-semibold block no-underline ${
 					isActive ? "bg-green-400" : "bg-primary"
 				}`}
 			>

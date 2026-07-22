@@ -42,7 +42,7 @@ const TEORIAS = [
 
 function RuidoContent() {
 	return (
-		<p className="text-muted-foreground">
+		<p className="text-foreground-soft">
 			Contenido próximo — Estudio de Ruido Res. 85/2012 SRT.
 		</p>
 	)
@@ -50,7 +50,7 @@ function RuidoContent() {
 
 function ExtintoresContent() {
 	return (
-		<p className="text-muted-foreground">
+		<p className="text-foreground-soft">
 			Contenido próximo — Control de Extintores, Recarga y PH.
 		</p>
 	)
@@ -58,7 +58,7 @@ function ExtintoresContent() {
 
 function PatContent() {
 	return (
-		<p className="text-muted-foreground">
+		<p className="text-foreground-soft">
 			Contenido próximo — Estudio de PAT y Continuidad de las Masas.
 		</p>
 	)
@@ -88,7 +88,7 @@ function RouteComponent() {
 							navigate({ to: "/landing", hash: "modulos" })
 						else navigate({ to: `/${from}` as never })
 					}}
-					className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors"
+					className="inline-flex items-center gap-1 text-sm text-foreground-soft hover:text-foreground transition-colors"
 				>
 					<ChevronLeft className="size-4" />
 					Volver

@@ -7,7 +7,7 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  --sea-ink: #173a40;
+  --sea-ink: #112c31;
   --sea-ink-soft: #416166;
   --lagoon: #4fb8b2;
   --lagoon-deep: #328f97;
@@ -28,7 +28,8 @@
   --hero-b: rgba(47, 106, 74, 0.2);
 
   --background: rgb(212, 212, 212);
-  --foreground: oklch(0.141 0.005 285.823);
+  --foreground: var(--sea-ink);
+  --foreground-soft: #112c31cc;
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.141 0.005 285.823);
   --popover: oklch(1 0 0);
@@ -84,7 +85,8 @@
   --hero-b: rgba(110, 200, 154, 0.12);
 
   --background: oklch(20.197% 0.00793 285.635);
-  --foreground: oklch(0.985 0 0);
+  --foreground: #fafafa;
+  --foreground-soft: #fafafa80;
   --card: oklch(0.141 0.005 285.823);
   --card-foreground: oklch(0.985 0 0);
   --popover: oklch(0.141 0.005 285.823);
@@ -121,6 +123,7 @@
   --font-sans: 'Manrope', ui-sans-serif, system-ui, sans-serif;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-foreground-soft: var(--foreground-soft);
   --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);
   --color-popover: var(--popover);
@@ -166,9 +169,8 @@ body,
 
 body {
   margin: 0;
-  color: var(--sea-ink);
+  color: var(--foreground);
   font-family: var(--font-sans);
-  /* background-color: var(--bg-base); */
   background-color: var(--background);
   background-image: linear-gradient(145deg, var(--background), var(--accent));
   overflow-x: hidden;
@@ -229,6 +231,14 @@ code {
   background: color-mix(in oklab, var(--surface-strong) 82%, white 18%);
   border-radius: 7px;
   padding: 2px 7px;
+}
+
+.text {
+  color: var(--foreground)/50
+}
+
+.dark .text {
+  color: var(--foreground)/10;
 }
 
 pre code {

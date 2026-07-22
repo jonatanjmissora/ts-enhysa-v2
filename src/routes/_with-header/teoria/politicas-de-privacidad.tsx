@@ -22,10 +22,11 @@ function RouteComponent() {
 				<button
 					type="button"
 					onClick={() => {
-						if (from === "landing") navigate({ to: "/landing", hash: "suscriptions" })
+						if (from === "landing")
+							navigate({ to: "/landing", hash: "suscriptions" })
 						else navigate({ to: `/${from}` as never })
 					}}
-					className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors"
+					className="inline-flex items-center gap-1 text-sm text-foreground-soft hover:text-foreground transition-colors"
 				>
 					<ChevronLeft className="size-4" />
 					Volver
@@ -33,12 +34,12 @@ function RouteComponent() {
 				<h1 className="text-3xl font-bold tracking-tight">
 					Políticas de Privacidad
 				</h1>
-				<p className="text-sm text-muted-foreground">
+				<p className="text-sm text-foreground-soft">
 					Última actualización: junio 2026
 				</p>
 			</header>
 
-			<section className="space-y-4 text-sm leading-relaxed text-muted-foreground">
+			<section className="space-y-4 text-sm leading-relaxed text-foreground-soft">
 				<p>
 					En <strong>EnHySa</strong> nos comprometemos a proteger la privacidad
 					de los datos personales de nuestros usuarios. Esta política describe

@@ -57,34 +57,34 @@ function Navbar() {
 				<button
 					type="button"
 					onClick={handleHashNav("")}
-					className="text-white no-underline text-sm transition-colors hover:text-[#e2711d]"
+					className=" no-underline text-sm transition-colors hover:text-[#4ca84c]"
 				>
 					¿Qué es EnHySa App?
 				</button>
 				<button
 					type="button"
 					onClick={handleHashNav("caracteristicas")}
-					className="text-white no-underline text-sm transition-colors hover:text-[#e2711d]"
+					className=" no-underline text-sm transition-colors hover:text-[#4ca84c]"
 				>
 					Características
 				</button>
 				<button
 					type="button"
 					onClick={handleHashNav("modulos")}
-					className="text-white no-underline text-sm transition-colors hover:text-[#e2711d]"
+					className=" no-underline text-sm transition-colors hover:text-[#4ca84c]"
 				>
 					Módulos
 				</button>
 				<Link
 					to="/"
-					className="bg-[#5cb85c] text-white rounded-md px-5 py-2 text-sm font-semibold no-underline transition-all hover:bg-[#4ca84c] hover:shadow-[0_4px_12px_rgba(92,184,92,0.3)]"
+					className="bg-[#5cb85c]  rounded-md px-5 py-2 text-sm font-semibold no-underline transition-all hover:bg-[#4ca84c] hover:shadow-[0_4px_12px_rgba(92,184,92,0.3)]"
 				>
 					{session?.user ? "Ir a Mi App" : "Ingresar"}
 				</Link>
 			</nav>
 			<button
 				onClick={() => setIsOpen(true)}
-				className="md:hidden text-white"
+				className="md:hidden "
 				aria-label="Abrir menú"
 			>
 				<Menu size={28} />
@@ -126,7 +126,7 @@ function MobileMenu({
 		>
 			<button
 				onClick={close}
-				className="absolute top-6 right-6 text-white"
+				className="absolute top-6 right-6 "
 				aria-label="Cerrar menú"
 			>
 				<X size={28} />
@@ -134,28 +134,28 @@ function MobileMenu({
 			<button
 				type="button"
 				onClick={handleHashNav("")}
-				className="text-2xl font-semibold no-underline text-white transition-colors hover:text-[#e2711d]"
+				className="text-2xl font-semibold no-underline transition-colors hover:text-[#4ca84c]"
 			>
 				¿Qué es EnHySa App?
 			</button>
 			<button
 				type="button"
 				onClick={handleHashNav("caracteristicas")}
-				className="text-2xl font-semibold no-underline text-white transition-colors hover:text-[#e2711d]"
+				className="text-2xl font-semibold no-underline transition-colors hover:text-[#4ca84c]"
 			>
 				Características
 			</button>
 			<button
 				type="button"
 				onClick={handleHashNav("modulos")}
-				className="text-2xl font-semibold no-underline text-white transition-colors hover:text-[#e2711d]"
+				className="text-2xl font-semibold no-underline transition-colors hover:text-[#4ca84c]"
 			>
 				Módulos
 			</button>
 			<Link
 				to="/"
 				onClick={close}
-				className="bg-[#5cb85c] text-white rounded-md px-8 py-3 text-lg font-semibold no-underline transition-all hover:bg-[#4ca84c]"
+				className="bg-[#5cb85c] rounded-md px-8 py-3 text-lg font-semibold no-underline transition-all hover:bg-[#4ca84c]"
 			>
 				Ingresar
 			</Link>

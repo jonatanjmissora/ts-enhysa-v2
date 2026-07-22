@@ -198,7 +198,7 @@ function AreaDropdownMenu({ area }: { area: AreaIluminacionType }) {
 		<DropdownMenu open={isMenuOpen} onOpenChange={setIsMenuOpen}>
 			<DropdownMenuTrigger asChild>
 				<Button variant="ghost" className="cursor-pointer">
-					<Ellipsis className="size-7 text-foreground/50" />
+					<Ellipsis className="size-7 text-foreground-soft" />
 				</Button>
 			</DropdownMenuTrigger>
 			<DropdownMenuContent className="p-6" align="end">

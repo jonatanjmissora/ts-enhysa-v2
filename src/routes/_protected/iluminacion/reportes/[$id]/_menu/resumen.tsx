@@ -55,7 +55,7 @@ function Resumen() {
 
 	if (!reporte) {
 		return (
-			<span className="text-sm italic text-foreground/50 text-center">
+			<span className="text-sm italic text-foreground-soft text-center">
 				No se encontró ningún reporte
 			</span>
 		)
@@ -163,7 +163,7 @@ function ResumenDropdownMenu({ reporte }: { reporte: ReporteIluminacionType }) {
 		<DropdownMenu open={isMenuOpen} onOpenChange={setIsMenuOpen}>
 			<DropdownMenuTrigger asChild>
 				<Button variant="ghost" className="cursor-pointer">
-					<Ellipsis className="size-7 text-foreground/50" />
+					<Ellipsis className="size-7 text-foreground-soft" />
 				</Button>
 			</DropdownMenuTrigger>
 			<DropdownMenuContent className="p-6" align="end">
@@ -204,7 +204,7 @@ function CompletoOResumidoModal({
 							<span className="font-bold text-lg tracking-widest text-center">
 								Reducida
 							</span>
-							<span className="text-center text-xs text-foreground/50 italic">
+							<span className="text-center text-xs text-foreground-soft italic">
 								Muestra sólo el punto de mayor interés por área.
 							</span>
 							<div className="h-40 w-full">
@@ -223,7 +223,7 @@ function CompletoOResumidoModal({
 							<span className="font-bold text-lg tracking-widest text-center">
 								Completa
 							</span>
-							<span className="text-center text-xs text-foreground/50 italic">
+							<span className="text-center text-xs text-foreground-soft italic">
 								Muestra todos los puntos de medicion por area.
 							</span>
 							<div className="h-44 w-full">

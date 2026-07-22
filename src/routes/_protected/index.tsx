@@ -13,6 +13,8 @@ export const Route = createFileRoute("/_protected/")({ component: Home })
 
 function Home() {
 	useScrollTop()
+	const cardBg =
+		"bg-[radial-gradient(ellipse_at_bottom_left,rgba(225,113,0,0.5)_0%,transparent_65%)] dark:bg-[radial-gradient(ellipse_at_bottom_left,rgba(225,113,0,0.1)_0%,transparent_65%)]"
 
 	return (
 		<article className="w-full sm:max-w-5xl 2xl:max-w-7xl sm:mx-auto min-h-svh flex flex-col items-center justify-center gap-20">
@@ -30,11 +32,13 @@ function Home() {
 
 			<div className="flex flex-col gap-20 w-5/6 mx-auto my-20">
 				<div className="">
-					<div className="shapeLeft flex items-center justify-center flex-col gap-2 bg-accent/50 ring-[1px] dark:ring-amber-500/20 ring-amber-700/40 rounded-md p-4 mr-4 dark:text-amber-600 text-amber-800">
+					<div
+						className={`shapeLeft flex items-center justify-center flex-col gap-2 bg-accent/50 ring-[1px] dark:ring-amber-500/20 ring-amber-700/40 rounded-md p-4 mr-4 dark:text-amber-600 text-amber-800 ${cardBg}`}
+					>
 						<ShieldCheck size={30} />
 						Protocolo
 					</div>
-					<p className="text-sm tracking-wider italic text-foreground/60">
+					<p className="text-sm tracking-wider italic text-foreground-soft">
 						Cumplir con los protocolos de seguridad ayuda a reducir riesgos,
 						prevenir lesiones y evitar accidentes dentro del entorno laboral.
 						Los informes permiten detectar fallas antes de que se conviertan en
@@ -44,11 +48,13 @@ function Home() {
 				</div>
 
 				<div className="">
-					<div className="shapeRight flex items-center justify-center flex-col gap-2 bg-accent/50 ring-[1px] dark:ring-amber-500/20 ring-amber-700/40 rounded-md p-4 ml-4 dark:text-amber-600 text-amber-800">
+					<div
+						className={`shapeRight flex items-center justify-center flex-col gap-2 bg-accent/50 ring-[1px] dark:ring-amber-500/20 ring-amber-700/40 rounded-md p-4 ml-4 dark:text-amber-600 text-amber-800 ${cardBg}`}
+					>
 						<HeartPulse size={30} />
 						Saludable
 					</div>
-					<p className="text-sm tracking-wider italic text-foreground/60">
+					<p className="text-sm tracking-wider italic text-foreground-soft">
 						Las normas e inspecciones de seguridad e higiene garantizan
 						condiciones de trabajo más saludables, reduciendo la exposición a
 						sustancias peligrosas, ruidos excesivos o malas condiciones
@@ -58,11 +64,13 @@ function Home() {
 				</div>
 
 				<div className="">
-					<div className="shapeLeft flex items-center justify-center flex-col gap-2 bg-accent/50 ring-[1px] dark:ring-amber-500/20 ring-amber-700/40 rounded-md p-4 mr-4 dark:text-amber-600 text-amber-800">
+					<div
+						className={`shapeLeft flex items-center justify-center flex-col gap-2 bg-accent/50 ring-[1px] dark:ring-amber-500/20 ring-amber-700/40 rounded-md p-4 mr-4 dark:text-amber-600 text-amber-800 ${cardBg}`}
+					>
 						<FileCheck size={30} />
 						Cumplir
 					</div>
-					<p className="text-sm tracking-wider italic text-foreground/60">
+					<p className="text-sm tracking-wider italic text-foreground-soft">
 						Los técnicos elaboran informes que ayudan a la empresa a cumplir con
 						las leyes laborales y regulaciones vigentes, evitando multas,
 						sanciones o clausuras. Mantener la documentación actualizada también
@@ -71,11 +79,13 @@ function Home() {
 				</div>
 
 				<div className="">
-					<div className="shapeRight flex items-center justify-center flex-col gap-2 bg-accent/50 ring-[1px] dark:ring-amber-500/20 ring-amber-700/40 rounded-md p-4 ml-4 dark:text-amber-600 text-amber-800">
+					<div
+						className={`shapeRight flex items-center justify-center flex-col gap-2 bg-accent/50 ring-[1px] dark:ring-amber-500/20 ring-amber-700/40 rounded-md p-4 ml-4 dark:text-amber-600 text-amber-800 ${cardBg}`}
+					>
 						<Factory size={30} />
 						Empresa
 					</div>
-					<p className="text-sm tracking-wider italic text-foreground/60">
+					<p className="text-sm tracking-wider italic text-foreground-soft">
 						Un espacio de trabajo seguro y ordenado genera mayor confianza en
 						los empleados, disminuye ausencias por accidentes y mejora el
 						rendimiento general de la empresa. Cuando las personas trabajan en
@@ -85,11 +95,13 @@ function Home() {
 				</div>
 
 				<div className="">
-					<div className="shapeLeft flex items-center justify-center flex-col gap-2 bg-accent/50 ring-[1px] dark:ring-amber-500/20 ring-amber-700/40 rounded-md p-4 mr-4 dark:text-amber-600 text-amber-800">
+					<div
+						className={`shapeLeft flex items-center justify-center flex-col gap-2 bg-accent/50 ring-[1px] dark:ring-amber-500/20 ring-amber-700/40 rounded-md p-4 mr-4 dark:text-amber-600 text-amber-800 ${cardBg}`}
+					>
 						<ClipboardList size={30} />
 						Seguimiento
 					</div>
-					<p className="text-sm tracking-wider italic text-foreground/60">
+					<p className="text-sm tracking-wider italic text-foreground-soft">
 						Los informes técnicos sirven como documentación oficial para
 						controlar riesgos, realizar auditorías y planificar mejoras
 						continuas en seguridad e higiene. Gracias a este seguimiento, la

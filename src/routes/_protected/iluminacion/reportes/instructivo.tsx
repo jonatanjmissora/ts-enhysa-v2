@@ -106,12 +106,12 @@ function RouteComponent() {
 			<BackChevron to={from} />
 			<Title text="Instructivo para elaborar el Informe de Iluminación" />
 
-			<p className="text-muted-foreground leading-relaxed text-center">
+			<p className="text-foreground-soft leading-relaxed text-center">
 				Pasos a seguir para elaborar el Informe de Iluminación, según Decreto
 				351/79 - Anexo IV y Resolución SRT 84/2012.
 			</p>
 
-			<p className="text-muted-foreground leading-relaxed text-center">
+			<p className="text-foreground-soft leading-relaxed text-center">
 				La aplicación puede correr en distintos dispositivos y compartir
 				información entre ellos para el mismo usuario. La finalidad es
 				facilitarle la tarea al especialista para adquirir datos, estructurarlos
@@ -126,7 +126,7 @@ function RouteComponent() {
 						<span className="rounded bg-green-700 flex items-center justify-center font-bold px-3 py-1 w-full sm:w-1/4 mx-auto">
 							Paso {paso.nro}
 						</span>
-						<p className="text-sm text-muted-foreground leading-relaxed text-pretty text-center">
+						<p className="text-sm text-foreground-soft leading-relaxed text-pretty text-center">
 							{paso.texto}
 						</p>
 						{Array.isArray(paso.img) ? (

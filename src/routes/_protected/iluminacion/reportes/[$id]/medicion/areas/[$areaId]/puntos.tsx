@@ -384,7 +384,7 @@ function InputMenu({
 			onSubmit={handleSetPunto}
 			className="min-h-[500px] bg-accent rounded-lg ring-[1px] ring-foreground/15 flex items-center justify-center gap-10 flex-col w-full p-10"
 		>
-			<span className="border-b py-2 border-foreground/50 w-full text-left text-foreground/70">
+			<span className="border-b py-2 border-foreground/50 w-full text-left text-foreground-soft">
 				Punto {actualPunto !== null ? actualPunto + 1 : ""}
 			</span>
 			<Input
@@ -450,7 +450,11 @@ function AreaPuntosList({
 				>
 					<span>punto-{index + 1}</span>
 					<span>{punto === 0 ? "*" : punto}</span>
-					<button type="button" aria-label={`Eliminar punto ${index + 1}`} onClick={() => handleSetPunto(index)}>
+					<button
+						type="button"
+						aria-label={`Eliminar punto ${index + 1}`}
+						onClick={() => handleSetPunto(index)}
+					>
 						<Trash2 className="size-4 cursor-pointer text-red-700/50" />
 					</button>
 				</div>

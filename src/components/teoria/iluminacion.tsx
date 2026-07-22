@@ -1,7 +1,7 @@
 export default function IluminacionContent() {
 	return (
 		<>
-			<p className="text-muted-foreground">
+			<p className="text-foreground-soft">
 				Decreto 351/79 - Anexo IV y Resolución SRT 84/2012. Exigencias mínimas
 				de iluminación en la República Argentina.
 			</p>
@@ -10,7 +10,7 @@ export default function IluminacionContent() {
 				<h2 className="text-xl font-semibold">
 					Niveles Mínimos de Iluminación
 				</h2>
-				<p className="text-sm text-muted-foreground">
+				<p className="text-sm text-foreground-soft">
 					El Decreto 351/79 (Anexo IV) establece los lux mínimos según la
 					dificultad de la tarea visual:
 				</p>
@@ -54,9 +54,9 @@ export default function IluminacionContent() {
 
 			<section className="space-y-4">
 				<h2 className="text-xl font-semibold">Interpretación</h2>
-				<ul className="space-y-3 text-sm">
+				<ul className="space-y-3 text-sm text-foreground-soft">
 					<li className="flex gap-3">
-						<span className="font-mono text-xs font-bold text-muted-foreground shrink-0 mt-0.5">
+						<span className="font-mono text-xs font-bold text-foreground-soft shrink-0 mt-0.5">
 							50 Lux
 						</span>
 						<span>
@@ -65,7 +65,7 @@ export default function IluminacionContent() {
 						</span>
 					</li>
 					<li className="flex gap-3">
-						<span className="font-mono text-xs font-bold text-muted-foreground shrink-0 mt-0.5">
+						<span className="font-mono text-xs font-bold text-foreground-soft shrink-0 mt-0.5">
 							100–200 Lux
 						</span>
 						<span>
@@ -74,7 +74,7 @@ export default function IluminacionContent() {
 						</span>
 					</li>
 					<li className="flex gap-3">
-						<span className="font-mono text-xs font-bold text-muted-foreground shrink-0 mt-0.5">
+						<span className="font-mono text-xs font-bold text-foreground-soft shrink-0 mt-0.5">
 							300 Lux
 						</span>
 						<span>
@@ -84,7 +84,7 @@ export default function IluminacionContent() {
 						</span>
 					</li>
 					<li className="flex gap-3">
-						<span className="font-mono text-xs font-bold text-muted-foreground shrink-0 mt-0.5">
+						<span className="font-mono text-xs font-bold text-foreground-soft shrink-0 mt-0.5">
 							500–1000 Lux
 						</span>
 						<span>
@@ -97,12 +97,12 @@ export default function IluminacionContent() {
 
 			<section className="space-y-4">
 				<h2 className="text-xl font-semibold">Protocolo SRT 84/2012</h2>
-				<p className="text-sm text-muted-foreground">
+				<p className="text-sm text-foreground-soft">
 					La Resolución SRT 84/2012 define el procedimiento obligatorio para la
 					medición y registro de los niveles de iluminación en los
 					establecimientos laborales.
 				</p>
-				<ul className="list-disc list-inside text-sm space-y-1 text-muted-foreground">
+				<ul className="list-disc list-inside text-sm space-y-1 text-foreground-soft">
 					<li>Registro del lux media, uniformidad y factor de mantenimiento</li>
 					<li>Croquis del sector con puntos de medición</li>
 					<li>Datos del instrumento (luxómetro calibrado)</li>

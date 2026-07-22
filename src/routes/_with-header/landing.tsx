@@ -9,7 +9,7 @@ export const Route = createFileRoute("/_with-header/landing")({
 
 function Landing() {
 	return (
-		<div className="text-white font-sans antialiased">
+		<div className="font-sans antialiased">
 			<Hero />
 			<Features />
 			<Modules />
@@ -41,7 +41,7 @@ function Hero() {
 						Digitalizá tus Auditorías de{" "}
 						<span className="text-[#e2711d]">Seguridad e Higiene</span>
 					</h1>
-					<p className="text-[#aaaaaa] mb-8 px-4 sm:px-0 max-w-150 max-md:mx-auto">
+					<p className="text-foreground-soft mb-8 px-4 sm:px-0 max-w-150 max-md:mx-auto">
 						La plataforma técnica definitiva para profesionales en Argentina.
 						Automatizá el cálculo del Índice de Local (K), gestioná tus
 						mediciones con luxómetros y generá protocolos listos para firmar en
@@ -51,7 +51,7 @@ function Hero() {
 						<button
 							type="button"
 							onClick={() => navigate({ to: "/" })}
-							className="bg-[#5cb85c] text-white rounded-md px-7 py-3.5 text-base font-semibold transition-all hover:bg-[#4ca84c] hover:shadow-[0_4px_12px_rgba(92,184,92,0.3)]"
+							className="bg-[#5cb85c] rounded-md px-7 py-3.5 text-base font-semibold transition-all hover:bg-[#4ca84c] hover:shadow-[0_4px_12px_rgba(92,184,92,0.3)]"
 						>
 							{session?.user
 								? "Continuar con la App"
@@ -60,7 +60,7 @@ function Hero() {
 						<button
 							type="button"
 							onClick={scrollToHash("modulos")}
-							className="bg-[#1a1a1a] text-white rounded-md px-7 py-3.5 text-base font-semibold border border-[#333] transition-all hover:bg-[#222]"
+							className="bg-[#1a1a1a] rounded-md px-7 py-3.5 text-base font-semibold border border-[#333] transition-all hover:bg-[#222] text-white/70"
 						>
 							Ver Módulos Técnicos
 						</button>
@@ -114,35 +114,35 @@ function Features() {
 					Diseñado por y para{" "}
 					<span className="text-[#e2711d]">Licenciados en HSE</span>
 				</h2>
-				<p className="text-center text-[#aaaaaa] text-lg mb-12">
+				<p className="text-center text-foreground-soft text-lg mb-12">
 					Olvidate de las planillas de cálculo manuales y la transcripción de
 					datos en la oficina.
 				</p>
 				<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-					<div className="border rounded-xl p-8 border-[#e2711d70] bg-[radial-gradient(ellipse_at_bottom_left,rgba(226,113,29,0.05)_0%,transparent_70%)]">
+					<div className="border rounded-xl p-8 border-[#e2711d70] bg-zinc-300 dark:bg-zinc-900 dark:bg-[radial-gradient(ellipse_at_bottom_left,rgba(226,113,29,0.2)_0%,transparent_70%)] bg-[radial-gradient(ellipse_at_bottom_left,rgba(226,113,29,0.35)_0%,transparent_70%)]">
 						<div className="text-4xl mb-5 text-[#e2711d80]">📊</div>
 						<h3 className="text-xl mb-3">Cálculos Automatizados</h3>
-						<p className="text-[#aaaaaa] text-sm">
+						<p className="text-foreground-soft text-sm">
 							Carga directa de luxes en campo, determinación automática del
 							Índice de Local (K) y verificación inmediata contra los mínimos
 							legales del Dec. 351/79.
 						</p>
 					</div>
-					<div className="border rounded-xl p-8 border-[#5cb85c70] bg-[radial-gradient(ellipse_at_top_left,rgba(92,184,92,0.05)_0%,transparent_70%)]">
+					<div className="border rounded-xl p-8 border-[#5cb85c70] bg-zinc-300 dark:bg-zinc-900 dark:bg-[radial-gradient(ellipse_at_top_left,rgba(92,184,92,0.2)_0%,transparent_70%)] bg-[radial-gradient(ellipse_at_top_left,rgba(92,184,92,0.35)_0%,transparent_70%)]">
 						<div className="text-4xl mb-5 text-[#5cb85c80]">🔒</div>
 						<h3 className="text-xl mb-3">Matrícula y Firma Digital</h3>
-						<p className="text-[#aaaaaa] text-sm">
+						<p className="text-foreground-soft text-sm">
 							Integración directa de tu credencial del Colegio de Profesionales
 							y firma digitalizada para emitir informes listos para auditorías
 							de la SRT.
 						</p>
 					</div>
-					<div className="border rounded-xl p-8 border-[#5197ff70] bg-[radial-gradient(ellipse_at_bottom_left,rgba(81,151,255,0.05)_0%,transparent_70%)]">
+					<div className="border rounded-xl p-8 border-[#5197ff70] bg-zinc-300 dark:bg-zinc-900 dark:bg-[radial-gradient(ellipse_at_bottom_left,rgba(81,151,255,0.2)_0%,transparent_70%)] bg-[radial-gradient(ellipse_at_bottom_left,rgba(81,151,255,0.35)_0%,transparent_70%)]">
 						<div className="text-4xl mb-5" style={{ color: "#5197ff80" }}>
 							📱
 						</div>
 						<h3 className="text-xl mb-3">Uso Off-line en Planta</h3>
-						<p className="text-[#aaaaaa] text-sm">
+						<p className="text-foreground-soft text-sm">
 							Registrá mediciones en sótanos, naves industriales o zonas rurales
 							sin señal. La aplicación sincroniza los datos al recuperar la
 							conexión.
@@ -157,33 +157,33 @@ function Features() {
 function Modules() {
 	const items = [
 		{
-			dot: "bg-[#5cb85c70]",
-			borderColor: "border-[#5cb85c70]",
-			bg: "bg-[radial-gradient(ellipse_at_bottom_left,rgba(92,184,92,0.05)_0%,transparent_65%)]",
+			dot: "bg-[#5cb85c]",
+			borderColor: "border-[#5cb85c90]",
+			bg: "bg-zinc-300 dark:bg-zinc-900 dark:bg-[radial-gradient(ellipse_at_bottom_left,rgba(92,184,92,0.2)_0%,transparent_65%)] bg-[radial-gradient(ellipse_at_bottom_left,rgba(92,184,92,0.35)_0%,transparent_65%)]",
 			title: "Estudio de Iluminación",
 			desc: "Protocolo oficial según Res. 84/2012 SRT. Gestión de luminarias y fuentes mixtas.",
 			t: "iluminacion",
 		},
 		{
-			dot: "bg-[#e2711d70]",
-			borderColor: "border-[#e2711d70]",
-			bg: "bg-[radial-gradient(ellipse_at_bottom_left,rgba(226,113,29,0.05)_0%,transparent_65%)]",
+			dot: "bg-[#e2711d]",
+			borderColor: "border-[#e2711d90]",
+			bg: "bg-zinc-300 dark:bg-zinc-900 dark:bg-[radial-gradient(ellipse_at_bottom_left,rgba(226,113,29,0.2)_0%,transparent_65%)] bg-[radial-gradient(ellipse_at_bottom_left,rgba(226,113,29,0.35)_0%,transparent_65%)]",
 			title: "Estudio de Ruido",
 			desc: "Evaluación de puestos de trabajo conforme a la Res. 85/2012 SRT.",
 			t: "ruido",
 		},
 		{
-			dot: "bg-[#5197ff70]",
-			borderColor: "border-[#5197ff70]",
-			bg: "bg-[radial-gradient(ellipse_at_bottom_left,rgba(81,151,255,0.05)_0%,transparent_65%)]",
+			dot: "bg-[#5197ff]",
+			borderColor: "border-[#5197ff90]",
+			bg: "bg-zinc-300 dark:bg-zinc-900 dark:bg-[radial-gradient(ellipse_at_bottom_left,rgba(81,151,255,0.2)_0%,transparent_65%)] bg-[radial-gradient(ellipse_at_bottom_left,rgba(81,151,255,0.35)_0%,transparent_65%)]",
 			title: "Puesta a Tierra (PAT)",
 			desc: "Verificación de continuidad de masas y resistencia bajo la Res. 900/15 SRT.",
 			t: "pat",
 		},
 		{
-			dot: "bg-[#a551ff70]",
-			borderColor: "border-[#a551ff70]",
-			bg: "bg-[radial-gradient(ellipse_at_bottom_left,rgba(165,81,255,0.05)_0%,transparent_65%)]",
+			dot: "bg-[#a551ff]",
+			borderColor: "border-[#a551ff90]",
+			bg: "bg-zinc-300 dark:bg-zinc-900 dark:bg-[radial-gradient(ellipse_at_bottom_left,rgba(165,81,255,0.2)_0%,transparent_65%)] bg-[radial-gradient(ellipse_at_bottom_left,rgba(165,81,255,0.35)_0%,transparent_65%)]",
 			title: "Control de Extintores",
 			desc: "Seguimiento de carga, vencimientos y pruebas hidráulicas según Dec. 351/79 Cap. 18.",
 			t: "extintores",
@@ -211,7 +211,7 @@ function Modules() {
 							/>
 							<div>
 								<h4 className="text-lg mb-1">{item.title}</h4>
-								<p className="text-[#aaaaaa] text-sm">{item.desc}</p>
+								<p className="text-foreground-soft text-sm">{item.desc}</p>
 							</div>
 						</Link>
 					))}
@@ -228,7 +228,7 @@ function CtaSection() {
 				<h2 className="text-2xl md:text-4xl text-pretty  mb-4 font-semibold">
 					Jerarquiza tu servicio técnico hoy mismo
 				</h2>
-				<p className="text-[#aaaaaa] mb-10">
+				<p className="text-foreground-soft mb-10">
 					Unite a los profesionales de Higiene y Seguridad que ya digitalizaron
 					sus auditorías con EnHySa App.
 				</p>
@@ -242,7 +242,7 @@ function CtaSection() {
 
 function Footer() {
 	return (
-		<footer className="py-8 px-5 border-t border-[#2c2c2c] text-center text-sm text-[#aaaaaa]">
+		<footer className="py-8 px-5 border-t border-[#2c2c2c] text-center text-sm text-foreground-soft">
 			<div className="w-full sm:max-w-5xl 2xl:max-w-7xl sm:mx-auto">
 				&copy; 2026 EnHySa Consultora. Todos los derechos reservados.
 				Desarrollado conforme a normativas de la Superintendencia de Riesgos del

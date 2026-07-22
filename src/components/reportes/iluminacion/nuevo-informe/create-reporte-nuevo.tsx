@@ -74,7 +74,9 @@ function ReporteNuevoForm() {
 		},
 		onSubmit: async ({ value }) => {
 			if (!tecnico || !empresas || !instrumentos) return
-			const tecnicoData = Array.isArray(tecnico) ? tecnico[0] ?? null : tecnico
+			const tecnicoData = Array.isArray(tecnico)
+				? (tecnico[0] ?? null)
+				: tecnico
 			if (!tecnicoData) return
 
 			const title = getTitle(value.empresaId, empresas)
@@ -100,7 +102,7 @@ function ReporteNuevoForm() {
 	if (!tecnico || !empresas?.length || !instrumentos?.length)
 		return (
 			<article className="w-full flex flex-col justify-center items-center min-h-[30svh] gap-10">
-				<span className="text-foreground/50 text-sm italic text-center w-5/6 mx-auto">
+				<span className="text-foreground-soft text-sm italic text-center w-5/6 mx-auto">
 					Debe completar los datos del técnico, empresa o instrumento en su
 					perfil primero.
 				</span>
