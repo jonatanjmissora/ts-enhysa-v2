@@ -45,7 +45,9 @@ function RouteComponent() {
 						Empresarial? Checkea los beneficios de subir de plan.
 					</p>
 				</div>
-				<SuscriptionPlans from={from} />
+				<div className="w-11/12 sm:w-full">
+					<SuscriptionPlans from={from} />
+				</div>
 			</div>
 		</div>
 	)

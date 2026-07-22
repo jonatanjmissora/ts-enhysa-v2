@@ -1,7 +1,7 @@
 import { Button } from "#/components/ui/button"
 import { useSuspenseQuery } from "@tanstack/react-query"
 import { Link } from "@tanstack/react-router"
-import { Clock, FileChartColumn } from "lucide-react"
+import { FileChartColumn, FileClock, FileLock } from "lucide-react"
 import { Suspense } from "react"
 import { reportesQueryOptions } from "../../../../queries/reportes/iluminacion/reportes-query"
 import type { ReporteIluminacionType } from "../../../../db/reportes/iluminacion/schema"
@@ -52,10 +52,12 @@ function Reportes() {
 						className="p-4 bg-accent rounded-lg ring-[1px] dark:ring-foreground/15 ring-foreground/50 justify-between w-full"
 					>
 						<div className="flex gap-4 items-center">
-							{reporte.finishedAt ? (
-								<FileChartColumn className="size-8 text-blue-600" />
+							{!reporte.finishedAt ? (
+								<FileClock className="size-8 text-amber-600" />
+							) : !reporte.creditConsumed ? (
+								<FileLock className="size-8 text-yellow-600" />
 							) : (
-								<Clock className="size-8 text-amber-600" />
+								<FileChartColumn className="size-8 text-blue-600" />
 							)}
 							<div className="flex flex-col gap-1">
 								<span className="textM font-semibold w-60 truncate">

@@ -13,7 +13,7 @@ function RouteComponent() {
 		activeForm === "login" ? "translate-x-[0px]" : "-translate-x-1/2"
 
 	return (
-		<section className="w-screen flex-1 overflow-hidden">
+		<section className="w-screen flex-1 overflow-hidden relative">
 			<section
 				className={`${authPosition} w-[200dvw] sm:max-w-510 2xl:max-w-640 flex items-center justify-between gap-10 relative transition-transform duration-500`}
 			>
@@ -24,6 +24,11 @@ function RouteComponent() {
 					<RegisterForm setActiveForm={setActiveForm} />
 				</div>
 			</section>
+			<img
+				src="/EnHySa_logo.webp"
+				alt="logo EnHySa"
+				className="absolute -bottom-20 -right-20 size-80 -rotate-15 dark:opacity-20 opacity-70 -z-10 object-cover"
+			/>
 		</section>
 	)
 }

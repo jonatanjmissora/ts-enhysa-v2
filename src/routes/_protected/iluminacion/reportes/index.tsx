@@ -6,11 +6,12 @@ import { createFileRoute, Link } from "@tanstack/react-router"
 import { Suspense, useState } from "react"
 import { reportesQueryOptions } from "../../../../../queries/reportes/iluminacion/reportes-query"
 import {
-	Clock,
+	FileClock,
 	ChevronRight,
 	FileChartColumn,
 	Filter,
 	FilterX,
+	FileLock,
 } from "lucide-react"
 import { Button } from "#/components/ui/button"
 import type { ReporteIluminacionType } from "../../../../../db/reportes/iluminacion/schema"
@@ -267,10 +268,12 @@ function ReportesList({
 						className="px-2 py-4 rounded-lg ring-[1px] dark:ring-foreground/10 ring-foreground/50 bg-accent flex justify-between w-full"
 					>
 						<div className="flex gap-2 items-center">
-							{reporte.finishedAt ? (
-								<FileChartColumn className="size-8 text-blue-600" />
+							{!reporte.finishedAt ? (
+								<FileClock className="size-8 text-amber-600" />
+							) : !reporte.creditConsumed ? (
+								<FileLock className="size-8 text-yellow-600" />
 							) : (
-								<Clock className="size-8 text-amber-600" />
+								<FileChartColumn className="size-8 text-blue-600" />
 							)}
 							<div className="flex flex-col gap-0">
 								<span className="text-base font-semibold w-55 truncate">

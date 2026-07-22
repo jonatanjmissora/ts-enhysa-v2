@@ -82,9 +82,6 @@ export function LoginForm({
 
 	return (
 		<div className={cn("w-90 relative", className)} {...props}>
-			{/*<div className="absolute top-4 left-4 right-4">
-				 <PreferencesMenu /> 
-			</div>*/}
 			<div className="w-11/12 mx-auto">
 				<CardHeader className="text-center">
 					<CardTitle className="hidden sm:block text-xl">

@@ -1,3 +1,4 @@
+import BackChevron from "#/components/back-chevron"
 import InformesRecientes from "#/components/reportes/iluminacion/recientes"
 import { createFileRoute, Link } from "@tanstack/react-router"
 import {
@@ -16,7 +17,8 @@ export const Route = createFileRoute("/_protected/iluminacion/")({
 function RouteComponent() {
 	const id = crypto.randomUUID().toString()
 	return (
-		<article className="w-full sm:max-w-5xl 2xl:max-w-7xl sm:mx-auto min-h-svh flex flex-col items-center justify-center gap-10">
+		<article className="w-full sm:max-w-5xl 2xl:max-w-7xl sm:mx-auto min-h-svh flex flex-col items-center justify-center gap-10 relative">
+			<BackChevron to="/" />
 			<div className="flex justify-between items-center flex-col mt-[70px] sm:mt-10 h-[550px] sm:h-[450px] relative overflow-visible px-6 sm:w-2/3 mx-auto">
 				<p className="text-[26px] text-center tracking-wider text-pretty px-0">
 					Informes de iluminación SRT 84/12.
