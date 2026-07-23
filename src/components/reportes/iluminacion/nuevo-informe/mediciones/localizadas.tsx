@@ -21,8 +21,10 @@ import { useState } from "react"
 import DeleteLocalizadaAlert from "./delete-localizada"
 import { localizadasQueryOptions } from "../../../../../../queries/reportes/iluminacion/localizadas/localizadas-query"
 import type { LocalizadaIluminacionType } from "../../../../../../db/reportes/iluminacion/localizadas/schema"
+import { reporteQueryOptions } from "../../../../../../queries/reportes/iluminacion/reportes-query"
 
 export default function Localizadas({ id }: { id: string }) {
+	const { data: reporte } = useSuspenseQuery(reporteQueryOptions({ id }))
 	const { data: localizadas } = useSuspenseQuery(
 		localizadasQueryOptions({ reportId: id })
 	)
@@ -66,18 +68,20 @@ export default function Localizadas({ id }: { id: string }) {
 					))}
 				</Accordion>
 
-				<Link
-					to="/iluminacion/reportes/$id/medicion/localizadas/$localizadaId/create-localizada"
-					params={{
-						id,
-						localizadaId,
-					}}
-					className="flex justify-center items-center w-full"
-				>
-					<Button className="w-1/2 min-w-40 sm:w-1/6 mx-auto py-5 bg-primary ring-foreground/25">
-						+ Crear localizada
-					</Button>
-				</Link>
+				{!reporte?.creditConsumed && (
+					<Link
+						to="/iluminacion/reportes/$id/medicion/localizadas/$localizadaId/create-localizada"
+						params={{
+							id,
+							localizadaId,
+						}}
+						className="flex justify-center items-center w-full"
+					>
+						<Button className="w-1/2 min-w-40 sm:w-1/6 mx-auto py-5 bg-primary ring-foreground/25">
+							+ Crear localizada
+						</Button>
+					</Link>
+				)}
 			</div>
 		</div>
 	)
@@ -90,11 +94,14 @@ function Localizada({
 	id: string
 	localizada: LocalizadaIluminacionType
 }) {
+	const { data: reporte } = useSuspenseQuery(reporteQueryOptions({ id }))
 	return (
 		<div className="w-full mx-auto rounded-lg border-0 bg-accent sm:bg-background flex flex-col justify-center items-center p-0 py-10 pt-30 relative">
-			<div className="absolute top-10 left-4">
-				<LocalizadaDropdownMenu localizada={localizada} id={id} />
-			</div>
+			{!reporte?.creditConsumed && (
+				<div className="absolute top-10 left-4">
+					<LocalizadaDropdownMenu localizada={localizada} id={id} />
+				</div>
+			)}
 
 			<div className="w-5/6 grid grid-cols-2 gap-3 border-b border-foreground/10 pb-2">
 				<Label className="textL text-sm place-content-end text-amber-700">
@@ -200,7 +207,6 @@ export function LocalizadaDropdownMenu({
 			</DropdownMenuTrigger>
 			<DropdownMenuContent className="p-6" align="end">
 				<DropdownMenuGroup className="flex flex-col bg-accent ring-[1px] ring-foreground/20 rounded-lg p-2">
-					{/* <EditAreaAlert area={area} setIsMenuOpen={setIsMenuOpen} /> */}
 					<Link
 						to={
 							"/iluminacion/reportes/$id/medicion/localizadas/$localizadaId/edit-localizada"

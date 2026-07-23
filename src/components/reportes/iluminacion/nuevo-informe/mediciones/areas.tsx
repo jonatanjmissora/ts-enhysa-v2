@@ -21,6 +21,7 @@ import {
 	DropdownMenuTrigger,
 } from "#/components/ui/dropdown-menu"
 import DeleteAreaAlert from "./delete-area"
+import { reporteQueryOptions } from "../../../../../../queries/reportes/iluminacion/reportes-query"
 
 // Lazy‑load the heavy chart component
 const ChartAreaInteractive = lazy(() =>
@@ -31,6 +32,7 @@ const ChartAreaInteractive = lazy(() =>
 
 export default function Areas({ id }: { id: string }) {
 	const { data: areas } = useSuspenseQuery(areasQueryOptions({ reportId: id }))
+	const { data: reporte } = useSuspenseQuery(reporteQueryOptions({ id }))
 
 	if (!areas || areas.length === 0) return <NoAreas id={id} />
 
@@ -71,25 +73,27 @@ export default function Areas({ id }: { id: string }) {
 					))}
 				</Accordion>
 
-				{/* <CreateAreaAlert /> */}
-				<Link
-					to="/iluminacion/reportes/$id/medicion/areas/$areaId/create-area"
-					params={{
-						id,
-						areaId,
-					}}
-					className="flex justify-center items-center w-full"
-				>
-					<Button className="w-1/2 min-w-40 sm:w-1/6 mx-auto py-5 bg-primary ring-foreground/25">
-						+ Crear area
-					</Button>
-				</Link>
+				{!reporte?.creditConsumed && (
+					<Link
+						to="/iluminacion/reportes/$id/medicion/areas/$areaId/create-area"
+						params={{
+							id,
+							areaId,
+						}}
+						className="flex justify-center items-center w-full"
+					>
+						<Button className="w-1/2 min-w-40 sm:w-1/6 mx-auto py-5 bg-primary ring-foreground/25">
+							+ Crear area
+						</Button>
+					</Link>
+				)}
 			</div>
 		</div>
 	)
 }
 
 function Area({ area, id }: { area: AreaIluminacionType; id: string }) {
+	const { data: reporte } = useSuspenseQuery(reporteQueryOptions({ id }))
 	const celdasMedidas = area.puntos.filter(punto => punto > 0)
 	const uniformidad = Math.ceil(
 		celdasMedidas.reduce((acc, valor) => acc + valor, 0) /
@@ -99,9 +103,11 @@ function Area({ area, id }: { area: AreaIluminacionType; id: string }) {
 
 	return (
 		<div className="w-full mx-auto rounded-lg border-0 bg-accent sm:bg-background flex flex-col justify-center items-center p-0 py-10 pt-30 relative">
-			<div className="absolute top-10 left-4">
-				<AreaDropdownMenu area={area} id={id} />
-			</div>
+			{!reporte?.creditConsumed && (
+				<div className="absolute top-10 left-4">
+					<AreaDropdownMenu area={area} id={id} />
+				</div>
+			)}
 
 			<div className="w-5/6 grid grid-cols-2 gap-3 border-b border-foreground/10 pb-2">
 				<Label className="textL text-sm place-content-end text-amber-700">

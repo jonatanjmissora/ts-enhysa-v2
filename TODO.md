@@ -44,15 +44,16 @@ mandra hacer:
 
 
 kato hacer:
-	V agregar contactos para los no demo users. (pedir email a mandra)
-	X cambiar logica de negocios. creditConsumed == true, no se puede modificar nada del informe.
-	V candado en el icono de informes para los que informes bloqueados.
-	V modificar imagen y texto para los informes con candado
-	V logo de EnHySa en el login / register.
-	V cambiar los botones de "Prueba Gratis", "Ingresar", "Tengo mi Cuenta" por la de "Continuar con la App", "Ir a mi App", "Continuar con mi cuenta" si es que estoy logueado.
-	V mejorar tema claro.
-	X mercadopago.
-	X demo user no puede comprar creditos.
+	✅ agregar contactos para pie de pagina. (pedir email a mandra)
+	✅ cambiar logica de negocios, no se puede modificar nada del informe, si esta desbloqueado (sin candado).
+	✅ candado en el icono de informes para los que informes bloqueados.
+	✅ modificar imagen y texto para los informes con candado en el instructivo del "Mi primer Informe".
+	✅ logo de EnHySa en el login / register.
+	✅ cambiar los botones de "Prueba Gratis", "Ingresar", "Tengo mi Cuenta" por la de "Continuar con la App", "Ir a mi App", "Continuar con mi cuenta" si es que ya estoy logueado.
+	✅ mejorar tema claro. Habia texto ilegible.
+	✅ graficos en la seccion de "areas" de los informes.
+	❌ mercadopago.
+	❌ demo user no puede comprar creditos, debe cambiar a usuario real.
 
 	evaluar el "volver" de las /landing cuando vuelvo de Terminos de uso", que me tiraba error.
 	evaluar el call back de google account para produccion.

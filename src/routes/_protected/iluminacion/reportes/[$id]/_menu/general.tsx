@@ -61,7 +61,7 @@ function General() {
 	return (
 		<article className="min-h-screen w-5/6 mx-auto flex flex-col gap-10 tracking-wider my-14 relative">
 			<div className="absolute top-0 left-0">
-				<ReporteDropdownMenu reporte={reporte} />
+				{!reporte.creditConsumed && <ReporteDropdownMenu reporte={reporte} />}
 			</div>
 			<div className="grid grid-cols-2 gap-2">
 				<Title text="Empresa" className="col-span-2" />
@@ -190,16 +190,6 @@ function ReporteDropdownMenu({ reporte }: { reporte: ReporteIluminacionType }) {
 			<DropdownMenuContent className="p-6" align="end">
 				<DropdownMenuGroup className="flex flex-col bg-accent ring-[1px] ring-foreground/20 rounded-lg p-2">
 					<EditReporteGeneral reporte={reporte} setIsMenuOpen={setIsMenuOpen} />
-					{/* <Link
-						to={"/iluminacion/reportes/$id/solo/edit-general"}
-						params={{
-							id: reporte.id,
-						}}
-						className="flex justify-center items-center gap-4 p-4 hover:bg-background rounded-lg"
-					>
-						<Edit className="size-3" />
-						Editar
-					</Link> */}
 					<DropdownMenuSeparator className="bg-foreground/20 w-5/6 mx-auto" />
 					<DeleteReporte reporte={reporte} setIsMenuOpen={setIsMenuOpen} />
 				</DropdownMenuGroup>

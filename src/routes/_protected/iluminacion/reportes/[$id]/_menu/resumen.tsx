@@ -73,9 +73,11 @@ function Resumen() {
 
 	return (
 		<article className="min-h-screen w-5/6 mx-auto flex flex-col gap-14 py-15 tracking-wider relative">
-			<div className="absolute top-14 left-0">
-				<ResumenDropdownMenu reporte={reporte} />
-			</div>
+			{!reporte.creditConsumed && (
+				<div className="absolute top-14 left-0">
+					<ResumenDropdownMenu reporte={reporte} />
+				</div>
+			)}
 			<div className="flex flex-col justify-center items-center gap-3">
 				<Title text="Conclusiones Finales" className="text-amber-700" />
 				<span className="text-xs text-pretty italic">
