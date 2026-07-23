@@ -56,10 +56,15 @@ export const Route = createFileRoute(
 
 function RouteComponent() {
 	useScrollTop()
-	const params = Route.useParams()
+	const { id } = Route.useParams()
+	const { data: reporte } = useSuspenseQuery(reporteQueryOptions({ id }))
+	if (!reporte) return <span>El reporte no existe</span>
+	let returnWhere = "medicion"
+	if (reporte.finishedAt) returnWhere = "medicion2"
+
 	return (
 		<article className="w-full min-h-svh flex flex-col items-center gap-0 relative mb-60">
-			<BackChevron to="/iluminacion/reportes/$id/medicion" params={params} />
+			<BackChevron to={`/iluminacion/reportes/$id/${returnWhere}`} />
 			<Title text="Nueva Area" className="mt-15" />
 			<Suspense
 				fallback={
@@ -84,6 +89,9 @@ function CreateArea() {
 	// Pass medicionTipo where needed (example: include in navigation or API calls)
 	const { mutateAsync: createArea, isPending, error } = useCreateArea()
 
+	let returnWhere = "medicion"
+	if (reporte?.finishedAt) returnWhere = "medicion2"
+
 	const form = useForm({
 		defaultValues: defaultAreaData,
 		validators: {
@@ -104,7 +112,7 @@ function CreateArea() {
 			}
 			console.log("Área creada exitosamente")
 			navigate({
-				to: `/iluminacion/reportes/$id/medicion/areas/$areaId/puntos`,
+				to: `/iluminacion/reportes/$id/${returnWhere}`,
 				params: {
 					id,
 					areaId: newArea.id,
@@ -384,7 +392,6 @@ function CreateArea() {
 							/>
 						)}
 					</form.Field>
-
 
 					<form.Field
 						name="observaciones"

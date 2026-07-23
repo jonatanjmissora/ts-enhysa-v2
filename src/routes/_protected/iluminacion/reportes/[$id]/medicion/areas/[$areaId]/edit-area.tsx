@@ -54,9 +54,14 @@ export const Route = createFileRoute(
 
 function RouteComponent() {
 	useScrollTop()
+	const { id } = Route.useParams()
+	const { data: reporte } = useSuspenseQuery(reporteQueryOptions({ id }))
+	if (!reporte) return <span>El reporte no existe</span>
+	let returnWhere = "medicion"
+	if (reporte.finishedAt) returnWhere = "medicion2"
 	return (
 		<article className="w-full min-h-svh flex flex-col items-center gap-0 relative mb-60">
-			<BackChevron to="/iluminacion/reportes/$id/medicion" />
+			<BackChevron to={`/iluminacion/reportes/$id/${returnWhere}`} />
 			<Title text="Editar Area" className="mt-15" />
 			<Suspense
 				fallback={
@@ -82,10 +87,14 @@ function EditAreaData() {
 }
 
 import { ValorRequeridoField } from "#/components/reportes/iluminacion/valor-requerido-field"
+import { reporteQueryOptions } from "../../../../../../../../../queries/reportes/iluminacion/reportes-query"
 
 function EditArea({ id, area }: { id: string; area: AreaIluminacionType }) {
+	const { data: reporte } = useSuspenseQuery(reporteQueryOptions({ id }))
 	const [planoFiles, setPlanoFiles] = useState<string[]>(area.imagenes || [])
 	const navigate = Route.useNavigate()
+	let returnWhere = "medicion"
+	if (reporte?.finishedAt) returnWhere = "medicion2"
 
 	const { mutateAsync: updateArea, isPending, error } = useUpdateArea()
 
@@ -99,7 +108,7 @@ function EditArea({ id, area }: { id: string; area: AreaIluminacionType }) {
 		onSubmit: async ({ value }) => {
 			if (checkAreaGeneralDifferences(value, planoFiles, area)) {
 				return navigate({
-					to: "/iluminacion/reportes/$id/medicion/areas/$areaId/puntos",
+					to: `/iluminacion/reportes/$id/${returnWhere}`,
 					params: {
 						id: id,
 					},
@@ -118,7 +127,7 @@ function EditArea({ id, area }: { id: string; area: AreaIluminacionType }) {
 			}
 			console.log("Area actualizada exitosamente")
 			navigate({
-				to: "/iluminacion/reportes/$id/medicion/areas/$areaId/puntos",
+				to: `/iluminacion/reportes/$id/${returnWhere}`,
 				params: {
 					id: id,
 				},

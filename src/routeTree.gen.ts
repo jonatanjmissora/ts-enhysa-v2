@@ -49,9 +49,6 @@ import { Route as ProtectedIluminacionReportesChar91idChar93MedicionLocalizadasC
 import { Route as ProtectedIluminacionReportesChar91idChar93MedicionAreasChar91areaIdChar93PuntosRouteImport } from './routes/_protected/iluminacion/reportes/[$id]/medicion/areas/[$areaId]/puntos'
 import { Route as ProtectedIluminacionReportesChar91idChar93MedicionAreasChar91areaIdChar93EditAreaRouteImport } from './routes/_protected/iluminacion/reportes/[$id]/medicion/areas/[$areaId]/edit-area'
 import { Route as ProtectedIluminacionReportesChar91idChar93MedicionAreasChar91areaIdChar93CreateAreaRouteImport } from './routes/_protected/iluminacion/reportes/[$id]/medicion/areas/[$areaId]/create-area'
-import { Route as ProtectedIluminacionReportesChar91idChar93MedicionAreasChar91areaIdChar93SoloPuntosRouteImport } from './routes/_protected/iluminacion/reportes/[$id]/medicion/areas/[$areaId]/solo.puntos'
-import { Route as ProtectedIluminacionReportesChar91idChar93MedicionAreasChar91areaIdChar93SoloEditAreaRouteImport } from './routes/_protected/iluminacion/reportes/[$id]/medicion/areas/[$areaId]/solo.edit-area'
-import { Route as ProtectedIluminacionReportesChar91idChar93MedicionAreasChar91areaIdChar93SoloCreateAreaRouteImport } from './routes/_protected/iluminacion/reportes/[$id]/medicion/areas/[$areaId]/solo.create-area'
 
 const WithHeaderRouteRoute = WithHeaderRouteRouteImport.update({
   id: '/_with-header',
@@ -302,30 +299,6 @@ const ProtectedIluminacionReportesChar91idChar93MedicionAreasChar91areaIdChar93C
       getParentRoute: () => ProtectedRouteRoute,
     } as any,
   )
-const ProtectedIluminacionReportesChar91idChar93MedicionAreasChar91areaIdChar93SoloPuntosRoute =
-  ProtectedIluminacionReportesChar91idChar93MedicionAreasChar91areaIdChar93SoloPuntosRouteImport.update(
-    {
-      id: '/iluminacion/reportes/$id/medicion/areas/$areaId/solo/puntos',
-      path: '/iluminacion/reportes/$id/medicion/areas/$areaId/solo/puntos',
-      getParentRoute: () => ProtectedRouteRoute,
-    } as any,
-  )
-const ProtectedIluminacionReportesChar91idChar93MedicionAreasChar91areaIdChar93SoloEditAreaRoute =
-  ProtectedIluminacionReportesChar91idChar93MedicionAreasChar91areaIdChar93SoloEditAreaRouteImport.update(
-    {
-      id: '/iluminacion/reportes/$id/medicion/areas/$areaId/solo/edit-area',
-      path: '/iluminacion/reportes/$id/medicion/areas/$areaId/solo/edit-area',
-      getParentRoute: () => ProtectedRouteRoute,
-    } as any,
-  )
-const ProtectedIluminacionReportesChar91idChar93MedicionAreasChar91areaIdChar93SoloCreateAreaRoute =
-  ProtectedIluminacionReportesChar91idChar93MedicionAreasChar91areaIdChar93SoloCreateAreaRouteImport.update(
-    {
-      id: '/iluminacion/reportes/$id/medicion/areas/$areaId/solo/create-area',
-      path: '/iluminacion/reportes/$id/medicion/areas/$areaId/solo/create-area',
-      getParentRoute: () => ProtectedRouteRoute,
-    } as any,
-  )
 
 export interface FileRoutesByFullPath {
   '/': typeof ProtectedIndexRoute
@@ -366,9 +339,6 @@ export interface FileRoutesByFullPath {
   '/iluminacion/reportes/$id/medicion/areas/$areaId/puntos': typeof ProtectedIluminacionReportesChar91idChar93MedicionAreasChar91areaIdChar93PuntosRoute
   '/iluminacion/reportes/$id/medicion/localizadas/$localizadaId/create-localizada': typeof ProtectedIluminacionReportesChar91idChar93MedicionLocalizadasChar91localizadaIdChar93CreateLocalizadaRoute
   '/iluminacion/reportes/$id/medicion/localizadas/$localizadaId/edit-localizada': typeof ProtectedIluminacionReportesChar91idChar93MedicionLocalizadasChar91localizadaIdChar93EditLocalizadaRoute
-  '/iluminacion/reportes/$id/medicion/areas/$areaId/solo/create-area': typeof ProtectedIluminacionReportesChar91idChar93MedicionAreasChar91areaIdChar93SoloCreateAreaRoute
-  '/iluminacion/reportes/$id/medicion/areas/$areaId/solo/edit-area': typeof ProtectedIluminacionReportesChar91idChar93MedicionAreasChar91areaIdChar93SoloEditAreaRoute
-  '/iluminacion/reportes/$id/medicion/areas/$areaId/solo/puntos': typeof ProtectedIluminacionReportesChar91idChar93MedicionAreasChar91areaIdChar93SoloPuntosRoute
 }
 export interface FileRoutesByTo {
   '/': typeof ProtectedIndexRoute
@@ -409,9 +379,6 @@ export interface FileRoutesByTo {
   '/iluminacion/reportes/$id/medicion/areas/$areaId/puntos': typeof ProtectedIluminacionReportesChar91idChar93MedicionAreasChar91areaIdChar93PuntosRoute
   '/iluminacion/reportes/$id/medicion/localizadas/$localizadaId/create-localizada': typeof ProtectedIluminacionReportesChar91idChar93MedicionLocalizadasChar91localizadaIdChar93CreateLocalizadaRoute
   '/iluminacion/reportes/$id/medicion/localizadas/$localizadaId/edit-localizada': typeof ProtectedIluminacionReportesChar91idChar93MedicionLocalizadasChar91localizadaIdChar93EditLocalizadaRoute
-  '/iluminacion/reportes/$id/medicion/areas/$areaId/solo/create-area': typeof ProtectedIluminacionReportesChar91idChar93MedicionAreasChar91areaIdChar93SoloCreateAreaRoute
-  '/iluminacion/reportes/$id/medicion/areas/$areaId/solo/edit-area': typeof ProtectedIluminacionReportesChar91idChar93MedicionAreasChar91areaIdChar93SoloEditAreaRoute
-  '/iluminacion/reportes/$id/medicion/areas/$areaId/solo/puntos': typeof ProtectedIluminacionReportesChar91idChar93MedicionAreasChar91areaIdChar93SoloPuntosRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -455,9 +422,6 @@ export interface FileRoutesById {
   '/_protected/iluminacion/reportes/$id/medicion/areas/$areaId/puntos': typeof ProtectedIluminacionReportesChar91idChar93MedicionAreasChar91areaIdChar93PuntosRoute
   '/_protected/iluminacion/reportes/$id/medicion/localizadas/$localizadaId/create-localizada': typeof ProtectedIluminacionReportesChar91idChar93MedicionLocalizadasChar91localizadaIdChar93CreateLocalizadaRoute
   '/_protected/iluminacion/reportes/$id/medicion/localizadas/$localizadaId/edit-localizada': typeof ProtectedIluminacionReportesChar91idChar93MedicionLocalizadasChar91localizadaIdChar93EditLocalizadaRoute
-  '/_protected/iluminacion/reportes/$id/medicion/areas/$areaId/solo/create-area': typeof ProtectedIluminacionReportesChar91idChar93MedicionAreasChar91areaIdChar93SoloCreateAreaRoute
-  '/_protected/iluminacion/reportes/$id/medicion/areas/$areaId/solo/edit-area': typeof ProtectedIluminacionReportesChar91idChar93MedicionAreasChar91areaIdChar93SoloEditAreaRoute
-  '/_protected/iluminacion/reportes/$id/medicion/areas/$areaId/solo/puntos': typeof ProtectedIluminacionReportesChar91idChar93MedicionAreasChar91areaIdChar93SoloPuntosRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -500,9 +464,6 @@ export interface FileRouteTypes {
     | '/iluminacion/reportes/$id/medicion/areas/$areaId/puntos'
     | '/iluminacion/reportes/$id/medicion/localizadas/$localizadaId/create-localizada'
     | '/iluminacion/reportes/$id/medicion/localizadas/$localizadaId/edit-localizada'
-    | '/iluminacion/reportes/$id/medicion/areas/$areaId/solo/create-area'
-    | '/iluminacion/reportes/$id/medicion/areas/$areaId/solo/edit-area'
-    | '/iluminacion/reportes/$id/medicion/areas/$areaId/solo/puntos'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -543,9 +504,6 @@ export interface FileRouteTypes {
     | '/iluminacion/reportes/$id/medicion/areas/$areaId/puntos'
     | '/iluminacion/reportes/$id/medicion/localizadas/$localizadaId/create-localizada'
     | '/iluminacion/reportes/$id/medicion/localizadas/$localizadaId/edit-localizada'
-    | '/iluminacion/reportes/$id/medicion/areas/$areaId/solo/create-area'
-    | '/iluminacion/reportes/$id/medicion/areas/$areaId/solo/edit-area'
-    | '/iluminacion/reportes/$id/medicion/areas/$areaId/solo/puntos'
   id:
     | '__root__'
     | '/_protected'
@@ -588,9 +546,6 @@ export interface FileRouteTypes {
     | '/_protected/iluminacion/reportes/$id/medicion/areas/$areaId/puntos'
     | '/_protected/iluminacion/reportes/$id/medicion/localizadas/$localizadaId/create-localizada'
     | '/_protected/iluminacion/reportes/$id/medicion/localizadas/$localizadaId/edit-localizada'
-    | '/_protected/iluminacion/reportes/$id/medicion/areas/$areaId/solo/create-area'
-    | '/_protected/iluminacion/reportes/$id/medicion/areas/$areaId/solo/edit-area'
-    | '/_protected/iluminacion/reportes/$id/medicion/areas/$areaId/solo/puntos'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -882,27 +837,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProtectedIluminacionReportesChar91idChar93MedicionAreasChar91areaIdChar93CreateAreaRouteImport
       parentRoute: typeof ProtectedRouteRoute
     }
-    '/_protected/iluminacion/reportes/$id/medicion/areas/$areaId/solo/puntos': {
-      id: '/_protected/iluminacion/reportes/$id/medicion/areas/$areaId/solo/puntos'
-      path: '/iluminacion/reportes/$id/medicion/areas/$areaId/solo/puntos'
-      fullPath: '/iluminacion/reportes/$id/medicion/areas/$areaId/solo/puntos'
-      preLoaderRoute: typeof ProtectedIluminacionReportesChar91idChar93MedicionAreasChar91areaIdChar93SoloPuntosRouteImport
-      parentRoute: typeof ProtectedRouteRoute
-    }
-    '/_protected/iluminacion/reportes/$id/medicion/areas/$areaId/solo/edit-area': {
-      id: '/_protected/iluminacion/reportes/$id/medicion/areas/$areaId/solo/edit-area'
-      path: '/iluminacion/reportes/$id/medicion/areas/$areaId/solo/edit-area'
-      fullPath: '/iluminacion/reportes/$id/medicion/areas/$areaId/solo/edit-area'
-      preLoaderRoute: typeof ProtectedIluminacionReportesChar91idChar93MedicionAreasChar91areaIdChar93SoloEditAreaRouteImport
-      parentRoute: typeof ProtectedRouteRoute
-    }
-    '/_protected/iluminacion/reportes/$id/medicion/areas/$areaId/solo/create-area': {
-      id: '/_protected/iluminacion/reportes/$id/medicion/areas/$areaId/solo/create-area'
-      path: '/iluminacion/reportes/$id/medicion/areas/$areaId/solo/create-area'
-      fullPath: '/iluminacion/reportes/$id/medicion/areas/$areaId/solo/create-area'
-      preLoaderRoute: typeof ProtectedIluminacionReportesChar91idChar93MedicionAreasChar91areaIdChar93SoloCreateAreaRouteImport
-      parentRoute: typeof ProtectedRouteRoute
-    }
   }
 }
 
@@ -972,9 +906,6 @@ interface ProtectedRouteRouteChildren {
   ProtectedIluminacionReportesChar91idChar93MedicionAreasChar91areaIdChar93PuntosRoute: typeof ProtectedIluminacionReportesChar91idChar93MedicionAreasChar91areaIdChar93PuntosRoute
   ProtectedIluminacionReportesChar91idChar93MedicionLocalizadasChar91localizadaIdChar93CreateLocalizadaRoute: typeof ProtectedIluminacionReportesChar91idChar93MedicionLocalizadasChar91localizadaIdChar93CreateLocalizadaRoute
   ProtectedIluminacionReportesChar91idChar93MedicionLocalizadasChar91localizadaIdChar93EditLocalizadaRoute: typeof ProtectedIluminacionReportesChar91idChar93MedicionLocalizadasChar91localizadaIdChar93EditLocalizadaRoute
-  ProtectedIluminacionReportesChar91idChar93MedicionAreasChar91areaIdChar93SoloCreateAreaRoute: typeof ProtectedIluminacionReportesChar91idChar93MedicionAreasChar91areaIdChar93SoloCreateAreaRoute
-  ProtectedIluminacionReportesChar91idChar93MedicionAreasChar91areaIdChar93SoloEditAreaRoute: typeof ProtectedIluminacionReportesChar91idChar93MedicionAreasChar91areaIdChar93SoloEditAreaRoute
-  ProtectedIluminacionReportesChar91idChar93MedicionAreasChar91areaIdChar93SoloPuntosRoute: typeof ProtectedIluminacionReportesChar91idChar93MedicionAreasChar91areaIdChar93SoloPuntosRoute
 }
 
 const ProtectedRouteRouteChildren: ProtectedRouteRouteChildren = {
@@ -1012,12 +943,6 @@ const ProtectedRouteRouteChildren: ProtectedRouteRouteChildren = {
     ProtectedIluminacionReportesChar91idChar93MedicionLocalizadasChar91localizadaIdChar93CreateLocalizadaRoute,
   ProtectedIluminacionReportesChar91idChar93MedicionLocalizadasChar91localizadaIdChar93EditLocalizadaRoute:
     ProtectedIluminacionReportesChar91idChar93MedicionLocalizadasChar91localizadaIdChar93EditLocalizadaRoute,
-  ProtectedIluminacionReportesChar91idChar93MedicionAreasChar91areaIdChar93SoloCreateAreaRoute:
-    ProtectedIluminacionReportesChar91idChar93MedicionAreasChar91areaIdChar93SoloCreateAreaRoute,
-  ProtectedIluminacionReportesChar91idChar93MedicionAreasChar91areaIdChar93SoloEditAreaRoute:
-    ProtectedIluminacionReportesChar91idChar93MedicionAreasChar91areaIdChar93SoloEditAreaRoute,
-  ProtectedIluminacionReportesChar91idChar93MedicionAreasChar91areaIdChar93SoloPuntosRoute:
-    ProtectedIluminacionReportesChar91idChar93MedicionAreasChar91areaIdChar93SoloPuntosRoute,
 }
 
 const ProtectedRouteRouteWithChildren = ProtectedRouteRoute._addFileChildren(

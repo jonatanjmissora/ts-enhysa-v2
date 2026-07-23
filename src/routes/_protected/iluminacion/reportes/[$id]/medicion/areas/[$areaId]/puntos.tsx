@@ -28,6 +28,7 @@ import z from "zod"
 import type { AreaIluminacionType } from "../../../../../../../../../db/reportes/iluminacion/areas/schema"
 import { useUpdateArea } from "../../../../../../../../../queries/reportes/iluminacion/areas/use-update-area"
 import useScrollTop from "#/hooks/scroll-top"
+import { reporteQueryOptions } from "../../../../../../../../../queries/reportes/iluminacion/reportes-query"
 
 export const Route = createFileRoute(
 	"/_protected/iluminacion/reportes/$id/medicion/areas/$areaId/puntos"
@@ -38,10 +39,14 @@ export const Route = createFileRoute(
 function RouteComponent() {
 	useScrollTop()
 	const { id, areaId } = Route.useParams()
+	const { data: reporte } = useSuspenseQuery(reporteQueryOptions({ id }))
+	if (!reporte) return <span>El reporte no existe</span>
+	let returnWhere = "medicion"
+	if (reporte.finishedAt) returnWhere = "medicion2"
 	return (
 		<article className="w-full min-h-svh flex flex-col items-center gap-0 relative mb-60">
 			<BackChevron
-				to={`/iluminacion/reportes/$id/medicion/areas/$areaId/edit-area`}
+				to={`/iluminacion/reportes/$id/${returnWhere}`}
 				params={{ id, areaId }}
 			/>
 			<Suspense fallback={<span>Cargando...</span>}>
@@ -76,6 +81,12 @@ function CargarPuntosData() {
 }
 
 function CargarPuntos({ area }: { area: AreaIluminacionType }) {
+	const { id } = Route.useParams()
+	const { data: reporte } = useSuspenseQuery(reporteQueryOptions({ id }))
+
+	let returnWhere = "medicion"
+	if (reporte?.finishedAt) returnWhere = "medicion2"
+
 	const navigate = useNavigate()
 	const [puntos, setPuntos] = useState<number[]>(
 		area.puntos.length !== 0
@@ -108,7 +119,7 @@ function CargarPuntos({ area }: { area: AreaIluminacionType }) {
 				JSON.stringify(timestamps) === JSON.stringify(area.timestamps)
 			) {
 				navigate({
-					to: "/iluminacion/reportes/$id/medicion",
+					to: `/iluminacion/reportes/$id/${returnWhere}`,
 					params: { id: area.reportId },
 				})
 				return
@@ -126,7 +137,7 @@ function CargarPuntos({ area }: { area: AreaIluminacionType }) {
 			}
 			console.log("Puntos actualizada exitosamente")
 			navigate({
-				to: "/iluminacion/reportes/$id/medicion",
+				to: `/iluminacion/reportes/$id/${returnWhere}`,
 				params: { id: area.reportId },
 			})
 		},
@@ -157,6 +168,8 @@ function CargarPuntos({ area }: { area: AreaIluminacionType }) {
 			setPuntosCount(0)
 		}
 	}, [puntosCount, puntos, timestamps, area, editArea, error])
+
+	if (!reporte) return <span>El reporte no existe</span>
 
 	return (
 		<section className="w-11/12 sm:w-full my-5 sm:my-4 flex flex-col gap-8 relative">
