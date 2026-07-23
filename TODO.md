@@ -50,13 +50,16 @@ kato hacer:
 	V modificar imagen y texto para los informes con candado
 	V logo de EnHySa en el login / register.
 	V cambiar los botones de "Prueba Gratis", "Ingresar", "Tengo mi Cuenta" por la de "Continuar con la App", "Ir a mi App", "Continuar con mi cuenta" si es que estoy logueado.
-	X mejorar tema claro.
+	V mejorar tema claro.
 	X mercadopago.
 	X demo user no puede comprar creditos.
 
 	evaluar el "volver" de las /landing cuando vuelvo de Terminos de uso", que me tiraba error.
 	evaluar el call back de google account para produccion.
 	evaluar el modal que se abre en el login para usuario demo.
+	evaluar que quite todos los solo.edit-area, etc
+	evaluar para localizada tambien
+
 
 
 

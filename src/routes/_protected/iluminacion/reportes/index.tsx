@@ -46,7 +46,7 @@ function RouteComponent() {
 				}}
 				className="w-11/12 italic text-foreground-soft tracking-wider text-sm underline text-right"
 			>
-				Instructivo: Mi primer Informe !
+				Instructivo: Mi primer Informe
 			</Link>
 			<IluminacionReportes />
 		</article>

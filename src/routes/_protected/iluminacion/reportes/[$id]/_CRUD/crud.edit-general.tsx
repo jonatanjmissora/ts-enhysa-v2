@@ -81,6 +81,9 @@ function EditReporteGeneral() {
 
 	const { mutateAsync: editarReporte, isPending, error } = useUpdateReporte()
 
+	let returnWhere = "medicion"
+	if (reporte?.finishedAt) returnWhere = "general"
+
 	const form = useForm({
 		defaultValues: {
 			empresaId: reporte?.empresaId || "",
@@ -112,7 +115,7 @@ function EditReporteGeneral() {
 				reporte.clima[2] === value.clima[2]
 			) {
 				return navigate({
-					to: "/iluminacion/reportes/$id/medicion",
+					to: `/iluminacion/reportes/$id/${returnWhere}`,
 					params: {
 						id: id,
 					},
@@ -125,7 +128,7 @@ function EditReporteGeneral() {
 			}
 			console.log("Reporte editado exitosamente")
 			navigate({
-				to: "/iluminacion/reportes/$id/medicion",
+				to: `/iluminacion/reportes/$id/${returnWhere}`,
 				params: {
 					id: id,
 				},
