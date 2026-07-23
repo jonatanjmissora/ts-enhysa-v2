@@ -29,7 +29,7 @@ export default function Localizadas({ id }: { id: string }) {
 
 	if (!localizadas || localizadas.length === 0) return <NoLocalizada id={id} />
 
-	const localizadaId = crypto.randomUUID().toString()
+	const localizadaId = "new"
 
 	return (
 		<div className="flex flex-col gap-2 w-5/6 mt-20 ">
@@ -226,7 +226,7 @@ export function LocalizadaDropdownMenu({
 }
 
 function NoLocalizada({ id }: { id: string }) {
-	const localizadaId = crypto.randomUUID().toString()
+	const localizadaId = "new"
 	return (
 		<div className="w-5/6 h-[30svh] flex flex-col gap-8 items-center justify-center mx-auto mt-20">
 			<div className="flex items-center justify-between py-1 border-b border-foreground/50 mt-10 mb-4 w-full mx-auto">

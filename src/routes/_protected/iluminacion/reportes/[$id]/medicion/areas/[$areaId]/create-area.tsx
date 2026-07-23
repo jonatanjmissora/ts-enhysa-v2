@@ -89,7 +89,7 @@ function CreateArea() {
 	// Pass medicionTipo where needed (example: include in navigation or API calls)
 	const { mutateAsync: createArea, isPending, error } = useCreateArea()
 
-	let returnWhere = "medicion"
+	let returnWhere = "medicion/areas/$areaId/puntos"
 	if (reporte?.finishedAt) returnWhere = "medicion2"
 
 	const form = useForm({
@@ -388,7 +388,7 @@ function CreateArea() {
 						{field => (
 							<ValorRequeridoField
 								field={field}
-								from={`/iluminacion/reportes/${id}/medicion/areas/${crypto.randomUUID()}/create-area`}
+								from={`/iluminacion/reportes/${id}/medicion/areas/new/create-area`}
 							/>
 						)}
 					</form.Field>

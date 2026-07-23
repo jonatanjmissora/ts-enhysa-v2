@@ -385,7 +385,7 @@ function CreateLocalizada() {
 						{field => (
 							<ValorRequeridoField
 								field={field}
-								from={`/iluminacion/reportes/${id}/medicion/localizadas/${crypto.randomUUID()}/create-localizada`}
+								from={`/iluminacion/reportes/${id}/medicion/localizadas/new/create-localizada`}
 								label="Valor Requerido (lux)"
 							/>
 						)}

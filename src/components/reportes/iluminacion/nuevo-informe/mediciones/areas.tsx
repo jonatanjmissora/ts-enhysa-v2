@@ -34,7 +34,7 @@ export default function Areas({ id }: { id: string }) {
 
 	if (!areas || areas.length === 0) return <NoAreas id={id} />
 
-	const areaId = crypto.randomUUID().toString()
+	const areaId = "new"
 
 	return (
 		<div className="flex flex-col gap-2 w-5/6">
@@ -255,7 +255,7 @@ function Area({ area, id }: { area: AreaIluminacionType; id: string }) {
 }
 
 function NoAreas({ id }: { id: string }) {
-	const areaId = crypto.randomUUID().toString()
+	const areaId = "new"
 	return (
 		<div className="w-5/6 flex flex-col gap-8 items-center justify-center mx-auto">
 			<div className="flex items-center justify-between py-1 border-b border-foreground/50 mt-10 mb-4 w-full mx-auto">

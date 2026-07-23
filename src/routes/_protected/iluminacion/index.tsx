@@ -16,7 +16,7 @@ export const Route = createFileRoute("/_protected/iluminacion/")({
 function RouteComponent() {
 	const cardBg =
 		"bg-[radial-gradient(ellipse_at_bottom_left,rgba(225,113,0,0.5)_0%,transparent_65%)] dark:bg-[radial-gradient(ellipse_at_bottom_left,rgba(225,113,0,0.1)_0%,transparent_65%)]"
-	const id = crypto.randomUUID().toString()
+	const id = "new"
 	return (
 		<article className="w-full sm:max-w-5xl 2xl:max-w-7xl sm:mx-auto min-h-svh flex flex-col items-center justify-center gap-10 relative">
 			<BackChevron to="/" />

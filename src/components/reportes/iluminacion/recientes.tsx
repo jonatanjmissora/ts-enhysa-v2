@@ -77,7 +77,7 @@ function Reportes() {
 }
 
 function NoReports() {
-	const id = crypto.randomUUID().toString()
+	const id = "new"
 	return (
 		<article className="w-5/6 mx-auto flex flex-col items-center justify-center gap-10 mt-20">
 			<span className="text-center text-foreground-soft text-sm italic tracking-wide">
