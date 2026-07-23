@@ -12,7 +12,7 @@ import {
 import { sortedByName } from "#/lib/utils"
 import type { AreaIluminacionType } from "../../../../../../db/reportes/iluminacion/areas/schema"
 import { Label } from "#/components/ui/label"
-import { useState } from "react"
+import { lazy, Suspense, useState } from "react"
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -21,6 +21,13 @@ import {
 	DropdownMenuTrigger,
 } from "#/components/ui/dropdown-menu"
 import DeleteAreaAlert from "./delete-area"
+
+// Lazy‑load the heavy chart component
+const ChartAreaInteractive = lazy(() =>
+	import(
+		"#/components/reportes/iluminacion/nuevo-informe/mediciones/chart"
+	).then(mod => ({ default: mod.default }))
+)
 
 export default function Areas({ id }: { id: string }) {
 	const { data: areas } = useSuspenseQuery(areasQueryOptions({ reportId: id }))
@@ -214,6 +221,18 @@ function Area({ area, id }: { area: AreaIluminacionType; id: string }) {
 					{area.puntos.some(punto => punto > 0) ? uniformidad : "-"}
 				</span>
 			</div>
+
+			{/* CHART HERE */}
+			<Suspense
+				fallback={
+					<div className="mt-10 bg-accent py-10 rounded-lg w-[96dvw] sm:w-full mx-auto flex items-center justify-center h-70">
+						<div className="text-center py-4">Cargando gráfico…</div>
+					</div>
+				}
+			>
+				<ChartAreaInteractive puntos={area.puntos} />
+			</Suspense>
+
 			{area.imagenes[0] !== "" && (
 				<div className="w-full my-10">
 					<div className="flex w-full grid-cols-4 gap-2 content-center">

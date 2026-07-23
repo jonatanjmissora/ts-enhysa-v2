@@ -39,7 +39,6 @@ import { Route as ProtectedIluminacionReportesPdfChar91idChar93CompletaRouteImpo
 import { Route as ProtectedIluminacionReportesChar91idChar93MenuResumenRouteImport } from './routes/_protected/iluminacion/reportes/[$id]/_menu/resumen'
 import { Route as ProtectedIluminacionReportesChar91idChar93MenuMedicion2RouteImport } from './routes/_protected/iluminacion/reportes/[$id]/_menu/medicion2'
 import { Route as ProtectedIluminacionReportesChar91idChar93MenuGeneralRouteImport } from './routes/_protected/iluminacion/reportes/[$id]/_menu/general'
-import { Route as ProtectedIluminacionReportesChar91idChar93MenuAreassRouteImport } from './routes/_protected/iluminacion/reportes/[$id]/_menu/areass'
 import { Route as ProtectedIluminacionReportesChar91idChar93CRUDCrudEditGeneralRouteImport } from './routes/_protected/iluminacion/reportes/[$id]/_CRUD/crud.edit-general'
 import { Route as ProtectedIluminacionReportesChar91idChar93CRUDCrudCreateResumenRouteImport } from './routes/_protected/iluminacion/reportes/[$id]/_CRUD/crud.create-resumen'
 import { Route as ProtectedIluminacionReportesChar91idChar93CRUDCrudCreateGeneralRouteImport } from './routes/_protected/iluminacion/reportes/[$id]/_CRUD/crud.create-general'
@@ -219,13 +218,6 @@ const ProtectedIluminacionReportesChar91idChar93MenuGeneralRoute =
     getParentRoute: () =>
       ProtectedIluminacionReportesChar91idChar93MenuRouteRoute,
   } as any)
-const ProtectedIluminacionReportesChar91idChar93MenuAreassRoute =
-  ProtectedIluminacionReportesChar91idChar93MenuAreassRouteImport.update({
-    id: '/areass',
-    path: '/areass',
-    getParentRoute: () =>
-      ProtectedIluminacionReportesChar91idChar93MenuRouteRoute,
-  } as any)
 const ProtectedIluminacionReportesChar91idChar93CRUDCrudEditGeneralRoute =
   ProtectedIluminacionReportesChar91idChar93CRUDCrudEditGeneralRouteImport.update(
     {
@@ -314,7 +306,6 @@ export interface FileRoutesByFullPath {
   '/iluminacion/reportes/$id': typeof ProtectedIluminacionReportesChar91idChar93MenuRouteRouteWithChildren
   '/perfil/empresas/$id/editar': typeof ProtectedPerfilEmpresasIdEditarRoute
   '/perfil/instrumentos/$id/editar': typeof ProtectedPerfilInstrumentosIdEditarRoute
-  '/iluminacion/reportes/$id/areass': typeof ProtectedIluminacionReportesChar91idChar93MenuAreassRoute
   '/iluminacion/reportes/$id/general': typeof ProtectedIluminacionReportesChar91idChar93MenuGeneralRoute
   '/iluminacion/reportes/$id/medicion2': typeof ProtectedIluminacionReportesChar91idChar93MenuMedicion2Route
   '/iluminacion/reportes/$id/resumen': typeof ProtectedIluminacionReportesChar91idChar93MenuResumenRoute
@@ -353,7 +344,6 @@ export interface FileRoutesByTo {
   '/iluminacion/reportes/$id': typeof ProtectedIluminacionReportesChar91idChar93MenuRouteRouteWithChildren
   '/perfil/empresas/$id/editar': typeof ProtectedPerfilEmpresasIdEditarRoute
   '/perfil/instrumentos/$id/editar': typeof ProtectedPerfilInstrumentosIdEditarRoute
-  '/iluminacion/reportes/$id/areass': typeof ProtectedIluminacionReportesChar91idChar93MenuAreassRoute
   '/iluminacion/reportes/$id/general': typeof ProtectedIluminacionReportesChar91idChar93MenuGeneralRoute
   '/iluminacion/reportes/$id/medicion2': typeof ProtectedIluminacionReportesChar91idChar93MenuMedicion2Route
   '/iluminacion/reportes/$id/resumen': typeof ProtectedIluminacionReportesChar91idChar93MenuResumenRoute
@@ -395,7 +385,6 @@ export interface FileRoutesById {
   '/_protected/iluminacion/reportes/$id/_menu': typeof ProtectedIluminacionReportesChar91idChar93MenuRouteRouteWithChildren
   '/_protected/perfil/empresas/$id/editar': typeof ProtectedPerfilEmpresasIdEditarRoute
   '/_protected/perfil/instrumentos/$id/editar': typeof ProtectedPerfilInstrumentosIdEditarRoute
-  '/_protected/iluminacion/reportes/$id/_menu/areass': typeof ProtectedIluminacionReportesChar91idChar93MenuAreassRoute
   '/_protected/iluminacion/reportes/$id/_menu/general': typeof ProtectedIluminacionReportesChar91idChar93MenuGeneralRoute
   '/_protected/iluminacion/reportes/$id/_menu/medicion2': typeof ProtectedIluminacionReportesChar91idChar93MenuMedicion2Route
   '/_protected/iluminacion/reportes/$id/_menu/resumen': typeof ProtectedIluminacionReportesChar91idChar93MenuResumenRoute
@@ -436,7 +425,6 @@ export interface FileRouteTypes {
     | '/iluminacion/reportes/$id'
     | '/perfil/empresas/$id/editar'
     | '/perfil/instrumentos/$id/editar'
-    | '/iluminacion/reportes/$id/areass'
     | '/iluminacion/reportes/$id/general'
     | '/iluminacion/reportes/$id/medicion2'
     | '/iluminacion/reportes/$id/resumen'
@@ -475,7 +463,6 @@ export interface FileRouteTypes {
     | '/iluminacion/reportes/$id'
     | '/perfil/empresas/$id/editar'
     | '/perfil/instrumentos/$id/editar'
-    | '/iluminacion/reportes/$id/areass'
     | '/iluminacion/reportes/$id/general'
     | '/iluminacion/reportes/$id/medicion2'
     | '/iluminacion/reportes/$id/resumen'
@@ -516,7 +503,6 @@ export interface FileRouteTypes {
     | '/_protected/iluminacion/reportes/$id/_menu'
     | '/_protected/perfil/empresas/$id/editar'
     | '/_protected/perfil/instrumentos/$id/editar'
-    | '/_protected/iluminacion/reportes/$id/_menu/areass'
     | '/_protected/iluminacion/reportes/$id/_menu/general'
     | '/_protected/iluminacion/reportes/$id/_menu/medicion2'
     | '/_protected/iluminacion/reportes/$id/_menu/resumen'
@@ -752,13 +738,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProtectedIluminacionReportesChar91idChar93MenuGeneralRouteImport
       parentRoute: typeof ProtectedIluminacionReportesChar91idChar93MenuRouteRoute
     }
-    '/_protected/iluminacion/reportes/$id/_menu/areass': {
-      id: '/_protected/iluminacion/reportes/$id/_menu/areass'
-      path: '/areass'
-      fullPath: '/iluminacion/reportes/$id/areass'
-      preLoaderRoute: typeof ProtectedIluminacionReportesChar91idChar93MenuAreassRouteImport
-      parentRoute: typeof ProtectedIluminacionReportesChar91idChar93MenuRouteRoute
-    }
     '/_protected/iluminacion/reportes/$id/_CRUD/crud/edit-general': {
       id: '/_protected/iluminacion/reportes/$id/_CRUD/crud/edit-general'
       path: '/iluminacion/reportes/$id/crud/edit-general'
@@ -841,7 +820,6 @@ const ProtectedPerfilRouteRouteWithChildren =
   ProtectedPerfilRouteRoute._addFileChildren(ProtectedPerfilRouteRouteChildren)
 
 interface ProtectedIluminacionReportesChar91idChar93MenuRouteRouteChildren {
-  ProtectedIluminacionReportesChar91idChar93MenuAreassRoute: typeof ProtectedIluminacionReportesChar91idChar93MenuAreassRoute
   ProtectedIluminacionReportesChar91idChar93MenuGeneralRoute: typeof ProtectedIluminacionReportesChar91idChar93MenuGeneralRoute
   ProtectedIluminacionReportesChar91idChar93MenuMedicion2Route: typeof ProtectedIluminacionReportesChar91idChar93MenuMedicion2Route
   ProtectedIluminacionReportesChar91idChar93MenuResumenRoute: typeof ProtectedIluminacionReportesChar91idChar93MenuResumenRoute
@@ -849,8 +827,6 @@ interface ProtectedIluminacionReportesChar91idChar93MenuRouteRouteChildren {
 
 const ProtectedIluminacionReportesChar91idChar93MenuRouteRouteChildren: ProtectedIluminacionReportesChar91idChar93MenuRouteRouteChildren =
   {
-    ProtectedIluminacionReportesChar91idChar93MenuAreassRoute:
-      ProtectedIluminacionReportesChar91idChar93MenuAreassRoute,
     ProtectedIluminacionReportesChar91idChar93MenuGeneralRoute:
       ProtectedIluminacionReportesChar91idChar93MenuGeneralRoute,
     ProtectedIluminacionReportesChar91idChar93MenuMedicion2Route:
