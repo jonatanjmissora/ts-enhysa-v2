@@ -41,6 +41,7 @@ import type { LocalizadaIluminacionType } from "../../../../../../../../../db/re
 import { useUpdateLocalizada } from "../../../../../../../../../queries/reportes/iluminacion/localizadas/use-update-localizada"
 import { updateLocalizadaValidator } from "../../../../../../../../../db/reportes/iluminacion/localizadas/localizada-validator"
 import { checkLocalizadaDifferences } from "#/lib/utils"
+import { reporteQueryOptions } from "../../../../../../../../../queries/reportes/iluminacion/reportes-query"
 
 export const Route = createFileRoute(
 	"/_protected/iluminacion/reportes/$id/medicion/localizadas/$localizadaId/edit-localizada"
@@ -50,9 +51,14 @@ export const Route = createFileRoute(
 
 function RouteComponent() {
 	useScrollTop()
+	const { id } = Route.useParams()
+	const { data: reporte } = useSuspenseQuery(reporteQueryOptions({ id }))
+	if (!reporte) return <span>El reporte no existe</span>
+	let returnWhere = "medicion"
+	if (reporte.finishedAt) returnWhere = "medicion2"
 	return (
 		<article className="w-full min-h-svh flex flex-col items-center gap-0 relative mb-60">
-			<BackChevron to="/iluminacion/reportes/$id/medicion" />
+			<BackChevron to={`/iluminacion/reportes/$id/${returnWhere}`} />
 			<Title text="Editar Localizada" className="mt-15" />
 			<Suspense
 				fallback={
@@ -86,10 +92,13 @@ function EditLocalizada({
 	id: string
 	localizada: LocalizadaIluminacionType
 }) {
+	const { data: reporte } = useSuspenseQuery(reporteQueryOptions({ id }))
 	const [planoFiles, setPlanoFiles] = useState<string[]>(
 		localizada.imagenes || []
 	)
 	const navigate = Route.useNavigate()
+	let returnWhere = "medicion"
+	if (reporte?.finishedAt) returnWhere = "medicion2"
 
 	const {
 		mutateAsync: updateLocalizada,
@@ -107,7 +116,7 @@ function EditLocalizada({
 		onSubmit: async ({ value }) => {
 			if (checkLocalizadaDifferences(value, planoFiles, localizada)) {
 				return navigate({
-					to: "/iluminacion/reportes/$id/medicion2",
+					to: `/iluminacion/reportes/$id/${returnWhere}`,
 					params: {
 						id: id,
 					},
@@ -127,7 +136,7 @@ function EditLocalizada({
 			}
 			console.log("La localizada actualizada exitosamente")
 			navigate({
-				to: "/iluminacion/reportes/$id/medicion2",
+				to: `/iluminacion/reportes/$id/${returnWhere}`,
 				params: {
 					id: id,
 				},

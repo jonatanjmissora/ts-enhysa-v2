@@ -51,10 +51,14 @@ export const Route = createFileRoute(
 
 function RouteComponent() {
 	useScrollTop()
-	const params = Route.useParams()
+	const { id } = Route.useParams()
+	const { data: reporte } = useSuspenseQuery(reporteQueryOptions({ id }))
+	if (!reporte) return <span>El reporte no existe</span>
+	let returnWhere = "medicion"
+	if (reporte.finishedAt) returnWhere = "medicion2"
 	return (
 		<article className="w-full min-h-svh flex flex-col items-center gap-0 relative mb-60">
-			<BackChevron to="/iluminacion/reportes/$id/medicion" params={params} />
+			<BackChevron to={`/iluminacion/reportes/$id/${returnWhere}`} />
 			<Title text="Nueva Localizada" className="mt-15" />
 			<Suspense
 				fallback={
@@ -83,6 +87,9 @@ function CreateLocalizada() {
 		error,
 	} = useCreateLocalizada()
 
+	let returnWhere = "medicion"
+	if (reporte?.finishedAt) returnWhere = "medicion2"
+
 	const form = useForm({
 		defaultValues: defaultLocalizadaData,
 		validators: {
@@ -104,7 +111,7 @@ function CreateLocalizada() {
 			}
 			console.log("Localizada creada exitosamente")
 			navigate({
-				to: `/iluminacion/reportes/$id/medicion`,
+				to: `/iluminacion/reportes/$id/${returnWhere}`,
 				params: {
 					id,
 				},
