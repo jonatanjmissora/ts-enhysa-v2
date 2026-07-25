@@ -5,8 +5,8 @@ type Perfil = "licenciado" | "tecnico"
 interface TareaRow {
 	id: string
 	cantidad: number
-	servicioKey: string
-	subOpcionIndex: number
+	servicioIndex: number
+	importeCustom?: number
 }
 
 interface AdicionalRow {
@@ -16,43 +16,60 @@ interface AdicionalRow {
 	valorUnitario: number
 }
 
-interface HonorarioOpcion {
-	label: string
-	valor: number
-}
-
 interface HonorarioServicio {
 	nombre: string
-	opciones: HonorarioOpcion[]
+	importe: number
 }
 
-type HonorariosDb = Record<Perfil, Record<string, HonorarioServicio>>
+type HonorariosDb = Record<Perfil, HonorarioServicio[]>
 
 const honorariosDb: HonorariosDb = {
-	licenciado: {
-		capacitacion: { nombre: "Capacitación (Hasta 4 hs)", opciones: [{ label: "Estándar", valor: 120000 }] },
-		autoelevadores: { nombre: "Capacitación Autoelevadores", opciones: [{ label: "Curso y Credencial", valor: 350000 }] },
-		puesta_tierra: { nombre: "Medición Puesta a Tierra", opciones: [{ label: "1 Jabalina / 3 Disyuntores", valor: 220000 }, { label: "Jabalina Adicional", valor: 44000 }, { label: "Disyuntor Adicional", valor: 44000 }] },
-		ergonomia_puesto: { nombre: "Estudio de Ergonomía por Puesto (Res. 295/03)", opciones: [{ label: "Por puesto", valor: 94000 }] },
-		ruido_ambiental: { nombre: "Ruido Ambiental", opciones: [{ label: "Hasta 30 minutos", valor: 118000 }] },
-		dosimetria_ruido: { nombre: "Dosimetría de Ruido", opciones: [{ label: "Hasta 2 hs", valor: 145000 }, { label: "Hasta 4 hs", valor: 210000 }, { label: "Hasta 8 hs", valor: 290000 }] },
-		iluminacion: { nombre: "Medición de Iluminación", opciones: [{ label: "Punto Individual", valor: 26000 }, { label: "Sector (9 a 16 puntos con protocolo)", valor: 94000 }, { label: "Sector (Más de 16 puntos con protocolo)", valor: 140000 }] },
-		vibraciones: { nombre: "Medición de Vibraciones", opciones: [{ label: "Miembros Superiores", valor: 160000 }, { label: "Cuerpo Entero", valor: 200000 }] },
-		carga_fuego: { nombre: "Estudio Carga de Fuego", opciones: [{ label: "0 a 300 m²", valor: 315000 }, { label: "301 a 600 m²", valor: 410000 }, { label: "601 a 1000 m²", valor: 500000 }] },
-		antisiniestral: { nombre: "Informe Antisiniestral", opciones: [{ label: "0 a 300 m²", valor: 315000 }, { label: "301 a 600 m²", valor: 410000 }, { label: "601 a 1000 m²", valor: 500000 }] },
-	},
-	tecnico: {
-		capacitacion: { nombre: "Capacitación (Hasta 4 hs)", opciones: [{ label: "Estándar", valor: 118000 }] },
-		autoelevadores: { nombre: "Capacitación Autoelevadores", opciones: [{ label: "Curso y Credencial", valor: 355000 }] },
-		puesta_tierra: { nombre: "Medición Puesta a Tierra", opciones: [{ label: "1 Jabalina / 3 Disyuntores", valor: 220000 }, { label: "Jabalina Adicional", valor: 44000 }, { label: "Disyuntor Adicional", valor: 44000 }] },
-		ergonomia_puesto: { nombre: "Estudio de Ergonomía por Puesto (Res. 295/03)", opciones: [{ label: "Por puesto", valor: 94000 }] },
-		ruido_ambiental: { nombre: "Ruido Ambiental", opciones: [{ label: "Hasta 30 minutos", valor: 118000 }] },
-		dosimetria_ruido: { nombre: "Dosimetría de Ruido", opciones: [{ label: "Hasta 2 hs", valor: 145000 }, { label: "Hasta 4 hs", valor: 210000 }, { label: "Hasta 8 hs", valor: 290000 }] },
-		iluminacion: { nombre: "Medición de Iluminación", opciones: [{ label: "Punto Individual", valor: 26000 }, { label: "Sector (9 a 16 puntos con protocolo)", valor: 94000 }, { label: "Sector (Más de 16 puntos con protocolo)", valor: 140000 }] },
-		vibraciones: { nombre: "Medición de Vibraciones", opciones: [{ label: "Miembros Superiores", valor: 160000 }, { label: "Cuerpo Entero", valor: 200000 }] },
-		carga_fuego: { nombre: "Estudio Carga de Fuego", opciones: [{ label: "0 a 300 m²", valor: 315000 }, { label: "301 a 600 m²", valor: 410000 }, { label: "601 a 1000 m²", valor: 500000 }] },
-		antisiniestral: { nombre: "Informe Antisiniestral", opciones: [{ label: "0 a 300 m²", valor: 315000 }, { label: "301 a 600 m²", valor: 410000 }, { label: "601 a 1000 m²", valor: 500000 }] },
-	},
+	licenciado: [
+		{ nombre: "Capacitación (Hasta 4 hs) - Estándar", importe: 120000 },
+		{ nombre: "Capacitación Autoelevadores - Curso y Credencial", importe: 350000 },
+		{ nombre: "Medición Puesta a Tierra - 1 Jabalina / 3 Disyuntores", importe: 220000 },
+		{ nombre: "Medición Puesta a Tierra - Jabalina Adicional", importe: 44000 },
+		{ nombre: "Medición Puesta a Tierra - Disyuntor Adicional", importe: 44000 },
+		{ nombre: "Estudio de Ergonomía por Puesto (Res. 295/03) - Por puesto", importe: 94000 },
+		{ nombre: "Ruido Ambiental - Hasta 30 minutos", importe: 118000 },
+		{ nombre: "Dosimetría de Ruido - Hasta 2 hs", importe: 145000 },
+		{ nombre: "Dosimetría de Ruido - Hasta 4 hs", importe: 210000 },
+		{ nombre: "Dosimetría de Ruido - Hasta 8 hs", importe: 290000 },
+		{ nombre: "Medición de Iluminación - Punto Individual", importe: 26000 },
+		{ nombre: "Medición de Iluminación - Sector (9 a 16 puntos con protocolo)", importe: 94000 },
+		{ nombre: "Medición de Iluminación - Sector (Más de 16 puntos con protocolo)", importe: 140000 },
+		{ nombre: "Medición de Vibraciones - Miembros Superiores", importe: 160000 },
+		{ nombre: "Medición de Vibraciones - Cuerpo Entero", importe: 200000 },
+		{ nombre: "Estudio Carga de Fuego - 0 a 300 m²", importe: 315000 },
+		{ nombre: "Estudio Carga de Fuego - 301 a 600 m²", importe: 410000 },
+		{ nombre: "Estudio Carga de Fuego - 601 a 1000 m²", importe: 500000 },
+		{ nombre: "Informe Antisiniestral - 0 a 300 m²", importe: 315000 },
+		{ nombre: "Informe Antisiniestral - 301 a 600 m²", importe: 410000 },
+		{ nombre: "Informe Antisiniestral - 601 a 1000 m²", importe: 500000 },
+	],
+	tecnico: [
+		{ nombre: "Capacitación (Hasta 4 hs) - Estándar", importe: 118000 },
+		{ nombre: "Capacitación Autoelevadores - Curso y Credencial", importe: 355000 },
+		{ nombre: "Medición Puesta a Tierra - 1 Jabalina / 3 Disyuntores", importe: 220000 },
+		{ nombre: "Medición Puesta a Tierra - Jabalina Adicional", importe: 44000 },
+		{ nombre: "Medición Puesta a Tierra - Disyuntor Adicional", importe: 44000 },
+		{ nombre: "Estudio de Ergonomía por Puesto (Res. 295/03) - Por puesto", importe: 94000 },
+		{ nombre: "Ruido Ambiental - Hasta 30 minutos", importe: 118000 },
+		{ nombre: "Dosimetría de Ruido - Hasta 2 hs", importe: 145000 },
+		{ nombre: "Dosimetría de Ruido - Hasta 4 hs", importe: 210000 },
+		{ nombre: "Dosimetría de Ruido - Hasta 8 hs", importe: 290000 },
+		{ nombre: "Medición de Iluminación - Punto Individual", importe: 26000 },
+		{ nombre: "Medición de Iluminación - Sector (9 a 16 puntos con protocolo)", importe: 94000 },
+		{ nombre: "Medición de Iluminación - Sector (Más de 16 puntos con protocolo)", importe: 140000 },
+		{ nombre: "Medición de Vibraciones - Miembros Superiores", importe: 160000 },
+		{ nombre: "Medición de Vibraciones - Cuerpo Entero", importe: 200000 },
+		{ nombre: "Estudio Carga de Fuego - 0 a 300 m²", importe: 315000 },
+		{ nombre: "Estudio Carga de Fuego - 301 a 600 m²", importe: 410000 },
+		{ nombre: "Estudio Carga de Fuego - 601 a 1000 m²", importe: 500000 },
+		{ nombre: "Informe Antisiniestral - 0 a 300 m²", importe: 315000 },
+		{ nombre: "Informe Antisiniestral - 301 a 600 m²", importe: 410000 },
+		{ nombre: "Informe Antisiniestral - 601 a 1000 m²", importe: 500000 },
+	],
 }
 
 function formatPrice(n: number) {
@@ -63,10 +80,10 @@ function formatPrice(n: number) {
 	}).format(n)
 }
 
-function getPrecioBase(perfil: Perfil, servicioKey: string, subOpcionIndex: number): number {
-	const servicio = honorariosDb[perfil]?.[servicioKey]
-	if (!servicio) return 0
-	return servicio.opciones[subOpcionIndex]?.valor ?? 0
+function getImporte(perfil: Perfil, tarea: TareaRow): number {
+	if (tarea.importeCustom !== undefined) return tarea.importeCustom
+	const servicio = honorariosDb[perfil]?.[tarea.servicioIndex]
+	return servicio?.importe ?? 0
 }
 
 const styles = StyleSheet.create({
@@ -201,6 +218,7 @@ export function PresupuestoPDF({
 	tareas,
 	adicionales,
 	nombreEmpresa = "EnHySa Consultora",
+	condiciones,
 }: {
 	perfil: Perfil
 	actividad: number
@@ -209,6 +227,12 @@ export function PresupuestoPDF({
 	tareas: TareaRow[]
 	adicionales: AdicionalRow[]
 	nombreEmpresa?: string
+	condiciones?: {
+		facturacion: string
+		formaPago: string
+		responsable: string
+		contacto: string
+	}
 }) {
 	const perfilLabel = perfil === "licenciado" ? "Licenciado en Higiene y Seguridad" : "Técnico en Higiene y Seguridad"
 	const actividadLabel = actividad === 0 ? "Estándar (Sin Adicional)" : "Química, Energía, Minería, Gas o Petróleo (+30%)"
@@ -216,7 +240,7 @@ export function PresupuestoPDF({
 	const total = (() => {
 		let sum = 0
 		for (const t of tareas) {
-			const base = getPrecioBase(perfil, t.servicioKey, t.subOpcionIndex)
+			const base = getImporte(perfil, t)
 			sum += base * (1 + actividad) * t.cantidad
 		}
 		for (const a of adicionales) {
@@ -271,25 +295,21 @@ export function PresupuestoPDF({
 						<Text style={styles.sectionTitle}>2. Tareas y Protocolos Requeridos</Text>
 						<View style={styles.tableHeader}>
 							<Text style={[styles.tableHeaderText, { width: "10%" }]}>Cant.</Text>
-							<Text style={[styles.tableHeaderText, { width: "30%" }]}>Servicio</Text>
-							<Text style={[styles.tableHeaderText, { width: "35%" }]}>Detalle</Text>
-							<Text style={[styles.tableHeaderText, { width: "15%", textAlign: "right" }]}>Precio Unit.</Text>
-							<Text style={[styles.tableHeaderText, { width: "10%", textAlign: "right" }]}>Subtotal</Text>
+							<Text style={[styles.tableHeaderText, { width: "50%" }]}>Servicio</Text>
+							<Text style={[styles.tableHeaderText, { width: "15%", textAlign: "right" }]}>Importe</Text>
+							<Text style={[styles.tableHeaderText, { width: "15%", textAlign: "right" }]}>Subtotal</Text>
 						</View>
 						{tareas.map(t => {
-							const servicio = t.servicioKey ? honorariosDb[perfil][t.servicioKey] : null
-							const precioBase = getPrecioBase(perfil, t.servicioKey, t.subOpcionIndex)
-							const detalle = servicio ? servicio.opciones[t.subOpcionIndex]?.label ?? "" : ""
-							const subtotal = precioBase * (1 + actividad) * t.cantidad
+							const importe = getImporte(perfil, t)
+							const subtotal = importe * (1 + actividad) * t.cantidad
 							return (
 								<View key={t.id} style={styles.tableRow}>
 									<Text style={[styles.tableCell, { width: "10%" }]}>{t.cantidad}</Text>
-									<Text style={[styles.tableCell, { width: "30%" }]}>{servicio?.nombre ?? "-"}</Text>
-									<Text style={[styles.tableCell, { width: "35%" }]}>{detalle}</Text>
+									<Text style={[styles.tableCell, { width: "50%" }]}>{t.servicioIndex >= 0 ? honorariosDb[perfil][t.servicioIndex]?.nombre ?? "-" : "-"}</Text>
 									<Text style={[styles.tableCell, { width: "15%", textAlign: "right" }]}>
-										{precioBase > 0 ? formatPrice(precioBase) : "-"}
+										{importe > 0 ? formatPrice(importe) : "-"}
 									</Text>
-									<Text style={[styles.tableCell, { width: "10%", textAlign: "right", fontWeight: "bold" }]}>
+									<Text style={[styles.tableCell, { width: "15%", textAlign: "right", fontWeight: "bold" }]}>
 										{subtotal > 0 ? formatPrice(subtotal) : "-"}
 									</Text>
 								</View>
@@ -329,12 +349,12 @@ export function PresupuestoPDF({
 					<Text style={{ fontWeight: "bold", color: "#111", marginBottom: 4, fontSize: 9 }}>
 						Condiciones del Servicio y Datos Comerciales:
 					</Text>
-					<Text>• Facturación: Emisión de comprobante Factura Tipo C.</Text>
-					<Text>• Forma de Pago: Mediante transferencia bancaria directa en cuenta.</Text>
+					<Text>• Facturación: {condiciones?.facturacion ?? "Factura Tipo C."}</Text>
+					<Text>• Forma de Pago: {condiciones?.formaPago ?? "Efectivo"}</Text>
 					<Text>• Equipamiento: Todo instrumental de medición utilizado se encuentra calibrado con certificación oficial vigente.</Text>
-					<Text>• Responsable Técnico: Licenciado en Higiene y Seguridad en el Trabajo.</Text>
+					<Text>• Responsable Técnico: {condiciones?.responsable ?? "Tecnico en Seguridad e Higiene."}</Text>
 					<Text>• Matrícula Profesional: Habilitado bajo regulaciones de Ley e Higiene correspondientes.</Text>
-					<Text>• Contacto: EnHySa Consultora.</Text>
+					<Text>• Contacto: {condiciones?.contacto ?? "EnHySa Consultora."}</Text>
 				</View>
 
 				<View style={styles.totalPanel}>

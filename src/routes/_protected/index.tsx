@@ -12,7 +12,6 @@ import {
 export const Route = createFileRoute("/_protected/")({ component: Home })
 
 function Home() {
-	useScrollTop()
 	const cardBg =
 		"bg-[radial-gradient(ellipse_at_bottom_left,rgba(225,113,0,0.5)_0%,transparent_65%)] dark:bg-[radial-gradient(ellipse_at_bottom_left,rgba(225,113,0,0.1)_0%,transparent_65%)]"
 
@@ -29,6 +28,12 @@ function Home() {
 				/>
 				<Icons />
 			</div>
+			<Link
+				to="/teoria/presupuesto"
+				className="w-11/12 italic text-foreground-soft tracking-wider text-sm underline text-right"
+			>
+				Cotizador Profesional HSE
+			</Link>
 
 			<div className="flex flex-col gap-20 w-5/6 mx-auto my-20">
 				<div className="">
