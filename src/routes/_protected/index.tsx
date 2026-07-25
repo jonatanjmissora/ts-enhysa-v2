@@ -12,6 +12,7 @@ import {
 export const Route = createFileRoute("/_protected/")({ component: Home })
 
 function Home() {
+	useScrollTop()
 	const cardBg =
 		"bg-[radial-gradient(ellipse_at_bottom_left,rgba(225,113,0,0.5)_0%,transparent_65%)] dark:bg-[radial-gradient(ellipse_at_bottom_left,rgba(225,113,0,0.1)_0%,transparent_65%)]"
 
