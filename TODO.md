@@ -54,6 +54,9 @@ kato hacer:
 	✅ graficos en la seccion de "areas" de los informes.
 	❌ mercadopago.
 	❌ demo user no puede comprar creditos, debe cambiar a usuario real.
+	✅ boton descrollToTop para los instructivos.
+	✅ arreglado Cotizadora
+	✅ grafico de puntos para movil.
 
 	evaluar el "volver" de las /landing cuando vuelvo de Terminos de uso", que me tiraba error.
 	evaluar el call back de google account para produccion.

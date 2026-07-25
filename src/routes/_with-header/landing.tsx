@@ -50,7 +50,7 @@ function Hero() {
 					<div className="flex gap-12 flex-wrap max-md:justify-center">
 						<button
 							type="button"
-							onClick={() => navigate({ to: "/" })}
+							onClick={() => navigate({ to: session?.user ? "/" : "/login" })}
 							className="bg-[#5cb85c] rounded-md px-7 py-3.5 text-base font-semibold transition-all hover:bg-[#4ca84c] hover:shadow-[0_4px_12px_rgba(92,184,92,0.3)]"
 						>
 							{session?.user

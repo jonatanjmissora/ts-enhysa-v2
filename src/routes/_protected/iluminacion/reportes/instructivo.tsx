@@ -1,6 +1,8 @@
+import { useCallback } from "react"
 import { createFileRoute } from "@tanstack/react-router"
 import BackChevron from "#/components/back-chevron"
 import Title from "#/components/title"
+import { ArrowUp } from "lucide-react"
 import { z } from "zod"
 
 const searchSchema = z.object({
@@ -101,6 +103,9 @@ En (1) son los datos del técnico, en (2) son los datos de la empresa a la que b
 
 function RouteComponent() {
 	const { from } = Route.useSearch()
+	const scrollToTop = useCallback(() => {
+		window.scrollTo({ top: 0, behavior: "smooth" })
+	}, [])
 	return (
 		<article className="relative w-full sm:max-w-4xl mx-auto py-10 px-4 space-y-12">
 			<BackChevron to={from} />
@@ -136,7 +141,7 @@ function RouteComponent() {
 										key={i}
 										src={src}
 										alt={`Paso ${paso.nro} - imagen ${i + 1}`}
-										className="w-3/4 sm:w-1/4 mx-auto"
+										className="w-3/4 sm:w-5/6 mx-auto"
 										loading="lazy"
 									/>
 								))}
@@ -151,6 +156,17 @@ function RouteComponent() {
 						)}
 					</section>
 				))}
+			</div>
+
+			<div className="flex justify-center">
+				<button
+					type="button"
+					onClick={scrollToTop}
+					className="flex items-center gap-2 px-5 py-3 bg-primary/10 hover:bg-primary/20 text-foreground-soft font-semibold rounded-full border border-primary/30 transition-all"
+				>
+					<ArrowUp className="size-4" />
+					Volver al comienzo
+				</button>
 			</div>
 		</article>
 	)

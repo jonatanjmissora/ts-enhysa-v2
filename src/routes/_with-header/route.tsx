@@ -76,7 +76,7 @@ function Navbar() {
 					Módulos
 				</button>
 				<Link
-					to="/"
+					to={session?.user ? "/" : "/login"}
 					className="bg-[#5cb85c]  rounded-md px-5 py-2 text-sm font-semibold no-underline transition-all hover:bg-[#4ca84c] hover:shadow-[0_4px_12px_rgba(92,184,92,0.3)]"
 				>
 					{session?.user ? "Ir a Mi App" : "Ingresar"}

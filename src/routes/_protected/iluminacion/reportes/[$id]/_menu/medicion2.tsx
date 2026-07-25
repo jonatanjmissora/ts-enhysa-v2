@@ -1,6 +1,7 @@
 import Loading from "#/components/loading"
 import Areas from "#/components/reportes/iluminacion/nuevo-informe/mediciones/areas"
 import Localizadas from "#/components/reportes/iluminacion/nuevo-informe/mediciones/localizadas"
+import useScrollTop from "#/hooks/scroll-top"
 import { createFileRoute } from "@tanstack/react-router"
 import { Suspense } from "react"
 
@@ -12,6 +13,7 @@ export const Route = createFileRoute(
 
 function RouteComponent() {
 	const { id } = Route.useParams()
+	useScrollTop()
 	return (
 		<Suspense
 			fallback={

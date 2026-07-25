@@ -37,7 +37,7 @@ export default function SuscriptionPlans({ from }: { from?: string }) {
 			</div>
 			<div className="flex flex-col sm:flex-row w-full items-center">
 				<Link
-					to="/"
+					to={session?.user ? "/" : "/login"}
 					className="bg-green-400 text-foreground border border-foreground/10 rounded-md px-7 py-3.5 text-base font-semibold transition-all hover:shadow-[0_4px_12px_rgba(92,184,92,0.3)] flex-1 text-center"
 				>
 					{session?.user ? "Continuar con Mi Cuenta" : "Ingresar con Mi Cuenta"}
@@ -91,6 +91,7 @@ const Plan = ({
 	setActualPlan,
 	from,
 }: PlanProps) => {
+	const { data: session } = authClient.useSession()
 	return (
 		<div
 			onClick={() => setActualPlan(index as 0 | 1 | 2)}
@@ -132,12 +133,12 @@ const Plan = ({
 			{index === 0 ? (
 				<div className="flex flex-col gap-2 w-full">
 					<Link
-						to="/"
+						to={session?.user ? "/" : "/login"}
 						className={`w-full py-3 rounded-md text-center font-semibold block no-underline ${
 							index === actualPlan ? "bg-green-400" : "bg-primary"
 						}`}
 					>
-						Prueba Gratis
+						{session?.user ? "Ir a Mi App" : "Prueba Gratis"}
 					</Link>
 				</div>
 			) : (

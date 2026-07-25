@@ -91,49 +91,53 @@ function ChartAreaInteractive({ puntos }: Props) {
 		[]
 	)
 
+	const chartWidth = Math.max(chartData.length * 55, 400)
+
 	return (
-		<div className="mt-10 bg-accent py-10 rounded-lg w-[96dvw] sm:w-full mx-auto">
+		<div className="mt-10 bg-accent py-10 rounded-lg w-full">
 			{hasData ? (
-				<CardContent className="px-2 pt-4 sm:px-6 sm:pt-6 w-full">
-					<ChartContainer
-						config={chartConfig}
-						className="aspect-auto h-[250px] w-full"
-					>
-						<AreaChart data={chartData}>
-							{ChartGradients}
-							<CartesianGrid vertical={false} />
-							<XAxis
-								dataKey="punto"
-								tickLine={false}
-								axisLine={false}
-								tickMargin={8}
-								minTickGap={32}
-								tickFormatter={value => value.toString()}
-							/>
-							<ChartTooltip
-								cursor={false}
-								content={
-									<ChartTooltipContent
-										labelFormatter={value => `Punto ${value}`}
-										indicator="dot"
-									/>
-								}
-							/>
-							<Line
-								dataKey="uniformidad"
-								type="natural"
-								stroke="var(--color-uniformidad)"
-								dot={false}
-							/>
-							<Area
-								dataKey="medicion"
-								type="natural"
-								fill="url(#fillMedicion)"
-								stroke="var(--color-medicion)"
-							/>
-							<ChartLegend content={<ChartLegendContent />} />
-						</AreaChart>
-					</ChartContainer>
+				<CardContent className="px-2 pt-4 sm:px-6 sm:pt-6 overflow-x-auto">
+					<div style={{ width: `${chartWidth}px` }}>
+						<ChartContainer
+							config={chartConfig}
+							className="aspect-auto h-[250px]"
+						>
+							<AreaChart data={chartData}>
+								{ChartGradients}
+								<CartesianGrid vertical={false} />
+								<XAxis
+									dataKey="punto"
+									tickLine={false}
+									axisLine={false}
+									tickMargin={8}
+									minTickGap={32}
+									tickFormatter={value => value.toString()}
+								/>
+								<ChartTooltip
+									cursor={false}
+									content={
+										<ChartTooltipContent
+											labelFormatter={value => `Punto ${value}`}
+											indicator="dot"
+										/>
+									}
+								/>
+								<Line
+									dataKey="uniformidad"
+									type="natural"
+									stroke="var(--color-uniformidad)"
+									dot={false}
+								/>
+								<Area
+									dataKey="medicion"
+									type="natural"
+									fill="url(#fillMedicion)"
+									stroke="var(--color-medicion)"
+								/>
+								<ChartLegend content={<ChartLegendContent />} />
+							</AreaChart>
+						</ChartContainer>
+					</div>
 				</CardContent>
 			) : (
 				<span className="flex justify-center">No hay datos</span>
