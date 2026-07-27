@@ -89,7 +89,7 @@ function Contactos() {
 					title="whatsapp"
 					target="_blank"
 					rel="noopener noreferrer"
-					href="https://wa.me/+5492914319025"
+					href="https://wa.me/+5492916426547"
 				>
 					<div className="flex flex-col items-center justify-center gap-2">
 						<Phone />
@@ -112,7 +112,7 @@ function Contactos() {
 					</div>
 				</a>
 				<a
-					href="https://mail.google.com/mail/u/0/?fs=1&to=mandra@gmail.com&su=&body=&bcc=&tf=cm"
+					href="https://mail.google.com/mail/u/0/?fs=1&to=enhysa.consultora@gmail.com&su=&body=&bcc=&tf=cm"
 					title="mail_de_la_empresa"
 					target="_blank"
 					rel="noopener noreferrer"

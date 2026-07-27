@@ -6,6 +6,8 @@ rate limit
 
 sentry
 
+calendario para los tecnicos
+
 TODO
 ======
 girar fotos
@@ -57,6 +59,9 @@ kato hacer:
 	✅ boton descrollToTop para los instructivos.
 	✅ arreglado Cotizadora
 	✅ grafico de puntos para movil.
+	❌callback de google account.
+	✅ agregar mas teoria
+	❌ demo user, boton de desbloquear pdf ¨Version Demo, debe loguearse para generar informes descargables¨ ¨Version Demo. No puede descargar informes. Logueate con tus datos"
 
 	evaluar el "volver" de las /landing cuando vuelvo de Terminos de uso", que me tiraba error.
 	evaluar el call back de google account para produccion.

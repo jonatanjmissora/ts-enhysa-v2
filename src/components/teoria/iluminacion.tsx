@@ -1,9 +1,17 @@
 export default function IluminacionContent() {
 	return (
 		<>
+			<h2 className="text-xl font-semibold">Medición de Iluminación</h2>
 			<p className="text-foreground-soft">
-				Decreto 351/79 - Anexo IV y Resolución SRT 84/2012. Exigencias mínimas
-				de iluminación en la República Argentina.
+				<strong className="text-foreground tracking-widest">Finalidad:</strong>{" "}
+				Evaluar los niveles de iluminancia en los puestos de trabajo para
+				garantizar condiciones visuales óptimas, prevenir la fatiga ocular,
+				reducir el riesgo de accidentes y optimizar el desempeño laboral,
+				asegurando que la distribución de la luz sea uniforme y evite
+				deslumbramientos. Legislación Aplicable: Ley N° 19.587 de Higiene y
+				Seguridad en el Trabajo, Decreto Reglamentario N° 351/79 (Anexo IV,
+				Capítulo 12) y la Resolución SRT N° 84/12 (Protocolo para la Medición
+				del Nivel de Iluminación en el Ambiente de Laboral).
 			</p>
 
 			<section className="space-y-4">
