@@ -475,3 +475,111 @@ Rules:
 - If graphify-out/wiki/index.md exists, use it for broad navigation instead of raw source browsing.
 - Read graphify-out/GRAPH_REPORT.md only for broad architecture review or when query/path/explain do not surface enough context.
 - After modifying code, run `graphify update .` to keep the graph current (AST-only, no API cost).
+
+## Mercado Pago — Checkout Pro + Créditos
+
+> Integración completa de Checkout Pro con acreditación automática de créditos vía webhook.
+
+### Planes y precios (producción)
+
+| Plan | Precio (ARS) | Créditos |
+|---|---|---|
+| Por Informe | 15 | 1 |
+| Mensual | 50 | 7 |
+| Anual | 500 | 100 |
+
+### Env vars
+
+```
+MERCADO_PAGO_ACCESS_TOKEN=APP_USR-xxxx  # mismo en test y prod (modo prueba/producción desde el panel)
+MERCADO_PAGO_PUBLIC_KEY=APP_USR-xxxx
+MERCADO_PAGO_WEBHOOK_SECRET=           # desde panel → Webhooks → Clave secreta
+BETTER_AUTH_BASE_URL=                  # usado para back_urls y notification_url
+```
+
+### Archivos del proyecto
+
+- `server/mercadopago/config.ts` — cliente `MercadoPagoConfig`
+- `server/mercadopago/test-conection.ts` — test de conectividad con MP
+- `server/mercadopago/create-preference-server.ts` — crea preferencia, envía `external_reference` (userId), `metadata.plan_id`, `notification_url`, `back_urls`
+- `server/mercadopago/webhook.ts` — handler dual (IPN + Webhook), valida firma, acredita créditos
+- `src/routes/api/mercadopago/webhook.ts` — ruta POST que recibe notificaciones de MP
+- `src/routes/_with-header/checkout.tsx` — UI de checkout con botón de pago y test de conexión
+- `db/credits/schema.ts` — tablas `user_credits` y `credit_history`
+
+### Flujo de pago (verificado con test)
+
+1. Usuario logueado va a `/checkout?plan=por-informe`
+2. Click "Pagar con Mercado Pago" → `createPreferenceServer` crea preferencia
+3. Redirige a `www.mercadopago.com.ar` (usar `init_point`, no `sandbox_init_point`)
+4. Usuario paga como invitado o logueado con buyer test
+5. MP envía notificación IPN (`?topic=merchant_order&id=...`) a `/api/mercadopago/webhook`
+6. Webhook busca el merchant order → encuentra payment aprobado
+7. Lee `metadata.plan_id` de la preferencia (via payment API)
+8. Acredita créditos: upsert en `user_credits` + insert en `credit_history`
+9. Idempotencia por `paymentId` — no duplica si llega la misma notificación dos veces
+
+### Testing con usuarios de prueba
+
+**Seller** (credenciales en .env): se crea desde el panel "Cuentas de Prueba"
+- User ID: `3573589436`
+- Usuario: `TESTUSER3026059714133907697`
+- Contraseña: `13Krt9DTHb`
+- Código de verificación: `589436`
+
+**Buyer** (para pagar): se crea desde el panel "Cuentas de Prueba"
+- Usuario: `TESTUSER582536072844915181`
+- Contraseña: `ErldGKgSdv`
+
+Procedimiento que funcionó:
+1. Ventana de incógnito
+2. Ir a `https://www.mercadopago.com.ar/developers` y loguearse con **buyer test**
+3. En misma pestaña, ir al checkout de la app: `/checkout?plan=por-informe`
+4. Pagar con tarjeta de prueba: `APRO` (nombre), `5031 7557 3453 0604` (Mastercard), `12/25`, `123`
+5. Verificar en consola del server: `[MP] Credited N credits to user X (payment Y)`
+
+**Tarjetas de prueba que funcionan:**
+| Tipo | Número | CVV | Vto |
+|---|---|---|---|
+| Mastercard crédito | `5031 7557 3453 0604` | `123` | `11/30` |
+| Visa crédito | `4509 9535 6623 3704` | `123` | `11/30` |
+
+**Códigos de titular (status del pago):**
+| Nombre | Resultado |
+|---|---|
+| `APRO` | Aprobado |
+| `OTHE` | Rechazado |
+| `CONT` | Pendiente |
+
+### Notas importantes de la implementación
+
+- Las credenciales de prueba de MP usan prefijo `APP_USR-` (igual que producción). El modo test/producción se configura desde el panel de MP, no del token.
+- El `notification_url` en la preferencia dispara **IPN** (query params `?topic=...&id=...`). El webhook panel (Tus integraciones → Webhooks) dispara **Webhook** (JSON body con `type` y `data.id`). El handler soporta ambos.
+- La validación de firma HMAC-SHA256 usa `x-signature`, `x-request-id` y `data.id` del body. Solo aplica a Webhooks (no IPN).
+- Las notificaciones IPN de tipo `merchant_order` requieren hacer un GET a la Merchant Order API para obtener el payment ID real.
+- `auto_return: "approved"` y `back_urls` configurados redirigen automáticamente al usuario después del pago exitoso.
+- Para desarrollo local con ngrok, agregar `server: { allowedHosts: true }` en `vite.config.ts`.
+
+### Estado actual del plan (Julio 2026)
+
+**Completado ✅**
+- Configuración del cliente MP (`server/mercadopago/config.ts`)
+- Test de conectividad (`server/mercadopago/test-conection.ts`)
+- Creación de preferencia Checkout Pro (`server/mercadopago/create-preference-server.ts`)
+- UI de checkout con botón "Pagar con MP" y test de conexión (`src/routes/_with-header/checkout.tsx`)
+- Handler dual de notificaciones IPN + Webhook (`server/mercadopago/webhook.ts`)
+- Ruta API del webhook (`src/routes/api/mercadopago/webhook.ts`)
+- Validación de firma HMAC-SHA256 con webhook secret
+- Acreditación automática de créditos (upsert en `user_credits` + `credit_history`)
+- Idempotencia por `paymentId`
+- Flujo completo verificado con tarjeta de prueba APRO
+
+**Próximos pasos pendientes**
+1. Probar con los otros planes (Mensual, Anual) y verificar acreditación de 7 y 100 créditos
+2. Conectar la UI de créditos restantes en la app para que el usuario vea su saldo después de la compra (usar `getUserCreditsServer`)
+3. Cuando pase a producción:
+   - Cambiar credenciales en `.env` a las de producción (mismas `APP_USR-...`, modo producción en el panel)
+   - Configurar dominio real en `BETTER_AUTH_BASE_URL` (no ngrok)
+   - Actualizar `notification_url` y `back_urls` en el panel de MP
+   - Remover `server.allowedHosts` de `vite.config.ts`
+4. Considerar agregar visualización del plan activo y fecha de expiración para planes recurrentes

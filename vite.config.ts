@@ -13,6 +13,9 @@ const config = defineConfig({
   optimizeDeps: {
     include: ['@react-pdf/renderer'],
   },
+  server: {
+    allowedHosts: true,
+  },
   plugins: [
     devtools(),
     netlify({ edgeSSR: false }),

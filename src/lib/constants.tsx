@@ -159,6 +159,7 @@ export const PLANS = [
 	{
 		title: "Gratis",
 		price: 0,
+		credits: 0,
 		subtitle: "Prueba todo el potencial de la app.",
 		benefits: [
 			"navegacion por los dashboards.",
@@ -169,7 +170,8 @@ export const PLANS = [
 	},
 	{
 		title: "Por Informe",
-		price: 15000,
+		price: 15,
+		credits: 1,
 		subtitle: "Paga solo lo que consumes.",
 		benefits: [
 			"navegacion por los dashboards.",
@@ -181,7 +183,8 @@ export const PLANS = [
 	},
 	{
 		title: "Mensual",
-		price: 50000,
+		price: 50,
+		credits: 7,
 		subtitle: "Accede a todo.",
 		benefits: [
 			"navegacion por los dashboards.",
@@ -192,7 +195,8 @@ export const PLANS = [
 	},
 	{
 		title: "Anual",
-		price: 500000,
+		price: 500,
+		credits: 100,
 		subtitle: "Accede a todo.",
 		benefits: [
 			"navegacion por los dashboards.",

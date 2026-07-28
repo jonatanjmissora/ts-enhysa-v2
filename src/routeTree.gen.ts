@@ -20,6 +20,7 @@ import { Route as ProtectedSuscripcionRouteImport } from './routes/_protected/su
 import { Route as ProtectedPerfilRouteRouteImport } from './routes/_protected/perfil/route'
 import { Route as WithHeaderTeoriaIndexRouteImport } from './routes/_with-header/teoria/index'
 import { Route as ProtectedIluminacionIndexRouteImport } from './routes/_protected/iluminacion/index'
+import { Route as ApiMercadopagoWebhookRouteImport } from './routes/api/mercadopago/webhook'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 import { Route as WithHeaderTeoriaTerminosDeUsoRouteImport } from './routes/_with-header/teoria/terminos-de-uso'
 import { Route as WithHeaderTeoriaPresupuestoRouteImport } from './routes/_with-header/teoria/presupuesto'
@@ -102,6 +103,11 @@ const ProtectedIluminacionIndexRoute =
     path: '/iluminacion/',
     getParentRoute: () => ProtectedRouteRoute,
   } as any)
+const ApiMercadopagoWebhookRoute = ApiMercadopagoWebhookRouteImport.update({
+  id: '/api/mercadopago/webhook',
+  path: '/api/mercadopago/webhook',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   id: '/api/auth/$',
   path: '/api/auth/$',
@@ -295,6 +301,7 @@ export interface FileRoutesByFullPath {
   '/teoria/presupuesto': typeof WithHeaderTeoriaPresupuestoRoute
   '/teoria/terminos-de-uso': typeof WithHeaderTeoriaTerminosDeUsoRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/api/mercadopago/webhook': typeof ApiMercadopagoWebhookRoute
   '/iluminacion/': typeof ProtectedIluminacionIndexRoute
   '/teoria/': typeof WithHeaderTeoriaIndexRoute
   '/iluminacion/reportes/instructivo': typeof ProtectedIluminacionReportesInstructivoRoute
@@ -333,6 +340,7 @@ export interface FileRoutesByTo {
   '/teoria/presupuesto': typeof WithHeaderTeoriaPresupuestoRoute
   '/teoria/terminos-de-uso': typeof WithHeaderTeoriaTerminosDeUsoRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/api/mercadopago/webhook': typeof ApiMercadopagoWebhookRoute
   '/iluminacion': typeof ProtectedIluminacionIndexRoute
   '/teoria': typeof WithHeaderTeoriaIndexRoute
   '/iluminacion/reportes/instructivo': typeof ProtectedIluminacionReportesInstructivoRoute
@@ -374,6 +382,7 @@ export interface FileRoutesById {
   '/_with-header/teoria/presupuesto': typeof WithHeaderTeoriaPresupuestoRoute
   '/_with-header/teoria/terminos-de-uso': typeof WithHeaderTeoriaTerminosDeUsoRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/api/mercadopago/webhook': typeof ApiMercadopagoWebhookRoute
   '/_protected/iluminacion/': typeof ProtectedIluminacionIndexRoute
   '/_with-header/teoria/': typeof WithHeaderTeoriaIndexRoute
   '/_protected/iluminacion/reportes/instructivo': typeof ProtectedIluminacionReportesInstructivoRoute
@@ -414,6 +423,7 @@ export interface FileRouteTypes {
     | '/teoria/presupuesto'
     | '/teoria/terminos-de-uso'
     | '/api/auth/$'
+    | '/api/mercadopago/webhook'
     | '/iluminacion/'
     | '/teoria/'
     | '/iluminacion/reportes/instructivo'
@@ -452,6 +462,7 @@ export interface FileRouteTypes {
     | '/teoria/presupuesto'
     | '/teoria/terminos-de-uso'
     | '/api/auth/$'
+    | '/api/mercadopago/webhook'
     | '/iluminacion'
     | '/teoria'
     | '/iluminacion/reportes/instructivo'
@@ -492,6 +503,7 @@ export interface FileRouteTypes {
     | '/_with-header/teoria/presupuesto'
     | '/_with-header/teoria/terminos-de-uso'
     | '/api/auth/$'
+    | '/api/mercadopago/webhook'
     | '/_protected/iluminacion/'
     | '/_with-header/teoria/'
     | '/_protected/iluminacion/reportes/instructivo'
@@ -524,6 +536,7 @@ export interface RootRouteChildren {
   WithHeaderRouteRoute: typeof WithHeaderRouteRouteWithChildren
   ApiUploadthingRoute: typeof ApiUploadthingRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
+  ApiMercadopagoWebhookRoute: typeof ApiMercadopagoWebhookRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -604,6 +617,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/iluminacion/'
       preLoaderRoute: typeof ProtectedIluminacionIndexRouteImport
       parentRoute: typeof ProtectedRouteRoute
+    }
+    '/api/mercadopago/webhook': {
+      id: '/api/mercadopago/webhook'
+      path: '/api/mercadopago/webhook'
+      fullPath: '/api/mercadopago/webhook'
+      preLoaderRoute: typeof ApiMercadopagoWebhookRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/api/auth/$': {
       id: '/api/auth/$'
@@ -930,6 +950,7 @@ const rootRouteChildren: RootRouteChildren = {
   WithHeaderRouteRoute: WithHeaderRouteRouteWithChildren,
   ApiUploadthingRoute: ApiUploadthingRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
+  ApiMercadopagoWebhookRoute: ApiMercadopagoWebhookRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
