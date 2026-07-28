@@ -15,7 +15,7 @@ const config = defineConfig({
   },
   plugins: [
     devtools(),
-    netlify({ edgeSSR: true }),
+    netlify({ edgeSSR: false }),
     tailwindcss(),
     tanstackStart(),
     viteReact(),
