@@ -1,4 +1,4 @@
-import { pgTable, text, integer, timestamp } from "drizzle-orm/pg-core"
+import { pgTable, text, integer, timestamp, unique } from "drizzle-orm/pg-core"
 import { user } from "../users/schema"
 import { reportes_iluminacion } from "../reportes/iluminacion/schema"
 
@@ -25,6 +25,8 @@ export const creditHistory = pgTable("credit_history", {
 	reportId: text("report_id").references(() => reportes_iluminacion.id, { onDelete: "set null" }),
 	paymentId: text("payment_id"),
 	createdAt: timestamp("created_at").defaultNow().notNull(),
-})
+}, (table) => ({
+	paymentTypeUnique: unique().on(table.paymentId, table.type),
+}))
 
 export type CreditHistoryType = typeof creditHistory.$inferSelect

@@ -621,9 +621,14 @@ Procedimiento:
 4. `pnpm dev`
 5. `server.allowedHosts: true` en `vite.config.ts`
 
+### Implementado
+
+- [x] `db/payments/schema.ts` — tabla `pending_payments` (preferenceId PK, userId, planId, mpPaymentId, status, timestamps)
+- [x] Fix race condition en `creditUser()` (webhook.ts): ahora usa `ON CONFLICT DO NOTHING` dentro de la transacción con UNIQUE `(payment_id, type)` en `credit_history`. MP puede enviar notificaciones duplicadas simultáneas sin acreditar dos veces.
+- [x] Limpieza de 3 registros duplicados existentes en `credit_history` producto de la race condition.
+
 ### Próximos pasos pendientes
 
-- [ ] Implementar `db/payments/schema.ts` (pending_payments)
 - [ ] Implementar `server/mercadopago/sync-payment.ts` (core)
 - [ ] Implementar `server/mercadopago/sync-payment-server.ts`
 - [ ] Implementar `server/mercadopago/sync-pending-payments.ts`

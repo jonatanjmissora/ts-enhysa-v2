@@ -1,7 +1,7 @@
 import { Payment, MerchantOrder, MercadoPagoConfig } from "mercadopago"
 import { db } from "../../db"
 import { userCredits, creditHistory } from "../../db/credits/schema"
-import { eq, and, sql } from "drizzle-orm"
+import { sql } from "drizzle-orm"
 import crypto, { randomUUID } from "node:crypto"
 
 const CREDIT_MAP: Record<string, number> = {
@@ -32,20 +32,21 @@ async function creditUser(paymentId: number, userId: string, planId: string) {
 	const credits = CREDIT_MAP[planId]
 	if (!credits) return
 
-	const existing = await db
-		.select({ id: creditHistory.id })
-		.from(creditHistory)
-		.where(
-			and(
-				eq(creditHistory.paymentId, String(paymentId)),
-				eq(creditHistory.type, "purchase"),
-			),
-		)
-		.limit(1)
-
-	if (existing.length > 0) return
-
 	await db.transaction(async (tx) => {
+		const inserted = await tx
+			.insert(creditHistory)
+			.values({
+				id: randomUUID(),
+				userId,
+				type: "purchase",
+				credits,
+				paymentId: String(paymentId),
+			})
+			.onConflictDoNothing({ target: [creditHistory.paymentId, creditHistory.type] })
+			.returning({ id: creditHistory.id })
+
+		if (inserted.length === 0) return
+
 		await tx
 			.insert(userCredits)
 			.values({ userId, credits })
@@ -53,14 +54,6 @@ async function creditUser(paymentId: number, userId: string, planId: string) {
 				target: userCredits.userId,
 				set: { credits: sql`${userCredits.credits} + ${credits}` },
 			})
-
-		await tx.insert(creditHistory).values({
-			id: randomUUID(),
-			userId,
-			type: "purchase",
-			credits,
-			paymentId: String(paymentId),
-		})
 	})
 
 	console.log(`[MP] Credited ${credits} credits to user ${userId} (payment ${paymentId})`)

@@ -21,3 +21,6 @@ export * from "./reportes/iluminacion/localizadas/schema"
 
 // Credits
 export * from "./credits/schema"
+
+// Payments / Mercado Pago
+export * from "./payments/schema"
