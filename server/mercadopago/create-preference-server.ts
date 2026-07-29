@@ -11,6 +11,8 @@ export const createPreferenceServer = createServerFn({ method: "POST" })
 		const session = await protectedServerFn(request)
 
 		const baseUrl = process.env.BETTER_AUTH_BASE_URL
+		const notificationUrl = `${baseUrl}/api/mercadopago/webhook`
+		console.log("[MP] notification_url:", notificationUrl)
 
 		try {
 			const preference = new Preference(mpClient)
@@ -28,7 +30,7 @@ export const createPreferenceServer = createServerFn({ method: "POST" })
 					],
 					external_reference: session.user.id,
 					metadata: { plan_id: data.planId },
-					notification_url: `${baseUrl}/api/mercadopago/webhook`,
+					notification_url: notificationUrl,
 					back_urls: {
 						success: `${baseUrl}/suscripcion?status=approved`,
 						failure: `${baseUrl}/suscripcion?status=failure`,
@@ -37,7 +39,7 @@ export const createPreferenceServer = createServerFn({ method: "POST" })
 					auto_return: "approved",
 				},
 			})
-			console.log("[MP] Preference created:", JSON.stringify(result, null, 2))
+			// console.log("[MP] Preference created:", JSON.stringify(result, null, 2))
 			return {
 				preferenceId: result.id,
 				initPoint: result.init_point,
@@ -45,6 +47,8 @@ export const createPreferenceServer = createServerFn({ method: "POST" })
 			}
 		} catch (mpErr) {
 			console.error("[MP] Error creating preference:", mpErr)
-			throw new Error(`MP error: ${mpErr instanceof Error ? mpErr.message : String(mpErr)}`)
+			throw new Error(
+				`MP error: ${mpErr instanceof Error ? mpErr.message : String(mpErr)}`
+			)
 		}
 	})

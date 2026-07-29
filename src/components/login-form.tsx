@@ -27,7 +27,7 @@ import { DemoCredentialsModal } from "./demo-credentials-modal"
 
 const formSchema = z.object({
 	email: z.email("Email inválido"),
-	password: z.string().min(8, "Contraseña mínima de 8 caracteres."),
+	password: z.string().min(5, "Contraseña mínima de 5 caracteres."),
 })
 
 export function LoginForm({

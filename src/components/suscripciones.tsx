@@ -152,7 +152,7 @@ const Plan = ({
 						index === actualPlan ? "bg-green-400" : "bg-primary"
 					}`}
 				>
-					Adquirir Plan
+					Adquirir Crédito
 				</Link>
 			)}
 		</div>
@@ -233,7 +233,7 @@ function CombinedPlan({
 					isActive ? "bg-green-400" : "bg-primary"
 				}`}
 			>
-				Adquirir Plan
+				Adquirir Créditos
 			</Link>
 		</button>
 	)

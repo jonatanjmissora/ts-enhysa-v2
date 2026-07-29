@@ -1,9 +1,12 @@
 import BackChevron from "#/components/back-chevron"
 import SuscriptionPlans from "#/components/suscripciones"
 import useScrollTop from "#/hooks/scroll-top"
+import { useQuery } from "@tanstack/react-query"
 import { createFileRoute, useNavigate } from "@tanstack/react-router"
 import { ChevronLeft, Shield } from "lucide-react"
+import { Suspense } from "react"
 import { z } from "zod"
+import { userCreditsOptions } from "../../../queries/credits/user-credits-query"
 
 const fromSearchSchema = z.object({
 	from: z.string().optional(),
@@ -36,19 +39,30 @@ function RouteComponent() {
 
 			<div className="flex-1 flex justify-center items-center flex-col gap-6 pt-20 sm:py-10 2xl:py-20">
 				<div className="flex items-center gap-2 text-5xl 2xl:text-6xl font-bold tracking-wildest relative">
-					<span>Planes</span>
-					<Shield className="absolute top-1/2 left-full -translate-1/2 size-30 2xl:size-50 -rotate-15 dark:text-amber-300/60 text-amber-800/80 -z-10" />
+					<span>Suscripciones</span>
+					<Shield className="absolute -top-20 right-0 size-30 2xl:size-50 -rotate-15 dark:text-amber-300/60 text-amber-800/80 -z-10" />
 				</div>
 				<div>
-					<p className="italic tracking-wider font-semibold text-pretty text-sm w-5/6 mx-auto text-center text-foreground-soft">
-						Tu actual plan es el "Plan Profesional". ¿Deseas cambiar a plan
-						Empresarial? Checkea los beneficios de subir de plan.
+					<p className="mt-10 italic tracking-wider text-balance text-lg w-5/6 mx-auto text-center text-foreground-soft">
+						La adquisición de créditos te permitirá obtener y descargar los informes realizados. Se necesitará de 1 crédito para desbloquear y descargar un informe.
 					</p>
 				</div>
+				<Suspense fallback={<h1>Cargando...</h1>}>
+					<Credits /> 
+				</Suspense>
 				<div className="w-11/12 sm:w-full">
 					<SuscriptionPlans from={from} />
 				</div>
 			</div>
 		</div>
+	)
+}
+
+function Credits() {
+	const { data: credits } = useQuery(userCreditsOptions)
+	return (
+			<span className="font-semibold text-gray-50/50 sm:text-foreground-soft text-lg tracking-wider">
+				creditos disponibles: {credits}
+			</span>
 	)
 }

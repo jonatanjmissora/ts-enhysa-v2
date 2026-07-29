@@ -136,38 +136,54 @@ function validateSignature(headers: Headers, body: string): boolean {
 
 export async function handleWebhook(request: Request): Promise<Response> {
 	const url = new URL(request.url)
-	const topic = url.searchParams.get("topic")
-	const resourceId = url.searchParams.get("id")
+	const method = request.method
+	console.log("[MP] Webhook received:", method, url.pathname, url.search)
 
-	if (topic && resourceId) {
-		const id = Number(resourceId)
-		if (id) processIPNTopic(topic, id).catch(console.error)
-		return new Response(JSON.stringify({ received: true }), {
-			status: 200,
-			headers: { "Content-Type": "application/json" },
-		})
+	const query = Object.fromEntries(url.searchParams)
+
+	// Handle via query params (IPN style: ?topic=payment&id=... or ?type=payment&data.id=...)
+	if (query.type || query.topic) {
+		console.log("[MP] IPN notification (query params):", JSON.stringify(query))
+		const type = query.type ?? query.topic ?? ""
+		const id = Number(query["data.id"] ?? query.id ?? 0)
+		if (id && type === "payment") processPaymentId(id).catch(console.error)
+		else if (id && type === "merchant_order") processIPNTopic(type, id).catch(console.error)
+		return new Response("OK", { status: 200 })
 	}
 
-	const rawBody = await request.text()
+	// Handle via JSON body (Webhook panel style: {"type":"payment","data":{"id":"..."}})
+	const bodyText = await request.text().catch(() => "")
+	if (bodyText) {
+		console.log("[MP] Webhook body:", bodyText)
+		let notification: { type?: string; action?: string; data?: { id?: number | string } }
+		try {
+			notification = JSON.parse(bodyText)
+		} catch {
+			console.warn("[MP] Failed to parse webhook body as JSON")
+			return new Response("OK", { status: 200 })
+		}
 
-	if (!validateSignature(request.headers, rawBody)) {
-		return new Response("Invalid signature", { status: 401 })
+		const type = notification.type ?? ""
+		const dataId = notification.data?.id
+
+		if (dataId) {
+			const id = Number(dataId)
+			if (id && type === "payment") {
+				console.log("[MP] JSON webhook — payment id:", id)
+				processPaymentId(id).catch(console.error)
+			} else if (id && type === "merchant_order") {
+				console.log("[MP] JSON webhook — merchant_order id:", id)
+				processIPNTopic(type, id).catch(console.error)
+			} else {
+				console.log("[MP] JSON webhook — unhandled type:", type, "data.id:", dataId)
+			}
+		} else {
+			console.log("[MP] JSON webhook — no data.id found, type:", type)
+		}
+
+		return new Response("OK", { status: 200 })
 	}
 
-	let notification: { type?: string; data?: { id: number | string } }
-	try {
-		notification = JSON.parse(rawBody)
-	} catch {
-		return new Response(JSON.stringify({ received: true }), {
-			status: 200,
-			headers: { "Content-Type": "application/json" },
-		})
-	}
-
-	processNotification(notification).catch(console.error)
-
-	return new Response(JSON.stringify({ received: true }), {
-		status: 200,
-		headers: { "Content-Type": "application/json" },
-	})
+	console.log("[MP] No query params and empty body, returning 200")
+	return new Response("OK", { status: 200 })
 }

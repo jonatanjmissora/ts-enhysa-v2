@@ -478,7 +478,7 @@ Rules:
 
 ## Mercado Pago — Checkout Pro + Créditos
 
-> Integración completa de Checkout Pro con acreditación automática de créditos vía webhook.
+> Integración completa de Checkout Pro con acreditación de créditos vía webhook + polling desde `/pago-exitoso` + sync bajo demanda.
 
 ### Planes y precios (producción)
 
@@ -497,89 +497,139 @@ MERCADO_PAGO_WEBHOOK_SECRET=           # desde panel → Webhooks → Clave secr
 BETTER_AUTH_BASE_URL=                  # usado para back_urls y notification_url
 ```
 
+### Principio de diseño
+
+> El **Webhook** únicamente **acelera** la sincronización. Nunca debe ser el único mecanismo de actualización.
+> La única fuente de verdad es la **API de Mercado Pago** (`GET /v1/payments/{id}`).
+> Nunca acreditar directo desde el body del webhook — siempre consultar la API de MP para validar estado.
+
+### Arquitectura resiliente — 3 mecanismos independientes
+
+**Mecanismo 1 — Webhook (acelerador)**
+```
+Webhook recibido (IPN query params o Webhook JSON body)
+    ↓
+syncPayment(paymentId)
+    ↓
+Consultar GET /v1/payments/{id} en MP
+    ↓
+Si APPROVED → creditUser() (idempotente por paymentId) + update pending_payments
+```
+
+**Mecanismo 2 — Polling desde `/pago-exitoso` (fallback post-pago)**
+```
+Usuario paga → MP redirige a /pago-exitoso?payment_id=...&status=approved
+    ↓
+syncPaymentServer({ paymentId }) → syncPayment(paymentId)
+    ↓
+Si APPROVED → "¡Créditos acreditados!" + ir al inicio
+Si aún PENDING → reintentar cada 2s (máx 10)
+Si agota reintentos → "Estamos procesando tu pago, te avisaremos"
+```
+
+**Mecanismo 3 — Sync bajo demanda (syncPendingPayments)**
+```
+Componente necesita créditos (Navbar, Suscripciones, PDF unlock)
+    ↓
+syncPendingPayments(userId)
+    ↓
+SELECT status='pending' FROM pending_payments WHERE userId = ?
+    ↓
+Si hay pendientes → syncPayment(Number(mpPaymentId)) por cada uno
+    ↓
+Acredita si APPROVED, Sonner si hubo cambios
+Si no hay pendientes → termina (0 consultas externas)
+```
+
 ### Archivos del proyecto
 
-- `server/mercadopago/config.ts` — cliente `MercadoPagoConfig`
-- `server/mercadopago/test-conection.ts` — test de conectividad con MP
-- `server/mercadopago/create-preference-server.ts` — crea preferencia, envía `external_reference` (userId), `metadata.plan_id`, `notification_url`, `back_urls`
-- `server/mercadopago/webhook.ts` — handler dual (IPN + Webhook), valida firma, acredita créditos
-- `src/routes/api/mercadopago/webhook.ts` — ruta POST que recibe notificaciones de MP
-- `src/routes/_with-header/checkout.tsx` — UI de checkout con botón de pago y test de conexión
-- `db/credits/schema.ts` — tablas `user_credits` y `credit_history`
+- `server/mercadopago/config.ts` — Inicializa `MercadoPagoConfig` con `MERCADO_PAGO_ACCESS_TOKEN`.
+- `server/mercadopago/test-conection.ts` — Test de conectividad con MP.
+- `server/mercadopago/create-preference-server.ts` — Crea preferencia Checkout Pro. Inserta `pending_payments`. Redirige a `/pago-exitoso` via `back_urls.success`.
+- `server/mercadopago/webhook.ts` — Handler dual IPN + Webhook. Llama `syncPayment()`.
+- `server/mercadopago/sync-payment.ts` — **Core**: consulta API de MP, acredita créditos si approved, actualiza `pending_payments`. Idempotente.
+- `server/mercadopago/sync-payment-server.ts` — Server function pública (POST, auth requerida). Llama `syncPayment()`.
+- `server/mercadopago/sync-pending-payments.ts` — Busca `pending_payments` del userId, llama `syncPayment()` por cada uno. Retorna resumen.
+- `db/payments/schema.ts` — Tabla `pending_payments` (preferenceId PK, userId, planId, mpPaymentId, status, timestamps).
+- `db/credits/schema.ts` — Tabla `user_credits` y `credit_history`.
+- `src/routes/api/mercadopago/webhook.ts` — Ruta API que expone webhook (GET + POST).
+- `src/routes/_with-header/checkout.tsx` — UI de checkout.
+- `src/routes/_protected/pago-exitoso.tsx` — Página post-pago con polling.
 
-### Flujo de pago (verificado con test)
+### Dónde llamar syncPendingPayments
 
-1. Usuario logueado va a `/checkout?plan=por-informe`
-2. Click "Pagar con Mercado Pago" → `createPreferenceServer` crea preferencia
-3. Redirige a `www.mercadopago.com.ar` (usar `init_point`, no `sandbox_init_point`)
-4. Usuario paga como invitado o logueado con buyer test
-5. MP envía notificación IPN (`?topic=merchant_order&id=...`) a `/api/mercadopago/webhook`
-6. Webhook busca el merchant order → encuentra payment aprobado
-7. Lee `metadata.plan_id` de la preferencia (via payment API)
-8. Acredita créditos: upsert en `user_credits` + insert en `credit_history`
-9. Idempotencia por `paymentId` — no duplica si llega la misma notificación dos veces
+| Componente | Cuándo |
+|---|---|
+| **Suscripciones** | Antes de mostrar créditos del usuario |
+| **Navbar** | Antes de mostrar badge de créditos (solo si hay pendientes) |
+| **PDF unlock** | Antes de decidir "no tenés créditos" |
+
+Optimización: el 99% de las veces solo hace un SELECT barato a la DB (status pending = 0 filas → termina). Solo consulta MP si hay pendientes.
+
+### Flujo de pago completo
+
+1. Usuario va a `/checkout?plan=por-informe`
+2. Click "Pagar con MP" → `createPreferenceServer`:
+   - Crea preferencia con `external_reference` (userId), `metadata.plan_id`, `notification_url`
+   - Inserta `pending_payments { preferenceId, userId, planId, status: "pending" }`
+   - Redirige a `init_point`
+3. Usuario paga en MP
+4. **M1** — MP envía IPN/Webhook → `syncPayment()` → acredita si approved
+5. **M2** — MP redirige a `/pago-exitoso` → `syncPaymentServer()` → acredita si approved (polling 2s, máx 10)
+6. **M3** — Componentes llaman `syncPendingPayments(userId)` → recupera pendientes olvidados
+
+### Notas de implementación
+
+- Las notificaciones IPN (`notification_url`) llegan como `GET` con query params. El handler expone GET y POST.
+- En modo TEST (ngrok), las notificaciones pueden no llegar. El M2 y M3 cubren este caso.
+- `syncPayment` es la única función que acredita créditos. Todos los mecanismos la invocan.
+- `creditUser()` usa transacción atómica: upsert `user_credits` + insert `credit_history`.
+- Idempotencia por `paymentId` en `credit_history` — doble acreditación imposible.
+- El webhook siempre responde 200 inmediatamente antes de procesar.
 
 ### Testing con usuarios de prueba
 
-**Seller** (credenciales en .env): se crea desde el panel "Cuentas de Prueba"
-- User ID: `3573589436`
-- Usuario: `TESTUSER3026059714133907697`
-- Contraseña: `13Krt9DTHb`
-- Código de verificación: `589436`
+**Seller**:
+- User ID: `3573589436` / Usuario: `TESTUSER3026059714133907697` / Pass: `13Krt9DTHb`
 
-**Buyer** (para pagar): se crea desde el panel "Cuentas de Prueba"
-- Usuario: `TESTUSER582536072844915181`
-- Contraseña: `ErldGKgSdv`
+**Buyer**:
+- Usuario: `TESTUSER582536072844915181` / Pass: `ErldGKgSdv`
 
-Procedimiento que funcionó:
-1. Ventana de incógnito
-2. Ir a `https://www.mercadopago.com.ar/developers` y loguearse con **buyer test**
-3. En misma pestaña, ir al checkout de la app: `/checkout?plan=por-informe`
-4. Pagar con tarjeta de prueba: `APRO` (nombre), `5031 7557 3453 0604` (Mastercard), `12/25`, `123`
-5. Verificar en consola del server: `[MP] Credited N credits to user X (payment Y)`
+Procedimiento:
+1. Ventana incógnito → loguearse como buyer test en `https://www.mercadopago.com.ar/developers`
+2. En misma pestaña, ir al checkout de la app
+3. Pagar con tarjeta test: `APRO` / `5031 7557 3453 0604` / `12/25` / `123`
 
-**Tarjetas de prueba que funcionan:**
+**Tarjetas:**
 | Tipo | Número | CVV | Vto |
 |---|---|---|---|
 | Mastercard crédito | `5031 7557 3453 0604` | `123` | `11/30` |
 | Visa crédito | `4509 9535 6623 3704` | `123` | `11/30` |
 
-**Códigos de titular (status del pago):**
+**Códigos titular:**
 | Nombre | Resultado |
 |---|---|
 | `APRO` | Aprobado |
 | `OTHE` | Rechazado |
 | `CONT` | Pendiente |
 
-### Notas importantes de la implementación
+### Setup de desarrollo con ngrok
 
-- Las credenciales de prueba de MP usan prefijo `APP_USR-` (igual que producción). El modo test/producción se configura desde el panel de MP, no del token.
-- El `notification_url` en la preferencia dispara **IPN** (query params `?topic=...&id=...`). El webhook panel (Tus integraciones → Webhooks) dispara **Webhook** (JSON body con `type` y `data.id`). El handler soporta ambos.
-- La validación de firma HMAC-SHA256 usa `x-signature`, `x-request-id` y `data.id` del body. Solo aplica a Webhooks (no IPN).
-- Las notificaciones IPN de tipo `merchant_order` requieren hacer un GET a la Merchant Order API para obtener el payment ID real.
-- `auto_return: "approved"` y `back_urls` configurados redirigen automáticamente al usuario después del pago exitoso.
-- Para desarrollo local con ngrok, agregar `server: { allowedHosts: true }` en `vite.config.ts`.
+1. `ngrok http 3000` → copiar URL
+2. Actualizar `.env`: `BETTER_AUTH_URL`, `VITE_BETTER_AUTH_BASE_URL`, `BETTER_AUTH_BASE_URL`
+3. Actualizar URL del webhook en panel MP (Tus integraciones → Webhooks)
+4. `pnpm dev`
+5. `server.allowedHosts: true` en `vite.config.ts`
 
-### Estado actual del plan (Julio 2026)
+### Próximos pasos pendientes
 
-**Completado ✅**
-- Configuración del cliente MP (`server/mercadopago/config.ts`)
-- Test de conectividad (`server/mercadopago/test-conection.ts`)
-- Creación de preferencia Checkout Pro (`server/mercadopago/create-preference-server.ts`)
-- UI de checkout con botón "Pagar con MP" y test de conexión (`src/routes/_with-header/checkout.tsx`)
-- Handler dual de notificaciones IPN + Webhook (`server/mercadopago/webhook.ts`)
-- Ruta API del webhook (`src/routes/api/mercadopago/webhook.ts`)
-- Validación de firma HMAC-SHA256 con webhook secret
-- Acreditación automática de créditos (upsert en `user_credits` + `credit_history`)
-- Idempotencia por `paymentId`
-- Flujo completo verificado con tarjeta de prueba APRO
-
-**Próximos pasos pendientes**
-1. Probar con los otros planes (Mensual, Anual) y verificar acreditación de 7 y 100 créditos
-2. Conectar la UI de créditos restantes en la app para que el usuario vea su saldo después de la compra (usar `getUserCreditsServer`)
-3. Cuando pase a producción:
-   - Cambiar credenciales en `.env` a las de producción (mismas `APP_USR-...`, modo producción en el panel)
-   - Configurar dominio real en `BETTER_AUTH_BASE_URL` (no ngrok)
-   - Actualizar `notification_url` y `back_urls` en el panel de MP
-   - Remover `server.allowedHosts` de `vite.config.ts`
-4. Considerar agregar visualización del plan activo y fecha de expiración para planes recurrentes
+- [ ] Implementar `db/payments/schema.ts` (pending_payments)
+- [ ] Implementar `server/mercadopago/sync-payment.ts` (core)
+- [ ] Implementar `server/mercadopago/sync-payment-server.ts`
+- [ ] Implementar `server/mercadopago/sync-pending-payments.ts`
+- [ ] Modificar `createPreferenceServer` (insert pending + back_url → /pago-exitoso)
+- [ ] Simplificar `webhook.ts` (usar syncPayment)
+- [ ] Crear `src/routes/_protected/pago-exitoso.tsx`
+- [ ] Integrar syncPendingPayments en Suscripciones, Navbar, PDF unlock
+- [ ] Probar con planes Mensual y Anual
+- [ ] Preparar para producción (dominio real, sin ngrok)
