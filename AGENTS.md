@@ -550,6 +550,7 @@ Si no hay pendientes → termina (0 consultas externas)
 - `server/mercadopago/sync-payment.ts` — **Core**: consulta API de MP, acredita créditos si approved, actualiza `pending_payments`. Idempotente.
 - `server/mercadopago/sync-payment-server.ts` — Server function pública (POST, auth requerida). Llama `syncPayment()`.
 - `server/mercadopago/sync-pending-payments.ts` — Busca `pending_payments` del userId, llama `syncPayment()` por cada uno. Retorna resumen.
+- `server/mercadopago/sync-pending-payments-server.ts` — Server function GET protegida para sync bajo demanda.
 - `db/payments/schema.ts` — Tabla `pending_payments` (preferenceId PK, userId, planId, mpPaymentId, status, timestamps).
 - `db/credits/schema.ts` — Tabla `user_credits` y `credit_history`.
 - `src/routes/api/mercadopago/webhook.ts` — Ruta API que expone webhook (GET + POST).
@@ -613,28 +614,37 @@ Procedimiento:
 | `OTHE` | Rechazado |
 | `CONT` | Pendiente |
 
-### Setup de desarrollo con ngrok
+### Setup de desarrollo con Cloudflare Tunnel (recomendado)
 
-1. `ngrok http 3000` → copiar URL
+> Recomendado sobre ngrok. Cloudflare Tunnel es más estable, no requiere URL dinámica, y las notificaciones de MP llegan consistentemente incluso en modo TEST.
+
+1. `cloudflared tunnel --url http://localhost:3000` → copiar URL `https://xxxx.trycloudflare.com`
 2. Actualizar `.env`: `BETTER_AUTH_URL`, `VITE_BETTER_AUTH_BASE_URL`, `BETTER_AUTH_BASE_URL`
 3. Actualizar URL del webhook en panel MP (Tus integraciones → Webhooks)
 4. `pnpm dev`
 5. `server.allowedHosts: true` en `vite.config.ts`
 
+**Alternativa ngrok** (menos estable para webhooks):
+```bash
+ngrok http 3000
+```
+
 ### Implementado
 
 - [x] `db/payments/schema.ts` — tabla `pending_payments` (preferenceId PK, userId, planId, mpPaymentId, status, timestamps)
-- [x] Fix race condition en `creditUser()` (webhook.ts): ahora usa `ON CONFLICT DO NOTHING` dentro de la transacción con UNIQUE `(payment_id, type)` en `credit_history`. MP puede enviar notificaciones duplicadas simultáneas sin acreditar dos veces.
-- [x] Limpieza de 3 registros duplicados existentes en `credit_history` producto de la race condition.
+- [x] Fix race condition en `creditUser()`: `ON CONFLICT DO NOTHING` con UNIQUE `(payment_id, type)` en `credit_history`. MP puede enviar notificaciones duplicadas simultáneas sin acreditar dos veces.
+- [x] `server/mercadopago/sync-payment.ts` — core que consulta API de MP y acredita créditos
+- [x] `server/mercadopago/sync-payment-server.ts` — server function POST protegida
+- [x] `server/mercadopago/sync-pending-payments.ts` — busca pendientes en DB y sincroniza
+- [x] `server/mercadopago/sync-pending-payments-server.ts` — server function GET protegida
+- [x] `createPreferenceServer` modificado: inserta `pending_payments` + `back_urls.success` → `/pago-exitoso`
+- [x] `webhook.ts` simplificado: delega en `syncPayment()`
+- [x] `src/routes/_protected/pago-exitoso.tsx` — página post-pago con polling 2s (máx 10 intentos)
+- [x] Webhook funciona correctamente con Cloudflare Tunnel (modo TEST y producción)
+- [x] Flujo completo M1+M2 verificado: pago APRO → crédito acreditado
 
 ### Próximos pasos pendientes
 
-- [ ] Implementar `server/mercadopago/sync-payment.ts` (core)
-- [ ] Implementar `server/mercadopago/sync-payment-server.ts`
-- [ ] Implementar `server/mercadopago/sync-pending-payments.ts`
-- [ ] Modificar `createPreferenceServer` (insert pending + back_url → /pago-exitoso)
-- [ ] Simplificar `webhook.ts` (usar syncPayment)
-- [ ] Crear `src/routes/_protected/pago-exitoso.tsx`
-- [ ] Integrar syncPendingPayments en Suscripciones, Navbar, PDF unlock
+- [ ] Integrar `syncPendingPaymentsServer` en Suscripciones, Navbar, PDF unlock
 - [ ] Probar con planes Mensual y Anual
-- [ ] Preparar para producción (dominio real, sin ngrok)
+- [ ] Preparar para producción (dominio real, sin Cloudflare Tunnel/ngrok)

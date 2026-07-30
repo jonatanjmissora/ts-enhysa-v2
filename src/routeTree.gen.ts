@@ -17,6 +17,7 @@ import { Route as WithHeaderLoginRouteImport } from './routes/_with-header/login
 import { Route as WithHeaderLandingRouteImport } from './routes/_with-header/landing'
 import { Route as WithHeaderCheckoutRouteImport } from './routes/_with-header/checkout'
 import { Route as ProtectedSuscripcionRouteImport } from './routes/_protected/suscripcion'
+import { Route as ProtectedPagoExitosoRouteImport } from './routes/_protected/pago-exitoso'
 import { Route as ProtectedPerfilRouteRouteImport } from './routes/_protected/perfil/route'
 import { Route as WithHeaderTeoriaIndexRouteImport } from './routes/_with-header/teoria/index'
 import { Route as ProtectedIluminacionIndexRouteImport } from './routes/_protected/iluminacion/index'
@@ -85,6 +86,11 @@ const WithHeaderCheckoutRoute = WithHeaderCheckoutRouteImport.update({
 const ProtectedSuscripcionRoute = ProtectedSuscripcionRouteImport.update({
   id: '/suscripcion',
   path: '/suscripcion',
+  getParentRoute: () => ProtectedRouteRoute,
+} as any)
+const ProtectedPagoExitosoRoute = ProtectedPagoExitosoRouteImport.update({
+  id: '/pago-exitoso',
+  path: '/pago-exitoso',
   getParentRoute: () => ProtectedRouteRoute,
 } as any)
 const ProtectedPerfilRouteRoute = ProtectedPerfilRouteRouteImport.update({
@@ -292,6 +298,7 @@ const ProtectedIluminacionReportesChar91idChar93MedicionAreasChar91areaIdChar93C
 export interface FileRoutesByFullPath {
   '/': typeof ProtectedIndexRoute
   '/perfil': typeof ProtectedPerfilRouteRouteWithChildren
+  '/pago-exitoso': typeof ProtectedPagoExitosoRoute
   '/suscripcion': typeof ProtectedSuscripcionRoute
   '/checkout': typeof WithHeaderCheckoutRoute
   '/landing': typeof WithHeaderLandingRoute
@@ -331,6 +338,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof ProtectedIndexRoute
   '/perfil': typeof ProtectedPerfilRouteRouteWithChildren
+  '/pago-exitoso': typeof ProtectedPagoExitosoRoute
   '/suscripcion': typeof ProtectedSuscripcionRoute
   '/checkout': typeof WithHeaderCheckoutRoute
   '/landing': typeof WithHeaderLandingRoute
@@ -372,6 +380,7 @@ export interface FileRoutesById {
   '/_protected': typeof ProtectedRouteRouteWithChildren
   '/_with-header': typeof WithHeaderRouteRouteWithChildren
   '/_protected/perfil': typeof ProtectedPerfilRouteRouteWithChildren
+  '/_protected/pago-exitoso': typeof ProtectedPagoExitosoRoute
   '/_protected/suscripcion': typeof ProtectedSuscripcionRoute
   '/_with-header/checkout': typeof WithHeaderCheckoutRoute
   '/_with-header/landing': typeof WithHeaderLandingRoute
@@ -414,6 +423,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/perfil'
+    | '/pago-exitoso'
     | '/suscripcion'
     | '/checkout'
     | '/landing'
@@ -453,6 +463,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/perfil'
+    | '/pago-exitoso'
     | '/suscripcion'
     | '/checkout'
     | '/landing'
@@ -493,6 +504,7 @@ export interface FileRouteTypes {
     | '/_protected'
     | '/_with-header'
     | '/_protected/perfil'
+    | '/_protected/pago-exitoso'
     | '/_protected/suscripcion'
     | '/_with-header/checkout'
     | '/_with-header/landing'
@@ -595,6 +607,13 @@ declare module '@tanstack/react-router' {
       path: '/suscripcion'
       fullPath: '/suscripcion'
       preLoaderRoute: typeof ProtectedSuscripcionRouteImport
+      parentRoute: typeof ProtectedRouteRoute
+    }
+    '/_protected/pago-exitoso': {
+      id: '/_protected/pago-exitoso'
+      path: '/pago-exitoso'
+      fullPath: '/pago-exitoso'
+      preLoaderRoute: typeof ProtectedPagoExitosoRouteImport
       parentRoute: typeof ProtectedRouteRoute
     }
     '/_protected/perfil': {
@@ -862,6 +881,7 @@ const ProtectedIluminacionReportesChar91idChar93MenuRouteRouteWithChildren =
 
 interface ProtectedRouteRouteChildren {
   ProtectedPerfilRouteRoute: typeof ProtectedPerfilRouteRouteWithChildren
+  ProtectedPagoExitosoRoute: typeof ProtectedPagoExitosoRoute
   ProtectedSuscripcionRoute: typeof ProtectedSuscripcionRoute
   ProtectedIndexRoute: typeof ProtectedIndexRoute
   ProtectedIluminacionIndexRoute: typeof ProtectedIluminacionIndexRoute
@@ -883,6 +903,7 @@ interface ProtectedRouteRouteChildren {
 
 const ProtectedRouteRouteChildren: ProtectedRouteRouteChildren = {
   ProtectedPerfilRouteRoute: ProtectedPerfilRouteRouteWithChildren,
+  ProtectedPagoExitosoRoute: ProtectedPagoExitosoRoute,
   ProtectedSuscripcionRoute: ProtectedSuscripcionRoute,
   ProtectedIndexRoute: ProtectedIndexRoute,
   ProtectedIluminacionIndexRoute: ProtectedIluminacionIndexRoute,

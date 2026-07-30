@@ -3,6 +3,8 @@ import { createServerFn } from "@tanstack/react-start"
 import { getRequest } from "@tanstack/react-start/server"
 import { Preference } from "mercadopago"
 import { mpClient } from "./config"
+import { db } from "../../db"
+import { pendingPayments } from "../../db/payments/schema"
 
 export const createPreferenceServer = createServerFn({ method: "POST" })
 	.validator((data: { planId: string; title: string; price: number }) => data)
@@ -32,14 +34,23 @@ export const createPreferenceServer = createServerFn({ method: "POST" })
 					metadata: { plan_id: data.planId },
 					notification_url: notificationUrl,
 					back_urls: {
-						success: `${baseUrl}/suscripcion?status=approved`,
+						success: `${baseUrl}/pago-exitoso`,
 						failure: `${baseUrl}/suscripcion?status=failure`,
 						pending: `${baseUrl}/suscripcion?status=pending`,
 					},
 					auto_return: "approved",
 				},
 			})
-			// console.log("[MP] Preference created:", JSON.stringify(result, null, 2))
+
+			if (result.id) {
+				await db.insert(pendingPayments).values({
+					preferenceId: result.id,
+					userId: session.user.id,
+					planId: data.planId,
+					status: "pending",
+				})
+			}
+
 			return {
 				preferenceId: result.id,
 				initPoint: result.init_point,

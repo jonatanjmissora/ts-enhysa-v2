@@ -1,8 +1,6 @@
-
 npx drizzle-kit push
 
-npx cloudflared 
-tunnel --url http://localhost:3000
+npx cloudflared tunnel --url http://localhost:3000
 
 userCredits
 INSERT INTO user_credits (user_id, credits)

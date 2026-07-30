@@ -23,7 +23,9 @@ function RouteComponent() {
 	const { data: session, isPending } = authClient.useSession()
 	const backTo = from === "landing" ? "/landing" : "/suscripcion"
 	const found = PLANS.find(p => p.title.toLowerCase() === plan?.toLowerCase())
-	const [mpStatus, setMpStatus] = useState<"idle" | "checking" | "connected" | "error">("idle")
+	const [mpStatus, setMpStatus] = useState<
+		"idle" | "checking" | "connected" | "error"
+	>("idle")
 	const [loading, setLoading] = useState(false)
 	const [errorMsg, setErrorMsg] = useState<string | null>(null)
 
@@ -50,9 +52,11 @@ function RouteComponent() {
 		} catch (err) {
 			console.error("Error al crear preferencia MP:", err)
 			const msg =
-				err instanceof Error ? err.message :
-				typeof err === "string" ? err :
-				JSON.stringify(err)
+				err instanceof Error
+					? err.message
+					: typeof err === "string"
+						? err
+						: JSON.stringify(err)
 			setErrorMsg(msg)
 			setLoading(false)
 		}
@@ -69,22 +73,6 @@ function RouteComponent() {
 					<ArrowLeft size={16} />
 					Volver
 				</Link>
-
-				<button
-					type="button"
-					onClick={checkConnection}
-					disabled={mpStatus === "checking" || mpStatus === "connected"}
-					className="flex items-center gap-2 text-xs px-3 py-1.5 rounded-md border border-foreground/10 hover:bg-accent transition-colors disabled:opacity-50"
-				>
-					{mpStatus === "idle" && "Verificar conexión con MP"}
-					{mpStatus === "checking" && (
-						<><Loader className="size-3 animate-spin" /> Verificando...</>
-					)}
-					{mpStatus === "connected" && (
-						<><Check className="size-3 text-green-500" /> MP conectado</>
-					)}
-					{mpStatus === "error" && "Error de conexión — reintentar"}
-				</button>
 
 				{isPending ? (
 					<Loader className="size-6 animate-spin text-foreground-soft" />
@@ -104,16 +92,23 @@ function RouteComponent() {
 						</button>
 					</div>
 				) : found ? (
-					<div className="flex flex-col items-center gap-6">
-						<div className="text-center space-y-4">
-							<h1 className="text-3xl font-bold">Checkout</h1>
-							<p>
-								Estás a punto de adquirir el plan{" "}
-								<strong className="text-[#e2711d]">{found.title}</strong>.
-							</p>
-							<p className="text-2xl font-semibold text-foreground-soft">
-								${found.price.toLocaleString("es-AR")}
-							</p>
+					<div className="flex flex-col items-center gap-10">
+						<div className="text-center space-y-6">
+							<h1 className="text-4xl font-bold">Orden de Compra</h1>
+							<div className="bg-accent rounded-xl p-4 w-full space-y-5 border border-foreground/10 py-4 my-4">
+								<p className="text-xl tracking-wide text-balance flex flex-col itemx-center gap-3">
+									Está a punto de adquirir el plan{" "}
+									<strong className="text-[#e2711d] text-2xl">
+										{found.title}
+									</strong>
+									<span className="text-foreground-soft">
+										{found.credits} crédito{found.credits !== 1 ? "s" : ""}
+									</span>
+								</p>
+								<p className="text-4xl font-semibold text-foreground-soft">
+									${found.price.toLocaleString("es-AR")}
+								</p>
+							</div>
 						</div>
 						<button
 							type="button"
@@ -124,7 +119,9 @@ function RouteComponent() {
 							{loading ? "Redirigiendo a MP..." : "Pagar con Mercado Pago"}
 						</button>
 						{errorMsg && (
-							<p className="text-xs text-red-500 max-w-xs text-center">{errorMsg}</p>
+							<p className="text-xs text-red-500 max-w-xs text-center">
+								{errorMsg}
+							</p>
 						)}
 					</div>
 				) : (

@@ -1,7 +1,6 @@
-import BackChevron from "#/components/back-chevron"
 import SuscriptionPlans from "#/components/suscripciones"
 import useScrollTop from "#/hooks/scroll-top"
-import { useQuery } from "@tanstack/react-query"
+import { useSuspenseQuery } from "@tanstack/react-query"
 import { createFileRoute, useNavigate } from "@tanstack/react-router"
 import { ChevronLeft, Shield } from "lucide-react"
 import { Suspense } from "react"
@@ -59,7 +58,7 @@ function RouteComponent() {
 }
 
 function Credits() {
-	const { data: credits } = useQuery(userCreditsOptions)
+	const { data: credits } = useSuspenseQuery(userCreditsOptions)
 	return (
 			<span className="font-semibold text-gray-50/50 sm:text-foreground-soft text-lg tracking-wider">
 				creditos disponibles: {credits}

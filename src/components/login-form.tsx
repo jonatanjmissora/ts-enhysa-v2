@@ -50,6 +50,7 @@ export function LoginForm({
 			onSubmit: formSchema,
 		},
 		onSubmit: async ({ value }) => {
+			setLoading(true)
 			const result = await authClient.signIn.email({
 				email: value.email,
 				password: value.password,
@@ -57,6 +58,7 @@ export function LoginForm({
 			})
 			if (result.error) {
 				console.error("Email o contraseña incorrectos")
+				setLoading(false)
 				return
 			}
 
@@ -197,9 +199,10 @@ export function LoginForm({
 							<Field>
 								<Button
 									type="submit"
+									disabled={loading}
 									className="p-5 text-center ring-foreground/20"
 								>
-									Ingresar
+									{loading ? "Ingresando..." : "Ingresar"}
 								</Button>
 								<FieldDescription className="text-center">
 									No tiene cuenta ?{" "}
