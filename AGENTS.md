@@ -642,9 +642,10 @@ ngrok http 3000
 - [x] `src/routes/_protected/pago-exitoso.tsx` — página post-pago con polling 2s (máx 10 intentos)
 - [x] Webhook funciona correctamente con Cloudflare Tunnel (modo TEST y producción)
 - [x] Flujo completo M1+M2 verificado: pago APRO → crédito acreditado
+- [x] `syncPendingPaymentsServer` integrado en Navbar, Suscripciones, PDF completa y PDF reducida (sync on mount + invalidación `user-credits`)
+- [x] Unlock de reporte (`unlock-reporte-server.ts`) solo setea `creditConsumed` + `creditConsumedAt` — `finishedAt` queda intacto
 
 ### Próximos pasos pendientes
 
-- [ ] Integrar `syncPendingPaymentsServer` en Suscripciones, Navbar, PDF unlock
 - [ ] Probar con planes Mensual y Anual
 - [ ] Preparar para producción (dominio real, sin Cloudflare Tunnel/ngrok)

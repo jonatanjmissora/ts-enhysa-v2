@@ -11,11 +11,12 @@ import { authClient } from "@/lib/auth-client"
 import { getUserInfo } from "@/lib/utils"
 import { Link, useLoaderData, useNavigate } from "@tanstack/react-router"
 import { LogOut, Shield } from "lucide-react"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Theme } from "./theme"
 import { resetDemoData } from "../../server/reset-demo-data-server"
-import { useQuery } from "@tanstack/react-query"
+import { useQuery, useQueryClient } from "@tanstack/react-query"
 import { userCreditsOptions } from "../../queries/credits/user-credits-query"
+import { syncPendingPaymentsServer } from "../../server/mercadopago/sync-pending-payments-server"
 
 const DEMO_EMAIL_PREFIX = "demo"
 const DEMO_EMAIL_DOMAIN = "@enhysa.demo"
@@ -158,7 +159,13 @@ function UserSuscriptionInfo({
 }: {
 	setIsOpen: (open: boolean) => void
 }) {
+	const queryClient = useQueryClient()
 	const { data: credits } = useQuery(userCreditsOptions)
+	useEffect(() => {
+		syncPendingPaymentsServer().then(res => {
+			if (res?.synchronized) queryClient.invalidateQueries({ queryKey: ["user-credits"] })
+		})
+	}, [])
 	return (
 		<div className="w-full flex flex-col items-end justify-end gap-1">
 			<div className="flex justify-end items-center gap-2 w-full">

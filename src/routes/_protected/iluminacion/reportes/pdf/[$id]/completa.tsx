@@ -1,9 +1,10 @@
 import BackChevron from "#/components/back-chevron"
 import Loading from "#/components/loading"
 import Title from "#/components/title"
-import { useSuspenseQuery, useQuery } from "@tanstack/react-query"
+import { useSuspenseQuery, useQuery, useQueryClient } from "@tanstack/react-query"
 import { createFileRoute } from "@tanstack/react-router"
-import { Suspense, lazy } from "react"
+import { Suspense, lazy, useEffect } from "react"
+import { syncPendingPaymentsServer } from "../../../../../../../server/mercadopago/sync-pending-payments-server"
 import { reporteQueryOptions } from "../../../../../../../queries/reportes/iluminacion/reportes-query"
 import { ClientComponent } from "#/components/client-component"
 const MyDocument = lazy(() =>
@@ -84,6 +85,12 @@ function PDF() {
 		staleTime: 1000 * 60 * 5,
 	})
 	const { data: credits } = useQuery(userCreditsOptions)
+	const queryClient = useQueryClient()
+	useEffect(() => {
+		syncPendingPaymentsServer().then(res => {
+			if (res?.synchronized) queryClient.invalidateQueries({ queryKey: ["user-credits"] })
+		})
+	}, [])
 
 	if (!reporte)
 		return <span className="text-red-500">Reporte no encontrado</span>

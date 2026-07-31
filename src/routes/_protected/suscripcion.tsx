@@ -1,11 +1,12 @@
 import SuscriptionPlans from "#/components/suscripciones"
 import useScrollTop from "#/hooks/scroll-top"
-import { useSuspenseQuery } from "@tanstack/react-query"
+import { useSuspenseQuery, useQueryClient } from "@tanstack/react-query"
 import { createFileRoute, useNavigate } from "@tanstack/react-router"
 import { ChevronLeft, Shield } from "lucide-react"
-import { Suspense } from "react"
+import { Suspense, useEffect } from "react"
 import { z } from "zod"
 import { userCreditsOptions } from "../../../queries/credits/user-credits-query"
+import { syncPendingPaymentsServer } from "../../../server/mercadopago/sync-pending-payments-server"
 
 const fromSearchSchema = z.object({
 	from: z.string().optional(),
@@ -20,6 +21,12 @@ function RouteComponent() {
 	const { from } = Route.useSearch()
 	useScrollTop()
 	const navigate = useNavigate()
+	const queryClient = useQueryClient()
+	useEffect(() => {
+		syncPendingPaymentsServer().then(res => {
+			if (res?.synchronized) queryClient.invalidateQueries({ queryKey: ["user-credits"] })
+		})
+	}, [])
 	return (
 		<div className="min-h-svh flex flex-col relative mb-30">
 			<button
