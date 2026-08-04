@@ -5,12 +5,17 @@ import { Preference } from "mercadopago"
 import { mpClient } from "./config"
 import { db } from "../../db"
 import { pendingPayments } from "../../db/payments/schema"
+import { isDemoUserEmail } from "@/lib/demo-user"
 
 export const createPreferenceServer = createServerFn({ method: "POST" })
 	.validator((data: { planId: string; title: string; price: number }) => data)
 	.handler(async ({ data }) => {
 		const request = getRequest()
 		const session = await protectedServerFn(request)
+
+		if (isDemoUserEmail(session.user.email)) {
+			throw new Error("Los usuarios demo no pueden comprar créditos.")
+		}
 
 		const baseUrl = process.env.BETTER_AUTH_BASE_URL
 		const notificationUrl = `${baseUrl}/api/mercadopago/webhook`

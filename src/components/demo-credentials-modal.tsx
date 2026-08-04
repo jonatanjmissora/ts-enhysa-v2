@@ -41,6 +41,10 @@ export function DemoCredentialsModal({
 					</div>
 				</div>
 				<AlertDialogFooter>
+					<p className="text-xs text-foreground-soft tracking-wider text-balance">
+						Esta cuenta es solo para fines demostrativos, no podrá descargar
+						informes.
+					</p>
 					<Button onClick={onConfirm}>Entendido, continuar</Button>
 				</AlertDialogFooter>
 			</AlertDialogContent>

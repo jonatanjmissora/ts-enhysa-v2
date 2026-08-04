@@ -371,11 +371,30 @@ El sistema de demo user permite probar la app sin registrarse, con datos aislado
 
 ### Diseño
 
-- Se crean hasta **5 demo users** simultáneos con credenciales secuenciales: `demo1@enhysa.demo` / `demo1`, `demo2@enhysa.demo` / `demo2`, etc.
+- Se crean hasta **5 demo users** simultáneos con emails secuenciales: `demo1@enhysa.demo`, `demo2@enhysa.demo`, etc.
 - Cada sesión demo tiene su propio `userId` → datos completamente aislados (privacidad).
-- TTL de **24 horas**: al solicitar un nuevo demo user, se borran los demo users con `createdAt > 24h` (y sus datos en cascada).
+- TTL de **24 horas**: al solicitar un nuevo demo user, se borran los demo users con `createdAt < now() - 24h` (y sus datos en cascada).
 - Al cerrar sesión, `resetDemoDataServer` solo borra datos si es la **única sesión activa** del demo user (cuenta sesiones en tabla `session` con `expiresAt > now()`).
 - Si hay otra sesión activa del mismo demo user, no se borra nada, para no interrumpir a otro usuario.
+
+### Reglas de negocio requeridas
+
+- Un demo user **no puede comprar créditos**.
+- En `src/routes/_with-header/checkout.tsx`, al hacer click en `Pagar con Mercado Pago`, se debe verificar si la cuenta es demo. Si lo es, no se crea preferencia y se muestra un mensaje o `sonner` indicando que debe iniciar sesión con un usuario real para comprar créditos.
+- En `src/components/reportes/iluminacion/pdf/my-document.tsx` y `src/components/reportes/iluminacion/pdf/my-document-reducida.tsx`, si la cuenta es demo, el botón `Desbloquear PDF (1 crédito)` debe reemplazarse por este mensaje:
+  `Version Demo, debe loguearse para generar informes descargables. Logueate con tus datos`.
+- Las credenciales demo no deben ser triviales. La contraseña deseada es un código aleatorio de 4 dígitos entre `0000` y `9999`.
+
+### Estado actual verificado
+
+- `server/seed-demo-user-server.ts` hoy crea passwords débiles y predecibles: `demo1`, `demo2`, etc.
+- `src/routes/_with-header/checkout.tsx` hoy no bloquea la compra de créditos para usuarios demo antes de llamar a Mercado Pago.
+- `src/components/reportes/iluminacion/pdf/my-document.tsx` y `src/components/reportes/iluminacion/pdf/my-document-reducida.tsx` hoy muestran el flujo normal de desbloqueo y no reemplazan el CTA por un mensaje específico para demo users.
+- La eliminación de demo users **sí está implementada** mediante `db.delete(user)` en `server/reset-demo-data-server.ts` y `server/seed-demo-user-server.ts`.
+- Esa eliminación depende de `ON DELETE CASCADE` y hoy alcanza a `session`, `account`, `user_credits`, `credit_history`, `pending_payments`, `tecnicos`, `empresas`, `instrumentos`, `reportes_iluminacion`, `areas_iluminacion` y `localizadas_iluminacion`.
+- La limpieza por logout ocurre solo si la sesión actual es la única sesión activa del demo user.
+- La limpieza por TTL ocurre recién cuando se solicita un nuevo demo user.
+- Riesgo actual: `ensureDemoUser()` calcula el próximo email con `activeCount + 1`, lo que puede reutilizar un slot ocupado si existen huecos (`demo1`, `demo3`, etc.) y terminar en colisión por email único.
 
 ### Server Functions
 
@@ -384,7 +403,7 @@ El sistema de demo user permite probar la app sin registrarse, con datos aislado
 export const ensureDemoUser = createServerFn({ method: "GET" }).handler(async () => {
   // 1. Borrar demo users con createdAt < hace 24h (cascade)
   // 2. Contar demo users activos restantes
-  // 3. Si < 5: crear nuevo user + account con email demo{N}@enhysa.demo, password demo{N}
+  // 3. Si < 5: crear nuevo user + account con email demo{N}@enhysa.demo, password temporal
   // 4. Si >= 5: devolver error
 })
 
@@ -420,16 +439,21 @@ const key = await new Promise<Buffer>((resolve, reject) =>
 
 ### Créditos
 
-Demo users nunca tienen créditos. `getUserCreditsServer` retorna `0`. PDFs siempre con watermark y botón "Comprar créditos".
+- Hoy los demo users no tienen créditos en la práctica porque no se les cargan filas en `user_credits`, y `getUserCreditsServer` devuelve `0` cuando no encuentra saldo.
+- Regla requerida: un demo user no debe poder iniciar compras de créditos ni desbloquear PDFs descargables.
 
 ### Archivos relevantes
 
 - `server/seed-demo-user-server.ts`
 - `server/reset-demo-data-server.ts`
+- `server/credits/get-user-credits-server.ts`
 - `src/components/login-form.tsx`
 - `src/components/suscripciones.tsx`
 - `src/components/navbar.tsx`
 - `src/components/demo-credentials-modal.tsx`
+- `src/routes/_with-header/checkout.tsx`
+- `src/components/reportes/iluminacion/pdf/my-document.tsx`
+- `src/components/reportes/iluminacion/pdf/my-document-reducida.tsx`
 
 ## Credit Unlock — Read-Only Report Policy
 
@@ -496,6 +520,18 @@ MERCADO_PAGO_PUBLIC_KEY=APP_USR-xxxx
 MERCADO_PAGO_WEBHOOK_SECRET=           # desde panel → Webhooks → Clave secreta
 BETTER_AUTH_BASE_URL=                  # usado para back_urls y notification_url
 ```
+
+### Producción real validada (Enhysa v2)
+
+1. Obtener credenciales de producción desde `https://www.mercadopago.com.ar/developers/panel/app`
+2. Copiar `MERCADO_PAGO_ACCESS_TOKEN` y `MERCADO_PAGO_PUBLIC_KEY` reales (`APP_USR`)
+3. Configurar el webhook de producción con el dominio real:
+   `https://enhysav2.netlify.app/api/mercadopago/webhook`
+4. Cargar las variables en Netlify
+5. Agregar logs temporales para inspeccionar la creación de la preferencia, `init_point` y `notification_url`
+6. Revisar esos logs en Netlify → `Logs` → `Functions` → `@netlify/vite-plugin server handler`
+
+Con estos pasos quedó validado que Checkout Pro funciona en producción con datos y pagos reales.
 
 ### Principio de diseño
 
@@ -644,8 +680,8 @@ ngrok http 3000
 - [x] Flujo completo M1+M2 verificado: pago APRO → crédito acreditado
 - [x] `syncPendingPaymentsServer` integrado en Navbar, Suscripciones, PDF completa y PDF reducida (sync on mount + invalidación `user-credits`)
 - [x] Unlock de reporte (`unlock-reporte-server.ts`) solo setea `creditConsumed` + `creditConsumedAt` — `finishedAt` queda intacto
+- [x] Producción real validada en Netlify con credenciales `APP_USR`, webhook real y revisión de logs de preferencia/init point
 
 ### Próximos pasos pendientes
 
-- [ ] Probar con planes Mensual y Anual
-- [ ] Preparar para producción (dominio real, sin Cloudflare Tunnel/ngrok)
+- [x] Probar con planes Mensual y Anual

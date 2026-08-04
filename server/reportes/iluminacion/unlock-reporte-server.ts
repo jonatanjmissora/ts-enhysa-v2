@@ -5,6 +5,7 @@ import { db } from "../../../db"
 import { reportes_iluminacion } from "../../../db/reportes/iluminacion/schema"
 import { userCredits, creditHistory } from "../../../db/credits/schema"
 import { eq, and, sql } from "drizzle-orm"
+import { isDemoUserEmail } from "@/lib/demo-user"
 
 export const unlockReporteServer = createServerFn({ method: "POST" })
 	.validator((data: { reporteId: string }) => data)
@@ -12,6 +13,12 @@ export const unlockReporteServer = createServerFn({ method: "POST" })
 		const request = getRequest()
 		const session = await protectedServerFn(request)
 		const userId = session.user.id
+
+		if (isDemoUserEmail(session.user.email)) {
+			throw new Error(
+				"Los usuarios demo no pueden desbloquear PDFs descargables."
+			)
+		}
 
 		const reporte = await db
 			.select({ creditConsumed: reportes_iluminacion.creditConsumed })
@@ -32,10 +39,7 @@ export const unlockReporteServer = createServerFn({ method: "POST" })
 				.update(userCredits)
 				.set({ credits: sql`${userCredits.credits} - 1` })
 				.where(
-					and(
-						eq(userCredits.userId, userId),
-						sql`${userCredits.credits} > 0`,
-					),
+					and(eq(userCredits.userId, userId), sql`${userCredits.credits} > 0`)
 				)
 
 			if (result.rowCount === 0) {

@@ -29,6 +29,10 @@ import Page6 from "./page-6"
 import Page05 from "./page-0-5"
 import type { LocalizadaIluminacionType } from "../../../../../db/reportes/iluminacion/localizadas/schema"
 import { useUnlockReporte } from "../../../../../queries/reportes/iluminacion/use-unlock-reporte"
+import { authClient } from "#/lib/auth-client"
+import { isDemoUserEmail } from "@/lib/demo-user"
+
+type ReactPdfComponents = Pick<typeof import("react-pdf"), "Document" | "Page">
 
 export function MyDocument({
 	reporte,
@@ -49,6 +53,8 @@ export function MyDocument({
 }) {
 	const showWatermark = !reporte.creditConsumed
 	const unlockMutation = useUnlockReporte()
+	const { data: session } = authClient.useSession()
+	const isDemo = isDemoUserEmail(session?.user.email)
 
 	const [instance] = usePDF({
 		document: (
@@ -77,50 +83,62 @@ export function MyDocument({
 		return <div>Error al generar el PDF: {String(instance.error)}</div>
 	}
 
+	const downloadUrl = instance.url ?? ""
+
 	return (
 		<div className="flex flex-col items-center w-full gap-4 pb-20">
 			<div className="flex flex-col items-center gap-3 mb-6">
 				{reporte.creditConsumed ? (
 					<a
-						href={instance.url!}
+						href={downloadUrl}
 						download={`Informe Iluminacion ${empresa.razonSocial} - ${reporte.finishedAt?.toLocaleDateString("it-IT")}.pdf`}
 					>
 						<Button>Descargar PDF</Button>
 					</a>
 				) : (
 					<>
-						<Button
-							onClick={() =>
-								unlockMutation.mutate({
-									data: { reporteId: reporte.id },
-								})
-							}
-							disabled={unlockMutation.isPending}
-						>
-							{unlockMutation.isPending
-								? "Desbloqueando..."
-								: "Desbloquear PDF (1 crédito)"}
-						</Button>
-						<div className="text-xs text-foreground-soft">
-							Créditos disponibles:{" "}
-							<span className="font-semibold text-foreground">
-								{credits ?? "..."}
-							</span>
-						</div>
-						{credits !== undefined && credits < 1 && (
-							<div className="flex flex-col items-center gap-2 text-xs mt-6">
-								<span>Ud no posee créditos para desbloquear el PDF.</span>
-								<Link to="/suscripcion">
-									<Button variant="outline" className="py-0">
-										Comprar créditos
-									</Button>
-								</Link>
-							</div>
-						)}
-						{unlockMutation.isError && (
-							<div className="text-xs text-destructive">
-								{unlockMutation.error?.message ?? "Error al desbloquear el PDF"}
-							</div>
+						{isDemo ? (
+							<p className="max-w-md text-center text-sm text-foreground-soft">
+								Version Demo, debe loguearse para generar informes descargables.
+								Logueate con tus datos
+							</p>
+						) : (
+							<>
+								<Button
+									onClick={() =>
+										unlockMutation.mutate({
+											data: { reporteId: reporte.id },
+										})
+									}
+									disabled={unlockMutation.isPending}
+								>
+									{unlockMutation.isPending
+										? "Desbloqueando..."
+										: "Desbloquear PDF (1 crédito)"}
+								</Button>
+								<div className="text-xs text-foreground-soft">
+									Créditos disponibles:{" "}
+									<span className="font-semibold text-foreground">
+										{credits ?? "..."}
+									</span>
+								</div>
+								{credits !== undefined && credits < 1 && (
+									<div className="flex flex-col items-center gap-2 text-xs mt-6">
+										<span>Ud no posee créditos para desbloquear el PDF.</span>
+										<Link to="/suscripcion">
+											<Button variant="outline" className="py-0">
+												Comprar créditos
+											</Button>
+										</Link>
+									</div>
+								)}
+								{unlockMutation.isError && (
+									<div className="text-xs text-destructive">
+										{unlockMutation.error?.message ??
+											"Error al desbloquear el PDF"}
+									</div>
+								)}
+							</>
 						)}
 					</>
 				)}
@@ -142,45 +160,55 @@ export function MyDocument({
 			<div className="flex flex-col items-center gap-3 mb-6">
 				{reporte.creditConsumed ? (
 					<a
-						href={instance.url!}
+						href={downloadUrl}
 						download={`Informe Iluminacion ${empresa.razonSocial} - ${reporte.finishedAt?.toLocaleDateString("it-IT")}.pdf`}
 					>
 						<Button>Descargar PDF</Button>
 					</a>
 				) : (
 					<>
-						<Button
-							onClick={() =>
-								unlockMutation.mutate({
-									data: { reporteId: reporte.id },
-								})
-							}
-							disabled={unlockMutation.isPending}
-						>
-							{unlockMutation.isPending
-								? "Desbloqueando..."
-								: "Desbloquear PDF (1 crédito)"}
-						</Button>
-						<div className="text-xs text-foreground-soft">
-							Créditos disponibles:{" "}
-							<span className="font-semibold text-foreground">
-								{credits ?? "..."}
-							</span>
-						</div>
-						{credits !== undefined && credits < 1 && (
-							<div className="flex flex-col items-center gap-2 text-xs mt-6">
-								<span>Ud no posee créditos para desbloquear el PDF.</span>
-								<Link to="/suscripcion">
-									<Button variant="outline" className="py-0">
-										Comprar créditos
-									</Button>
-								</Link>
-							</div>
-						)}
-						{unlockMutation.isError && (
-							<div className="text-xs text-destructive">
-								{unlockMutation.error?.message ?? "Error al desbloquear el PDF"}
-							</div>
+						{isDemo ? (
+							<p className="max-w-md text-center text-sm text-foreground-soft">
+								Version Demo, debe loguearse para generar informes descargables.
+								Logueate con tus datos
+							</p>
+						) : (
+							<>
+								<Button
+									onClick={() =>
+										unlockMutation.mutate({
+											data: { reporteId: reporte.id },
+										})
+									}
+									disabled={unlockMutation.isPending}
+								>
+									{unlockMutation.isPending
+										? "Desbloqueando..."
+										: "Desbloquear PDF (1 crédito)"}
+								</Button>
+								<div className="text-xs text-foreground-soft">
+									Créditos disponibles:{" "}
+									<span className="font-semibold text-foreground">
+										{credits ?? "..."}
+									</span>
+								</div>
+								{credits !== undefined && credits < 1 && (
+									<div className="flex flex-col items-center gap-2 text-xs mt-6">
+										<span>Ud no posee créditos para desbloquear el PDF.</span>
+										<Link to="/suscripcion">
+											<Button variant="outline" className="py-0">
+												Comprar créditos
+											</Button>
+										</Link>
+									</div>
+								)}
+								{unlockMutation.isError && (
+									<div className="text-xs text-destructive">
+										{unlockMutation.error?.message ??
+											"Error al desbloquear el PDF"}
+									</div>
+								)}
+							</>
 						)}
 					</>
 				)}
@@ -269,7 +297,7 @@ function PdfViewerClient({
 }) {
 	const [numPages, setNumPages] = useState<number>()
 	const [width, setWidth] = useState<number>(window.innerWidth)
-	const [ReactPdf, setReactPdf] = useState<any>(null)
+	const [ReactPdf, setReactPdf] = useState<ReactPdfComponents | null>(null)
 
 	useEffect(() => {
 		const handleResize = () => setWidth(window.innerWidth)

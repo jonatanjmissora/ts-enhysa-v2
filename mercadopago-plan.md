@@ -517,6 +517,33 @@ Durante los primeros días revisar diariamente:
 
 ---
 
+# 10.1 Implementación real validada en Enhysa v2
+
+Se confirmó en producción el siguiente flujo real:
+
+* Credenciales de producción obtenidas desde `https://www.mercadopago.com.ar/developers/panel/app`.
+* Uso de `MERCADO_PAGO_ACCESS_TOKEN` y `MERCADO_PAGO_PUBLIC_KEY` reales.
+* Webhook de producción configurado en Mercado Pago con el dominio real:
+
+```
+https://enhysav2.netlify.app/api/mercadopago/webhook
+```
+
+* Variables cargadas en Netlify.
+* Logs agregados para inspeccionar:
+  * creación de `preference`;
+  * `init_point`;
+  * `notification_url` enviado a MP.
+* En Netlify, los logs útiles aparecen en:
+
+```
+Logs/Functions/@netlify/vite-plugin server handler
+```
+
+Con estos pasos quedó validado que la integración funciona en producción con pagos y datos reales.
+
+---
+
 # 11. Buenas prácticas
 
 Mantener siempre separados:
@@ -543,25 +570,30 @@ Nunca desarrollar utilizando:
 
 # Checklist de salida a producción
 
-* [ ] Cuenta Mercado Pago verificada.
-* [ ] Credenciales APP_USR generadas.
+* [x] Cuenta Mercado Pago verificada.
+* [x] Credenciales APP_USR generadas.
 * [ ] Base de datos de producción creada.
 * [ ] Migraciones ejecutadas.
-* [ ] Variables de entorno configuradas.
-* [ ] Better Auth configurado.
-* [ ] Public Key actualizada.
-* [ ] Access Token actualizado.
-* [ ] Webhook actualizado.
-* [ ] Endpoint del webhook accesible.
-* [ ] Preferencias funcionando.
-* [ ] Firma del webhook validada.
-* [ ] Idempotencia verificada.
-* [ ] Manejo de pagos `pending` verificado.
-* [ ] Deploy realizado.
-* [ ] Primer pago real completado.
-* [ ] Créditos acreditados correctamente.
-* [ ] Logs revisados.
-* [ ] Monitoreo inicial realizado.
+* [x] Variables de entorno configuradas.
+* [x] Better Auth configurado.
+* [x] Public Key actualizada.
+* [x] Access Token actualizado.
+* [x] Webhook actualizado.
+* [x] Endpoint del webhook accesible.
+* [x] Preferencias funcionando.
+* [x] Firma del webhook validada.
+* [x] Idempotencia verificada.
+* [x] Manejo de pagos `pending` verificado.
+* [x] Deploy realizado.
+* [x] Primer pago real completado.
+* [x] Créditos acreditados correctamente.
+* [x] Logs revisados.
+* [x] Monitoreo inicial realizado.
+
+Nota para Enhysa v2:
+
+* La separación estricta de base de datos DEV/PROD no se implementó por el estado avanzado del proyecto.
+* Sigue siendo una recomendación válida para proyectos nuevos o integraciones futuras.
 
 ---
 

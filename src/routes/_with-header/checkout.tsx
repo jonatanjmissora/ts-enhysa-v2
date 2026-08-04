@@ -1,11 +1,11 @@
 import { PLANS } from "@/lib/constants"
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router"
-import { ArrowLeft, Check, Loader, LogIn } from "lucide-react"
+import { ArrowLeft, Loader, LogIn } from "lucide-react"
 import { z } from "zod"
-import { testMpConnection } from "../../../server/mercadopago/test-conection"
 import { createPreferenceServer } from "../../../server/mercadopago/create-preference-server"
 import { authClient } from "#/lib/auth-client"
 import { useState } from "react"
+import { isDemoUserEmail } from "@/lib/demo-user"
 
 const searchSchema = z.object({
 	plan: z.string().optional(),
@@ -23,20 +23,18 @@ function RouteComponent() {
 	const { data: session, isPending } = authClient.useSession()
 	const backTo = from === "landing" ? "/landing" : "/suscripcion"
 	const found = PLANS.find(p => p.title.toLowerCase() === plan?.toLowerCase())
-	const [mpStatus, setMpStatus] = useState<
-		"idle" | "checking" | "connected" | "error"
-	>("idle")
 	const [loading, setLoading] = useState(false)
 	const [errorMsg, setErrorMsg] = useState<string | null>(null)
-
-	const checkConnection = async () => {
-		setMpStatus("checking")
-		const result = await testMpConnection()
-		setMpStatus(result.success ? "connected" : "error")
-	}
+	const isDemo = isDemoUserEmail(session?.user.email)
 
 	const handlePay = async () => {
 		if (!found) return
+		if (isDemo) {
+			setErrorMsg(
+				"Debés iniciar sesión con un usuario real para comprar créditos."
+			)
+			return
+		}
 		setLoading(true)
 		setErrorMsg(null)
 		try {
@@ -76,6 +74,23 @@ function RouteComponent() {
 
 				{isPending ? (
 					<Loader className="size-6 animate-spin text-foreground-soft" />
+				) : isDemo ? (
+					<div className="flex flex-col items-center gap-6 text-center">
+						<LogIn size={48} className="text-foreground-soft" />
+						<h1 className="text-2xl font-bold">
+							Compra no disponible para demo
+						</h1>
+						<p className="text-foreground-soft text-sm max-w-md">
+							Debés iniciar sesión con un usuario real para comprar créditos.
+						</p>
+						<button
+							type="button"
+							onClick={() => navigate({ to: "/login" })}
+							className="py-3 px-8 rounded-md text-center font-semibold bg-[#e2711d] hover:bg-[#d0610d] text-white transition-colors"
+						>
+							Ir a Iniciar Sesión
+						</button>
+					</div>
 				) : !session ? (
 					<div className="flex flex-col items-center gap-6 text-center">
 						<LogIn size={48} className="text-foreground-soft" />
