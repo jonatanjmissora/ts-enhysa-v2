@@ -233,3 +233,347 @@ Allows secure browsing and the protection of your data during information transf
   E -- Errors detected --> I["Fix configuration"]
   I --> H
   H --> J["Measure quality"]
+
+---
+
+# Plan de salida a producción - Mercado Pago
+
+## Objetivo
+
+Migrar la aplicación desde un entorno de desarrollo utilizando credenciales TEST de Mercado Pago hacia un entorno de producción completamente funcional, manteniendo separados ambos ambientes para evitar afectar datos reales durante el desarrollo.
+
+---
+
+# 1. Preparación
+
+## 1.1 Verificar cuenta de Mercado Pago
+
+Antes de utilizar credenciales de producción confirmar que la cuenta posee:
+
+* Identidad verificada.
+* Email confirmado.
+* Cuenta habilitada para cobrar.
+* Datos fiscales configurados (si corresponde).
+
+---
+
+## 1.2 Obtener credenciales de Producción
+
+Generar:
+
+* Access Token (APP_USR)
+* Public Key (APP_USR)
+
+**No reemplazar todavía las credenciales TEST.**
+
+---
+
+# 2. Separación de entornos
+
+Mantener dos ambientes completamente independientes.
+
+## Desarrollo
+
+* Credenciales TEST.
+* Base de datos de desarrollo.
+* Webhook mediante Cloudflare Tunnel.
+* Aplicación ejecutándose en localhost.
+
+## Producción
+
+* Credenciales APP_USR.
+* Base de datos de producción.
+* Webhook apuntando al dominio real.
+* Aplicación desplegada en Netlify.
+
+---
+
+# 3. Base de datos
+
+Crear una base exclusiva para producción.
+
+Ejemplo:
+
+```
+Neon
+
+myapp-dev
+
+myapp-prod
+```
+
+Ejecutar todas las migraciones de Drizzle sobre la nueva base.
+
+Verificar que todas las tablas existan.
+
+Especial atención a:
+
+* users
+* subscriptions
+* credits
+* payments
+* reports
+* creditHistory
+* cualquier tabla relacionada con Mercado Pago
+
+---
+
+# 4. Variables de entorno
+
+## Desarrollo
+
+```
+DATABASE_URL=...
+
+MERCADOPAGO_ACCESS_TOKEN=TEST...
+
+VITE_MERCADOPAGO_PUBLIC_KEY=TEST...
+
+APP_URL=http://localhost:3000
+```
+
+## Producción
+
+```
+DATABASE_URL=...
+
+MERCADOPAGO_ACCESS_TOKEN=APP_USR...
+
+VITE_MERCADOPAGO_PUBLIC_KEY=APP_USR...
+
+APP_URL=https://mi-dominio.com
+```
+
+Si se utiliza Better Auth:
+
+```
+BETTER_AUTH_URL=https://mi-dominio.com
+```
+
+---
+
+# 5. Webhooks
+
+Actualizar el endpoint.
+
+Anterior:
+
+```
+https://xxxxx.trycloudflare.com/api/webhook
+```
+
+Nuevo:
+
+```
+https://mi-dominio.com/api/webhook
+```
+
+Preferentemente enviar el `notification_url` al crear la preferencia para que cada entorno utilice automáticamente su webhook correspondiente.
+
+---
+
+# 6. Deploy
+
+Realizar el deploy en Netlify.
+
+Verificar:
+
+* Variables cargadas.
+* Build exitosa.
+* Rutas funcionando.
+* Endpoint del webhook accesible.
+
+Un GET puede devolver:
+
+```
+405 Method Not Allowed
+```
+
+Lo importante es que no devuelva:
+
+* 404
+* 500
+
+---
+
+# 7. Verificaciones funcionales
+
+Antes del primer pago.
+
+## Creación de preferencias
+
+Verificar que:
+
+* se crea correctamente la preferencia.
+* se obtiene el init_point.
+* Checkout abre correctamente.
+
+---
+
+## Webhook
+
+Confirmar que:
+
+* llega el POST.
+* se valida la firma.
+* se consulta el Payment.
+* se procesa correctamente.
+
+---
+
+## Idempotencia
+
+Comprobar que un mismo payment:
+
+* nunca acredita créditos dos veces.
+* nunca genera dos registros.
+* nunca consume créditos duplicados.
+
+---
+
+## Estados pendientes
+
+Confirmar que:
+
+```
+pending
+
+↓
+
+approved
+```
+
+actualiza correctamente la información.
+
+---
+
+# 8. Primer pago real
+
+Realizar un pago de importe mínimo.
+
+Verificar todo el flujo.
+
+```
+Usuario compra
+
+↓
+
+Preferencia creada
+
+↓
+
+Checkout
+
+↓
+
+Pago aprobado
+
+↓
+
+Webhook recibido
+
+↓
+
+Consulta Payment
+
+↓
+
+Acreditar créditos
+
+↓
+
+Guardar paymentId
+
+↓
+
+Actualizar interfaz
+```
+
+---
+
+# 9. Validaciones posteriores
+
+Revisar:
+
+* créditos del usuario.
+* historial de créditos.
+* historial de pagos.
+* registros del webhook.
+* logs de Netlify.
+
+Confirmar que no existan errores.
+
+---
+
+# 10. Monitoreo
+
+Durante los primeros días revisar diariamente:
+
+* Webhooks fallidos.
+* Reintentos.
+* Pagos pendientes.
+* Pagos rechazados.
+* Logs de producción.
+
+---
+
+# 11. Buenas prácticas
+
+Mantener siempre separados:
+
+## Desarrollo
+
+* Base de datos DEV.
+* Mercado Pago TEST.
+* Webhook Tunnel.
+
+## Producción
+
+* Base de datos PROD.
+* Mercado Pago APP_USR.
+* Dominio real.
+
+Nunca desarrollar utilizando:
+
+* Access Token de producción.
+* Base de datos de producción.
+* Usuarios reales.
+
+---
+
+# Checklist de salida a producción
+
+* [ ] Cuenta Mercado Pago verificada.
+* [ ] Credenciales APP_USR generadas.
+* [ ] Base de datos de producción creada.
+* [ ] Migraciones ejecutadas.
+* [ ] Variables de entorno configuradas.
+* [ ] Better Auth configurado.
+* [ ] Public Key actualizada.
+* [ ] Access Token actualizado.
+* [ ] Webhook actualizado.
+* [ ] Endpoint del webhook accesible.
+* [ ] Preferencias funcionando.
+* [ ] Firma del webhook validada.
+* [ ] Idempotencia verificada.
+* [ ] Manejo de pagos `pending` verificado.
+* [ ] Deploy realizado.
+* [ ] Primer pago real completado.
+* [ ] Créditos acreditados correctamente.
+* [ ] Logs revisados.
+* [ ] Monitoreo inicial realizado.
+
+---
+
+## Mejoras futuras
+
+Yo añadiría una sección final llamada **"Rollback"**. Muchas guías de despliegue olvidan este punto, pero es muy útil.
+
+Por ejemplo:
+
+* ¿Qué hacer si el webhook deja de funcionar?
+* ¿Cómo volver temporalmente a la versión anterior en Netlify?
+* ¿Cómo deshabilitar la venta de créditos sin afectar el resto de la aplicación?
+* ¿Cómo identificar pagos que quedaron sin procesar para recuperarlos manualmente?
+
+Documentar ese procedimiento te permitirá reaccionar mucho más rápido ante un problema en producción y también servirá como guía para futuras actualizaciones.

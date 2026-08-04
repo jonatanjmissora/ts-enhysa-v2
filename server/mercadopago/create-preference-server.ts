@@ -42,6 +42,10 @@ export const createPreferenceServer = createServerFn({ method: "POST" })
 				},
 			})
 
+			console.log("[MP] preferenceId:", result.id)
+			console.log("[MP] init_point:", result.init_point)
+			console.log("[MP] sandbox_init_point:", result.sandbox_init_point)
+
 			if (result.id) {
 				await db.insert(pendingPayments).values({
 					preferenceId: result.id,
