@@ -19,19 +19,16 @@ si no espero al 100% para cargar la foto, no puedo seguir
 
 [🔨] probar PWA en celular
 
-❌ mensaje y boton para autoinstalar app
+❌ mensaje y boton para autoinstalar app.
 
 ❌callback de google account.
+
+❌ verificar si esta matriculado.
 
 DEMO USERs:
 	✅ NO deben comprar creditos, deben cambiar a usuario real.
 	✅ ¨Version Demo, debe loguearse para generar informes descargables. Logueate con tus datos"
 	✅ mejorar contraseña
 	✅ cuando se eliminan, borran lo relacionado a creditos?
-
-
-
-
-
 
 	
