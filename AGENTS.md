@@ -380,7 +380,7 @@ El sistema de demo user permite probar la app sin registrarse, con datos aislado
 ### Reglas de negocio requeridas
 
 - Un demo user **no puede comprar créditos**.
-- En `src/routes/_with-header/checkout.tsx`, al hacer click en `Pagar con Mercado Pago`, se debe verificar si la cuenta es demo. Si lo es, no se crea preferencia y se muestra un mensaje o `sonner` indicando que debe iniciar sesión con un usuario real para comprar créditos.
+- En `src/routes/_protected/checkout.tsx`, al hacer click en `Pagar con Mercado Pago`, se debe verificar si la cuenta es demo. Si lo es, no se crea preferencia y se muestra un mensaje o `sonner` indicando que debe iniciar sesión con un usuario real para comprar créditos.
 - En `src/components/reportes/iluminacion/pdf/my-document.tsx` y `src/components/reportes/iluminacion/pdf/my-document-reducida.tsx`, si la cuenta es demo, el botón `Desbloquear PDF (1 crédito)` debe reemplazarse por este mensaje:
   `Version Demo, debe loguearse para generar informes descargables. Logueate con tus datos`.
 - Las credenciales demo no deben ser triviales. La contraseña deseada es un código aleatorio de 4 dígitos entre `0000` y `9999`.
@@ -388,7 +388,7 @@ El sistema de demo user permite probar la app sin registrarse, con datos aislado
 ### Estado actual verificado
 
 - `server/seed-demo-user-server.ts` hoy crea passwords débiles y predecibles: `demo1`, `demo2`, etc.
-- `src/routes/_with-header/checkout.tsx` hoy no bloquea la compra de créditos para usuarios demo antes de llamar a Mercado Pago.
+- `src/routes/_protected/checkout.tsx` hoy no bloquea la compra de créditos para usuarios demo antes de llamar a Mercado Pago.
 - `src/components/reportes/iluminacion/pdf/my-document.tsx` y `src/components/reportes/iluminacion/pdf/my-document-reducida.tsx` hoy muestran el flujo normal de desbloqueo y no reemplazan el CTA por un mensaje específico para demo users.
 - La eliminación de demo users **sí está implementada** mediante `db.delete(user)` en `server/reset-demo-data-server.ts` y `server/seed-demo-user-server.ts`.
 - Esa eliminación depende de `ON DELETE CASCADE` y hoy alcanza a `session`, `account`, `user_credits`, `credit_history`, `pending_payments`, `tecnicos`, `empresas`, `instrumentos`, `reportes_iluminacion`, `areas_iluminacion` y `localizadas_iluminacion`.
@@ -451,7 +451,7 @@ const key = await new Promise<Buffer>((resolve, reject) =>
 - `src/components/suscripciones.tsx`
 - `src/components/navbar.tsx`
 - `src/components/demo-credentials-modal.tsx`
-- `src/routes/_with-header/checkout.tsx`
+- `src/routes/_protected/checkout.tsx`
 - `src/components/reportes/iluminacion/pdf/my-document.tsx`
 - `src/components/reportes/iluminacion/pdf/my-document-reducida.tsx`
 
@@ -590,7 +590,7 @@ Si no hay pendientes → termina (0 consultas externas)
 - `db/payments/schema.ts` — Tabla `pending_payments` (preferenceId PK, userId, planId, mpPaymentId, status, timestamps).
 - `db/credits/schema.ts` — Tabla `user_credits` y `credit_history`.
 - `src/routes/api/mercadopago/webhook.ts` — Ruta API que expone webhook (GET + POST).
-- `src/routes/_with-header/checkout.tsx` — UI de checkout.
+- `src/routes/_protected/checkout.tsx` — UI de checkout.
 - `src/routes/_protected/pago-exitoso.tsx` — Página post-pago con polling.
 
 ### Dónde llamar syncPendingPayments

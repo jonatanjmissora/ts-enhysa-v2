@@ -17,7 +17,7 @@ Documentar y preparar los cambios pendientes del sistema de demo users sin modif
 
 ### Checkout
 
-Archivo objetivo: `src/routes/_with-header/checkout.tsx`
+Archivo objetivo: `src/routes/_protected/checkout.tsx`
 
 Comportamiento deseado:
 
@@ -47,7 +47,7 @@ Comportamiento deseado:
 
 Estado actual:
 
-- `src/routes/_with-header/checkout.tsx` no verifica si la sesión es demo en `handlePay()`.
+- `src/routes/_protected/checkout.tsx` no verifica si la sesión es demo en `handlePay()`.
 - Hoy un demo user puede llegar hasta la creación de preferencia si entra a checkout autenticado.
 
 Gap detectado:
@@ -133,7 +133,7 @@ Bloquear checkout para demo users.
 
 Archivo:
 
-- `src/routes/_with-header/checkout.tsx`
+- `src/routes/_protected/checkout.tsx`
 
 Acción:
 
@@ -200,7 +200,7 @@ Acción:
 - `server/credits/get-user-credits-server.ts`
 - `src/components/login-form.tsx`
 - `src/components/navbar.tsx`
-- `src/routes/_with-header/checkout.tsx`
+- `src/routes/_protected/checkout.tsx`
 - `src/components/reportes/iluminacion/pdf/my-document.tsx`
 - `src/components/reportes/iluminacion/pdf/my-document-reducida.tsx`
 - `db/users/schema.ts`

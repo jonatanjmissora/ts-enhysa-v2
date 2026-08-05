@@ -1,18 +1,20 @@
 import { PLANS } from "@/lib/constants"
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router"
-import { ArrowLeft, Loader, LogIn } from "lucide-react"
+import { ArrowLeft, LogIn } from "lucide-react"
 import { z } from "zod"
 import { createPreferenceServer } from "../../../server/mercadopago/create-preference-server"
 import { authClient } from "#/lib/auth-client"
-import { useState } from "react"
+import { Suspense, useState } from "react"
 import { isDemoUserEmail } from "@/lib/demo-user"
+import { CheckMatriculado } from "@/components/check-matriculado"
+import Loading from "#/components/loading"
 
 const searchSchema = z.object({
 	plan: z.string().optional(),
 	from: z.string().optional(),
 })
 
-export const Route = createFileRoute("/_with-header/checkout")({
+export const Route = createFileRoute("/_protected/checkout")({
 	validateSearch: searchSchema,
 	component: RouteComponent,
 })
@@ -27,6 +29,10 @@ function RouteComponent() {
 	const [actualPrice, setActualPrice] = useState(found?.price || 0)
 	const [errorMsg, setErrorMsg] = useState<string | null>(null)
 	const isDemo = isDemoUserEmail(session?.user.email)
+
+	const handleDiscountChange = (discountedPrice: number) => {
+		setActualPrice(discountedPrice)
+	}
 
 	const handlePay = async () => {
 		if (!found) return
@@ -43,7 +49,7 @@ function RouteComponent() {
 				data: {
 					planId: found.title.toLowerCase(),
 					title: found.title,
-					price: found.price,
+					price: actualPrice,
 				},
 			})
 			if (!result.initPoint) throw new Error("No se obtuvo URL de pago")
@@ -62,7 +68,7 @@ function RouteComponent() {
 	}
 
 	return (
-		<article className="font-sans antialiased">
+		<article className="font-sans antialiased min-h-screen">
 			<div className="py-10 w-full sm:max-w-5xl 2xl:max-w-7xl sm:mx-auto flex flex-col gap-8 justify-center items-center px-0 sm:px-4">
 				<Link
 					to={backTo}
@@ -74,7 +80,7 @@ function RouteComponent() {
 				</Link>
 
 				{isPending ? (
-					<Loader className="size-6 animate-spin text-foreground-soft" />
+					<Loading className="justify-start pt-20" />
 				) : isDemo ? (
 					<div className="flex flex-col items-center gap-6 text-center">
 						<LogIn size={48} className="text-foreground-soft" />
@@ -127,7 +133,12 @@ function RouteComponent() {
 							</div>
 						</div>
 
-						{/* <CheckMatriculado /> */}
+						<Suspense fallback={<div>Verificando técnico...</div>}>
+							<CheckMatriculado
+								basePrice={found.price}
+								onDiscountChange={handleDiscountChange}
+							/>
+						</Suspense>
 
 						<button
 							type="button"

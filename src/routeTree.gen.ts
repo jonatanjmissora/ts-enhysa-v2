@@ -16,9 +16,9 @@ import { Route as ProtectedIndexRouteImport } from './routes/_protected/index'
 import { Route as ApiUploadthingRouteImport } from './routes/api/uploadthing'
 import { Route as WithHeaderLoginRouteImport } from './routes/_with-header/login'
 import { Route as WithHeaderLandingRouteImport } from './routes/_with-header/landing'
-import { Route as WithHeaderCheckoutRouteImport } from './routes/_with-header/checkout'
 import { Route as ProtectedSuscripcionRouteImport } from './routes/_protected/suscripcion'
 import { Route as ProtectedPagoExitosoRouteImport } from './routes/_protected/pago-exitoso'
+import { Route as ProtectedCheckoutRouteImport } from './routes/_protected/checkout'
 import { Route as ProtectedPerfilRouteRouteImport } from './routes/_protected/perfil/route'
 import { Route as WithHeaderTeoriaIndexRouteImport } from './routes/_with-header/teoria/index'
 import { Route as ProtectedIluminacionIndexRouteImport } from './routes/_protected/iluminacion/index'
@@ -84,11 +84,6 @@ const WithHeaderLandingRoute = WithHeaderLandingRouteImport.update({
   path: '/landing',
   getParentRoute: () => WithHeaderRouteRoute,
 } as any)
-const WithHeaderCheckoutRoute = WithHeaderCheckoutRouteImport.update({
-  id: '/checkout',
-  path: '/checkout',
-  getParentRoute: () => WithHeaderRouteRoute,
-} as any)
 const ProtectedSuscripcionRoute = ProtectedSuscripcionRouteImport.update({
   id: '/suscripcion',
   path: '/suscripcion',
@@ -97,6 +92,11 @@ const ProtectedSuscripcionRoute = ProtectedSuscripcionRouteImport.update({
 const ProtectedPagoExitosoRoute = ProtectedPagoExitosoRouteImport.update({
   id: '/pago-exitoso',
   path: '/pago-exitoso',
+  getParentRoute: () => ProtectedRouteRoute,
+} as any)
+const ProtectedCheckoutRoute = ProtectedCheckoutRouteImport.update({
+  id: '/checkout',
+  path: '/checkout',
   getParentRoute: () => ProtectedRouteRoute,
 } as any)
 const ProtectedPerfilRouteRoute = ProtectedPerfilRouteRouteImport.update({
@@ -305,9 +305,9 @@ export interface FileRoutesByFullPath {
   '/': typeof ProtectedIndexRoute
   '/test': typeof TestRoute
   '/perfil': typeof ProtectedPerfilRouteRouteWithChildren
+  '/checkout': typeof ProtectedCheckoutRoute
   '/pago-exitoso': typeof ProtectedPagoExitosoRoute
   '/suscripcion': typeof ProtectedSuscripcionRoute
-  '/checkout': typeof WithHeaderCheckoutRoute
   '/landing': typeof WithHeaderLandingRoute
   '/login': typeof WithHeaderLoginRoute
   '/api/uploadthing': typeof ApiUploadthingRoute
@@ -346,9 +346,9 @@ export interface FileRoutesByTo {
   '/': typeof ProtectedIndexRoute
   '/test': typeof TestRoute
   '/perfil': typeof ProtectedPerfilRouteRouteWithChildren
+  '/checkout': typeof ProtectedCheckoutRoute
   '/pago-exitoso': typeof ProtectedPagoExitosoRoute
   '/suscripcion': typeof ProtectedSuscripcionRoute
-  '/checkout': typeof WithHeaderCheckoutRoute
   '/landing': typeof WithHeaderLandingRoute
   '/login': typeof WithHeaderLoginRoute
   '/api/uploadthing': typeof ApiUploadthingRoute
@@ -389,9 +389,9 @@ export interface FileRoutesById {
   '/_with-header': typeof WithHeaderRouteRouteWithChildren
   '/test': typeof TestRoute
   '/_protected/perfil': typeof ProtectedPerfilRouteRouteWithChildren
+  '/_protected/checkout': typeof ProtectedCheckoutRoute
   '/_protected/pago-exitoso': typeof ProtectedPagoExitosoRoute
   '/_protected/suscripcion': typeof ProtectedSuscripcionRoute
-  '/_with-header/checkout': typeof WithHeaderCheckoutRoute
   '/_with-header/landing': typeof WithHeaderLandingRoute
   '/_with-header/login': typeof WithHeaderLoginRoute
   '/api/uploadthing': typeof ApiUploadthingRoute
@@ -433,9 +433,9 @@ export interface FileRouteTypes {
     | '/'
     | '/test'
     | '/perfil'
+    | '/checkout'
     | '/pago-exitoso'
     | '/suscripcion'
-    | '/checkout'
     | '/landing'
     | '/login'
     | '/api/uploadthing'
@@ -474,9 +474,9 @@ export interface FileRouteTypes {
     | '/'
     | '/test'
     | '/perfil'
+    | '/checkout'
     | '/pago-exitoso'
     | '/suscripcion'
-    | '/checkout'
     | '/landing'
     | '/login'
     | '/api/uploadthing'
@@ -516,9 +516,9 @@ export interface FileRouteTypes {
     | '/_with-header'
     | '/test'
     | '/_protected/perfil'
+    | '/_protected/checkout'
     | '/_protected/pago-exitoso'
     | '/_protected/suscripcion'
-    | '/_with-header/checkout'
     | '/_with-header/landing'
     | '/_with-header/login'
     | '/api/uploadthing'
@@ -615,13 +615,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof WithHeaderLandingRouteImport
       parentRoute: typeof WithHeaderRouteRoute
     }
-    '/_with-header/checkout': {
-      id: '/_with-header/checkout'
-      path: '/checkout'
-      fullPath: '/checkout'
-      preLoaderRoute: typeof WithHeaderCheckoutRouteImport
-      parentRoute: typeof WithHeaderRouteRoute
-    }
     '/_protected/suscripcion': {
       id: '/_protected/suscripcion'
       path: '/suscripcion'
@@ -634,6 +627,13 @@ declare module '@tanstack/react-router' {
       path: '/pago-exitoso'
       fullPath: '/pago-exitoso'
       preLoaderRoute: typeof ProtectedPagoExitosoRouteImport
+      parentRoute: typeof ProtectedRouteRoute
+    }
+    '/_protected/checkout': {
+      id: '/_protected/checkout'
+      path: '/checkout'
+      fullPath: '/checkout'
+      preLoaderRoute: typeof ProtectedCheckoutRouteImport
       parentRoute: typeof ProtectedRouteRoute
     }
     '/_protected/perfil': {
@@ -901,6 +901,7 @@ const ProtectedIluminacionReportesChar91idChar93MenuRouteRouteWithChildren =
 
 interface ProtectedRouteRouteChildren {
   ProtectedPerfilRouteRoute: typeof ProtectedPerfilRouteRouteWithChildren
+  ProtectedCheckoutRoute: typeof ProtectedCheckoutRoute
   ProtectedPagoExitosoRoute: typeof ProtectedPagoExitosoRoute
   ProtectedSuscripcionRoute: typeof ProtectedSuscripcionRoute
   ProtectedIndexRoute: typeof ProtectedIndexRoute
@@ -923,6 +924,7 @@ interface ProtectedRouteRouteChildren {
 
 const ProtectedRouteRouteChildren: ProtectedRouteRouteChildren = {
   ProtectedPerfilRouteRoute: ProtectedPerfilRouteRouteWithChildren,
+  ProtectedCheckoutRoute: ProtectedCheckoutRoute,
   ProtectedPagoExitosoRoute: ProtectedPagoExitosoRoute,
   ProtectedSuscripcionRoute: ProtectedSuscripcionRoute,
   ProtectedIndexRoute: ProtectedIndexRoute,
@@ -962,7 +964,6 @@ const ProtectedRouteRouteWithChildren = ProtectedRouteRoute._addFileChildren(
 )
 
 interface WithHeaderRouteRouteChildren {
-  WithHeaderCheckoutRoute: typeof WithHeaderCheckoutRoute
   WithHeaderLandingRoute: typeof WithHeaderLandingRoute
   WithHeaderLoginRoute: typeof WithHeaderLoginRoute
   WithHeaderTeoriaPoliticasDePrivacidadRoute: typeof WithHeaderTeoriaPoliticasDePrivacidadRoute
@@ -972,7 +973,6 @@ interface WithHeaderRouteRouteChildren {
 }
 
 const WithHeaderRouteRouteChildren: WithHeaderRouteRouteChildren = {
-  WithHeaderCheckoutRoute: WithHeaderCheckoutRoute,
   WithHeaderLandingRoute: WithHeaderLandingRoute,
   WithHeaderLoginRoute: WithHeaderLoginRoute,
   WithHeaderTeoriaPoliticasDePrivacidadRoute:
