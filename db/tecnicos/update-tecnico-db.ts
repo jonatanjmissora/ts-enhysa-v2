@@ -7,9 +7,13 @@ import { eq } from "drizzle-orm"
 export async function updateTecnicoDB(updatedTecnico: UpdateTecnicoType) {
 	try {
 		await delay()
+		const payload = {
+			...updatedTecnico,
+			dni: updatedTecnico.dni ? Number(updatedTecnico.dni) : null,
+		}
 		const result = await db
 			.update(tecnicos)
-			.set(updatedTecnico)
+			.set(payload)
 			.where(eq(tecnicos.id, updatedTecnico.id))
 			.returning()
 

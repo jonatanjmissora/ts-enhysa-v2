@@ -9,6 +9,7 @@ export const tecnicoFormValidator = z.object({
 	matriculaImg: z.string(),
 	firmaImg: z.string(),
 	empresaLogo: z.string(),
+	dni: z.string().regex(/^\d{7,8}$/, "DNI inválido"),
 })
 
 export type TecnicoFormType = z.infer<typeof tecnicoFormValidator>
@@ -29,6 +30,7 @@ export const defaultTecnico = {
 	matriculaImg: "",
 	firmaImg: "",
 	empresaLogo: "",
+	dni: "",
 }
 
 export type DefaultTecnicoDataType = typeof defaultTecnico

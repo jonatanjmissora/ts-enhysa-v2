@@ -92,6 +92,18 @@ function HayTecnico({ tecnico }: { tecnico: TecnicoType }) {
 						readOnly
 					/>
 				</div>
+				<div className="flex flex-col gap-1 w-full">
+					<Label className="tracking-wider text-amber-700" htmlFor="dni">
+						DNI
+					</Label>
+					<Input
+						onFocus={e => e.target.select()}
+						id="dni"
+						placeholder="Sin DNI"
+						value={tecnico.dni ?? ""}
+						readOnly
+					/>
+				</div>
 				<div className="flex flex-col gap-1">
 					<Label className="tracking-wider text-amber-700">
 						Matrícula Digital

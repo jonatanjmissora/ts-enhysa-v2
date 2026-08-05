@@ -51,7 +51,8 @@ export const checkTecnicoDiference = (
 		formValues.matricula === tecnico.matricula &&
 		formValues.matriculaImg === tecnico.matriculaImg &&
 		formValues.firmaImg === tecnico.firmaImg &&
-		formValues.empresaLogo === tecnico.empresaLogo
+		formValues.empresaLogo === tecnico.empresaLogo &&
+		(formValues.dni ?? null) === (tecnico.dni ?? null)
 	)
 }
 

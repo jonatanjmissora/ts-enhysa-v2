@@ -206,3 +206,5 @@ export const PLANS = [
 		],
 	},
 ]
+
+export type PLANS_TYPE = (typeof PLANS)[number]

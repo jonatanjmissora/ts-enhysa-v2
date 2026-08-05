@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as TestRouteImport } from './routes/test'
 import { Route as WithHeaderRouteRouteImport } from './routes/_with-header/route'
 import { Route as ProtectedRouteRouteImport } from './routes/_protected/route'
 import { Route as ProtectedIndexRouteImport } from './routes/_protected/index'
@@ -50,6 +51,11 @@ import { Route as ProtectedIluminacionReportesChar91idChar93MedicionAreasChar91a
 import { Route as ProtectedIluminacionReportesChar91idChar93MedicionAreasChar91areaIdChar93EditAreaRouteImport } from './routes/_protected/iluminacion/reportes/[$id]/medicion/areas/[$areaId]/edit-area'
 import { Route as ProtectedIluminacionReportesChar91idChar93MedicionAreasChar91areaIdChar93CreateAreaRouteImport } from './routes/_protected/iluminacion/reportes/[$id]/medicion/areas/[$areaId]/create-area'
 
+const TestRoute = TestRouteImport.update({
+  id: '/test',
+  path: '/test',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const WithHeaderRouteRoute = WithHeaderRouteRouteImport.update({
   id: '/_with-header',
   getParentRoute: () => rootRouteImport,
@@ -297,6 +303,7 @@ const ProtectedIluminacionReportesChar91idChar93MedicionAreasChar91areaIdChar93C
 
 export interface FileRoutesByFullPath {
   '/': typeof ProtectedIndexRoute
+  '/test': typeof TestRoute
   '/perfil': typeof ProtectedPerfilRouteRouteWithChildren
   '/pago-exitoso': typeof ProtectedPagoExitosoRoute
   '/suscripcion': typeof ProtectedSuscripcionRoute
@@ -337,6 +344,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof ProtectedIndexRoute
+  '/test': typeof TestRoute
   '/perfil': typeof ProtectedPerfilRouteRouteWithChildren
   '/pago-exitoso': typeof ProtectedPagoExitosoRoute
   '/suscripcion': typeof ProtectedSuscripcionRoute
@@ -379,6 +387,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_protected': typeof ProtectedRouteRouteWithChildren
   '/_with-header': typeof WithHeaderRouteRouteWithChildren
+  '/test': typeof TestRoute
   '/_protected/perfil': typeof ProtectedPerfilRouteRouteWithChildren
   '/_protected/pago-exitoso': typeof ProtectedPagoExitosoRoute
   '/_protected/suscripcion': typeof ProtectedSuscripcionRoute
@@ -422,6 +431,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/test'
     | '/perfil'
     | '/pago-exitoso'
     | '/suscripcion'
@@ -462,6 +472,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/test'
     | '/perfil'
     | '/pago-exitoso'
     | '/suscripcion'
@@ -503,6 +514,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/_protected'
     | '/_with-header'
+    | '/test'
     | '/_protected/perfil'
     | '/_protected/pago-exitoso'
     | '/_protected/suscripcion'
@@ -546,6 +558,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   ProtectedRouteRoute: typeof ProtectedRouteRouteWithChildren
   WithHeaderRouteRoute: typeof WithHeaderRouteRouteWithChildren
+  TestRoute: typeof TestRoute
   ApiUploadthingRoute: typeof ApiUploadthingRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
   ApiMercadopagoWebhookRoute: typeof ApiMercadopagoWebhookRoute
@@ -553,6 +566,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/test': {
+      id: '/test'
+      path: '/test'
+      fullPath: '/test'
+      preLoaderRoute: typeof TestRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_with-header': {
       id: '/_with-header'
       path: ''
@@ -969,6 +989,7 @@ const WithHeaderRouteRouteWithChildren = WithHeaderRouteRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   ProtectedRouteRoute: ProtectedRouteRouteWithChildren,
   WithHeaderRouteRoute: WithHeaderRouteRouteWithChildren,
+  TestRoute: TestRoute,
   ApiUploadthingRoute: ApiUploadthingRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
   ApiMercadopagoWebhookRoute: ApiMercadopagoWebhookRoute,

@@ -252,6 +252,40 @@ export function CreateTecnicoForm({
 							)
 						}}
 					/>
+
+					<form.Field
+						name="dni"
+						children={field => {
+							const isInvalid =
+								field.state.meta.isTouched && !field.state.meta.isValid
+							return (
+								<Field data-invalid={isInvalid} className="relative gap-1">
+									<FieldLabel htmlFor={field.name}>
+										DNI
+										<Asterisk className="text-destructive size-3" />
+									</FieldLabel>
+									<Input
+										onFocus={e => e.target.select()}
+										id={field.name}
+										name={field.name}
+										value={field.state.value}
+										onBlur={field.handleBlur}
+										onChange={e => field.handleChange(e.target.value)}
+										aria-invalid={isInvalid}
+										placeholder="Solo números (7 u 8 dígitos)"
+										inputMode="numeric"
+										pattern="[0-9]*"
+									/>
+									{isInvalid && (
+										<FieldError
+											errors={field.state.meta.errors}
+											className="text-xs 2xl:text-sm absolute -bottom-4 left-0"
+										/>
+									)}
+								</Field>
+							)
+						}}
+					/>
 					<div className="flex flex-col gap-1">
 						<Label>Matrícula Digital</Label>
 						<FileDropzone

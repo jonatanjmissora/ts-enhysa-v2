@@ -24,6 +24,7 @@ function RouteComponent() {
 	const backTo = from === "landing" ? "/landing" : "/suscripcion"
 	const found = PLANS.find(p => p.title.toLowerCase() === plan?.toLowerCase())
 	const [loading, setLoading] = useState(false)
+	const [actualPrice, setActualPrice] = useState(found?.price || 0)
 	const [errorMsg, setErrorMsg] = useState<string | null>(null)
 	const isDemo = isDemoUserEmail(session?.user.email)
 
@@ -121,10 +122,13 @@ function RouteComponent() {
 									</span>
 								</p>
 								<p className="text-4xl font-semibold text-foreground-soft">
-									${found.price.toLocaleString("es-AR")}
+									${actualPrice.toLocaleString("es-AR")}
 								</p>
 							</div>
 						</div>
+
+						{/* <CheckMatriculado /> */}
+
 						<button
 							type="button"
 							onClick={handlePay}

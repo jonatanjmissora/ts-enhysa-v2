@@ -1,4 +1,4 @@
-import { pgTable, text } from "drizzle-orm/pg-core"
+import { pgTable, text, integer } from "drizzle-orm/pg-core"
 import { user } from "../users/schema"
 
 export const tecnicos = pgTable("tecnicos", {
@@ -19,6 +19,8 @@ export const tecnicos = pgTable("tecnicos", {
 	firmaImg: text("firmaImg").notNull(),
 
 	empresaLogo: text("empresaLogo").notNull(),
+
+	dni: integer("dni"),
 
 	userId: text("userId")
 		.notNull()

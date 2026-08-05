@@ -83,7 +83,19 @@ export function EditTecnicoForm({
 	} = useUpdateTecnico()
 
 	const form = useForm({
-		defaultValues: { ...tecnico },
+		defaultValues: {
+			id: tecnico.id,
+			userId: tecnico.userId,
+			nombre: tecnico.nombre,
+			telefono: tecnico.telefono,
+			localidad: tecnico.localidad,
+			cargo: tecnico.cargo,
+			matricula: tecnico.matricula,
+			matriculaImg: tecnico.matriculaImg,
+			firmaImg: tecnico.firmaImg,
+			empresaLogo: tecnico.empresaLogo,
+			dni: tecnico.dni != null ? String(tecnico.dni) : "",
+		},
 		validators: {
 			onSubmit: updateTecnicoValidator,
 		},
@@ -266,6 +278,41 @@ export function EditTecnicoForm({
 											onChange={e => field.handleChange(e.target.value)}
 											aria-invalid={isInvalid}
 											placeholder="N° Matrícula"
+											className="bg-background sm:bg-accent text-right"
+										/>
+										{isInvalid && (
+											<FieldError
+												errors={field.state.meta.errors}
+												className="text-xs 2xl:text-sm absolute -bottom-4 left-0"
+											/>
+										)}
+									</Field>
+								)
+							}}
+						/>
+
+						<form.Field
+							name="dni"
+							children={field => {
+								const isInvalid =
+									field.state.meta.isTouched && !field.state.meta.isValid
+								return (
+									<Field data-invalid={isInvalid} className="relative gap-1">
+										<FieldLabel htmlFor={field.name}>
+											DNI
+											<Asterisk className="text-destructive size-3" />
+										</FieldLabel>
+										<Input
+											onFocus={e => e.target.select()}
+											id={field.name}
+											name={field.name}
+											value={field.state.value ?? ""}
+											onBlur={field.handleBlur}
+											onChange={e => field.handleChange(e.target.value)}
+											aria-invalid={isInvalid}
+											placeholder="Solo números (7 u 8 dígitos)"
+											inputMode="numeric"
+											pattern="[0-9]*"
 											className="bg-background sm:bg-accent text-right"
 										/>
 										{isInvalid && (

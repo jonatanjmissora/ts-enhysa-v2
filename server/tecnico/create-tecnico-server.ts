@@ -13,6 +13,7 @@ export const createTecnicoServer = createServerFn({ method: "POST" })
 			...data,
 			id: crypto.randomUUID(),
 			userId: session.user.id,
+			dni: Number(data.dni),
 		}
 
 		const result = await createTecnicoDB(newTecnico)
