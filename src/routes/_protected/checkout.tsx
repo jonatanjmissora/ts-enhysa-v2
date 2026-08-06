@@ -1,6 +1,6 @@
 import { PLANS } from "@/lib/constants"
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router"
-import { ArrowLeft, LogIn } from "lucide-react"
+import { ArrowLeft, LogIn, OctagonAlert } from "lucide-react"
 import { z } from "zod"
 import { createPreferenceServer } from "../../../server/mercadopago/create-preference-server"
 import { authClient } from "#/lib/auth-client"
@@ -99,8 +99,8 @@ function RouteComponent() {
 						</button>
 					</div>
 				) : !session ? (
-					<div className="flex flex-col items-center gap-6 text-center">
-						<LogIn size={48} className="text-foreground-soft" />
+					<div className="flex flex-col items-center gap-6 text-center w-11/12">
+						<OctagonAlert size={48} className="text-amber-500/60" />
 						<h1 className="text-2xl font-bold">Iniciá sesión para continuar</h1>
 						<p className="text-foreground-soft text-sm max-w-md">
 							Necesitás estar logueado para poder comprar créditos.

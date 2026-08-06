@@ -20,6 +20,7 @@ import {
 import type { TecnicoType } from "../../../db/tecnicos/schema"
 import { useUpdateTecnico } from "../../../queries/tecnico/use-update-tecnico"
 import { updateTecnicoValidator } from "../../../db/tecnicos/tecnico-validator"
+import { checkDniServer } from "../../../server/tecnico/check-dni-server"
 import { Button } from "../ui/button"
 import Title from "../title"
 import { FileDropzone } from "../upload-button"
@@ -75,6 +76,7 @@ export function EditTecnicoForm({
 	const [empresaLogoFile, setEmpresaLogoFile] = useState<string>(
 		tecnico.empresaLogo ?? ""
 	)
+	const [dniError, setDniError] = useState<string | null>(null)
 
 	const {
 		mutateAsync: editTecnicoMutation,
@@ -100,6 +102,15 @@ export function EditTecnicoForm({
 			onSubmit: updateTecnicoValidator,
 		},
 		onSubmit: async ({ value }) => {
+			const check = await checkDniServer({
+				data: { dni: value.dni, excludeId: tecnico.id },
+			})
+			if (check.exists) {
+				setDniError("El DNI ya está registrado")
+				return
+			}
+			setDniError(null)
+
 			const newTecnico = {
 				...value,
 				firmaImg: firmaFile,
@@ -411,6 +422,7 @@ export function EditTecnicoForm({
 					</Field>
 
 					{error && <p>{error.message}</p>}
+					{dniError && <p className="text-xs text-red-500">{dniError}</p>}
 				</FieldGroup>
 			</form>
 		</article>

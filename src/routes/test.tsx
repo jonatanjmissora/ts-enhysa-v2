@@ -45,9 +45,7 @@ function RouteComponent() {
 					</section>
 
 					<section className="bg-accent rounded-xl p-4 border border-foreground/10">
-						<h2 className="text-lg font-semibold mb-4">
-							Verificar matrícula
-						</h2>
+						<h2 className="text-lg font-semibold mb-4">Verificar matrícula</h2>
 						<CpshForm />
 					</section>
 				</div>
@@ -85,7 +83,7 @@ function CpshForm() {
 			<input
 				type="text"
 				value={dni}
-				onChange={(e) => setDni(e.target.value)}
+				onChange={e => setDni(e.target.value)}
 				placeholder="DNI o CUIT"
 				className="w-full rounded-md border border-foreground/20 bg-background px-3 py-2 text-sm"
 			/>

@@ -23,7 +23,9 @@ si no espero al 100% para cargar la foto, no puedo seguir
 
 ❌callback de google account.
 
-❌ verificar si esta matriculado.
+❌ chequear cuando ingreso el dni, que no este repetido
+
+✅ verificar si esta matriculado.
 
 DEMO USERs:
 	✅ NO deben comprar creditos, deben cambiar a usuario real.

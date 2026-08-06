@@ -22,6 +22,7 @@ import {
 	defaultTecnico,
 	tecnicoFormValidator,
 } from "../../../db/tecnicos/tecnico-validator"
+import { checkDniServer } from "../../../server/tecnico/check-dni-server"
 import { Button } from "../ui/button"
 import Title from "../title"
 import { FileDropzone } from "../upload-button"
@@ -57,6 +58,7 @@ export function CreateTecnicoForm({
 	const [matriculaFile, setMatriculaFile] = useState<string>("")
 	const [firmaFile, setFirmaFile] = useState<string>("")
 	const [empresaLogoFile, setEmpresaLogoFile] = useState<string>("")
+	const [dniError, setDniError] = useState<string | null>(null)
 	const navigate = useNavigate()
 
 	const {
@@ -71,6 +73,13 @@ export function CreateTecnicoForm({
 			onSubmit: tecnicoFormValidator,
 		},
 		onSubmit: async ({ value }) => {
+			const check = await checkDniServer({ data: { dni: value.dni } })
+			if (check.exists) {
+				setDniError("El DNI ya está registrado")
+				return
+			}
+			setDniError(null)
+
 			const newTecnico = {
 				...value,
 				firmaImg: firmaFile,
@@ -366,6 +375,7 @@ export function CreateTecnicoForm({
 				</div>
 
 				{error && <p>{error.message}</p>}
+				{dniError && <p className="text-xs text-red-500">{dniError}</p>}
 			</FieldGroup>
 		</form>
 	)

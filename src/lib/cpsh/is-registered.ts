@@ -4,6 +4,13 @@ const CPSH_BASE_URL = "https://cpsh.com.ar"
 const CPSH_SEARCH_PATH = "/matriculacion/web/site/buscar-profesional"
 const REQUEST_TIMEOUT = 15_000
 
+function isTlsError(e: unknown): boolean {
+	if (!(e instanceof Error)) return false
+	const msg =
+		e.message + " " + (e.cause instanceof Error ? e.cause.message : "")
+	return /unable to verify|certificate|UNABLE_TO_VERIFY|leaf/i.test(msg)
+}
+
 export async function getCpshFormData(): Promise<{
 	csrfToken: string
 	cookies: string
@@ -13,12 +20,7 @@ export async function getCpshFormData(): Promise<{
 	try {
 		return await fetchCpshWithFetch(url)
 	} catch (e) {
-		if (
-			e instanceof Error &&
-			(/unable to verify|certificate|UNABLE_TO_VERIFY|leaf/i.test(e.message) ||
-				(e as any).cause instanceof Error &&
-				/unable to verify|certificate|UNABLE_TO_VERIFY|leaf/i.test((e as any).cause.message))
-		) {
+		if (isTlsError(e)) {
 			return await fetchCpshWithHttps(url)
 		}
 		throw e
@@ -37,7 +39,8 @@ async function fetchCpshWithFetch(
 			headers: {
 				"User-Agent":
 					"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
-				"Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
+				Accept:
+					"text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
 				"Accept-Language": "es-AR,es;q=0.9,en;q=0.8",
 			},
 			signal: controller.signal,
@@ -74,18 +77,22 @@ async function fetchCpshWithHttps(
 				headers: {
 					"User-Agent":
 						"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
-					"Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
+					Accept:
+						"text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
 					"Accept-Language": "es-AR,es;q=0.9,en;q=0.8",
 				},
 			},
-			(res) => {
+			res => {
 				const chunks: Buffer[] = []
-				res.on("data", (chunk) => chunks.push(chunk))
+				res.on("data", chunk => chunks.push(chunk))
 				res.on("end", () => {
 					clearTimeout(timeoutId)
 					const html = Buffer.concat(chunks).toString("utf-8")
 
-					if (res.statusCode && (res.statusCode < 200 || res.statusCode >= 300)) {
+					if (
+						res.statusCode &&
+						(res.statusCode < 200 || res.statusCode >= 300)
+					) {
 						reject(new Error(`CPSH responded with status ${res.statusCode}`))
 						return
 					}
@@ -99,24 +106,30 @@ async function fetchCpshWithHttps(
 			}
 		)
 
-		req.on("error", (e) => {
+		req.on("error", e => {
 			clearTimeout(timeoutId)
 			reject(e)
 		})
 	})
 }
 
-function buildCookieHeader(setCookie: string | string[] | undefined | null): string {
+function buildCookieHeader(
+	setCookie: string | string[] | undefined | null
+): string {
 	if (!setCookie) return ""
 	const cookies = Array.isArray(setCookie) ? setCookie : [setCookie]
-	return cookies.map((c) => c.split(";")[0].trim()).join("; ")
+	return cookies.map(c => c.split(";")[0].trim()).join("; ")
 }
 
 function extractCsrfToken(html: string): string {
-	const inputMatch = html.match(/<input[^>]*name="_csrf"[^>]*value="([^"]+)"[^>]*>/i)
+	const inputMatch = html.match(
+		/<input[^>]*name="_csrf"[^>]*value="([^"]+)"[^>]*>/i
+	)
 	if (inputMatch?.[1]) return inputMatch[1]
 
-	const metaMatch = html.match(/<meta[^>]*name="csrf-token"[^>]*content="([^"]+)"[^>]*>/i)
+	const metaMatch = html.match(
+		/<meta[^>]*name="csrf-token"[^>]*content="([^"]+)"[^>]*>/i
+	)
 	if (metaMatch?.[1]) return metaMatch[1]
 
 	throw new Error("CSRF token not found in CPSH form")
@@ -136,12 +149,7 @@ export async function searchProfessionalRegistration(
 	try {
 		return await searchWithFetch(url, body, cookies)
 	} catch (e) {
-		if (
-			e instanceof Error &&
-			(/unable to verify|certificate|UNABLE_TO_VERIFY|leaf/i.test(e.message) ||
-				(e as any).cause instanceof Error &&
-				/unable to verify|certificate|UNABLE_TO_VERIFY|leaf/i.test((e as any).cause.message))
-		) {
+		if (isTlsError(e)) {
 			return await searchWithHttps(url, body, cookies)
 		}
 		throw e
@@ -152,7 +160,11 @@ export async function verifyProfessionalRegistration(
 	dniOrCuit: string
 ): Promise<boolean> {
 	const formData = await getCpshFormData()
-	return searchProfessionalRegistration(dniOrCuit, formData.csrfToken, formData.cookies)
+	return searchProfessionalRegistration(
+		dniOrCuit,
+		formData.csrfToken,
+		formData.cookies
+	)
 }
 
 async function searchWithFetch(
@@ -168,10 +180,11 @@ async function searchWithFetch(
 			method: "POST",
 			headers: {
 				"Content-Type": "application/x-www-form-urlencoded",
-				"Cookie": cookies,
+				Cookie: cookies,
 				"User-Agent":
 					"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
-				"Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
+				Accept:
+					"text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
 				"Accept-Language": "es-AR,es;q=0.9,en;q=0.8",
 			},
 			body: body.toString(),
@@ -210,21 +223,25 @@ async function searchWithHttps(
 				headers: {
 					"Content-Type": "application/x-www-form-urlencoded",
 					"Content-Length": Buffer.byteLength(postData),
-					"Cookie": cookies,
+					Cookie: cookies,
 					"User-Agent":
 						"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
-					"Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
+					Accept:
+						"text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
 					"Accept-Language": "es-AR,es;q=0.9,en;q=0.8",
 				},
 			},
-			(res) => {
+			res => {
 				const chunks: Buffer[] = []
-				res.on("data", (chunk) => chunks.push(chunk))
+				res.on("data", chunk => chunks.push(chunk))
 				res.on("end", () => {
 					clearTimeout(timeoutId)
 					const html = Buffer.concat(chunks).toString("utf-8")
 
-					if (res.statusCode && (res.statusCode < 200 || res.statusCode >= 300)) {
+					if (
+						res.statusCode &&
+						(res.statusCode < 200 || res.statusCode >= 300)
+					) {
 						reject(new Error(`CPSH responded with status ${res.statusCode}`))
 						return
 					}
@@ -234,7 +251,7 @@ async function searchWithHttps(
 			}
 		)
 
-		req.on("error", (e) => {
+		req.on("error", e => {
 			clearTimeout(timeoutId)
 			reject(e)
 		})
