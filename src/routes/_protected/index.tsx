@@ -8,6 +8,7 @@ import {
 	HeartPulse,
 	ShieldCheck,
 } from "lucide-react"
+import { InstallPrompt } from "#/components/install-prompt"
 
 export const Route = createFileRoute("/_protected/")({ component: Home })
 
@@ -18,6 +19,7 @@ function Home() {
 
 	return (
 		<article className="w-full sm:max-w-5xl 2xl:max-w-7xl sm:mx-auto min-h-svh flex flex-col items-center justify-center gap-20">
+			<InstallPrompt />
 			<div className="flex justify-between items-center flex-col mt-17 sm:mt-10 h-150 sm:h-180 relative overflow-visible px-6 w-full sm:w-5/6 mx-auto">
 				<p className="text-[26px] sm:text-[30px] 2xl:text-[36px] text-center tracking-wider text-pretty px-3">
 					Selecciona tu nuevo informe.

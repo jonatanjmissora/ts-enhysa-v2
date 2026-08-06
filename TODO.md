@@ -21,13 +21,13 @@ si no espero al 100% para cargar la foto, no puedo seguir
 
 ❌ mensaje y boton para autoinstalar app.
 
-❔ callback de google account.
+❌callback de google account. (borrando el cache de la pagina)
 
 ✅chequear cuando ingreso el dni, que no este repetido
 
 ✅ verificar si esta matriculado.
 
-❌ compra de creditos estando en desbloqueo de pdf, me debe de retornar nuevamente
+✅ compra de creditos estando en desbloqueo de pdf, me debe de retornar nuevamente
 
 DEMO USERs:
 	✅ NO deben comprar creditos, deben cambiar a usuario real.

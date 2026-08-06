@@ -153,7 +153,7 @@ function MobileMenu({
 				Módulos
 			</button>
 			<Link
-				to="/"
+				to="/login"
 				onClick={close}
 				className="bg-[#5cb85c] rounded-md px-8 py-3 text-lg font-semibold no-underline transition-all hover:bg-[#4ca84c]"
 			>

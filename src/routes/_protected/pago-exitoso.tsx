@@ -135,7 +135,7 @@ function RouteComponent() {
 							onClick={() => navigate({ to: "/suscripcion", search: { from } })}
 							className="inline-flex items-center gap-2 py-3 px-8 rounded-md font-semibold bg-[#e2711d] hover:bg-[#d0610d] text-white transition-colors"
 						>
-							Ir a Suscripciones
+							Volver a Suscripciones
 							<ArrowRight className="size-4" />
 						</button>
 					</>
@@ -153,7 +153,7 @@ function RouteComponent() {
 							onClick={() => navigate({ to: "/suscripcion" })}
 							className="inline-flex items-center gap-2 py-3 px-8 rounded-md font-semibold bg-[#e2711d] hover:bg-[#d0610d] text-white transition-colors"
 						>
-							Ir a Suscripciones
+							Volver a Suscripciones
 							<ArrowRight className="size-4" />
 						</button>
 					</>
@@ -178,7 +178,7 @@ function RouteComponent() {
 							onClick={() => navigate({ to: "/suscripcion" })}
 							className="inline-flex items-center gap-2 py-3 px-8 rounded-md font-semibold bg-[#e2711d] hover:bg-[#d0610d] text-white transition-colors"
 						>
-							Ir a Suscripciones
+							Volver a Suscripciones
 							<ArrowRight className="size-4" />
 						</button>
 					</>

@@ -82,7 +82,9 @@ async function cacheFirst(request, cacheName) {
 	try {
 		const fetchRequest = new Request(request, { redirect: "follow" })
 		const response = await fetch(fetchRequest)
-		if (response.ok) cache.put(request, response.clone())
+		if (response.ok && response.type !== "opaqueredirect") {
+			cache.put(request, response.clone())
+		}
 		return response
 	} catch {
 		return new Response("", { status: 408 })
@@ -94,7 +96,9 @@ async function networkFirst(request, cacheName) {
 	try {
 		const fetchRequest = new Request(request, { redirect: "follow" })
 		const response = await fetch(fetchRequest)
-		if (response.ok) cache.put(request, response.clone())
+		if (response.ok && response.type !== "opaqueredirect") {
+			cache.put(request, response.clone())
+		}
 		return response
 	} catch {
 		const cached = await cache.match(request)
@@ -107,7 +111,7 @@ async function networkFirstWithOffline(request) {
 	try {
 		const fetchRequest = new Request(request, { redirect: "follow" })
 		const response = await fetch(fetchRequest)
-		if (response.ok) {
+		if (response.ok && response.type !== "opaqueredirect") {
 			const clone = response.clone()
 			caches.open(CACHE_NAME).then((cache) => cache.put(request, clone))
 		}
