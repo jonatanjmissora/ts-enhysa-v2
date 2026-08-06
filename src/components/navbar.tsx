@@ -163,9 +163,10 @@ function UserSuscriptionInfo({
 	const { data: credits } = useQuery(userCreditsOptions)
 	useEffect(() => {
 		syncPendingPaymentsServer().then(res => {
-			if (res?.synchronized) queryClient.invalidateQueries({ queryKey: ["user-credits"] })
+			if (res?.synchronized)
+				queryClient.invalidateQueries({ queryKey: ["user-credits"] })
 		})
-	}, [])
+	}, [queryClient.invalidateQueries])
 	return (
 		<div className="w-full flex flex-col items-end justify-end gap-1">
 			<div className="flex justify-end items-center gap-2 w-full">

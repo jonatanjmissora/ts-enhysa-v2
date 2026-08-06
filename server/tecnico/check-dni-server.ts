@@ -6,7 +6,7 @@ import { tecnicos } from "../../db/tecnicos/schema"
 import { eq, and, ne, isNotNull } from "drizzle-orm"
 
 export const checkDniServer = createServerFn({ method: "POST" })
-	.inputValidator((d: { dni: string; excludeId?: string }) => d)
+	.validator((d: { dni: string; excludeId?: string }) => d)
 	.handler(async ({ data }) => {
 		const request = getRequest()
 		const session = await protectedServerFn(request)

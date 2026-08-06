@@ -24,9 +24,10 @@ function RouteComponent() {
 	const queryClient = useQueryClient()
 	useEffect(() => {
 		syncPendingPaymentsServer().then(res => {
-			if (res?.synchronized) queryClient.invalidateQueries({ queryKey: ["user-credits"] })
+			if (res?.synchronized)
+				queryClient.invalidateQueries({ queryKey: ["user-credits"] })
 		})
-	}, [])
+	}, [queryClient.invalidateQueries])
 	return (
 		<div className="min-h-svh flex flex-col relative mb-30">
 			<button
@@ -50,11 +51,13 @@ function RouteComponent() {
 				</div>
 				<div>
 					<p className="mt-10 italic tracking-wider text-balance text-lg w-5/6 mx-auto text-center text-foreground-soft">
-						La adquisición de créditos te permitirá obtener y descargar los informes realizados. Se necesitará de 1 crédito para desbloquear y descargar un informe.
+						La adquisición de créditos te permitirá obtener y descargar los
+						informes realizados. Se necesitará de 1 crédito para desbloquear y
+						descargar un informe.
 					</p>
 				</div>
 				<Suspense fallback={<h1>Cargando...</h1>}>
-					<Credits /> 
+					<Credits />
 				</Suspense>
 				<div className="w-11/12 sm:w-full">
 					<SuscriptionPlans from={from} />
@@ -67,8 +70,9 @@ function RouteComponent() {
 function Credits() {
 	const { data: credits } = useSuspenseQuery(userCreditsOptions)
 	return (
-			<span className="font-semibold text-gray-50/50 sm:text-foreground-soft text-lg tracking-wider">
-				creditos disponibles: {credits}
-			</span>
+		<p className="font-semibold text-gray-50/50 sm:text-foreground-soft text-lg tracking-wider">
+			creditos disponibles:{" "}
+			<span className="font-bold text-2xl text-amber-700">{credits}</span>
+		</p>
 	)
 }

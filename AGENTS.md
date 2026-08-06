@@ -57,7 +57,7 @@ export const getData = createServerFn({ method: "GET" }).handler(
 ### Server Function (POST con validación)
 ```ts
 export const saveData = createServerFn({ method: "POST" })
-  .inputValidator((d: { id: string; data: SomeType }) => d)
+  .validator((d: { id: string; data: SomeType }) => d)
   .handler(async ({ data }) => {
     return await saveDataDb(data.id, data.data)
   })
@@ -358,7 +358,7 @@ Conexión: `drizzle(process.env.DATABASE_URL as string, { schema })`.
 ## Best practices
 
 - Usar `useSuspenseQuery` en lugar de `useQuery` para evitar checks de `undefined` en `data`.
-- Server Functions con `inputValidator` para validación tipada antes del handler.
+- Server Functions con `validator` para validación tipada antes del handler.
 - Middleware con `createMiddleware` para auth reutilizable.
 - Formularios con `@tanstack/react-form` + Zod + UI components.
 - Drizzle: `db.update()` con `$onUpdate()` auto-maneja `updatedAt`.

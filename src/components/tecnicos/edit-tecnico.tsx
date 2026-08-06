@@ -422,7 +422,11 @@ export function EditTecnicoForm({
 					</Field>
 
 					{error && <p>{error.message}</p>}
-					{dniError && <p className="text-xs text-red-500">{dniError}</p>}
+					{dniError && (
+						<p className="tracking-wider italic text-red-500 text-center">
+							{dniError}
+						</p>
+					)}
 				</FieldGroup>
 			</form>
 		</article>

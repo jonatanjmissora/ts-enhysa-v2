@@ -8,6 +8,7 @@ import { PLANS } from "@/lib/constants"
 const searchSchema = z.object({
 	payment_id: z.coerce.number().optional(),
 	status: z.string().optional(),
+	from: z.string().optional(),
 })
 
 export const Route = createFileRoute("/_protected/pago-exitoso")({
@@ -24,7 +25,7 @@ const MAX_ATTEMPTS = 10
 const POLL_INTERVAL = 2000
 
 function RouteComponent() {
-	const { payment_id, status } = Route.useSearch()
+	const { payment_id, status, from } = Route.useSearch()
 	const navigate = useNavigate()
 	const [syncState, setSyncState] = useState<SyncState>(
 		status === "approved"
@@ -131,10 +132,10 @@ function RouteComponent() {
 						</div>
 						<button
 							type="button"
-							onClick={() => navigate({ to: "/suscripcion" })}
+							onClick={() => navigate({ to: "/suscripcion", search: { from } })}
 							className="inline-flex items-center gap-2 py-3 px-8 rounded-md font-semibold bg-[#e2711d] hover:bg-[#d0610d] text-white transition-colors"
 						>
-							Continuar
+							Ir a Suscripciones
 							<ArrowRight className="size-4" />
 						</button>
 					</>

@@ -8,7 +8,7 @@ import { pendingPayments } from "../../db/payments/schema"
 import { isDemoUserEmail } from "@/lib/demo-user"
 
 export const createPreferenceServer = createServerFn({ method: "POST" })
-	.validator((data: { planId: string; title: string; price: number }) => data)
+	.validator((data: { planId: string; title: string; price: number; from?: string }) => data)
 	.handler(async ({ data }) => {
 		const request = getRequest()
 		const session = await protectedServerFn(request)
@@ -21,6 +21,7 @@ export const createPreferenceServer = createServerFn({ method: "POST" })
 		const notificationUrl = `${baseUrl}/api/mercadopago/webhook`
 		console.log("[MP] notification_url:", notificationUrl)
 
+		const fromParam = data.from ? `?from=${encodeURIComponent(data.from)}` : ""
 		try {
 			const preference = new Preference(mpClient)
 			const result = await preference.create({
@@ -39,9 +40,9 @@ export const createPreferenceServer = createServerFn({ method: "POST" })
 					metadata: { plan_id: data.planId },
 					notification_url: notificationUrl,
 					back_urls: {
-						success: `${baseUrl}/pago-exitoso`,
-						failure: `${baseUrl}/suscripcion?status=failure`,
-						pending: `${baseUrl}/suscripcion?status=pending`,
+						success: `${baseUrl}/pago-exitoso${fromParam}`,
+						failure: `${baseUrl}/suscripcion${fromParam}&status=failure`,
+						pending: `${baseUrl}/suscripcion${fromParam}&status=pending`,
 					},
 					auto_return: "approved",
 				},

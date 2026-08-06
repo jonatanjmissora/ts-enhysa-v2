@@ -10,19 +10,25 @@ const CPSH_DISCOUNT = 0.15
 type CheckMatriculadoProps = {
 	basePrice: number
 	onDiscountChange: (discountedPrice: number) => void
+	onCheckingChange?: (checking: boolean) => void
 }
 
 export function CheckMatriculado({
 	basePrice,
 	onDiscountChange,
+	onCheckingChange,
 }: CheckMatriculadoProps) {
 	const { data: tecnico } = useSuspenseQuery(tecnicoQueryOptions)
 	const tecnicoData = Array.isArray(tecnico) ? (tecnico[0] ?? null) : tecnico
 	const dni = tecnicoData?.dni ?? null
 
-	const [checking, setChecking] = useState(false)
+	const [checking, setChecking] = useState(!!dni)
 	const [isRegistered, setIsRegistered] = useState<boolean | null>(null)
 	const [error, setError] = useState<string | null>(null)
+
+	useEffect(() => {
+		onCheckingChange?.(checking)
+	}, [checking, onCheckingChange])
 
 	useEffect(() => {
 		if (!tecnicoData || !dni) return

@@ -1,10 +1,10 @@
 import { PLANS } from "@/lib/constants"
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router"
-import { ArrowLeft, LogIn, OctagonAlert } from "lucide-react"
+import { ArrowLeft, OctagonAlert } from "lucide-react"
 import { z } from "zod"
 import { createPreferenceServer } from "../../../server/mercadopago/create-preference-server"
 import { authClient } from "#/lib/auth-client"
-import { Suspense, useState } from "react"
+import { Suspense, useState, useCallback } from "react"
 import { isDemoUserEmail } from "@/lib/demo-user"
 import { CheckMatriculado } from "@/components/check-matriculado"
 import Loading from "#/components/loading"
@@ -28,11 +28,12 @@ function RouteComponent() {
 	const [loading, setLoading] = useState(false)
 	const [actualPrice, setActualPrice] = useState(found?.price || 0)
 	const [errorMsg, setErrorMsg] = useState<string | null>(null)
+	const [checkingMatriculado, setCheckingMatriculado] = useState(false)
 	const isDemo = isDemoUserEmail(session?.user.email)
 
-	const handleDiscountChange = (discountedPrice: number) => {
+	const handleDiscountChange = useCallback((discountedPrice: number) => {
 		setActualPrice(discountedPrice)
-	}
+	}, [])
 
 	const handlePay = async () => {
 		if (!found) return
@@ -50,6 +51,7 @@ function RouteComponent() {
 					planId: found.title.toLowerCase(),
 					title: found.title,
 					price: actualPrice,
+					from: from || undefined,
 				},
 			})
 			if (!result.initPoint) throw new Error("No se obtuvo URL de pago")
@@ -73,6 +75,9 @@ function RouteComponent() {
 				<Link
 					to={backTo}
 					hash={from === "landing" ? "suscriptions" : ""}
+					search={{
+						from: from ?? "root",
+					}}
 					className="self-start flex items-center gap-2 text-sm text-foreground-soft hover:text-foreground transition-colors"
 				>
 					<ArrowLeft size={16} />
@@ -83,7 +88,7 @@ function RouteComponent() {
 					<Loading className="justify-start pt-20" />
 				) : isDemo ? (
 					<div className="flex flex-col items-center gap-6 text-center">
-						<LogIn size={48} className="text-foreground-soft" />
+						<OctagonAlert size={64} className="text-amber-500/60" />
 						<h1 className="text-2xl font-bold">
 							Compra no disponible para demo
 						</h1>
@@ -95,12 +100,12 @@ function RouteComponent() {
 							onClick={() => navigate({ to: "/login" })}
 							className="py-3 px-8 rounded-md text-center font-semibold bg-[#e2711d] hover:bg-[#d0610d] text-white transition-colors"
 						>
-							Ir a Iniciar Sesión
+							Iniciar Sesión
 						</button>
 					</div>
 				) : !session ? (
 					<div className="flex flex-col items-center gap-6 text-center w-11/12">
-						<OctagonAlert size={48} className="text-amber-500/60" />
+						<OctagonAlert size={64} className="text-amber-500/60" />
 						<h1 className="text-2xl font-bold">Iniciá sesión para continuar</h1>
 						<p className="text-foreground-soft text-sm max-w-md">
 							Necesitás estar logueado para poder comprar créditos.
@@ -110,7 +115,7 @@ function RouteComponent() {
 							onClick={() => navigate({ to: "/login" })}
 							className="py-3 px-8 rounded-md text-center font-semibold bg-[#e2711d] hover:bg-[#d0610d] text-white transition-colors"
 						>
-							Ir a Iniciar Sesión
+							Iniciar Sesión
 						</button>
 					</div>
 				) : found ? (
@@ -137,16 +142,21 @@ function RouteComponent() {
 							<CheckMatriculado
 								basePrice={found.price}
 								onDiscountChange={handleDiscountChange}
+								onCheckingChange={setCheckingMatriculado}
 							/>
 						</Suspense>
 
 						<button
 							type="button"
 							onClick={handlePay}
-							disabled={loading}
+							disabled={loading || checkingMatriculado}
 							className="w-full max-w-xs py-3 rounded-md text-center font-semibold bg-[#e2711d] hover:bg-[#d0610d] text-white transition-colors disabled:opacity-50"
 						>
-							{loading ? "Redirigiendo a MP..." : "Pagar con Mercado Pago"}
+							{loading
+								? "Redirigiendo a MP..."
+								: checkingMatriculado
+									? "Verificando matrícula..."
+									: "Pagar con Mercado Pago"}
 						</button>
 						{errorMsg && (
 							<p className="text-xs text-red-500 max-w-xs text-center">
