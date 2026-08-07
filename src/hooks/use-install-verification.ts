@@ -16,7 +16,9 @@ export function useInstallVerification() {
 
 			try {
 				const relatedApps = await relatedAppsApi.call(navigator)
-				setInstalledFlag(relatedApps.length > 0)
+				if (relatedApps.length > 0) {
+					setInstalledFlag(true)
+				}
 			} catch {
 				// Keep the persisted state if the browser rejects the call.
 			}
