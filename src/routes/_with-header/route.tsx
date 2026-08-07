@@ -104,6 +104,7 @@ function MobileMenu({
 }) {
 	const close = () => setIsOpen(false)
 	const navigate = useNavigate()
+	const { data: session } = authClient.useSession()
 
 	const handleHashNav = (hash: string) => () => {
 		close()
