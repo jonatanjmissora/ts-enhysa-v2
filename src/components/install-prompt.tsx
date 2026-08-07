@@ -1,19 +1,24 @@
 import { useInstall } from "#/hooks/use-install"
+import { useInstalledFlag } from "#/store/install-store"
 
 export function InstallPrompt() {
-	const { isInstalled, canInstall, isIOS, install } = useInstall()
+	const { isStandalone, canInstall, isIOS, install } = useInstall()
+	const installed = useInstalledFlag()
 
-	if (isInstalled)
-		return (
-			<div className="w-full bg-amber-600/20 py-2 text-sm text-center text-pretty italic">
-				Aplicación ya instalada, utilice el icono del escritorio
-			</div>
-		)
+	if (isStandalone) return null
 
-	if (isIOS) {
+	if (isIOS && !installed) {
 		return (
 			<div className="w-full bg-amber-600/20 py-2 text-sm text-center text-pretty italic">
 				Para instalar en iOS: Compartir → Añadir a pantalla de inicio
+			</div>
+		)
+	}
+
+	if (installed) {
+		return (
+			<div className="w-full bg-amber-600/20 py-2 text-sm text-center text-pretty italic">
+				Aplicación ya instalada, utilice el icono del escritorio
 			</div>
 		)
 	}
@@ -22,7 +27,7 @@ export function InstallPrompt() {
 
 	return (
 		<div className="w-full bg-amber-600/20 py-2 text-sm flex justify-center items-center gap-2 text-pretty">
-			<span>Puede instalar la aplicacion!</span>
+			<span>Puede instalar la aplicación</span>
 			<button type="button" onClick={() => install()} className="underline">
 				Instalar
 			</button>

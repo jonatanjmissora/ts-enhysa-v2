@@ -1,30 +1,35 @@
 import { useState, useEffect, useCallback, useRef } from "react"
+import { setInstalledFlag } from "#/store/install-store"
 
 interface BeforeInstallPromptEvent extends Event {
 	readonly platforms: string[]
-	readonly userChoice: Promise<{ outcome: "accepted" | "dismissed"; platform: string }>
+	readonly userChoice: Promise<{
+		outcome: "accepted" | "dismissed"
+		platform: string
+	}>
 	prompt(): Promise<void>
 }
 
 type InstallState = {
-	isInstalled: boolean
+	isStandalone: boolean
 	canInstall: boolean
 	isIOS: boolean
 	install: () => Promise<void>
 }
 
 export function useInstall(): InstallState {
-	const [isInstalled, setIsInstalled] = useState(false)
+	const [isStandalone, setIsStandalone] = useState(false)
 	const [canInstall, setCanInstall] = useState(false)
 	const [isIOS, setIsIOS] = useState(false)
 	const deferredPrompt = useRef<BeforeInstallPromptEvent | null>(null)
 
-	const detectInstalled = useCallback(() => {
+	const detectStandalone = useCallback(() => {
 		const standalone =
 			window.matchMedia("(display-mode: standalone)").matches ||
 			("standalone" in window.navigator &&
-				(window.navigator as Navigator & { standalone?: boolean }).standalone === true)
-		setIsInstalled(standalone)
+				(window.navigator as Navigator & { standalone?: boolean })
+					.standalone === true)
+		setIsStandalone(standalone)
 	}, [])
 
 	const detectIOS = useCallback(() => {
@@ -38,7 +43,7 @@ export function useInstall(): InstallState {
 	useEffect(() => {
 		if (typeof window === "undefined") return
 
-		detectInstalled()
+		detectStandalone()
 		detectIOS()
 
 		const handleBeforeInstallPrompt = (e: Event) => {
@@ -50,11 +55,11 @@ export function useInstall(): InstallState {
 		const handleAppInstalled = () => {
 			deferredPrompt.current = null
 			setCanInstall(false)
-			setIsInstalled(true)
+			setInstalledFlag(true)
 		}
 
 		const handleDisplayModeChange = (e: MediaQueryListEvent) => {
-			setIsInstalled(e.matches)
+			setIsStandalone(e.matches)
 		}
 
 		window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt)
@@ -64,22 +69,30 @@ export function useInstall(): InstallState {
 		mediaQuery.addEventListener("change", handleDisplayModeChange)
 
 		return () => {
-			window.removeEventListener("beforeinstallprompt", handleBeforeInstallPrompt)
+			window.removeEventListener(
+				"beforeinstallprompt",
+				handleBeforeInstallPrompt
+			)
 			window.removeEventListener("appinstalled", handleAppInstalled)
 			mediaQuery.removeEventListener("change", handleDisplayModeChange)
 		}
-	}, [detectInstalled, detectIOS])
+	}, [detectStandalone, detectIOS])
 
 	const install = useCallback(async () => {
-		if (!deferredPrompt.current) return
-		deferredPrompt.current.prompt()
-		const { outcome } = await deferredPrompt.current.userChoice
-		if (outcome === "accepted") {
+		const promptEvent = deferredPrompt.current
+		if (!promptEvent) return
+
+		try {
+			await promptEvent.prompt()
+			const { outcome } = await promptEvent.userChoice
+			if (outcome === "accepted") {
+				setInstalledFlag(true)
+			}
+		} finally {
 			deferredPrompt.current = null
 			setCanInstall(false)
-			setIsInstalled(true)
 		}
 	}, [])
 
-	return { isInstalled, canInstall, isIOS, install }
+	return { isStandalone, canInstall, isIOS, install }
 }
