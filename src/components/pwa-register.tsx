@@ -6,7 +6,7 @@ export function PWARegister() {
 
 	useEffect(() => {
 		if (import.meta.env.DEV) {
-			navigator.serviceWorker?.getRegistrations().then((regs) => {
+			navigator.serviceWorker?.getRegistrations().then(regs => {
 				for (const reg of regs) {
 					reg.active?.postMessage({ type: "UNREGISTER" })
 					reg.unregister()
@@ -16,7 +16,7 @@ export function PWARegister() {
 		}
 		if (!("serviceWorker" in navigator)) return
 
-		navigator.serviceWorker.register("/sw.js").then((reg) => {
+		navigator.serviceWorker.register("/sw.js").then(reg => {
 			if (reg.waiting) {
 				setNeedRefresh(true)
 			}
@@ -55,11 +55,11 @@ export function PWARegister() {
 
 	return (
 		<>
-			{offlineReady && (
+			{/* {offlineReady && (
 				<div className="fixed bottom-4 right-4 z-50 rounded-lg bg-zinc-800 px-4 py-3 text-sm text-white shadow-lg">
 					App lista para uso offline
 				</div>
-			)}
+			)} */}
 			{needRefresh && (
 				<div className="fixed bottom-4 right-4 z-50 flex items-center gap-3 rounded-lg bg-zinc-800 px-4 py-3 text-sm text-white shadow-lg">
 					<span>Nueva versi&oacute;n disponible</span>

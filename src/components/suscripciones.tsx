@@ -207,7 +207,7 @@ function CombinedPlan({
 								className="size-4 accent-[#5cb85c] rounded-[80%]"
 							/>
 							<span className="text-sm tracking-wider text-foreground-soft">
-								Pago anual (ahorro 16%)
+								Pago anual (ahorro 15%)
 							</span>
 						</Label>
 					</div>
