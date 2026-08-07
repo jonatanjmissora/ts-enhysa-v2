@@ -12,10 +12,12 @@ export function DemoCredentialsModal({
 	email,
 	password,
 	onConfirm,
+	loading,
 }: {
 	email: string
 	password: string
 	onConfirm: () => void
+	loading: boolean
 }) {
 	return (
 		<AlertDialog open>
@@ -41,11 +43,19 @@ export function DemoCredentialsModal({
 					</div>
 				</div>
 				<AlertDialogFooter>
-					<p className="text-xs text-foreground-soft tracking-wider text-balance">
-						Esta cuenta es solo para fines demostrativos, no podrá descargar
-						informes.
-					</p>
-					<Button onClick={onConfirm}>Entendido, continuar</Button>
+					<div className="w-full gap-4 flex flex-col">
+						<Button
+							onClick={onConfirm}
+							className="tracking-wider w-full bg-amber-600 hover:bg-amber-600/90"
+							disabled={loading}
+						>
+							{loading ? "Iniciando..." : "Continuar"}
+						</Button>
+						<span className="w-full italic text-foreground-soft text-center text-pretty text-xs">
+							Esta cuenta es solo para fines demostrativos, no podrá descargar
+							informes.
+						</span>
+					</div>
 				</AlertDialogFooter>
 			</AlertDialogContent>
 		</AlertDialog>

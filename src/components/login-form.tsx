@@ -225,7 +225,10 @@ export function LoginForm({
 }
 
 function DemoButton() {
+	const router = useRouter()
+	const [loadingOnModal, setLoadingOnModal] = useState(false)
 	const [loading, setLoading] = useState(false)
+	const [error, setError] = useState<string | null>(null)
 	const [demoCreds, setDemoCreds] = useState<{
 		email: string
 		password: string
@@ -233,21 +236,36 @@ function DemoButton() {
 
 	const handleDemo = async () => {
 		setLoading(true)
+		setError(null)
 		try {
 			const creds = await ensureDemoUser()
 			setDemoCreds(creds)
-		} catch (_err) {
+		} catch (err) {
+			setError(
+				err instanceof Error ? err.message : "Error al crear sesión demo"
+			)
+			console.error(err)
+		} finally {
 			setLoading(false)
 		}
 	}
 
 	const confirmDemo = async () => {
-		if (!demoCreds) return
-		await authClient.signIn.email({
-			email: demoCreds.email,
-			password: demoCreds.password,
-			callbackURL: "/",
-		})
+		setLoadingOnModal(true)
+		try {
+			if (!demoCreds) return
+			await authClient.signIn.email({
+				email: demoCreds.email,
+				password: demoCreds.password,
+				callbackURL: "/",
+			})
+			setDemoCreds(null)
+			router.invalidate()
+		} catch (error) {
+			console.error(error)
+		} finally {
+			setLoadingOnModal(false)
+		}
 	}
 
 	return (
@@ -257,6 +275,7 @@ function DemoButton() {
 					email={demoCreds.email}
 					password={demoCreds.password}
 					onConfirm={confirmDemo}
+					loading={loadingOnModal}
 				/>
 			)}
 			<Field>
@@ -268,6 +287,9 @@ function DemoButton() {
 				>
 					{loading ? "Iniciando..." : "Demo — Probar sin registrarse"}
 				</Button>
+				{error && (
+					<p className="text-xs text-red-500 mt-2 text-center">{error}</p>
+				)}
 			</Field>
 		</>
 	)

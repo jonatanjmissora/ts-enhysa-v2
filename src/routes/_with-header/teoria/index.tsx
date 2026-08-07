@@ -937,7 +937,7 @@ function RouteComponent() {
 	const Content = CONTENT[t]
 
 	return (
-		<article className="w-full sm:max-w-5xl 2xl:max-w-7xl sm:mx-auto px-0 sm:px-10 py-10">
+		<article className="w-11/12 mx-auto sm:max-w-5xl 2xl:max-w-7xl sm:mx-auto px-0 sm:px-10 py-10">
 			<header className="space-y-4">
 				<button
 					type="button"
