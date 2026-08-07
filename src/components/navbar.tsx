@@ -17,6 +17,7 @@ import { resetDemoData } from "../../server/reset-demo-data-server"
 import { useQuery, useQueryClient } from "@tanstack/react-query"
 import { userCreditsOptions } from "../../queries/credits/user-credits-query"
 import { syncPendingPaymentsServer } from "../../server/mercadopago/sync-pending-payments-server"
+import { InstallPrompt } from "./install-prompt"
 
 const DEMO_EMAIL_PREFIX = "demo"
 const DEMO_EMAIL_DOMAIN = "@enhysa.demo"
@@ -24,25 +25,26 @@ const DEMO_EMAIL_DOMAIN = "@enhysa.demo"
 export default function Navbar() {
 	const [isOpen, setIsOpen] = useState(false)
 	return (
-		<header
-			className={`w-full relative h-18 flex items-center justify-between p-4 text-foreground`}
-		>
-			<Link to="/" className="flex items-center gap-3">
-				<img
-					src="/EnHySa_logo.webp"
-					alt="logo EnHySa"
-					className="size-10 object-cover"
-				/>
+		<header className="w-full flex flex-col gap-1">
+			<div className="w-full relative h-18 flex items-center justify-between p-4 text-foreground">
+				<Link to="/" className="flex items-center gap-3">
+					<img
+						src="/EnHySa_logo.webp"
+						alt="logo EnHySa"
+						className="size-10 object-cover"
+					/>
 
-				<p className="text-2xl">EnHySa App</p>
-			</Link>
-			<button
-				onClick={() => setIsOpen(!isOpen)}
-				aria-label="Abrir menú de navegación"
-			>
-				<Menu className="size-7" />
-			</button>
-			<MovilMenuContent isOpen={isOpen} setIsOpen={setIsOpen} />
+					<p className="text-2xl">EnHySa App</p>
+				</Link>
+				<button
+					onClick={() => setIsOpen(!isOpen)}
+					aria-label="Abrir menú de navegación"
+				>
+					<Menu className="size-7" />
+				</button>
+				<MovilMenuContent isOpen={isOpen} setIsOpen={setIsOpen} />
+			</div>
+			<InstallPrompt />
 		</header>
 	)
 }
@@ -113,7 +115,7 @@ const MovilMenuContent = ({
 				</li>
 			</ul>
 			<User setIsOpen={setIsOpen} />
-			<div className="h-6"></div>
+			<InstallPrompt />
 		</div>
 	)
 }
