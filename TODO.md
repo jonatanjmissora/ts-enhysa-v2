@@ -19,9 +19,9 @@ si no espero al 100% para cargar la foto, no puedo seguir
 
 [🔨] probar PWA en celular
 
-❌ mensaje y boton para autoinstalar app.
+✅ mensaje y boton para instalar app.
 
-❌callback de google account. (borrando el cache de la pagina)
+✅ callback de google account. (borrando el cache de la pagina)
 
 ✅chequear cuando ingreso el dni, que no este repetido
 
@@ -31,8 +31,10 @@ si no espero al 100% para cargar la foto, no puedo seguir
 
 DEMO USERs:
 	✅ NO deben comprar creditos, deben cambiar a usuario real.
-	✅ ¨Version Demo, debe loguearse para generar informes descargables. Logueate con tus datos"
+	✅ mensaje ¨Version Demo, debe loguearse para generar informes descargables. 
+					Logueate con tus datos"
 	✅ mejorar contraseña
-	✅ cuando se eliminan, borran lo relacionado a creditos?
+	✅ cuando se eliminan, borran todas sus tablas relacionadas
+	✅ maximo de 5 usuarios demo.
 
 	
