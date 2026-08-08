@@ -12,6 +12,7 @@ import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools"
 import { TanStackDevtools } from "@tanstack/react-devtools"
 import TanStackQueryDevtools from "../integrations/tanstack-query/devtools"
 import { PWARegister } from "@/components/pwa-register"
+import { PWAInstallListener } from "@/components/pwa-install-listener"
 import { OfflineIndicator } from "@/components/offline-indicator"
 import appCss from "../styles.css?url"
 import type { QueryClient } from "@tanstack/react-query"
@@ -84,6 +85,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 			</head>
 			<body className="overflow-x-hidden w-screen">
 				<OfflineIndicator />
+				<PWAInstallListener />
 				<main>{children}</main>
 				<PWARegister />
 				<TanStackDevtools
