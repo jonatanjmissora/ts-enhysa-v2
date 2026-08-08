@@ -1,9 +1,16 @@
 {
   "name": "EnHySa - Gestión de Inspecciones",
   "short_name": "EnHySa",
+  "id": "/",
   "description": "Plataforma de gestión de inspecciones de seguridad e higiene. Reportes técnicos, mediciones y certificaciones.",
   "start_url": "/",
   "display": "standalone",
+  "related_applications": [
+    {
+      "platform": "webapp",
+      "id": "/"
+    }
+  ],
   "background_color": "#09090b",
   "theme_color": "#09090b",
   "orientation": "portrait-primary",

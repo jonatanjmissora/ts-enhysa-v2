@@ -841,3 +841,15 @@ La aplicación tendrá un sistema de instalación que:
 * permite instalar desde un botón propio cuando el navegador lo permite;
 * proporciona instrucciones específicas para iOS;
 * mantiene toda la lógica de instalación encapsulada.
+
+                                                                Usuario entra a "/"
+                                                                             ↓
+                                                        estoy en navegador (no standalone)
+                                                        │                                                    │
+                                                        Sí                                                  No
+                                                        ↓                                                     ↓
+                                                verificar: esta instalada?                   no hacer nada
+                                                │                                │
+                                                Sí                               No
+                                                ↓                                 ↓
+                renderizar: “Aplicación ya instalada”        renderizar botón “Instalar”

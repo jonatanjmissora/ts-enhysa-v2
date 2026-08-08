@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { setInstalledFlag } from "#/store/install-store"
 
 interface BeforeInstallPromptEvent extends Event {
@@ -10,6 +10,8 @@ interface BeforeInstallPromptEvent extends Event {
 	prompt(): Promise<void>
 }
 
+let deferredPrompt: BeforeInstallPromptEvent | null = null
+
 type InstallState = {
 	isStandalone: boolean
 	canInstall: boolean
@@ -19,9 +21,8 @@ type InstallState = {
 
 export function useInstall(): InstallState {
 	const [isStandalone, setIsStandalone] = useState(false)
-	const [canInstall, setCanInstall] = useState(false)
+	const [canInstall, setCanInstall] = useState(() => deferredPrompt !== null)
 	const [isIOS, setIsIOS] = useState(false)
-	const deferredPrompt = useRef<BeforeInstallPromptEvent | null>(null)
 
 	const detectStandalone = useCallback(() => {
 		const standalone =
@@ -48,12 +49,12 @@ export function useInstall(): InstallState {
 
 		const handleBeforeInstallPrompt = (e: Event) => {
 			e.preventDefault()
-			deferredPrompt.current = e as BeforeInstallPromptEvent
+			deferredPrompt = e as BeforeInstallPromptEvent
 			setCanInstall(true)
 		}
 
 		const handleAppInstalled = () => {
-			deferredPrompt.current = null
+			deferredPrompt = null
 			setCanInstall(false)
 			setInstalledFlag(true)
 		}
@@ -79,7 +80,7 @@ export function useInstall(): InstallState {
 	}, [detectStandalone, detectIOS])
 
 	const install = useCallback(async () => {
-		const promptEvent = deferredPrompt.current
+		const promptEvent = deferredPrompt
 		if (!promptEvent) return
 
 		try {
@@ -89,7 +90,7 @@ export function useInstall(): InstallState {
 				setInstalledFlag(true)
 			}
 		} finally {
-			deferredPrompt.current = null
+			deferredPrompt = null
 			setCanInstall(false)
 		}
 	}, [])
