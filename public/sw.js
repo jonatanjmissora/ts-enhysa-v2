@@ -47,6 +47,7 @@ self.addEventListener("fetch", (event) => {
 
 	if (request.method !== "GET") return
 	if (!url.protocol.startsWith("http")) return
+	if (url.pathname.startsWith("/api/")) return
 
 	if (url.pathname.startsWith("/_serverFn/")) {
 		event.respondWith(networkFirst(request, CACHE_NAME))
