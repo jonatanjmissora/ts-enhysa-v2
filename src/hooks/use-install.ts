@@ -12,6 +12,10 @@ interface BeforeInstallPromptEvent extends Event {
 
 let deferredPrompt: BeforeInstallPromptEvent | null = null
 
+export function hasDeferredInstallPrompt() {
+	return deferredPrompt !== null
+}
+
 type InstallState = {
 	isStandalone: boolean
 	canInstall: boolean

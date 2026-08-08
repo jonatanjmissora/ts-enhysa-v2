@@ -1,4 +1,5 @@
 import { useEffect } from "react"
+import { hasDeferredInstallPrompt } from "#/hooks/use-install"
 import { setInstalledFlag } from "#/store/install-store"
 
 export function useInstallVerification() {
@@ -6,6 +7,14 @@ export function useInstallVerification() {
 		if (typeof window === "undefined") return
 
 		const verifyInstalledApps = async () => {
+			const isStandalone =
+				window.matchMedia("(display-mode: standalone)").matches ||
+				("standalone" in window.navigator &&
+					(window.navigator as Navigator & { standalone?: boolean })
+						.standalone === true)
+
+			if (isStandalone) return
+
 			const relatedAppsApi = (
 				navigator as Navigator & {
 					getInstalledRelatedApps?: () => Promise<unknown[]>
@@ -16,7 +25,14 @@ export function useInstallVerification() {
 
 			try {
 				const relatedApps = await relatedAppsApi.call(navigator)
-				setInstalledFlag(relatedApps.length > 0)
+				if (relatedApps.length > 0) {
+					setInstalledFlag(true)
+					return
+				}
+
+				if (hasDeferredInstallPrompt()) {
+					setInstalledFlag(false)
+				}
 			} catch {
 				// Keep the persisted state if the browser rejects the call.
 			}
