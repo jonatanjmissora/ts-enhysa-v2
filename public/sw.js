@@ -11,37 +11,39 @@ const PRECACHE_URLS = [
 	"/robots.txt",
 ]
 
-self.addEventListener("message", (event) => {
+self.addEventListener("message", event => {
 	if (event.data?.type === "SKIP_WAITING") self.skipWaiting()
 	if (event.data?.type === "UNREGISTER") {
 		self.registration.unregister()
-		caches.keys().then((keys) => Promise.all(keys.map((k) => caches.delete(k))))
+		caches.keys().then(keys => Promise.all(keys.map(k => caches.delete(k))))
 	}
 })
 
-self.addEventListener("install", (event) => {
+self.addEventListener("install", event => {
 	event.waitUntil(
-		caches.open(STATIC_CACHE).then((cache) => cache.addAll(PRECACHE_URLS))
+		caches.open(STATIC_CACHE).then(cache => cache.addAll(PRECACHE_URLS))
 	)
 	self.skipWaiting()
 })
 
-self.addEventListener("activate", (event) => {
+self.addEventListener("activate", event => {
 	event.waitUntil(
 		Promise.all([
 			self.clients.claim(),
-			caches.keys().then((keys) =>
-				Promise.all(
-					keys
-						.filter((key) => key !== STATIC_CACHE && key !== CACHE_NAME)
-						.map((key) => caches.delete(key))
-				)
-			),
+			caches
+				.keys()
+				.then(keys =>
+					Promise.all(
+						keys
+							.filter(key => key !== STATIC_CACHE && key !== CACHE_NAME)
+							.map(key => caches.delete(key))
+					)
+				),
 		])
 	)
 })
 
-self.addEventListener("fetch", (event) => {
+self.addEventListener("fetch", event => {
 	const { request } = event
 	const url = new URL(request.url)
 
@@ -112,9 +114,13 @@ async function networkFirstWithOffline(request) {
 	try {
 		const fetchRequest = new Request(request, { redirect: "follow" })
 		const response = await fetch(fetchRequest)
-		if (response.ok && response.type !== "opaqueredirect") {
+		if (
+			response.ok &&
+			response.type !== "opaqueredirect" &&
+			!response.redirected
+		) {
 			const clone = response.clone()
-			caches.open(CACHE_NAME).then((cache) => cache.put(request, clone))
+			caches.open(CACHE_NAME).then(cache => cache.put(request, clone))
 		}
 		return response
 	} catch {

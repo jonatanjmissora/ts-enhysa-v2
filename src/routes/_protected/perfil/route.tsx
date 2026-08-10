@@ -1,6 +1,4 @@
 import { createFileRoute, Link, Outlet } from "@tanstack/react-router"
-import { empresasQueryOptions } from "../../../../queries/empresas/empresas-query"
-import { instrumentosQueryOptions } from "../../../../queries/instrumentos/instrumentos-query"
 import { tecnicoQueryOptions } from "../../../../queries/tecnico/tecnico-query"
 import Title from "#/components/title"
 import { Cpu, UserRound, Warehouse } from "lucide-react"
@@ -9,8 +7,6 @@ import BackChevron from "#/components/back-chevron"
 export const Route = createFileRoute("/_protected/perfil")({
 	loader: ({ context }) => {
 		context.queryClient.ensureQueryData(tecnicoQueryOptions)
-		context.queryClient.ensureQueryData(empresasQueryOptions)
-		context.queryClient.ensureQueryData(instrumentosQueryOptions)
 		return null
 	},
 	component: RouteComponent,
