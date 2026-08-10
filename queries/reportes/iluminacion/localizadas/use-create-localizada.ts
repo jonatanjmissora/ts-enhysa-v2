@@ -3,32 +3,13 @@ import { sortedByName } from "#/lib/utils"
 import { createLocalizadaServer } from "../../../../server/reportes/iluminacion/localizadas/create-localizada-server"
 import type { LocalizadaIluminacionType } from "../../../../db/reportes/iluminacion/localizadas/schema"
 import type { LocalizadaServerType } from "../../../../db/reportes/iluminacion/localizadas/localizada-validator"
-import {
-	addMutationToQueue,
-	putEntityInCache,
-} from "@/lib/offline/db"
 
 export function useCreateLocalizada() {
 	const queryClient = useQueryClient()
 
 	return useMutation({
-		mutationFn: async ({ data }: { data: LocalizadaServerType }) => {
-			try {
-				return await createLocalizadaServer({ data })
-			} catch {
-				const newEntity: LocalizadaIluminacionType = {
-					...data,
-					userId: "",
-				}
-				await addMutationToQueue({
-					entity: "localizadas-iluminacion-cache",
-					type: "create",
-					payload: newEntity,
-				})
-				await putEntityInCache("localizadas-iluminacion-cache", newEntity)
-				return newEntity
-			}
-		},
+		mutationFn: ({ data }: { data: LocalizadaServerType }) =>
+			createLocalizadaServer({ data }),
 		onSuccess: data => {
 			if (!data) return
 			queryClient.setQueryData<LocalizadaIluminacionType[]>(

@@ -2,7 +2,6 @@ import { useEffect, useState } from "react"
 
 export function PWARegister() {
 	const [needRefresh, setNeedRefresh] = useState(false)
-	const [offlineReady, setOfflineReady] = useState(false)
 
 	useEffect(() => {
 		if (import.meta.env.DEV) {
@@ -36,11 +35,6 @@ export function PWARegister() {
 			})
 		})
 
-		navigator.serviceWorker.ready.then(() => {
-			setOfflineReady(true)
-			setTimeout(() => setOfflineReady(false), 5000)
-		})
-
 		navigator.serviceWorker.addEventListener("controllerchange", () => {
 			window.location.reload()
 		})
@@ -55,11 +49,6 @@ export function PWARegister() {
 
 	return (
 		<>
-			{/* {offlineReady && (
-				<div className="fixed bottom-4 right-4 z-50 rounded-lg bg-zinc-800 px-4 py-3 text-sm text-white shadow-lg">
-					App lista para uso offline
-				</div>
-			)} */}
 			{needRefresh && (
 				<div className="fixed bottom-4 right-4 z-50 flex items-center gap-3 rounded-lg bg-zinc-800 px-4 py-3 text-sm text-white shadow-lg">
 					<span>Nueva versi&oacute;n disponible</span>

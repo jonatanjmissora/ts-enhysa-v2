@@ -18,6 +18,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query"
 import { userCreditsOptions } from "../../queries/credits/user-credits-query"
 import { syncPendingPaymentsServer } from "../../server/mercadopago/sync-pending-payments-server"
 import { InstallPrompt } from "./install-prompt"
+import { OfflineIndicator } from "./offline-indicator"
 
 const DEMO_EMAIL_PREFIX = "demo"
 const DEMO_EMAIL_DOMAIN = "@enhysa.demo"
@@ -36,6 +37,7 @@ export default function Navbar() {
 
 					<p className="text-2xl">EnHySa App</p>
 				</Link>
+				<OfflineIndicator />
 				<button
 					onClick={() => setIsOpen(!isOpen)}
 					aria-label="Abrir menú de navegación"

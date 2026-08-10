@@ -13,7 +13,6 @@ import { TanStackDevtools } from "@tanstack/react-devtools"
 import TanStackQueryDevtools from "../integrations/tanstack-query/devtools"
 import { PWARegister } from "@/components/pwa-register"
 import { PWAInstallListener } from "@/components/pwa-install-listener"
-import { OfflineIndicator } from "@/components/offline-indicator"
 import appCss from "../styles.css?url"
 import type { QueryClient } from "@tanstack/react-query"
 import { DefaultCatchBoundary } from "#/components/DefaultCatchBoundary"
@@ -84,7 +83,6 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 				<HeadContent />
 			</head>
 			<body className="overflow-x-hidden w-screen">
-				<OfflineIndicator />
 				<PWAInstallListener />
 				<main>{children}</main>
 				<PWARegister />
