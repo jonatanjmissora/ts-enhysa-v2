@@ -14,10 +14,13 @@ import {
 import { Button } from "../ui/button"
 import { Ellipsis, Pencil } from "lucide-react"
 import useScrollTop from "#/hooks/scroll-top"
-import { Link } from "@tanstack/react-router"
+import { Link, useLoaderData } from "@tanstack/react-router"
 
 export default function Tecnico() {
-	const { data: tecnico } = useSuspenseQuery(tecnicoQueryOptions)
+	const { session } = useLoaderData({ from: "__root__" })
+	const { data: tecnico } = useSuspenseQuery(
+		tecnicoQueryOptions(session?.user?.id ?? "")
+	)
 	const tecnicoData = Array.isArray(tecnico) ? (tecnico[0] ?? null) : tecnico
 	if (!tecnicoData) return <TecnicoVacio />
 	return <HayTecnico tecnico={tecnicoData} />
