@@ -14,14 +14,24 @@ export interface TecnicoLocal {
 	userId: string
 }
 
+export interface SessionLocal {
+	user: {
+		id: string
+		email: string
+		name: string
+	}
+}
+
 class AppDatabase extends Dexie {
 	tecnicos!: EntityTable<TecnicoLocal, "id">
+	session!: EntityTable<SessionLocal, "user">
 
 	constructor() {
-		super("app-db")
+		super("enhysa-db")
 
 		this.version(1).stores({
 			tecnicos: "id, userId, updatedAt",
+			session: "user",
 		})
 	}
 }
