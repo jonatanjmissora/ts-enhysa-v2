@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Sin conexión — EnHySa</title>
+	<style>
+		* { margin: 0; padding: 0; box-sizing: border-box; }
+		body {
+			font-family: system-ui, -apple-system, sans-serif;
+			background: #09090b; color: #fafafa;
+			display: flex; align-items: center; justify-content: center;
+			min-height: 100vh; padding: 1rem;
+		}
+		.container { text-align: center; max-width: 340px; }
+		.icon { width: 64px; height: 64px; margin: 0 auto 1.5rem; opacity: 0.5; }
+		h1 { font-size: 1.25rem; font-weight: 600; margin-bottom: 0.5rem; }
+		p { font-size: 0.875rem; color: #a1a1aa; margin-bottom: 1.5rem; line-height: 1.5; }
+		a {
+			display: inline-flex; align-items: center; gap: 0.5rem;
+			background: #d97706; color: white;
+			padding: 0.625rem 1.25rem; border-radius: 0.5rem;
+			font-size: 0.875rem; font-weight: 500; text-decoration: none;
+		}
+		a:hover { background: #b45309; }
+		.actions { display: flex; gap: 0.625rem; justify-content: center; flex-wrap: wrap; }
+		button {
+			display: inline-flex; align-items: center; gap: 0.5rem;
+			padding: 0.625rem 1.25rem; border-radius: 0.5rem;
+			font-size: 0.875rem; font-weight: 600;
+			border: none; cursor: pointer;
+		}
+		.btn-primary { background: #d97706; color: #fff; }
+		.btn-primary:hover { background: #b45309; }
+		.btn-secondary { background: #3f3f46; color: #fafafa; }
+		.btn-secondary:hover { background: #52525b; }
+	</style>
+</head>
+<body>
+	<div class="container">
+		<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-wifi-off-icon lucide-wifi-off"><path d="M12 20h.01"/><path d="M8.5 16.429a5 5 0 0 1 7 0"/><path d="M5 12.859a10 10 0 0 1 5.17-2.69"/><path d="M19 12.859a10 10 0 0 0-2.007-1.523"/><path d="M2 8.82a15 15 0 0 1 4.177-2.643"/><path d="M22 8.82a15 15 0 0 0-11.288-3.764"/><path d="m2 2 20 20"/></svg>
+		<h1>Sin conexión a internet</h1>
+		<p>Esta página no está guardada. Conectate e intentá de nuevo.</p>
+		<div class="actions">
+			<button type="button" class="btn-primary" onclick="window.history.back(); setTimeout(() => window.location.reload(), 500);">Volver</button>
+			<button type="button" class="btn-secondary" onclick="window.location.reload()">Reintentar</button>
+		</div>
+	</div>
+</body>
+</html>

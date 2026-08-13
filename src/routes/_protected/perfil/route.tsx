@@ -1,14 +1,9 @@
 import { createFileRoute, Link, Outlet } from "@tanstack/react-router"
-import { tecnicoQueryOptions } from "../../../../queries/tecnico/tecnico-query"
 import Title from "#/components/title"
 import { Cpu, UserRound, Warehouse } from "lucide-react"
 import BackChevron from "#/components/back-chevron"
 
 export const Route = createFileRoute("/_protected/perfil")({
-	loader: ({ context }) => {
-		context.queryClient.ensureQueryData(tecnicoQueryOptions)
-		return null
-	},
 	component: RouteComponent,
 })
 

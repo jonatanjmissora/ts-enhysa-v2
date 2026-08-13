@@ -21,6 +21,8 @@ import { getSession } from "../../server/get-session"
 import NotFound from "#/components/not-found"
 import { getThemeServerFn } from "../../server/theme"
 import { OfflineSession } from "#/components/offline-session"
+import type { RootSessionState } from "#/lib/offline/types"
+import { useAutoReloadOnReconnect } from "#/hooks/use-auto-reload-on-reconnect"
 
 interface MyRouterContext {
 	session: Session | null
@@ -28,11 +30,7 @@ interface MyRouterContext {
 	theme: "light" | "dark" | "auto"
 }
 
-type RootSessionState = {
-	session: Session | null
-	serverSession: Session | null
-	serverState: "ok" | "unreachable"
-}
+let lastKnownTheme: "light" | "dark" | "auto" = "auto"
 
 export const Route = createRootRouteWithContext<MyRouterContext>()({
 	head: () => ({
@@ -68,9 +66,19 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 			},
 		],
 	}),
-	beforeLoad: async () => ({
-		theme: ((await getThemeServerFn()) ?? "auto") as "light" | "dark" | "auto",
-	}),
+	beforeLoad: async () => {
+		let theme: "light" | "dark" | "auto" = lastKnownTheme
+		try {
+			theme = ((await getThemeServerFn()) ?? lastKnownTheme) as
+				| "light"
+				| "dark"
+				| "auto"
+			lastKnownTheme = theme
+		} catch {
+			theme = lastKnownTheme
+		}
+		return { theme }
+	},
 	loader: async () => {
 		try {
 			const session = await getSession()
@@ -96,6 +104,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 	const theme = Route.useRouteContext({
 		select: s => s.theme,
 	})
+	useAutoReloadOnReconnect()
 	return (
 		<html lang="en" className={theme === "auto" ? "dark" : theme}>
 			<head>

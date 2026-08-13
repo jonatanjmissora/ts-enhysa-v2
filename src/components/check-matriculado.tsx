@@ -4,6 +4,7 @@ import { verifyCpshRegistrationServer } from "../../server/cpsh/verify-cpsh-regi
 import { Link } from "@tanstack/react-router"
 import { useEffect, useState } from "react"
 import { Loader2 } from "lucide-react"
+import { useAppSession } from "#/lib/app-session-context"
 
 const CPSH_DISCOUNT = 0.15
 
@@ -18,7 +19,32 @@ export function CheckMatriculado({
 	onDiscountChange,
 	onCheckingChange,
 }: CheckMatriculadoProps) {
-	const { data: tecnico } = useSuspenseQuery(tecnicoQueryOptions)
+	const { session } = useAppSession()
+	if (!session) {
+		return (
+			<div className="text-foreground-soft text-center flex flex-col justify-center items-center">
+				<span>Debe iniciar sesión para verificar su matrícula.</span>
+			</div>
+		)
+	}
+
+	return (
+		<CheckMatriculadoContent
+			basePrice={basePrice}
+			onDiscountChange={onDiscountChange}
+			onCheckingChange={onCheckingChange}
+			userId={session.user.id}
+		/>
+	)
+}
+
+function CheckMatriculadoContent({
+	basePrice,
+	onDiscountChange,
+	onCheckingChange,
+	userId,
+}: CheckMatriculadoProps & { userId: string }) {
+	const { data: tecnico } = useSuspenseQuery(tecnicoQueryOptions(userId))
 	const tecnicoData = Array.isArray(tecnico) ? (tecnico[0] ?? null) : tecnico
 	const dni = tecnicoData?.dni ?? null
 

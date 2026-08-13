@@ -9,14 +9,18 @@
 
 ## 1. Estado actual auditado
 
+> **Actualización (implementado):** gran parte de este plan ya está construido. Ver estados por fase al final de cada sección y `plan-offline-part2.md` para el arranque offline. Los items `[ ]` de los checklists marcan lo pendiente.
+
 * La **instalación PWA** funciona y se conserva: `public/manifest.json`, `public/logo192/512.png`,
   `src/components/pwa-register.tsx`, `src/components/pwa-install-listener.tsx`,
   `src/components/install-prompt.tsx`, `src/hooks/use-install*`, `src/store/install-store.ts`.
 * `src/components/offline-indicator.tsx` hoy solo muestra "sin internet" (no hay cola ni sync).
 * `src/hooks/use-online-status.ts` existe (requerido por el indicator).
-* La capa offline previa fue **eliminada** en `e4789fe`: no existe `src/lib/offline/*`, no hay
-  dependencia `idb`, y todos los `queryOptions` quedaron online-only.
-* `public/sw.js` es mínimo (solo `SKIP_WAITING`, `UNREGISTER`, `clients.claim`). **No cachea nada**.
+* La capa offline fue **reimplementada**: existe `src/lib/offline/*` (types, resolver, errors),
+  `src/lib/session/index.ts` (cache de sesión en Dexie), `OfflineSession`, `OfflineSessionGate`,
+  `OfflineRouteBlock`, `useAutoReloadOnReconnect` y `AppSessionContext` (ver `plan-offline-part2.md`).
+* `public/sw.js` fue **reescrito**: precache de app shell + `networkFirstWithOffline` en navegación +
+  `cacheFirst` en assets, sin interceptar `/api/auth/*` ni `/_serverFn/*`. Existe `public/offline.html`.
 * El servidor de sesión sigue siendo `getSession()` / `protectedRoute()` (server functions de `server/get-session.ts`),
   usadas en `src/routes/__root.tsx` y `src/lib/protected-route.ts`.
 * `protectedRoute()` sigue siendo responsable de determinar si existe una sesión y redirigir cuando no existe.
@@ -25,6 +29,8 @@
   la identidad del usuario que tenía una sesión válida para permitir el funcionamiento offline.
 * La sincronización Better Auth -> Dexie ya fue validada con `authClient.useSession()` y un componente global
   de sincronización; la sesión local queda lista para el siguiente paso del modo offline real.
+* Lecturas cache-first implementadas en `repositories/tecnicos/tecnico-repository.ts` (guard SSR +
+  `getTecnicoLocal()` primero + mirror-write en miss). Es el patrón de referencia (decisión D1).
 
 ### Entidades involucradas y generación de IDs
 
@@ -434,17 +440,17 @@ Tampoco se almacenará el token/cookie de Better Auth como sustituto de la auten
 
 Objetivo: assets y navegación disponibles sin red.
 
-* [ ] `pnpm add idb`
-* [ ] Actualizar `public/sw.js`.
-* [ ] Assets → `cacheFirst`.
-* [ ] `/_serverFn/` GET → `networkFirst`.
-* [ ] Navegación → `networkFirstWithOffline`.
-* [ ] Mantener `SKIP_WAITING`.
-* [ ] Mantener `UNREGISTER` solo DEV.
-* [ ] Crear `public/offline.html`.
-* [ ] Precache `/`, `/offline.html`, `/manifest.json`, logos y favicon.
-* [ ] Validar instalación PWA.
-* [ ] Probar navegación offline.
+Estado: **implementada**. Se usa **Dexie** (no `idb`) en `indexed-db/database.ts`.
+
+* [x] Actualizar `public/sw.js` → precache app shell + `networkFirstWithOffline` + `cacheFirst`.
+* [x] Assets → `cacheFirst`.
+* [x] `/_serverFn/` GET → **no interceptar** (siguen network-only). Son son API del server, no cacheables.
+* [x] Navegación → `networkFirstWithOffline`.
+* [x] Mantener `SKIP_WAITING`.
+* [x] Crear `public/offline.html`.
+* [x] Precache `/`, `/offline.html`, `/manifest.json`, logos y favicon.
+* [x] Validar instalación PWA.
+* [x] Probar navegación offline.
 
 ---
 
@@ -452,22 +458,23 @@ Objetivo: assets y navegación disponibles sin red.
 
 Objetivo: navegar offline utilizando snapshots de IndexedDB.
 
-* [ ] Crear `src/lib/offline/db.ts`.
-* [ ] Crear `src/lib/offline/errors.ts`.
-* [ ] Crear `src/lib/offline/session.ts`.
-* [ ] Implementar `SessionLocal`.
-* [ ] Implementar `AppSession`.
-* [ ] Implementar `getCachedSession()`.
-* [ ] Integrar `OfflineSession` para sincronizar `authClient.useSession()` con Dexie.
-* [ ] Mantener `__root.tsx` con `getSession()` durante SSR.
-* [ ] Mantener `protectedRoute()` como responsable de redirección cuando no existe sesión.
-* [ ] No introducir Session Context como mecanismo de persistencia.
-* [ ] Modificar los queryOptions con `networkMode: "always"`.
-* [ ] Implementar write-through en caso de éxito.
-* [ ] Implementar fallback a IndexedDB.
-* [ ] Implementar `OfflineNoCacheError`.
-* [ ] Crear `OfflineRouteBlock`.
-* [ ] Integrar `OfflineNoCacheError` en `DefaultCatchBoundary`.
+Estado: **parcialmente implementada** — la sesión offline y el patrón cache-first ya corren; falta replicar el patrón en el resto de las queries.
+
+* [x] Crear `src/lib/offline/errors.ts` → `OfflineNoCacheError`, `isOfflineNoCacheError()`, `isOfflineError()`.
+* [x] Crear `src/lib/offline/session.ts` → `src/lib/session/index.ts` (`cacheSession`, `getCachedSession`, `clearCachedSession`).
+* [x] Implementar `SessionLocal` (tabla `session` en Dexie, `indexed-db/database.ts`).
+* [x] Implementar `AppSession`.
+* [x] Implementar `getCachedSession()`.
+* [x] Integrar `OfflineSession` para sincronizar `authClient.useSession()` con Dexie.
+* [x] Mantener `__root.tsx` con `getSession()` durante SSR (loader degradado + theme tolerant).
+* [x] Mantener `protectedRoute()` como responsable de redirección cuando no existe sesión.
+* [x] No introducir Session Context como mecanismo de persistencia (solo presentación: `AppSessionContext`).
+* [x] Implementar fallback a IndexedDB (patrón cache-first).
+* [x] Implementar `OfflineNoCacheError`.
+* [x] Crear `OfflineRouteBlock`.
+* [x] Integrar `OfflineNoCacheError` en `DefaultCatchBoundary`.
+* [ ] Modificar los queryOptions con `networkMode: "always"` (pendiente en la mayoría de queries).
+* [ ] Implementar write-through en caso de éxito (pendiente fuera de `tecnico-repository.ts`).
 
 Queries:
 
@@ -476,7 +483,7 @@ Queries:
 * `queries/reportes/iluminacion/localizadas/localizadas-query.ts`
 * `queries/empresas/empresas-query.ts`
 * `queries/instrumentos/instrumentos-query.ts`
-* `queries/tecnico/tecnico-query.ts`
+* `queries/tecnico/tecnico-query.ts` → **implementado** vía `tecnicoRepository.get()` (cache-first + guard SSR).
 
 ### Verificación
 
@@ -814,13 +821,15 @@ Mutex para evitar sincronizaciones simultáneas.
 
 # 8. Orden de ejecución recomendado
 
-1. **Fase 0** — Service Worker + `offline.html`.
-2. **Fase 1** — IndexedDB + caches + sesión local.
-3. **Fase 3** — Debug route.
-4. **Fase 2** — Create + queue + sync.
-5. **Fase 4** — Delete.
-6. **Fase 5** — Edit.
-7. **Fase 6** — Verificación integral.
+> **Estado:** Fase 0 implementada; Fase 1 parcial (sesión + patrón tecnico cache-first); el arranque offline se hizo en `plan-offline-part2.md` (A2→A7 verificado con la navegación SPA offline). Pendientes: replicar cache-first en resto de queries, `networkMode`, y Fases 2/4/5 (mutaciones).
+
+1. **Fase 0** — Service Worker + `offline.html`. ✅ implementada
+2. **Fase 1** — IndexedDB + caches + sesión local. 🟡 parcial (sesión y `tecnico-repository` cache-first listos)
+3. **Fase 3** — Debug route. ⬜ pendiente
+4. **Fase 2** — Create + queue + sync. ⬜ pendiente
+5. **Fase 4** — Delete. ⬜ pendiente
+6. **Fase 5** — Edit. ⬜ pendiente (decisión D1: si se implementa, mirror-write en onSuccess)
+7. **Fase 6** — Verificación integral. ⬜ pendiente
 
 ---
 
@@ -860,10 +869,31 @@ La regla fundamental es:
 
 > **IndexedDB mantiene la identidad local para trabajar offline; Better Auth y el servidor siguen siendo la autoridad de autenticación y autorización cuando existe conexión.**
 
-Y los componentes existentes pueden continuar utilizando:
+### Resolución de sesión en browser (implementado)
 
-```ts
-const { session } = useLoaderData({ from: "__root__" })
+El `__root.tsx` `loader` devuelve `RootSessionState` y el `OfflineSessionGate` resuelve la sesión de app en el subtree `/_protected`:
+
+```text
+serverSession → source: "server"     (sesión real, camino normal)
+serverState "ok" sin sesión → anonymous (Navigate a /landing)
+serverState "unreachable" → getCachedSession()
+    ├─ sesión local → source: "cache" (entra offline autenticado)
+    └─ sin sesión local → offline-no-session (mensaje local claro)
 ```
 
-sin necesidad de crear un `SessionContext`.
+El contexto (`AppSessionContext`) es solo presentación, no persistencia.
+
+### Bifurcación de redes (crítica para offline)
+
+| Mecanismo | Navegación SPA | Documento (hard load) |
+|-----------|----------------|-----------------------|
+| Service Worker | No interviene (es client-side routing) | `networkFirstWithOffline` (fallback a cache) |
+| Server functions (`/_serverFn/*`) | Network-only, no cacheable · **no interceptadas por el SW** | igual |
+| `beforeLoad` del root (`getThemeServerFn`) | Se ejecuta en cada navegación SPA → debe ser tolerante a fallos (try/catch + `lastKnownTheme`) | idem |
+
+Por eso la navegación SPA offline solo funciona si a) la ruta/chunks fueron cacheados por el SW en hard loads previos y b) los `beforeLoad`/loaders no rompen por falta de red.
+
+Consumo en componentes:
+
+* En el subtree `/_protected`, `useAppSession()` (desde `AppSessionContext`) devuelve `AppSessionState` con la sesión resuelta localmente (server o cache).
+* `OfflineSessionGate` es quien provee ese contexto; las rutas fuera del subtree siguen leyendo la sesión del root loader/`getSession()` normalmente.

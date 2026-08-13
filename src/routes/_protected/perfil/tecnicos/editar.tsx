@@ -4,13 +4,21 @@ import { tecnicoQueryOptions } from "../../../../../queries/tecnico/tecnico-quer
 import { EditTecnicoForm } from "#/components/tecnicos/edit-tecnico"
 import BackChevron from "#/components/back-chevron"
 import Title from "#/components/title"
+import { useAppSession } from "#/lib/app-session-context"
 
 export const Route = createFileRoute("/_protected/perfil/tecnicos/editar")({
 	component: RouteComponent,
 })
 
 function RouteComponent() {
-	const { data: tecnicoData } = useSuspenseQuery(tecnicoQueryOptions)
+	const { session } = useAppSession()
+	if (!session) return <div>No se encontró una sesión activa</div>
+
+	return <EditTecnicoRouteContent userId={session.user.id} />
+}
+
+function EditTecnicoRouteContent({ userId }: { userId: string }) {
+	const { data: tecnicoData } = useSuspenseQuery(tecnicoQueryOptions(userId))
 	const router = useRouter()
 
 	const tecnico = Array.isArray(tecnicoData) ? tecnicoData[0] : tecnicoData

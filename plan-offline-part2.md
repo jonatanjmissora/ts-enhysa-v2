@@ -533,11 +533,11 @@ Casos a probar:
 
 * [ ] A1. Definir el alcance del piloto offline.
 * [x] A2. Hacer que `__root.tsx` degrade el estado de sesion sin romper el bootstrap.
-* [ ] A3. Implementar el resolver browser-only de sesion de app.
-* [ ] A4. Implementar `OfflineSessionGate`.
-* [ ] A5. Crear el subtree `/_protected-offline`.
-* [ ] A6. Migrar al menos una ruta piloto al subtree offline-capable.
-* [ ] A7. Ejecutar la verificacion manual completa.
+* [x] A3. Implementar el resolver browser-only de sesion de app.
+* [x] A4. Implementar `OfflineSessionGate`.
+* [x] A5. Gatear el subtree piloto `/_protected` con `OfflineSessionGate`.
+* [x] A6. Migrar al menos una ruta piloto al subtree offline-capable.
+* [x] A7. Ejecutar la verificacion manual completa.
 
 ## 8.2 A1 — Alcance del piloto offline
 
@@ -547,11 +547,11 @@ Objetivo:
 
 Checklist:
 
-* [ ] Listar rutas candidatas que hoy viven dentro de `/_protected`.
-* [ ] Marcar cuales dependen solo de datos cacheables y cuales requieren server si o si.
-* [ ] Elegir una ruta piloto offline-capable.
-* [ ] Definir explicitamente que rutas quedan en `/_protected-online`.
-* [ ] Dejar esa decision escrita en `plan-offline-part2.md` o `plan-offline.md`.
+* [x] Listar rutas candidatas que hoy viven dentro de `/_protected`.
+* [x] Marcar cuales dependen solo de datos cacheables y cuales requieren server si o si.
+* [x] Elegir una ruta piloto offline-capable.
+* [x] Definir explicitamente que rutas quedan en `/_protected-online`.
+* [x] Dejar esa decision escrita en `plan-offline-part2.md` o `plan-offline.md`.
 
 Recomendacion de piloto:
 
@@ -681,6 +681,12 @@ Salida esperada de A4:
 
 ## 8.6 A5 — Subtree `/_protected-offline`
 
+Implementacion actual del piloto:
+
+* `src/routes/_protected/route.tsx` ya usa `OfflineSessionGate`.
+* la ruta piloto `/perfil/tecnicos` ya entra por el gate y puede resolver sesion desde `useAppSession()`.
+* la division fisica en `/_protected-offline` / `/_protected-online` queda como refinamiento posterior y no bloquea A7.
+
 Archivos a crear o reestructurar:
 
 * `src/routes/_protected-offline/route.tsx`
@@ -731,39 +737,82 @@ Salida esperada de A6:
 
 ## 8.8 A7 — Verificacion manual final
 
-Preparacion:
+> A7 se ejecuta en **entorno de preview**, no en dev. El PWA/service worker solo hace sentido contra el `dist` buildado servido en modo producción.
 
-* [ ] Tener una sesion valida iniciada online.
-* [ ] Confirmar que Dexie contiene la sesion local.
-* [ ] Confirmar que la shell PWA ya fue cacheada.
-* [ ] Confirmar que la ruta piloto ya fue visitada al menos una vez online.
+### Checklist operativo — puesta en marcha
 
-Casos:
+* [x] `pnpm build` (debe terminar sin errores).
+* [x] `pnpm preview` (verifica que el puerto propio de preview, típicamente `http://localhost:3000` o el que informe la terminal, levante el `dist`).
+* [x] Abrir la app en una ventana `http://localhost` (NO en una IP tipo `0.0.0.0`), porque el service worker exige contexto seguro (localhost lo es).
+* [x] Confirmar en DevTools → Application → Service Workers que hay un service worker activo y `activated`.
+* [x] Confirmar en DevTools → Application → Cache Storage que la app shell (documento, JS, CSS) ya está cacheada. Si no aparece, hacer un par de hard reloads mientras hay red hasta que esté.
+* [x] Iniciar sesión online con un usuario real (o el flujo que use la ruta piloto).
+* [x] Confirmar en DevTools → Application → IndexedDB → Dexie que la tabla `session` tiene una fila con la sesión local.
+* [x] Visitar la ruta piloto al menos una vez online para que el chunk de la ruta también quede cacheado por el SW.
 
-* [ ] Caso 1. Hard load online en la ruta piloto.
-* [ ] Caso 2. Hard load online sin sesion.
-* [ ] Caso 3. Hard load offline con shell cacheada y sesion local.
-* [ ] Caso 4. Hard load offline con shell cacheada y sin sesion local.
-* [ ] Caso 5. Reapertura de PWA offline en la ruta piloto.
-* [ ] Caso 6. Navegacion client-side offline dentro del subtree offline.
-* [ ] Caso 7. Recuperar internet despues de iniciar offline.
+### Checklist operativo — casos
 
-Resultados esperados:
+> Marcar `offline` habilitando DevTools → Network → `Offline`. Luego hard reload (`CTRL+SHIFT+R`) o cerrar/abrir la pestaña según el caso. Cada vez que se tome la decisión del `SessionGate`, mirar el resultado, no la consola.
 
-* [ ] La ruta piloto entra con `source: "server"` cuando hay red.
-* [ ] La ruta piloto entra con `source: "cache"` cuando no hay red pero existe sesion local.
-* [ ] Sin sesion local aparece una pantalla offline clara.
-* [ ] No aparece `MissingAPIError`.
-* [ ] No hay redirects erroneos por `protectedRoute()` en el subtree offline.
-* [ ] Al volver la red, la app vuelve a operar con server session normalmente.
+* [x] Caso 1. Hard load online en la ruta piloto (sesión activa). Debe entrar con `source: "server"`.
+* [x] Caso 2. Hard load online sin sesión. Debe seguir el flujo normal de login, sin pantalla offline.
+* [x] Caso 3. Hard load offline con shell cacheada y sesión local. Debe entrar con `source: "cache"` (o equivalente que muestre el gate) y renderizar la ruta.
+* [x] Caso 4. Hard load offline con shell cacheada pero sin sesión local (borrar fila en Dexie justo antes). Debe aparecer la pantalla offline clara, NO un crash del router.
+* [x] Caso 5. Reapertura de PWA offline en la ruta piloto. Cerrar pestaña → en el menú de PWA instalada (o nueva pestaña) abrir la URL de nuevo sin red. Debe seguir entrando con sesión local.
+* [x] Caso 6. Navegación client-side offline dentro del subtree offline (enlaces que no requieran server). Debe navegar sin recargar y sin `MissingAPIError`.
+* [x] Caso 7. Empezar offline (Caso 3) y luego recuperar red. Hacer hard reload online. Debe volver a `source: "server"`.
+
+### Resultados esperados
+
+* [x] La ruta piloto entra con `source: "server"` cuando hay red.
+* [x] La ruta piloto entra con `source: "cache"` cuando no hay red pero existe sesión local.
+* [x] Sin sesión local aparece una pantalla offline clara.
+* [x] No aparece `MissingAPIError`.
+* [x] No hay redirects erróneos por `protectedRoute()` en el subtree offline.
+* [x] Al volver la red, la app vuelve a operar con server session normalmente.
+
+### Observaciones
+
+* Si el SW no se activa: verificar `allowedHosts`, que la URL sea `localhost` con http y que `preview` use el `dist` correcto.
+* Si `source` no se puede inspeccionar fácilmente en UI, se puede hacer un debug temporal (log en `resolveAppSession` o `OfflineSessionGate`) y retirarlo después.
+* Quedará pendiente de cerrar en A8+: las queries offline; A7 solo valida el **arranque** y la **sesión**.
+
+### Hallazgo y fix crítico — navegación SPA offline (causa raíz)
+
+Durante A7 se observó el siguiente bug (este tema por sí solo bloqueó la verificación de la navegación client-side):
+
+**Síntoma:** navegación SPA (`/` → `/perfil/tecnicos`) con red cortada mostraba primero "Sin conexión" (error boundary) y recién con un hard reload mostraba la ruta cacheada. El `networkFirst` del SW no era el culpable: solo aplica a navegación de documento completo.
+
+**Causa raíz:** TanStack Router re-ejecuta el `beforeLoad` del root (`src/routes/__root.tsx`) en **cada navegación SPA**, y este llamaba `getThemeServerFn()` (server function de `server/theme.ts`). Las server functions son `network-only` (el SW las saltea a propósito: `/_serverFn/*` no intercepta), así que con red cortada el `beforeLoad` lanzaba `TypeError: Failed to fetch` → tumbaba toda la navegación → `DefaultCatchBoundary`.
+
+**Fix aplicado (`src/routes/__root.tsx` `beforeLoad`):**
+
+```ts
+let lastKnownTheme: "light" | "dark" | "auto" = "auto"
+
+beforeLoad: async () => {
+	let theme = lastKnownTheme
+	try {
+		theme = ((await getThemeServerFn()) ?? lastKnownTheme) as ...
+		lastKnownTheme = theme
+	} catch {
+		theme = lastKnownTheme   // off-line: seguir con el último tema, no romper
+	}
+	return { theme }
+},
+```
+
+Fuera de red el `beforeLoad` ya no rompe; la navegación SPA a una ruta cacheada (chunks en `CACHE_STATIC`) fluye directo a cache sin pasar por el error boundary. Al recuperar red, `useAutoReloadOnReconnect` recarga y re-sincroniza tema y sesión.
+
+**Extra detectado en la misma vuelta:** `_serverFn` y `/api/auth` quedan `network-only` a propósito; esperar `ERR_INTERNET_DISCONNECTED` en consola offline es normal, lo importante es que la UI no vuele. La detección UI usa `!isOnline || isOfflineError(error)` en `DefaultCatchBoundary`.
 
 ## 8.9 Regla de avance
 
 No pasar a queries offline de lectura hasta que:
 
-* [ ] A1 a A6 esten completos.
-* [ ] A7 haya sido ejecutada completa al menos una vez.
-* [ ] Exista evidencia clara de que el arranque offline funciona para la ruta piloto.
+* [x] A1 a A6 esten completos.
+* [x] A7 haya sido ejecutada completa al menos una vez.
+* [x] Exista evidencia clara de que el arranque offline funciona para la ruta piloto.
 
 ---
 
@@ -771,13 +820,15 @@ No pasar a queries offline de lectura hasta que:
 
 Se considera resuelta esta parte cuando:
 
-* la app shell puede arrancar offline si ya fue cacheada;
-* el root loader no rompe el bootstrap por falta de red;
-* el fallback a Dexie ocurre solo en browser;
-* `protectedRoute()` sigue intacto para rutas online-only;
-* existe al menos un subtree offline-capable protegido por `SessionGate`;
-* un usuario con session local puede reabrir la app offline y entrar a ese subtree;
-* un usuario sin session local ve una pantalla offline clara y no una explosion del router.
+* [x] la app shell puede arrancar offline si ya fue cacheada;
+* [x] el root loader no rompe el bootstrap por falta de red;
+* [x] el fallback a Dexie ocurre solo en browser;
+* [x] `protectedRoute()` sigue intacto para rutas online-only;
+* [x] existe al menos un subtree offline-capable protegido por `SessionGate`;
+* [x] un usuario con session local puede reabrir la app offline y entrar a ese subtree;
+* [x] un usuario sin session local ve una pantalla offline clara y no una explosion del router.
+
+> **Nota:** la verificación concluyó con la prueba del entorno `preview` y la corrección del `beforeLoad` de tema que bloqueaba la navegación SPA offline (ver §8.8 — Hallazgo y fix crítico).
 
 ---
 
@@ -825,3 +876,82 @@ Hace algo mas simple y mas seguro:
 4. Las rutas offline-capable dejan de depender exclusivamente de `protectedRoute()`.
 
 Ese es el paso correcto antes de continuar con queries offline y mutation queue.
+
+---
+
+# 12. Decision D1 — Lecturas cache-first + mirror-write
+
+> Contexto: tras la verificacion A7 se observo que el espejo local (Dexie) solo se escribe en cache miss, por lo que puede quedar stale si el usuario edita sus datos desde otro dispositivo. En la misma sesion no hay problema porque hoy el piloto es solo-lectura.
+
+## Decision
+
+* Mantener la disposicion **cache-first** para lecturas:
+  1. leer Dexie primero;
+  2. si hay copia local, devolverla sin tocar el server;
+  3. si no, consultar el server y escribir el resultado a Dexie.
+
+## Justificacion
+
+* La fuente de la verdad de los datos del tecnico es el **usuario**, no el server.
+* El server no muta estos datos por cuenta propia, asi que no hay fuente de staleness ajena a las ediciones del usuario.
+* El unico caso real de espejo viejo es **multi-dispositivo** (editar desde el celular y tener el espejo del desktop con el dato anterior). Es el tradeoff aceptable de data-offline.
+
+## Reglas para implementaciones futuras (operations de escritura)
+
+Hoy el alcance offline habilita **solo lectura y creacion**. La edicion (`update`) todavia no tiene implementacion offline planificada — puede o no llegar. Las reglas aplican cuando (y si) se implemente cualquier mutation:
+
+* **Mirror-write en el mismo `onSuccess`**: la mutation debe escribir el resultado a Dexie (`saveTecnicoLocal`) ademas de a Postgres, para que el espejo nunca quede viejo en el mismo dispositivo.
+* **Usar la key real `["tecnico", userId]`** para `setQueryData` / `invalidateQueries`. Hoy `useUpdateTecnico` usa `["tecnico"]` (incompatible con la key del query), y no escribe a Dexie.
+* No cambiar a network-first: cache-first se mantiene como politica de lectura.
+
+## Caso multi-dispositivo (opcional, no urgente)
+
+* Si el espejo viejo de otro dispositivo llegara a molestar, la curacion seria un refresh on-focus (p. ej. refetch al devolver el foco a la pestana), no un cambio a network-first.
+
+---
+
+# 13. Registro de lo implementado (estado actual)
+
+> Snapshot de todo lo construido en la Part 2 + el arreglo del arranque offline. Ver también el detalle en `AGENTS.md` (sección "Modo Offline + PWA").
+
+## Service Worker y app shell
+
+* `public/sw.js` reescrito: `CACHE_STATIC = "app-static-v1"` (precache `/`, `/offline.html`, `/manifest.json`, logos, favicon) + `CACHE_PAGES = "app-pages-v1"` (navegaciones).
+* `install` → `cache.addAll` + `skipWaiting()`. `activate` → borra caches ajenos + `clients.claim()`.
+* `fetch`: solo GET http. `request.mode === "navigate"` → `networkFirstWithOffline`; resto → `cacheFirst`. **Saltea `/api/auth/*` y `/_serverFn/*`** (network-only).
+* `public/offline.html` creado como fallback de navegacion offline.
+* El SW solo cachea navegaciones de documento completo (hard load); las navegaciones SPA no pasan por el SW (hay que entrar directo a la URL online para cachearla).
+
+## Arranque offline (root + gate)
+
+* `src/routes/__root.tsx` `loader`: `getSession()` en try/catch → `{ session, serverSession, serverState: "ok" }` o `{ session: null, serverSession: null, serverState: "unreachable" }`.
+* `beforeLoad` de tema: `getThemeServerFn()` con try/catch + `lastKnownTheme` (fix que desbloquea la navegacion SPA offline, ver §8.8).
+* `src/lib/offline/types.ts`: `RootSessionState`, `AppSessionState`, `CachedSession`, `AppSession`, `source: "server" | "cache" | "none"`.
+* `src/lib/offline/resolve-app-session.ts`: `resolveAppSession()` — server primero; si unreachable → `getCachedSession()`; cache → `source: "cache"`, sin cache → `offline-no-session`.
+* `src/components/offline-session-gate.tsx`: `OfflineSessionGate` (Cargando... / sin sesion local / `Navigate` a `/landing` / `AppSessionProvider`).
+* `src/routes/_protected/route.tsx`: subtree envuelto en `OfflineSessionGate`.
+* `src/lib/app-session-context.tsx`: `useAppSession()` (contexto de presentacion).
+
+## Sesion local (Dexie)
+
+* `src/lib/session/index.ts`: `cacheSession()`, `getCachedSession()` (`{ userId, email, name }`), `clearCachedSession()` sobre la tabla `session` de `indexed-db/database.ts`.
+* `src/components/offline-session.tsx` (montado en `RootDocument`): `authClient.useSession()` → cache/limpieza de la sesion en Dexie.
+
+## Deteccion de errores offline (UI)
+
+* `src/lib/offline/errors.ts`: `OfflineNoCacheError`, `isOfflineNoCacheError()`, `isOfflineError()` (patrones `Failed to fetch`, `NetworkError`, `Network request failed`, `Load failed`, `ERR_INTERNET_DISCONNECTED`, `ERR_NETWORK_CHANGED`, `ERR_CONNECTION_REFUSED`, `Loading chunk`).
+* `src/components/DefaultCatchBoundary.tsx`: si `!isOnline || isOfflineError(error)` → `<OfflineRouteBlock />`.
+* `src/components/offline-route-block.tsx`: pantalla "Sin conexión" con `Volver` (`history.back()` + reload 500ms) y `Reintentar`.
+* `src/hooks/use-auto-reload-on-reconnect.ts` (montado en `RootDocument`): al recuperar red tras estar offline, recarga la app.
+
+## Lectura cache-first (repositorios)
+
+* `repositories/tecnicos/tecnico-repository.ts`: guard SSR (`typeof window === "undefined"` → server) + `getTecnicoLocal()` primero; en miss `getTecnicoServer()` + `saveTecnicoLocal()` (mirror-write). Evita `MissingAPIError` en `renderToReadableStream`.
+* Politica D1: lecturas cache-first; mutations futuras con mirror-write en `onSuccess`.
+
+## Pendientes (fuera de este corte)
+
+* Replicar cache-first en el resto de queries (reportes, areas, localizadas, empresas, instrumentos) + `networkMode: "always"`.
+* Queries offline de lectura (A8+) — dependencias de queries a dexie.
+* Mutaciones CREATE/DELETE/EDIT offline con cola (Fases 2, 4, 5 de `plan-offline.md`).
+* Debug route de la cola (Fase 3).

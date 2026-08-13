@@ -365,6 +365,59 @@ Conexión: `drizzle(process.env.DATABASE_URL as string, { schema })`.
 - Tailwind v4: usar `@import "tailwindcss"` en CSS, no config file.
 - Las rutas TanStack Router son lazy-load por defecto.
 
+## Modo Offline + PWA (implementado)
+
+Base de proyecto: la 1era etapa de offline fue implementada (sesión obtenida del `authClient` y guardada en IndexedDB). Arquitectura y decisiones en `plan-offline.md` (diseño) y `plan-offline-part2.md` (arranque offline + verificación A7 + decisión D1).
+
+### Regla fundamental
+
+> **IndexedDB mantiene la identidad local para trabajar offline; Better Auth y el servidor siguen siendo la autoridad de autenticación/ autorización cuando existe conexión.**
+> IndexedDB/Dexie **nunca** se usa en SSR. Solo visitar Dexie en browser (`typeof window === "undefined"` guard).
+
+### Service Worker (`public/sw.js`)
+
+- Dos caches: `CACHE_STATIC` (`app-static-v1`, assets/precache) y `CACHE_PAGES` (`app-pages-v1`, navegaciones).
+- `install`: precache de `/`, `/offline.html`, `/manifest.json`, logos, favicon (`skipWaiting`).
+- `activate`: borra caches que no sean estáticos/páginas (`clients.claim`).
+- `fetch`: **solo GET http**. Navegación → `networkFirstWithOffline` (fallback a cache de página y luego a `/offline.html`). Assets → `cacheFirst` (fallback Response 408).
+- **Crítico:** el SW **no intercepta** `/api/auth/*` ni `/_serverFn/*` (Better Auth y server functions siguen network-only). Sino los fetch offline de auth/serverFn quedan atrapados.
+- El SW solo cachea navegaciones de documento completo (hard load directo). Las navegaciones SPA no pasan por el SW; para cachear una ruta hay que entrar directo a esa URL online con hard load.
+
+### Sesión offline
+
+- `src/components/offline-session.tsx` (montado en `RootDocument`): sincroniza `authClient.useSession()` → `cacheSession()` / `clearCachedSession()` en Dexie (tabla `session` de `indexed-db/database.ts`).
+- `src/lib/session/index.ts`: `cacheSession()`, `getCachedSession()` (devuelve `CachedSession { userId, email, name }`), `clearCachedSession()`. No persiste `expiresAt`, token ni cookie.
+- `src/lib/offline/types.ts`: `RootSessionState`, `AppSessionState` (`status: authenticated | anonymous | offline-no-session | resolving`), `source: server | cache | none`, `CachedSession`, `AppSession`.
+- `src/lib/offline/resolve-app-session.ts`: `resolveAppSession()` — si hay `serverSession` → `server`; si server respondió `ok` → `anonymous`; si `unreachable` → leer caché Dexie (`cache` si hay sesión local, sino `offline-no-session`).
+- `src/components/offline-session-gate.tsx` (`OfflineSessionGate`): envuelve el subtree `/_protected` con `AppSessionProvider`. Estados: `resolving` (Cargando...), `offline-no-session` (mensaje local), `anonymous` (`Navigate` a `/landing`).
+- `src/lib/app-session-context.tsx`: `useAppSession()` (Context de presentación, no de persistencia).
+
+### Error boundary offline
+
+- `src/lib/offline/errors.ts`: `OfflineNoCacheError`, `isOfflineNoCacheError()`, `isOfflineError()` — detecta `Failed to fetch`, `NetworkError`, `Network request failed`, `Load failed`, `ERR_INTERNET_DISCONNECTED`, `ERR_NETWORK_CHANGED`, `ERR_CONNECTION_REFUSED`, `Loading chunk`.
+- `src/components/DefaultCatchBoundary.tsx`: si `!isOnline || isOfflineError(error)` muestra `<OfflineRouteBlock />`.
+- `src/components/offline-route-block.tsx`: pantalla "Sin conexión" con botones `Volver` (`history.back()` + reload diferido 500ms) y `Reintentar`.
+- `src/hooks/use-auto-reload-on-reconnect.ts` (montado en `RootDocument`): al recuperar conexión tras haber estado offline, recarga la página automáticamente.
+
+### `getSession()` root y tema
+
+- `src/routes/__root.tsx` `loader`: hace `getSession()` y devuelve `{ session, serverSession, serverState: "ok" }`; si lanza error → `{ session: null, serverSession: null, serverState: "unreachable" }` (el arranque no explota por falta de red).
+- `beforeLoad`: `getThemeServerFn()` corre **en cada navegación SPA** y en red caída lanzaba `TypeError: Failed to fetch` tumbando toda la navegación (no es el SW; las server functions son network-only). Fix: `try/catch` + fallback a `lastKnownTheme` (variable módulo) para no romper la navegación offline.
+
+### Repositorios con cache-first (lecturas)
+
+- `repositories/tecnicos/tecnico-repository.ts`: patrón de referencia — guard `typeof window === "undefined"` → server directo; en browser `getTecnicoLocal()` primero (cache-first), en miss `getTecnicoServer()` y mirror-write a Dexie en el éxito. Evita `MissingAPIError` en SSR (`renderToReadableStream`).
+- Decisión D1 (`plan-offline-part2.md` §12): lecturas **cache-first**; mirror-write en el mismo `onSuccess` de mutations futuras; nunca cambiar a network-first.
+
+### Archivos del modo offline
+
+- `public/sw.js`, `public/offline.html`
+- `src/components/offline-session.tsx`, `src/components/offline-session-gate.tsx`, `src/components/offline-route-block.tsx`
+- `src/lib/session/index.ts`, `src/lib/offline/{types,resolve-app-session,errors}.ts`, `src/lib/app-session-context.tsx`
+- `src/hooks/use-auto-reload-on-reconnect.ts`
+- `src/routes/__root.tsx` (loader degradado + theme tolerant), `src/routes/_protected/route.tsx` (`OfflineSessionGate`)
+- `repositories/tecnicos/tecnico-repository.ts`
+
 ## Demo User Pattern
 
 El sistema de demo user permite probar la app sin registrarse, con datos aislados por sesión y límites anti-spam.

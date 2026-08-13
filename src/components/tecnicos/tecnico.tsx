@@ -14,13 +14,18 @@ import {
 import { Button } from "../ui/button"
 import { Ellipsis, Pencil } from "lucide-react"
 import useScrollTop from "#/hooks/scroll-top"
-import { Link, useLoaderData } from "@tanstack/react-router"
+import { Link } from "@tanstack/react-router"
+import { useAppSession } from "#/lib/app-session-context"
 
 export default function Tecnico() {
-	const { session } = useLoaderData({ from: "__root__" })
-	const { data: tecnico } = useSuspenseQuery(
-		tecnicoQueryOptions(session?.user?.id ?? "")
-	)
+	const { session } = useAppSession()
+	if (!session) return <TecnicoVacio />
+
+	return <TecnicoContent userId={session.user.id} />
+}
+
+function TecnicoContent({ userId }: { userId: string }) {
+	const { data: tecnico } = useSuspenseQuery(tecnicoQueryOptions(userId))
 	const tecnicoData = Array.isArray(tecnico) ? (tecnico[0] ?? null) : tecnico
 	if (!tecnicoData) return <TecnicoVacio />
 	return <HayTecnico tecnico={tecnicoData} />

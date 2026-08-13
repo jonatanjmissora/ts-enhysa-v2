@@ -6,6 +6,10 @@ import { getTecnicoServer } from "../../server/tecnico/get-tecnico-server"
 
 export const tecnicoRepository = {
 	async get(userId: string) {
+		if (typeof window === "undefined") {
+			return await getTecnicoServer()
+		}
+
 		const tecnicoL = await getTecnicoLocal(userId)
 
 		if (tecnicoL) {

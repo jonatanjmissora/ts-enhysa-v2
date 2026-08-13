@@ -7,13 +7,23 @@ import {
 } from "@tanstack/react-router"
 import type { ErrorComponentProps } from "@tanstack/react-router"
 import { Button } from "./ui/button"
+import { useOnlineStatus } from "#/hooks/use-online-status"
+import { OfflineRouteBlock } from "./offline-route-block"
+import { isOfflineError } from "#/lib/offline/errors"
 
 export function DefaultCatchBoundary({ error }: ErrorComponentProps) {
 	const router = useRouter()
+	const isOnline = useOnlineStatus()
 	const isRoot = useMatch({
 		strict: false,
 		select: state => state.id === rootRouteId,
 	})
+
+	const isOffline = !isOnline || isOfflineError(error)
+
+	if (isOffline) {
+		return <OfflineRouteBlock />
+	}
 
 	console.error("DefaultCatchBoundary Error:", error)
 

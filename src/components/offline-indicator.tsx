@@ -9,11 +9,8 @@ export function OfflineIndicator() {
 	if (isOnline) return null
 
 	return (
-		<div className="bg-amber-600/20 text-xs text-center italic">
-			<span className="inline-flex items-center justify-center gap-1">
-				<WifiOff size={8} />
-				sin internet
-			</span>
+		<div className="text-amber-600">
+			<WifiOff size={14} />
 		</div>
 	)
 }

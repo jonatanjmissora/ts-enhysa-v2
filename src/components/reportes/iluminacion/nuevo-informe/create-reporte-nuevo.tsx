@@ -39,6 +39,7 @@ import useScrollTop from "#/hooks/scroll-top"
 import { useCreateReporteNuevo } from "../../../../../queries/reportes/iluminacion/use-create-reporte-nuevo"
 import type { EmpresaType } from "../../../../../db/empresas/schema"
 import { sortedByName, sortedByRazonSocial } from "#/lib/utils"
+import { useAppSession } from "#/lib/app-session-context"
 
 export default function CreateReporteNuevo() {
 	return (
@@ -56,8 +57,25 @@ export default function CreateReporteNuevo() {
 }
 
 function ReporteNuevoForm() {
+	const { session } = useAppSession()
+
+	if (!session) {
+		return (
+			<article className="w-full flex flex-col justify-center items-center min-h-[30svh] gap-10">
+				<span className="text-foreground-soft text-sm italic text-center w-5/6 mx-auto">
+					Debe iniciar sesión para crear un reporte.
+				</span>
+			</article>
+		)
+	}
+
+	return <ReporteNuevoFormContent userId={session.user.id} />
+}
+
+function ReporteNuevoFormContent({ userId }: { userId: string }) {
 	useScrollTop()
-	const { data: tecnico } = useSuspenseQuery(tecnicoQueryOptions)
+
+	const { data: tecnico } = useSuspenseQuery(tecnicoQueryOptions(userId))
 	const { data: empresas } = useSuspenseQuery(empresasQueryOptions)
 	const { data: instrumentos } = useSuspenseQuery(instrumentosQueryOptions)
 	const navigate = useNavigate()
