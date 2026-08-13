@@ -20,11 +20,18 @@ import type { Session } from "better-auth"
 import { getSession } from "../../server/get-session"
 import NotFound from "#/components/not-found"
 import { getThemeServerFn } from "../../server/theme"
+import { OfflineSession } from "#/components/offline-session"
 
 interface MyRouterContext {
 	session: Session | null
 	queryClient: QueryClient
 	theme: "light" | "dark" | "auto"
+}
+
+type RootSessionState = {
+	session: Session | null
+	serverSession: Session | null
+	serverState: "ok" | "unreachable"
 }
 
 export const Route = createRootRouteWithContext<MyRouterContext>()({
@@ -65,8 +72,20 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 		theme: ((await getThemeServerFn()) ?? "auto") as "light" | "dark" | "auto",
 	}),
 	loader: async () => {
-		const session = await getSession()
-		return { session }
+		try {
+			const session = await getSession()
+			return {
+				session,
+				serverSession: session,
+				serverState: "ok",
+			} satisfies RootSessionState
+		} catch {
+			return {
+				session: null,
+				serverSession: null,
+				serverState: "unreachable",
+			} satisfies RootSessionState
+		}
 	},
 	shellComponent: RootDocument,
 	errorComponent: DefaultCatchBoundary,
@@ -84,6 +103,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 			</head>
 			<body className="overflow-x-hidden w-screen">
 				<PWAInstallListener />
+				<OfflineSession />
 				<main>{children}</main>
 				<PWARegister />
 				<TanStackDevtools

@@ -2,7 +2,7 @@
 
 > Sí, es posible. Este plan define el paso a paso para que la app funcione sin internet:
 > cachear las queries de lectura (navegación), encolar operaciones de **crear** (y luego **eliminar** / **editar**)
-> en IndexedDB, sincronizarlas contra la base de datos cuando se recupera la conexión y
+> en IndexedDB/Dexie, sincronizarlas contra la base de datos cuando se recupera la conexión y
 > exponer una interfaz visual de estados + una ruta de prueba para inspeccionar la cola.
 
 ---
@@ -17,14 +17,14 @@
 * La capa offline previa fue **eliminada** en `e4789fe`: no existe `src/lib/offline/*`, no hay
   dependencia `idb`, y todos los `queryOptions` quedaron online-only.
 * `public/sw.js` es mínimo (solo `SKIP_WAITING`, `UNREGISTER`, `clients.claim`). **No cachea nada**.
-* El servidor de sesión es `getSession()` / `protectedRoute()` (server functions de `server/get-session.ts`),
+* El servidor de sesión sigue siendo `getSession()` / `protectedRoute()` (server functions de `server/get-session.ts`),
   usadas en `src/routes/__root.tsx` y `src/lib/protected-route.ts`.
-* Actualmente, cuando la app está offline, las llamadas al servidor de sesión fallan.
-* `protectedRoute()` es responsable de determinar si existe una sesión y redirigir cuando no existe.
-* Para soportar offline, la sesión que utiliza el loader de `__root.tsx` será obtenida mediante
-  `getCachedSession()`.
+* `protectedRoute()` sigue siendo responsable de determinar si existe una sesión y redirigir cuando no existe.
+* `__root.tsx` continúa usando `getSession()` durante SSR; `getCachedSession()` no reemplaza esa ruta.
 * La sesión cacheada **no reemplaza la autenticación real del servidor**. Solo conserva localmente
   la identidad del usuario que tenía una sesión válida para permitir el funcionamiento offline.
+* La sincronización Better Auth -> Dexie ya fue validada con `authClient.useSession()` y un componente global
+  de sincronización; la sesión local queda lista para el siguiente paso del modo offline real.
 
 ### Entidades involucradas y generación de IDs
 
@@ -135,30 +135,24 @@ la sesión real validada por Better Auth.
 
 ---
 
-# D4 — Sesión offline mediante `getCachedSession()`
+# D4 — Sesión offline y sincronización local
 
-La sesión será persistida localmente en IndexedDB para que la aplicación pueda continuar
-funcionando después de perder conexión o reiniciar React/PWA.
+La sesión real sigue viviendo en Better Auth. Dexie solo mantiene una copia local mínima para que el navegador conserve identidad y contexto cuando no hay conexión.
 
-La implementación estará en:
+La implementación vive en:
 
 ```text
 src/lib/offline/session.ts
+src/components/offline-session.tsx
 ```
 
-Este archivo será responsable de:
-
-* los tipos relacionados con la sesión offline;
-* `getCachedSession()`;
-* cualquier helper específico de persistencia/lectura de la sesión.
+`session.ts` maneja la persistencia local de la sesión. `OfflineSession` sincroniza la sesión del cliente hacia Dexie.
 
 ## D4.1 — Tipos
 
-La sesión cacheada no necesita `expiresAt`.
-
 ```ts
-export type CachedSession = {
-  userId: string
+export interface SessionLocal {
+  id: string
   email: string
   name: string
 }
@@ -173,241 +167,58 @@ export type AppSession = {
 }
 ```
 
-`CachedSession` representa únicamente la identidad local necesaria para continuar trabajando
-offline.
+`SessionLocal` es la identidad mínima guardada en Dexie.
 
-`AppSession` es la representación que utilizará la aplicación.
+`AppSession` es la forma usada por la app para diferenciar origen `server` o `cache`.
 
-`source` permite saber si la sesión proviene del servidor o del cache y resulta útil para
-debugging.
+## D4.2 — `getSession()` sigue siendo server-only
 
----
+`getSession()` continúa significando solo esto:
 
-## D4.2 — Responsabilidad de `getSession()`
+> Obtener la sesión real desde Better Auth.
 
-`getSession()` continuará representando exclusivamente:
+No debe conocer IndexedDB.
 
-> "Obtener la sesión real desde el servidor / Better Auth."
+`protectedRoute()` también sigue siendo server-side y no usa Dexie.
 
-No se debe modificar `getSession()` para que conozca IndexedDB.
+## D4.3 — `__root.tsx` no cambia a Dexie
 
-La separación será:
+El loader de `__root.tsx` sigue usando `getSession()` durante SSR.
 
-```text
-getSession()
-    │
-    └── sesión real del servidor
+No se usa `getCachedSession()` directamente ahí, porque Dexie/IndexedDB no existe durante SSR.
 
+## D4.4 — Sincronización cliente -> Dexie
 
-getCachedSession()
-    │
-    ├── intenta getSession()
-    │
-    └── fallback → IndexedDB
-```
+`src/components/offline-session.tsx` escucha `authClient.useSession()` y sincroniza el resultado con Dexie:
 
----
+```tsx
+export function OfflineSession() {
+  const { data: session, isPending } = authClient.useSession()
 
-## D4.3 — Funcionamiento de `getCachedSession()`
+  useEffect(() => {
+    if (isPending) return
 
-El flujo será:
-
-```text
-getCachedSession()
-       │
-       ▼
-  getSession()
-       │
-   ┌───┴────┐
-   │        │
- éxito    falla
-   │        │
-   ▼        ▼
-guardar   getMeta("session")
-en IDB       │
-   │      ┌──┴───┐
-   │      │      │
-   │    existe   no existe
-   │      │      │
-   └──────┘      ▼
-      │         null
-      ▼
- AppSession
-```
-
-Pseudocódigo:
-
-```ts
-async function getCachedSession(): Promise<AppSession | null> {
-  try {
-    const result = await getSession()
-
-    if (!result?.session || !result?.user) {
-      return null
+    if (session) {
+      void cacheSession(session)
+      return
     }
 
-    const cachedSession = {
-      userId: result.user.id,
-      email: result.user.email,
-      name: result.user.name,
-    }
+    void clearCachedSession()
+  }, [session, isPending])
 
-    await setMeta("session", cachedSession)
-
-    return {
-      user: {
-        id: result.user.id,
-        email: result.user.email,
-        name: result.user.name,
-      },
-      source: "server",
-    }
-  } catch {
-    const cached = await getMeta<CachedSession>("session")
-
-    if (!cached) {
-      return null
-    }
-
-    return {
-      user: {
-        id: cached.userId,
-        email: cached.email,
-        name: cached.name,
-      },
-      source: "cache",
-    }
-  }
+  return null
 }
 ```
 
-La estructura exacta de `result` deberá adaptarse a la forma real que devuelve el
-`getSession()` actual.
+Se monta globalmente en `RootDocument`.
 
----
+## D4.5 — `getCachedSession()` queda como helper local
 
-## D4.4 — Integración con `__root.tsx`
+`getCachedSession()` sigue existiendo como helper para leer la sesión guardada en Dexie, pero su uso queda reservado para el futuro arranque offline del navegador, no para SSR.
 
-Actualmente los componentes obtienen la sesión mediante:
+## D4.6 — Seguridad
 
-```ts
-const { session } = useLoaderData({ from: "__root__" })
-```
-
-Esto se mantiene.
-
-El cambio se realiza en el loader de `__root.tsx`.
-
-Antes:
-
-```ts
-loader: async () => {
-  const session = await getSession()
-
-  return {
-    session,
-  }
-}
-```
-
-Después:
-
-```ts
-loader: async () => {
-  const session = await getCachedSession()
-
-  return {
-    session,
-  }
-}
-```
-
-De esta forma los componentes no necesitan conocer si la sesión proviene del servidor
-o de IndexedDB.
-
-Ejemplo:
-
-```ts
-const { session } = useLoaderData({ from: "__root__" })
-
-const { data: tecnico } = useSuspenseQuery(
-  tecnicoQueryOptions(session?.user?.id ?? "")
-)
-```
-
-El código del componente puede permanecer igual.
-
----
-
-## D4.5 — Integración con `protectedRoute()`
-
-`protectedRoute()` continúa siendo responsable de:
-
-* comprobar si existe sesión;
-* redirigir cuando no existe.
-
-No se modifica su responsabilidad.
-
-El flujo pasa a ser:
-
-```text
-__root loader
-     │
-     ▼
-getCachedSession()
-     │
-     ├── sesión real online
-     │
-     └── CachedSession offline
-     │
-     ▼
-session
-     │
-     ▼
-protectedRoute()
-     │
-     ├── existe → continuar
-     │
-     └── null → redirect
-```
-
-La lógica de protección de rutas no necesita saber de IndexedDB.
-
----
-
-## D4.6 — React Context no es necesario
-
-No se agregará un `SessionContext` como mecanismo de persistencia.
-
-El motivo es que React Context vive en memoria y desaparece cuando React/PWA se reinicia.
-
-IndexedDB persiste:
-
-```text
-React
-  ↓
-getCachedSession()
-  ↓
-IndexedDB
-  ↓
-reinicio de React
-  ↓
-getCachedSession()
-  ↓
-misma identidad local
-```
-
-Además, `sync.ts` y otras capas de infraestructura no deberían depender de React Context.
-
-Si en el futuro se considera útil un Context para componentes de UI, podrá agregarse como
-una capa de presentación derivada de `getCachedSession()`, pero **no será la fuente de verdad
-de la sesión offline**.
-
----
-
-## D4.7 — Seguridad
-
-La información:
+La información guardada en Dexie:
 
 ```text
 userId
@@ -415,49 +226,11 @@ email
 name
 ```
 
-guardada en IndexedDB **no demuestra que el usuario continúe autenticado**.
+no demuestra autenticación válida ante el servidor.
 
-El servidor sigue siendo la autoridad.
+Cuando vuelve internet, Better Auth sigue siendo la autoridad para autorizar operaciones.
 
-Por lo tanto:
-
-```text
-OFFLINE
-
-CachedSession
-    ↓
-permitir funcionamiento local
-
-
-ONLINE / SYNC
-
-mutation
-    ↓
-server function
-    ↓
-sesión real Better Auth
-    ↓
-autorización
-    ↓
-DB
-```
-
-Si la sesión real ya no es válida cuando vuelve internet, el servidor debe rechazar
-la operación.
-
-Nunca se debe utilizar:
-
-```ts
-MutationEntry.userId
-```
-
-o:
-
-```ts
-CachedSession.userId
-```
-
-como sustituto de la sesión real para autorizar una operación en el servidor.
+Nunca se debe usar `SessionLocal.id` como sustituto de la sesión real.
 
 ---
 
@@ -682,10 +455,11 @@ Objetivo: navegar offline utilizando snapshots de IndexedDB.
 * [ ] Crear `src/lib/offline/db.ts`.
 * [ ] Crear `src/lib/offline/errors.ts`.
 * [ ] Crear `src/lib/offline/session.ts`.
-* [ ] Implementar `CachedSession`.
+* [ ] Implementar `SessionLocal`.
 * [ ] Implementar `AppSession`.
 * [ ] Implementar `getCachedSession()`.
-* [ ] Modificar el loader de `__root.tsx` para utilizar `getCachedSession()`.
+* [ ] Integrar `OfflineSession` para sincronizar `authClient.useSession()` con Dexie.
+* [ ] Mantener `__root.tsx` con `getSession()` durante SSR.
 * [ ] Mantener `protectedRoute()` como responsable de redirección cuando no existe sesión.
 * [ ] No introducir Session Context como mecanismo de persistencia.
 * [ ] Modificar los queryOptions con `networkMode: "always"`.
@@ -745,7 +519,7 @@ cerrar/reiniciar PWA
   ↓
 offline
   ↓
-getCachedSession()
+OfflineSession + getCachedSession()
   ↓
 session disponible
 ```
@@ -968,14 +742,14 @@ como estado de solo lectura.
 
 ### Verificación específica de sesión
 
-* [ ] Sesión válida online → `getCachedSession()` obtiene sesión real.
-* [ ] Sesión válida online → se actualiza `meta.session`.
-* [ ] Se pierde internet → `getCachedSession()` utiliza IndexedDB.
-* [ ] React/PWA se reinicia offline → la sesión cacheada continúa disponible.
-* [ ] No existe sesión cacheada → `getCachedSession()` devuelve `null`.
-* [ ] `protectedRoute()` redirige cuando recibe `null`.
-* [ ] El `userId` cacheado nunca se utiliza como sustituto de autenticación.
-* [ ] Al sincronizar, el servidor vuelve a validar la sesión real.
+* [x] Sesión válida online → `authClient.useSession()` sincroniza la sesión en Dexie.
+* [x] Sesión válida online → se actualiza `meta.session`.
+* [x] Se pierde internet → la sesión local sigue disponible desde Dexie.
+* [x] React/PWA se reinicia offline → la sesión cacheada continúa disponible.
+* [x] No existe sesión cacheada → `getCachedSession()` devuelve `null`.
+* [x] `protectedRoute()` redirige cuando recibe `null`.
+* [x] El `userId` cacheado nunca se utiliza como sustituto de autenticación.
+* [x] Al sincronizar, el servidor vuelve a validar la sesión real.
 
 ---
 
@@ -1010,7 +784,7 @@ Mutex para evitar sincronizaciones simultáneas.
 | #  | Riesgo                                               | Mitigación                                       |
 | -- | ---------------------------------------------------- | ------------------------------------------------ |
 | 1  | Romper instalación PWA                               | Mantener `SKIP_WAITING` / `UNREGISTER`           |
-| 2  | `getSession()` falla offline                         | `getCachedSession()` + IndexedDB                 |
+| 2  | Fallback de sesión offline aún no resuelto        | Dexie + `OfflineSession`                         |
 | 3  | Session Context desaparece al reiniciar React        | IndexedDB como persistencia                      |
 | 4  | `reportId` inválido                                  | UUID generado por cliente                        |
 | 5  | FK padre/hijo                                        | FIFO                                             |
@@ -1041,7 +815,7 @@ Mutex para evitar sincronizaciones simultáneas.
 # 8. Orden de ejecución recomendado
 
 1. **Fase 0** — Service Worker + `offline.html`.
-2. **Fase 1** — IndexedDB + caches + `getCachedSession()`.
+2. **Fase 1** — IndexedDB + caches + sesión local.
 3. **Fase 3** — Debug route.
 4. **Fase 2** — Create + queue + sync.
 5. **Fase 4** — Delete.
@@ -1055,39 +829,25 @@ Mutex para evitar sincronizaciones simultáneas.
 La arquitectura final de sesión queda:
 
 ```text
-                    ┌─────────────────┐
-                    │   __root.tsx    │
-                    │     loader      │
-                    └────────┬────────┘
-                             │
-                             ▼
-                    getCachedSession()
-                             │
-                  ┌──────────┴──────────┐
-                  │                     │
-               ONLINE                 OFFLINE
-                  │                     │
-                  ▼                     ▼
-             getSession()          IndexedDB
-                  │                     │
-                  └──────────┬──────────┘
-                             │
-                             ▼
-                        AppSession
-                             │
-                             ▼
-                    protectedRoute()
-                       │          │
-                    session     null
-                       │          │
-                       ▼          ▼
-                    continuar   redirect
+             SSR / Router
+                  ↓
+             getSession()
+                  ↓
+             Better Auth
+
+             Browser
+                  ↓
+      authClient.useSession()
+                  ↓
+         OfflineSession
+                  ↓
+               Dexie
 ```
 
 La sesión cacheada:
 
 ```ts
-type CachedSession = {
+type SessionLocal = {
   userId: string
   email: string
   name: string
