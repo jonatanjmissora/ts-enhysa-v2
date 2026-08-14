@@ -7,7 +7,13 @@ const PRECACHE_URLS = [
 	"/manifest.json",
 	"/logo192.png",
 	"/logo512.png",
+	"/working-on-it.webp",
 	"/favicon.ico",
+	"/iluminacion",
+	"/iluminacion/reportes",
+	"/perfil/tecnicos",
+	"/perfil/empresas",
+	"/perfil/instrumentos",
 ]
 
 self.addEventListener("install", event => {
@@ -80,6 +86,9 @@ async function networkFirstWithOffline(request) {
 		if (cached) return cached
 
 		const staticCache = await caches.open(CACHE_STATIC)
+		const precachedRoute = await staticCache.match(request)
+		if (precachedRoute) return precachedRoute
+
 		const offlinePage = await staticCache.match("/offline.html")
 		if (offlinePage) return offlinePage
 

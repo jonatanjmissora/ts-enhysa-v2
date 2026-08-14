@@ -1,4 +1,5 @@
 import { WifiOff } from "lucide-react"
+import { Link } from "@tanstack/react-router"
 
 export function OfflineRouteBlock() {
 	return (
@@ -12,23 +13,12 @@ export function OfflineRouteBlock() {
 				</p>
 			</div>
 			<div className="flex gap-2 items-center flex-wrap justify-center">
-				<button
-					type="button"
-					onClick={() => {
-						window.history.back()
-						setTimeout(() => window.location.reload(), 500)
-					}}
+				<Link
+					to="/"
 					className="px-4 py-2 bg-amber-600 hover:bg-amber-700 rounded-sm text-white uppercase font-extrabold cursor-pointer"
 				>
-					Volver
-				</button>
-				<button
-					type="button"
-					onClick={() => window.location.reload()}
-					className="px-4 py-2 bg-gray-600 dark:bg-gray-700 rounded-sm text-white uppercase font-extrabold cursor-pointer"
-				>
-					Reintentar
-				</button>
+					Ir al inicio
+				</Link>
 			</div>
 			<p className="text-xs text-muted-foreground">
 				Al reconectarte, la pagina se recarga automaticamente.

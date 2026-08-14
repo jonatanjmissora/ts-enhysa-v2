@@ -32,8 +32,6 @@
 		}
 		.btn-primary { background: #d97706; color: #fff; }
 		.btn-primary:hover { background: #b45309; }
-		.btn-secondary { background: #3f3f46; color: #fafafa; }
-		.btn-secondary:hover { background: #52525b; }
 	</style>
 </head>
 <body>
@@ -42,8 +40,7 @@
 		<h1>Sin conexión a internet</h1>
 		<p>Esta página no está guardada. Conectate e intentá de nuevo.</p>
 		<div class="actions">
-			<button type="button" class="btn-primary" onclick="window.history.back(); setTimeout(() => window.location.reload(), 500);">Volver</button>
-			<button type="button" class="btn-secondary" onclick="window.location.reload()">Reintentar</button>
+			<button type="button" class="btn-primary" onclick="window.location.href = '/'">Ir al inicio</button>
 		</div>
 	</div>
 </body>

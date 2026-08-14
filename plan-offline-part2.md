@@ -916,9 +916,10 @@ Hoy el alcance offline habilita **solo lectura y creacion**. La edicion (`update
 
 ## Service Worker y app shell
 
-* `public/sw.js` reescrito: `CACHE_STATIC = "app-static-v1"` (precache `/`, `/offline.html`, `/manifest.json`, logos, favicon) + `CACHE_PAGES = "app-pages-v1"` (navegaciones).
+* `public/sw.js` reescrito: `CACHE_STATIC = "app-static-v1"` (precache `/`, `/offline.html`, `/manifest.json`, logos, favicon, y las rutas `/iluminacion`, `/iluminacion/reportes`, `/perfil/tecnicos`, `/perfil/empresas`, `/perfil/instrumentos`) + `CACHE_PAGES = "app-pages-v1"` (navegaciones).
 * `install` → `cache.addAll` + `skipWaiting()`. `activate` → borra caches ajenos + `clients.claim()`.
 * `fetch`: solo GET http. `request.mode === "navigate"` → `networkFirstWithOffline`; resto → `cacheFirst`. **Saltea `/api/auth/*` y `/_serverFn/*`** (network-only).
+* `networkFirstWithOffline` en fallback offline: `CACHE_PAGES` → `CACHE_STATIC` (rutas precacheadas) → `/offline.html`.
 * `public/offline.html` creado como fallback de navegacion offline.
 * El SW solo cachea navegaciones de documento completo (hard load); las navegaciones SPA no pasan por el SW (hay que entrar directo a la URL online para cachearla).
 
@@ -947,11 +948,13 @@ Hoy el alcance offline habilita **solo lectura y creacion**. La edicion (`update
 ## Lectura cache-first (repositorios)
 
 * `repositories/tecnicos/tecnico-repository.ts`: guard SSR (`typeof window === "undefined"` → server) + `getTecnicoLocal()` primero; en miss `getTecnicoServer()` + `saveTecnicoLocal()` (mirror-write). Evita `MissingAPIError` en `renderToReadableStream`.
+* `repositories/empresas/empresas-repository.ts`, `repositories/instrumentos/instrumentos-repository.ts`, `repositories/reportes/iluminacion/reportes-repository.ts`, `repositories/reportes/iluminacion/areas-repository.ts` y `repositories/reportes/iluminacion/localizadas-repository.ts`: mismo patrón cache-first para lecturas asociadas a `userId`/`reportId`.
+* `indexed-db/database.ts` v5: stores `areasIluminacion` (`id, reportId, userId`) y `localizadasIluminacion` (`id, reportId, userId`).
 * Politica D1: lecturas cache-first; mutations futuras con mirror-write en `onSuccess`.
 
 ## Pendientes (fuera de este corte)
 
-* Replicar cache-first en el resto de queries (reportes, areas, localizadas, empresas, instrumentos) + `networkMode: "always"`.
+* Agregar `networkMode: "always"` a las queries de lectura cache-first.
 * Queries offline de lectura (A8+) — dependencias de queries a dexie.
 * Mutaciones CREATE/DELETE/EDIT offline con cola (Fases 2, 4, 5 de `plan-offline.md`).
 * Debug route de la cola (Fase 3).

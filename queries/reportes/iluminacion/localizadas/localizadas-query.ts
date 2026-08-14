@@ -1,12 +1,12 @@
 import { queryOptions, useQueryClient } from "@tanstack/react-query"
-import { getLocalizadasServer } from "../../../../server/reportes/iluminacion/localizadas/get-localizadas-server"
 import { getLocalizadaServer } from "../../../../server/reportes/iluminacion/localizadas/get-localizada-server"
 import type { LocalizadaIluminacionType } from "../../../../db/reportes/iluminacion/localizadas/schema"
+import { localizadasRepository } from "../../../../repositories/reportes/iluminacion/localizadas-repository"
 
 export const localizadasQueryOptions = ({ reportId }: { reportId: string }) =>
 	queryOptions({
 		queryKey: ["localizadas-iluminacion", reportId],
-		queryFn: () => getLocalizadasServer({ data: { reportId } }),
+		queryFn: () => localizadasRepository.get(reportId),
 		enabled: !!reportId,
 	})
 

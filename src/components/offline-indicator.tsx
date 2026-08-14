@@ -10,7 +10,7 @@ export function OfflineIndicator() {
 
 	return (
 		<div className="text-amber-600">
-			<WifiOff size={14} />
+			<WifiOff size={18} />
 		</div>
 	)
 }

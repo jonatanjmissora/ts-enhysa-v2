@@ -79,7 +79,7 @@ function IluminacionReportesContent({ userId }: { userId: string }) {
 
 function ReportesIluminacion({ userId }: { userId: string }) {
 	const id = "new"
-	const { data: reportes } = useSuspenseQuery(reportesQueryOptions)
+	const { data: reportes } = useSuspenseQuery(reportesQueryOptions(userId))
 	const { data: empresas } = useSuspenseQuery(empresasQueryOptions(userId))
 
 	const [showFilters, setShowFilters] = useState(false)

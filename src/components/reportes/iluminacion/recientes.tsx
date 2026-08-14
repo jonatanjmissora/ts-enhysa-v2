@@ -5,6 +5,7 @@ import { FileChartColumn, FileClock, FileLock } from "lucide-react"
 import { Suspense } from "react"
 import { reportesQueryOptions } from "../../../../queries/reportes/iluminacion/reportes-query"
 import type { ReporteIluminacionType } from "../../../../db/reportes/iluminacion/schema"
+import { useAppSession } from "#/lib/app-session-context"
 
 export default function InformesRecientes() {
 	return (
@@ -33,7 +34,15 @@ export default function InformesRecientes() {
 }
 
 function Reportes() {
-	const { data: reportes } = useSuspenseQuery(reportesQueryOptions)
+	const { session } = useAppSession()
+
+	if (!session) return <NoReports />
+
+	return <ReportesContent userId={session.user.id} />
+}
+
+function ReportesContent({ userId }: { userId: string }) {
+	const { data: reportes } = useSuspenseQuery(reportesQueryOptions(userId))
 
 	if (!reportes || reportes.length === 0) return <NoReports />
 	return (

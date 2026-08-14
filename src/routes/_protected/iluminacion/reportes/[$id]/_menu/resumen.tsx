@@ -101,7 +101,7 @@ function Resumen() {
 			<div className="mt-20 flex flex-col items-center justify-center gap-3">
 				<ReporteCompleto
 					reporte={reporte}
-					areasLength={areas.length}
+					areasLength={areas?.length ?? 0}
 					setReportError={setReportError}
 					setIsModal={setIsModal}
 				/>

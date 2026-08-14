@@ -129,8 +129,8 @@ function PDF() {
 				<MyDocumentReducida
 					key={reporte.creditConsumed ? "unlocked" : "locked"}
 					reporte={reporte}
-					localizadas={localizadas}
-					areas={areas}
+					localizadas={localizadas ?? []}
+					areas={areas ?? []}
 					tecnico={reporteConRelaciones.tecnico}
 					empresa={reporteConRelaciones.empresa}
 					instrumento={reporteConRelaciones.instrumento}

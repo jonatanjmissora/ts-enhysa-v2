@@ -19,7 +19,7 @@
 * La capa offline fue **reimplementada**: existe `src/lib/offline/*` (types, resolver, errors),
   `src/lib/session/index.ts` (cache de sesión en Dexie), `OfflineSession`, `OfflineSessionGate`,
   `OfflineRouteBlock`, `useAutoReloadOnReconnect` y `AppSessionContext` (ver `plan-offline-part2.md`).
-* `public/sw.js` fue **reescrito**: precache de app shell + `networkFirstWithOffline` en navegación +
+* `public/sw.js` fue **reescrito**: precache de app shell + `/iluminacion`, `/iluminacion/reportes`, `/perfil/tecnicos`, `/perfil/empresas`, `/perfil/instrumentos` + `networkFirstWithOffline` en navegación +
   `cacheFirst` en assets, sin interceptar `/api/auth/*` ni `/_serverFn/*`. Existe `public/offline.html`.
 * El servidor de sesión sigue siendo `getSession()` / `protectedRoute()` (server functions de `server/get-session.ts`),
   usadas en `src/routes/__root.tsx` y `src/lib/protected-route.ts`.
@@ -459,7 +459,7 @@ Estado: **implementada**. Se usa **Dexie** (no `idb`) en `indexed-db/database.ts
 
 Objetivo: navegar offline utilizando snapshots de IndexedDB.
 
-Estado: **parcialmente implementada** — la sesión offline y el patrón cache-first ya corren; falta replicar el patrón en las queries de lectura de `empresas` e `instrumentos`.
+Estado: **mayormente implementada** — la sesión offline y el patrón cache-first corren en todas las queries de lectura (`tecnico`, `empresas`, `instrumentos`, `reportes`, `areas` y `localizadas`); queda pendiente `networkMode: "always"` y los mutables.
 
 * [x] Crear `src/lib/offline/errors.ts` → `OfflineNoCacheError`, `isOfflineNoCacheError()`, `isOfflineError()`.
 * [x] Crear `src/lib/offline/session.ts` → `src/lib/session/index.ts` (`cacheSession`, `getCachedSession`, `clearCachedSession`).
@@ -480,12 +480,14 @@ Estado: **parcialmente implementada** — la sesión offline y el patrón cache-
 
 Queries:
 
-* `queries/reportes/iluminacion/reportes-query.ts`
-* `queries/reportes/iluminacion/areas/areas-query.ts`
-* `queries/reportes/iluminacion/localizadas/localizadas-query.ts`
-* `queries/empresas/empresas-query.ts` → solo lectura, sin `create` / `edit` / `delete`.
-* `queries/instrumentos/instrumentos-query.ts` → solo lectura, sin `create` / `edit` / `delete`.
+* `queries/reportes/iluminacion/reportes-query.ts` → solo lectura; **implementado** vía `reportesRepository.get()` (cache-first + guard SSR).
+* `queries/reportes/iluminacion/areas/areas-query.ts` → solo lectura; **implementado** vía `areasRepository.get()` (cache-first + guard SSR).
+* `queries/reportes/iluminacion/localizadas/localizadas-query.ts` → solo lectura; **implementado** vía `localizadasRepository.get()` (cache-first + guard SSR).
+* `queries/empresas/empresas-query.ts` → solo lectura, sin `create` / `edit` / `delete`; **implementado** vía `empresasRepository.get()`.
+* `queries/instrumentos/instrumentos-query.ts` → solo lectura, sin `create` / `edit` / `delete`; **implementado** vía `instrumentosRepository.get()`.
 * `queries/tecnico/tecnico-query.ts` → solo lectura, sin `create` / `edit` / `delete`; **implementado** vía `tecnicoRepository.get()` (cache-first + guard SSR).
+
+> **Pendiente (test en curso):** el SW precachea solo el **HTML** de las rutas (`/iluminacion`, `/iluminacion/reportes`, `/perfil/tecnicos`, `/perfil/empresas`, `/perfil/instrumentos`). Las rutas TanStack son lazy-load: sus **chunks JS** se cachean bajo demanda (`cacheFirst`) recién al entrar online a la ruta. Si al navegar entre rutas offline falla (chunk sin cachear → `OfflineRouteBlock`), habrá que implementar el **cacheo de los chunks específicos** en el precache del SW (p. ej. precachear los nombres de chunk del build o precache inteligente por manifiesto).
 
 ### Verificación
 

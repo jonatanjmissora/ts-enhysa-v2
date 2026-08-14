@@ -11,6 +11,7 @@ import { TriangleAlert } from "lucide-react"
 import { Button } from "#/components/ui/button"
 import DeleteReporteNuevo from "#/components/reportes/iluminacion/nuevo-informe/delete-reporte-nuevo"
 import CreateReporteNuevo from "#/components/reportes/iluminacion/nuevo-informe/create-reporte-nuevo"
+import { useAppSession } from "#/lib/app-session-context"
 
 export const Route = createFileRoute(
 	"/_protected/iluminacion/reportes/$id/_CRUD/crud/create-general"
@@ -46,7 +47,15 @@ function IluminacionData() {
 }
 
 function Data() {
-	const { data: reportes } = useSuspenseQuery(reportesQueryOptions)
+	const { session } = useAppSession()
+
+	if (!session) return <CreateReporteNuevo />
+
+	return <DataContent userId={session.user.id} />
+}
+
+function DataContent({ userId }: { userId: string }) {
+	const { data: reportes } = useSuspenseQuery(reportesQueryOptions(userId))
 
 	const reporteNuevo = reportes?.find(r => !r.finishedAt)
 
