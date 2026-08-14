@@ -4,6 +4,7 @@ import { instrumentosQueryOptions } from "../../../../../../queries/instrumentos
 import { EditInstrumentoForm } from "#/components/instrumentos/edit-instrumento"
 import BackChevron from "#/components/back-chevron"
 import Title from "#/components/title"
+import { useAppSession } from "#/lib/app-session-context"
 
 export const Route = createFileRoute(
 	"/_protected/perfil/instrumentos/$id/editar"
@@ -13,7 +14,15 @@ export const Route = createFileRoute(
 
 function RouteComponent() {
 	const { id } = Route.useParams()
-	const { data: instrumentos } = useSuspenseQuery(instrumentosQueryOptions)
+	const { session } = useAppSession()
+
+	if (!session) return <div>No se encontró el instrumento</div>
+
+	return <RouteContent id={id} userId={session.user.id} />
+}
+
+function RouteContent({ id, userId }: { id: string; userId: string }) {
+	const { data: instrumentos } = useSuspenseQuery(instrumentosQueryOptions(userId))
 	const router = useRouter()
 
 	const instrumento = instrumentos?.find(i => i.id === id)

@@ -4,6 +4,7 @@ import { empresasQueryOptions } from "../../../../../../queries/empresas/empresa
 import { EditEmpresaForm } from "#/components/empresas/edit-empresa"
 import BackChevron from "#/components/back-chevron"
 import Title from "#/components/title"
+import { useAppSession } from "#/lib/app-session-context"
 
 export const Route = createFileRoute(
 	"/_protected/perfil/empresas/$id/editar"
@@ -13,7 +14,15 @@ export const Route = createFileRoute(
 
 function RouteComponent() {
 	const { id } = Route.useParams()
-	const { data: empresas } = useSuspenseQuery(empresasQueryOptions)
+	const { session } = useAppSession()
+
+	if (!session) return <div>No se encontró la empresa</div>
+
+	return <RouteContent id={id} userId={session.user.id} />
+}
+
+function RouteContent({ id, userId }: { id: string; userId: string }) {
+	const { data: empresas } = useSuspenseQuery(empresasQueryOptions(userId))
 	const router = useRouter()
 
 	const empresa = empresas?.find(e => e.id === id)

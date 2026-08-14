@@ -11,14 +11,21 @@ import { areasQueryOptions } from "../../../../../../../queries/reportes/ilumina
 import { useSuspenseQuery } from "@tanstack/react-query"
 import { Suspense } from "react"
 import { empresasQueryOptions } from "../../../../../../../queries/empresas/empresas-query"
+import type { ReporteIluminacionType } from "../../../../../../../db/reportes/iluminacion/schema"
 
 export const Route = createFileRoute(
 	"/_protected/iluminacion/reportes/$id/_menu"
 )({
-	loader: ({ context, params }) => {
-		context.queryClient.ensureQueryData(reporteQueryOptions({ id: params.id }))
-		context.queryClient.ensureQueryData(empresasQueryOptions)
-		context.queryClient.ensureQueryData(
+	loader: async ({ context, params }) => {
+		const reporte = await context.queryClient.ensureQueryData(
+			reporteQueryOptions({ id: params.id })
+		)
+		if (reporte) {
+			void context.queryClient.ensureQueryData(
+				empresasQueryOptions(reporte.userId)
+			)
+		}
+		await context.queryClient.ensureQueryData(
 			areasQueryOptions({ reportId: params.id })
 		)
 		return null
@@ -87,7 +94,20 @@ function RouteComponent() {
 const SuspenseTitle = () => {
 	const { id } = Route.useParams()
 	const { data: reporte } = useSuspenseQuery(reporteQueryOptions({ id }))
-	const { data: empresas } = useSuspenseQuery(empresasQueryOptions)
+
+	if (!reporte) return null
+
+	return <SuspenseTitleContent userId={reporte.userId} reporte={reporte} />
+}
+
+function SuspenseTitleContent({
+	userId,
+	reporte,
+}: {
+	userId: string
+	reporte: ReporteIluminacionType
+}) {
+	const { data: empresas } = useSuspenseQuery(empresasQueryOptions(userId))
 	const empresa = empresas?.find(empresa => empresa.id === reporte?.empresaId)
 
 	return (

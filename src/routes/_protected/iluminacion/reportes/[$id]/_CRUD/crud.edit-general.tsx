@@ -75,20 +75,31 @@ function IluminacionGeneralData() {
 function EditReporteGeneral() {
 	const { id } = Route.useParams()
 	const { data: reporte } = useSuspenseQuery(reporteQueryOptions({ id }))
-	const { data: empresas } = useSuspenseQuery(empresasQueryOptions)
-	const { data: instrumentos } = useSuspenseQuery(instrumentosQueryOptions)
+
+	if (!reporte) {
+		return (
+			<div className="italic text-foreground-soft tracking-wider text-sm p-10">
+				No se encontro el reporte
+			</div>
+		)
+	}
+
+	const { data: empresas } = useSuspenseQuery(empresasQueryOptions(reporte.userId))
+	const { data: instrumentos } = useSuspenseQuery(
+		instrumentosQueryOptions(reporte.userId)
+	)
 	const navigate = useNavigate()
 
 	const { mutateAsync: editarReporte, isPending, error } = useUpdateReporte()
 
 	let returnWhere = "medicion"
-	if (reporte?.finishedAt) returnWhere = "general"
+	if (reporte.finishedAt) returnWhere = "general"
 
 	const form = useForm({
 		defaultValues: {
-			empresaId: reporte?.empresaId || "",
-			instrumentoId: reporte?.instrumentoId || "",
-			clima: reporte?.clima || ["despejado", "10", "10"],
+			empresaId: reporte.empresaId,
+			instrumentoId: reporte.instrumentoId,
+			clima: reporte.clima,
 		},
 		validators: {
 			onSubmit: reporteNuevoFormValidator,

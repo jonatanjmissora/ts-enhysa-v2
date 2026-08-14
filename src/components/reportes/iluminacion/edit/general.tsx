@@ -95,8 +95,8 @@ function EditReporteGeneralSuspense({
 	setIsMenuOpen: (value: boolean) => void
 	reporte: ReporteIluminacionType
 }) {
-	const { data: empresas } = useSuspenseQuery(empresasQueryOptions)
-	const { data: instrumentos } = useSuspenseQuery(instrumentosQueryOptions)
+  const { data: empresas } = useSuspenseQuery(empresasQueryOptions(reporte.userId))
+  const { data: instrumentos } = useSuspenseQuery(instrumentosQueryOptions(reporte.userId))
 
 	if (!empresas || !instrumentos) return
 

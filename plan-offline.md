@@ -29,6 +29,7 @@
   la identidad del usuario que tenía una sesión válida para permitir el funcionamiento offline.
 * La sincronización Better Auth -> Dexie ya fue validada con `authClient.useSession()` y un componente global
   de sincronización; la sesión local queda lista para el siguiente paso del modo offline real.
+* `tecnicos`, `empresas` e `instrumentos` quedan como queries de **solo lectura**: no se planifican `create`, `edit` ni `delete` para esas entidades dentro de esta fase.
 * Lecturas cache-first implementadas en `repositories/tecnicos/tecnico-repository.ts` (guard SSR +
   `getTecnicoLocal()` primero + mirror-write en miss). Es el patrón de referencia (decisión D1).
 
@@ -458,7 +459,7 @@ Estado: **implementada**. Se usa **Dexie** (no `idb`) en `indexed-db/database.ts
 
 Objetivo: navegar offline utilizando snapshots de IndexedDB.
 
-Estado: **parcialmente implementada** — la sesión offline y el patrón cache-first ya corren; falta replicar el patrón en el resto de las queries.
+Estado: **parcialmente implementada** — la sesión offline y el patrón cache-first ya corren; falta replicar el patrón en las queries de lectura de `empresas` e `instrumentos`.
 
 * [x] Crear `src/lib/offline/errors.ts` → `OfflineNoCacheError`, `isOfflineNoCacheError()`, `isOfflineError()`.
 * [x] Crear `src/lib/offline/session.ts` → `src/lib/session/index.ts` (`cacheSession`, `getCachedSession`, `clearCachedSession`).
@@ -473,17 +474,18 @@ Estado: **parcialmente implementada** — la sesión offline y el patrón cache-
 * [x] Implementar `OfflineNoCacheError`.
 * [x] Crear `OfflineRouteBlock`.
 * [x] Integrar `OfflineNoCacheError` en `DefaultCatchBoundary`.
-* [ ] Modificar los queryOptions con `networkMode: "always"` (pendiente en la mayoría de queries).
-* [ ] Implementar write-through en caso de éxito (pendiente fuera de `tecnico-repository.ts`).
+* [ ] Modificar los queryOptions con `networkMode: "always"` para las queries de lectura.
+* [ ] Mantener fuera de alcance cualquier `create` / `edit` / `delete` para `tecnicos`, `empresas` e `instrumentos`.
+* [ ] Implementar write-through solo en las entidades mutables; no aplica a `tecnicos`, `empresas` ni `instrumentos`.
 
 Queries:
 
 * `queries/reportes/iluminacion/reportes-query.ts`
 * `queries/reportes/iluminacion/areas/areas-query.ts`
 * `queries/reportes/iluminacion/localizadas/localizadas-query.ts`
-* `queries/empresas/empresas-query.ts`
-* `queries/instrumentos/instrumentos-query.ts`
-* `queries/tecnico/tecnico-query.ts` → **implementado** vía `tecnicoRepository.get()` (cache-first + guard SSR).
+* `queries/empresas/empresas-query.ts` → solo lectura, sin `create` / `edit` / `delete`.
+* `queries/instrumentos/instrumentos-query.ts` → solo lectura, sin `create` / `edit` / `delete`.
+* `queries/tecnico/tecnico-query.ts` → solo lectura, sin `create` / `edit` / `delete`; **implementado** vía `tecnicoRepository.get()` (cache-first + guard SSR).
 
 ### Verificación
 
@@ -821,7 +823,7 @@ Mutex para evitar sincronizaciones simultáneas.
 
 # 8. Orden de ejecución recomendado
 
-> **Estado:** Fase 0 implementada; Fase 1 parcial (sesión + patrón tecnico cache-first); el arranque offline se hizo en `plan-offline-part2.md` (A2→A7 verificado con la navegación SPA offline). Pendientes: replicar cache-first en resto de queries, `networkMode`, y Fases 2/4/5 (mutaciones).
+> **Estado:** Fase 0 implementada; Fase 1 parcial (sesión + patrón tecnico cache-first); el arranque offline se hizo en `plan-offline-part2.md` (A2→A7 verificado con la navegación SPA offline). Pendientes: replicar cache-first en las queries de lectura de `empresas` e `instrumentos`, `networkMode` para lecturas, y Fases 2/4/5 (mutaciones).
 
 1. **Fase 0** — Service Worker + `offline.html`. ✅ implementada
 2. **Fase 1** — IndexedDB + caches + sesión local. 🟡 parcial (sesión y `tecnico-repository` cache-first listos)

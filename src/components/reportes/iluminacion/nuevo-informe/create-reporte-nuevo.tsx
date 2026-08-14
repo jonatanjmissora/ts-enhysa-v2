@@ -76,8 +76,8 @@ function ReporteNuevoFormContent({ userId }: { userId: string }) {
 	useScrollTop()
 
 	const { data: tecnico } = useSuspenseQuery(tecnicoQueryOptions(userId))
-	const { data: empresas } = useSuspenseQuery(empresasQueryOptions)
-	const { data: instrumentos } = useSuspenseQuery(instrumentosQueryOptions)
+	const { data: empresas } = useSuspenseQuery(empresasQueryOptions(userId))
+	const { data: instrumentos } = useSuspenseQuery(instrumentosQueryOptions(userId))
 	const navigate = useNavigate()
 
 	const {

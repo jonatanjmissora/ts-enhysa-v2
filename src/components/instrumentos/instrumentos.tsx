@@ -23,9 +23,20 @@ import { Ellipsis, Pencil } from "lucide-react"
 import DeleteInstrumento from "./delete-instrumento"
 import useScrollTop from "#/hooks/scroll-top"
 import { Link } from "@tanstack/react-router"
+import { useAppSession } from "#/lib/app-session-context"
 
 export default function Instrumentos() {
-	const { data: instrumentos } = useSuspenseQuery(instrumentosQueryOptions)
+	const { session } = useAppSession()
+
+	if (!session) return <InstrumentosVacios />
+
+	return <InstrumentosContent userId={session.user.id} />
+}
+
+function InstrumentosContent({ userId }: { userId: string }) {
+	const { data: instrumentos } = useSuspenseQuery(
+		instrumentosQueryOptions(userId)
+	)
 	// const instrumentos = null
 	if (!instrumentos || instrumentos.length === 0) return <InstrumentosVacios />
 	return <HayInstrumentos instrumentos={instrumentos} />

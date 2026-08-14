@@ -1,7 +1,8 @@
 import { queryOptions } from "@tanstack/react-query"
-import { getEmpresasServer } from "../../server/empresas/get-empresas-server"
+import { empresasRepository } from "../../repositories/empresas/empresas-repository"
 
-export const empresasQueryOptions = queryOptions({
-	queryKey: ["empresas"],
-	queryFn: () => getEmpresasServer(),
-})
+export const empresasQueryOptions = (userId: string) =>
+	queryOptions({
+		queryKey: ["empresas", userId],
+		queryFn: () => empresasRepository.get(userId),
+	})

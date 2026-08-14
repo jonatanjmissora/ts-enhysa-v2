@@ -28,6 +28,7 @@ import {
 import { empresasQueryOptions } from "../../../../../queries/empresas/empresas-query"
 import { cn } from "#/lib/utils"
 import useScrollTop from "#/hooks/scroll-top"
+import { useAppSession } from "#/lib/app-session-context"
 
 export const Route = createFileRoute("/_protected/iluminacion/reportes/")({
 	component: RouteComponent,
@@ -54,6 +55,14 @@ function RouteComponent() {
 }
 
 function IluminacionReportes() {
+	const { session } = useAppSession()
+
+	if (!session) return <NoReports />
+
+	return <IluminacionReportesContent userId={session.user.id} />
+}
+
+function IluminacionReportesContent({ userId }: { userId: string }) {
 	return (
 		<Suspense
 			fallback={
@@ -63,15 +72,15 @@ function IluminacionReportes() {
 				/>
 			}
 		>
-			<ReportesIluminacion />
+			<ReportesIluminacion userId={userId} />
 		</Suspense>
 	)
 }
 
-function ReportesIluminacion() {
+function ReportesIluminacion({ userId }: { userId: string }) {
 	const id = "new"
 	const { data: reportes } = useSuspenseQuery(reportesQueryOptions)
-	const { data: empresas } = useSuspenseQuery(empresasQueryOptions)
+	const { data: empresas } = useSuspenseQuery(empresasQueryOptions(userId))
 
 	const [showFilters, setShowFilters] = useState(false)
 	const [desde, setDesde] = useState<string>("")

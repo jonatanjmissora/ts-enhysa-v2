@@ -1,7 +1,7 @@
 import { createServerFn } from "@tanstack/react-start"
 import { db } from "../db"
 import { user, account } from "../db/users/schema"
-import { and, lt, like, count, eq } from "drizzle-orm"
+import { and, lt, like, eq } from "drizzle-orm"
 import { randomBytes, randomInt, scrypt } from "node:crypto"
 
 const DEMO_DOMAIN = "@enhysa.demo"

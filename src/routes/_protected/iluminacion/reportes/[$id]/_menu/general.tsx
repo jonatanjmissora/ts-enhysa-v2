@@ -44,14 +44,25 @@ function RouteComponent() {
 function General() {
 	const { id } = Route.useParams()
 	const { data: reporte } = useSuspenseQuery(reporteQueryOptions({ id }))
-	const { data: empresas } = useSuspenseQuery(empresasQueryOptions)
-	const { data: instrumentos } = useSuspenseQuery(instrumentosQueryOptions)
-	const empresa = empresas?.find(empresa => empresa.id === reporte?.empresaId)
+
+	if (!reporte) {
+		return (
+			<div className="italic text-foreground-soft tracking-wider text-sm p-10">
+				No se encontro el reporte
+			</div>
+		)
+	}
+
+	const { data: empresas } = useSuspenseQuery(empresasQueryOptions(reporte.userId))
+	const { data: instrumentos } = useSuspenseQuery(
+		instrumentosQueryOptions(reporte.userId)
+	)
+	const empresa = empresas?.find(empresa => empresa.id === reporte.empresaId)
 	const instrumento = instrumentos?.find(
-		instrumento => instrumento.id === reporte?.instrumentoId
+		instrumento => instrumento.id === reporte.instrumentoId
 	)
 
-	if (!reporte || !empresa || !instrumento)
+	if (!empresa || !instrumento)
 		return (
 			<div className="italic text-foreground-soft tracking-wider text-sm p-10">
 				No se encontro el reporte

@@ -1,7 +1,8 @@
 import { queryOptions } from "@tanstack/react-query"
-import { getInstrumentosServer } from "../../server/instrumentos/get-instrumentos-server"
+import { instrumentosRepository } from "../../repositories/instrumentos/instrumentos-repository"
 
-export const instrumentosQueryOptions = queryOptions({
-	queryKey: ["instrumentos"],
-	queryFn: () => getInstrumentosServer(),
-})
+export const instrumentosQueryOptions = (userId: string) =>
+	queryOptions({
+		queryKey: ["instrumentos", userId],
+		queryFn: () => instrumentosRepository.get(userId),
+	})

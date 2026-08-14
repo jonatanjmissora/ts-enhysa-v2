@@ -184,7 +184,7 @@ function UserSuscriptionInfo({
 				search={{
 					from: "root",
 				}}
-				onClick={() => setIsOpen(prev => !prev)}
+				onClick={() => setIsOpen(false)}
 				className="text:sm sm:text-xs tracking-wider flex items-center justify-end gap-1 bg-primary rounded p-1 px-2"
 			>
 				Agregar Creditos

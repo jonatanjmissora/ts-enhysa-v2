@@ -22,9 +22,18 @@ import { Ellipsis, Pencil } from "lucide-react"
 import { useState } from "react"
 import DeleteEmpresa from "./delete-empresa"
 import { Link } from "@tanstack/react-router"
+import { useAppSession } from "#/lib/app-session-context"
 
 export default function Empresas() {
-	const { data: empresas } = useSuspenseQuery(empresasQueryOptions)
+	const { session } = useAppSession()
+
+	if (!session) return <EmpresasVacias />
+
+	return <EmpresasContent userId={session.user.id} />
+}
+
+function EmpresasContent({ userId }: { userId: string }) {
+	const { data: empresas } = useSuspenseQuery(empresasQueryOptions(userId))
 	// const empresas = null
 	if (!empresas || empresas.length === 0) return <EmpresasVacias />
 	return <HayEmpresas empresas={empresas} />
