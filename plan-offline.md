@@ -490,6 +490,32 @@ Queries:
 
 > **Pendiente (test en curso):** el SW precachea solo el **HTML** de las rutas (`/iluminacion`, `/iluminacion/reportes`, `/perfil/tecnicos`, `/perfil/empresas`, `/perfil/instrumentos`). Las rutas TanStack son lazy-load: sus **chunks JS** se cachean bajo demanda (`cacheFirst`) recién al entrar online a la ruta. Si al navegar entre rutas offline falla (chunk sin cachear → `OfflineRouteBlock`), habrá que implementar el **cacheo de los chunks específicos** en el precache del SW (p. ej. precachear los nombres de chunk del build o precache inteligente por manifiesto).
 
+---
+
+## Parte 6 — Visualización offline de PDFs de reportes cacheados
+
+> Estado: **pendiente (sin implementar).** Viabilidad: sí, con matices.
+
+Objetivo: poder ver (con marca de agua) el PDF completo/reducido de un reporte cacheado sin conexión.
+
+### Dependencias ya cubiertas (por Partes 1-4)
+
+- `reporteQueryOptions({ id })` → `reportesRepository.getById()` reconstruye `empresa`/`tecnico`/`instrumento` desde IndexedDB.
+- `areasQueryOptions` y `localizadasQueryOptions` → cache-first (Dexie por `reportId`).
+- Render client-side: `ClientComponent` + `lazy(MyDocument)` (react-pdf). El chunk se cachea al visitar online una vez (compartido para todos los reportes).
+
+### Bloqueos a resolver
+
+- **Fuente Roboto desde CDN** (`src/components/reportes/iluminacion/pdf/my-document.tsx`): `Font.register({ src: "https://cdnjs.cloudflare.com/..." })`. Offline el fetch de la fuente falla y el PDF puede no pintar. → Bundlear la `.ttf` en `public/` y registrar `src` local (`/roboto-regular-webfont.ttf`).
+- **Imágenes externas** del reporte (logo empresa, `matriculaImg`, `firmaImg`, `imagenes` de áreas/localizadas e instrumento): offline no cargan salvo que el SW las tenga cacheadas (`cacheFirst` + `cache.put` solo si se visitaron antes). Evaluar si se precachean/cachean al entrar a un reporte, o se acepta PDF sin imágenes offline.
+- **Unlock = mutación online**: offline solo se puede ver la versión **con marca de agua** (`creditConsumed` falso). Consumir crédito requiere server.
+- **`syncPendingPaymentsServer()`** en `pdf/[$id]/completa.tsx` y `reducida.tsx` (useEffect): es network-only → offline rechaza. Envolver en try/catch (patrón del `beforeLoad` del root).
+
+### Criterio de éxito
+
+- Navegar SPA a `/iluminacion/reportes/$id/pdf/$id/reducida` (o `completa`) con red caída sobre un reporte cacheado → ver el PDF con marca de agua.
+- Los chunks de las rutas PDF y `my-document` ya deben estar cacheados (visitados online antes).
+
 ### Verificación
 
 Online:
