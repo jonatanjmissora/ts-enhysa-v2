@@ -10,6 +10,10 @@ export async function getReportesLocal(userId: string) {
 	return reportes.length > 0 ? reportes : null
 }
 
+export async function getReporteLocal(id: string) {
+	return (await localDb.reportesIluminacion.get(id)) ?? null
+}
+
 export async function saveReportesLocal(reportes: ReporteIluminacionType[]) {
 	await localDb.reportesIluminacion.bulkPut(reportes)
 	return { data: reportes, status: "ok" }

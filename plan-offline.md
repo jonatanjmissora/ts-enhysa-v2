@@ -486,6 +486,7 @@ Queries:
 * `queries/empresas/empresas-query.ts` → solo lectura, sin `create` / `edit` / `delete`; **implementado** vía `empresasRepository.get()`.
 * `queries/instrumentos/instrumentos-query.ts` → solo lectura, sin `create` / `edit` / `delete`; **implementado** vía `instrumentosRepository.get()`.
 * `queries/tecnico/tecnico-query.ts` → solo lectura, sin `create` / `edit` / `delete`; **implementado** vía `tecnicoRepository.get()` (cache-first + guard SSR).
+* `reporteQueryOptions({ id })` → **reporte individual cache-first** (Parte 4): vía `reportesRepository.getById(id)` (Dexie por `id` + reconstruye `empresa`/`tecnico`/`instrumento` desde sus stores locales; en miss server + mirror del reporte base). Permite abrir `general`, `medicion2` y `resumen` offline.
 
 > **Pendiente (test en curso):** el SW precachea solo el **HTML** de las rutas (`/iluminacion`, `/iluminacion/reportes`, `/perfil/tecnicos`, `/perfil/empresas`, `/perfil/instrumentos`). Las rutas TanStack son lazy-load: sus **chunks JS** se cachean bajo demanda (`cacheFirst`) recién al entrar online a la ruta. Si al navegar entre rutas offline falla (chunk sin cachear → `OfflineRouteBlock`), habrá que implementar el **cacheo de los chunks específicos** en el precache del SW (p. ej. precachear los nombres de chunk del build o precache inteligente por manifiesto).
 
@@ -825,10 +826,10 @@ Mutex para evitar sincronizaciones simultáneas.
 
 # 8. Orden de ejecución recomendado
 
-> **Estado:** Fase 0 implementada; Fase 1 parcial (sesión + patrón tecnico cache-first); el arranque offline se hizo en `plan-offline-part2.md` (A2→A7 verificado con la navegación SPA offline). Pendientes: replicar cache-first en las queries de lectura de `empresas` e `instrumentos`, `networkMode` para lecturas, y Fases 2/4/5 (mutaciones).
+> **Estado:** Fase 0 implementada; Fase 1 completa para lectura (cache-first en todas las queries: `tecnico`, `empresas`, `instrumentos`, `reportes` lista + individual, `areas`, `localizadas`); rutas precacheadas en SW (`/iluminacion`, `/iluminacion/reportes`, `/perfil/tecnicos`, `/perfil/empresas`, `/perfil/instrumentos`). Pendientes: `networkMode` para lecturas, y Fases 2/4/5 (mutaciones).
 
 1. **Fase 0** — Service Worker + `offline.html`. ✅ implementada
-2. **Fase 1** — IndexedDB + caches + sesión local. 🟡 parcial (sesión y `tecnico-repository` cache-first listos)
+2. **Fase 1** — IndexedDB + caches + sesión local. ✅ lectura completa implementada
 3. **Fase 3** — Debug route. ⬜ pendiente
 4. **Fase 2** — Create + queue + sync. ⬜ pendiente
 5. **Fase 4** — Delete. ⬜ pendiente

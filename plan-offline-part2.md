@@ -950,6 +950,7 @@ Hoy el alcance offline habilita **solo lectura y creacion**. La edicion (`update
 * `repositories/tecnicos/tecnico-repository.ts`: guard SSR (`typeof window === "undefined"` → server) + `getTecnicoLocal()` primero; en miss `getTecnicoServer()` + `saveTecnicoLocal()` (mirror-write). Evita `MissingAPIError` en `renderToReadableStream`.
 * `repositories/empresas/empresas-repository.ts`, `repositories/instrumentos/instrumentos-repository.ts`, `repositories/reportes/iluminacion/reportes-repository.ts`, `repositories/reportes/iluminacion/areas-repository.ts` y `repositories/reportes/iluminacion/localizadas-repository.ts`: mismo patrón cache-first para lecturas asociadas a `userId`/`reportId`.
 * `indexed-db/database.ts` v5: stores `areasIluminacion` (`id, reportId, userId`) y `localizadasIluminacion` (`id, reportId, userId`).
+* **Reporte individual (Parte 4):** `reportesRepository.getById(id)` — `getReporteLocal(id)` (Dexie por PK) + reconstrucción de `empresa`/`tecnico`/`instrumento` desde sus stores locales vía `empresaId`/`tecnicoId`/`instrumentoId`; en miss `getReporteServer()` + mirror del reporte base (sin relaciones) en `reportesIluminacion`. `reporteQueryOptions({ id })` usa el repo → abre `general`, `medicion2` y `resumen` offline.
 * Politica D1: lecturas cache-first; mutations futuras con mirror-write en `onSuccess`.
 
 ## Pendientes (fuera de este corte)

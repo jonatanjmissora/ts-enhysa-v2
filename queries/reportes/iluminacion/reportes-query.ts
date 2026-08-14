@@ -1,6 +1,5 @@
 import { queryOptions, useQueryClient } from "@tanstack/react-query"
 import { getReporteNuevoServer } from "../../../server/reportes/iluminacion/get-reporte-nuevo-server"
-import { getReporteServer } from "../../../server/reportes/iluminacion/get-reporte-server"
 import type { ReporteIluminacionType } from "../../../db/reportes/iluminacion/schema"
 import { reportesRepository } from "../../../repositories/reportes/iluminacion/reportes-repository"
 
@@ -28,6 +27,6 @@ export const reporteNuevoQueryOptions = (userId: string) => {
 export const reporteQueryOptions = ({ id }: { id: string }) => {
 	return queryOptions({
 		queryKey: ["reporte-iluminacion", id],
-		queryFn: () => getReporteServer({ data: { id } }),
+		queryFn: () => reportesRepository.getById(id),
 	})
 }

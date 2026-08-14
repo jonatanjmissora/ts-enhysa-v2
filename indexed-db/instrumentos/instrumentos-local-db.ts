@@ -9,6 +9,10 @@ export async function getInstrumentosLocal(userId: string) {
 	return instrumentos.length > 0 ? instrumentos : null
 }
 
+export async function getInstrumentoLocal(id: string) {
+	return (await localDb.instrumentos.get(id)) ?? null
+}
+
 export async function saveInstrumentosLocal(instrumentos: InstrumentoType[]) {
 	await localDb.instrumentos.bulkPut(instrumentos)
 	return { data: instrumentos, status: "ok" }

@@ -6,6 +6,10 @@ export async function getEmpresasLocal(userId: string) {
 	return empresas.length > 0 ? empresas : null
 }
 
+export async function getEmpresaLocal(id: string) {
+	return (await localDb.empresas.get(id)) ?? null
+}
+
 export async function saveEmpresasLocal(empresas: EmpresaType[]) {
 	await localDb.empresas.bulkPut(empresas)
 	return { data: empresas, status: "ok" }
