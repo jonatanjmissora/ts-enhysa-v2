@@ -4,10 +4,10 @@ import { Link } from "@tanstack/react-router"
 import { useState } from "react"
 import { Label } from "./ui/label"
 import { Check } from "lucide-react"
-import { authClient } from "#/lib/auth-client"
+import { useOfflineAwareSession } from "#/hooks/use-offline-session"
 
 export default function SuscriptionPlans({ from }: { from?: string }) {
-	const { data: session } = authClient.useSession()
+	const { session } = useOfflineAwareSession()
 	const [actualPlan, setActualPlan] = useState<0 | 1 | 2>(1)
 	const [anual, setAnual] = useState(false)
 
@@ -24,6 +24,7 @@ export default function SuscriptionPlans({ from }: { from?: string }) {
 						actualPlan={actualPlan}
 						setActualPlan={setActualPlan}
 						from={from}
+						session={session}
 					/>
 				))}
 				<CombinedPlan
@@ -79,6 +80,7 @@ interface PlanProps {
 	actualPlan: 0 | 1 | 2
 	setActualPlan: (plan: 0 | 1 | 2) => void
 	from?: string
+	session: { user?: { id: string; email: string; name: string; image?: string | null } } | null
 }
 
 const Plan = ({
@@ -90,8 +92,8 @@ const Plan = ({
 	actualPlan,
 	setActualPlan,
 	from,
+	session,
 }: PlanProps) => {
-	const { data: session } = authClient.useSession()
 	return (
 		<div
 			onClick={() => setActualPlan(index as 0 | 1 | 2)}

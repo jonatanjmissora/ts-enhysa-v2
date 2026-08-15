@@ -1,7 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router"
 import { useState, useEffect } from "react"
 import SuscriptionPlans from "#/components/suscripciones"
-import { authClient } from "#/lib/auth-client"
+import { useOfflineAwareSession } from "#/hooks/use-offline-session"
 
 export const Route = createFileRoute("/_with-header/landing")({
 	component: Landing,
@@ -20,7 +20,7 @@ function Landing() {
 }
 
 function Hero() {
-	const { data: session } = authClient.useSession()
+	const { session } = useOfflineAwareSession()
 	const navigate = useNavigate()
 
 	const scrollToHash = (hash: string) => () => {
