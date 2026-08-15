@@ -8,6 +8,8 @@ const PRECACHE_URLS = [
 	"/logo192.png",
 	"/logo512.png",
 	"/working-on-it.webp",
+	"/completa.webp",
+	"/reducida.webp",
 	"/favicon.ico",
 	"/iluminacion",
 	"/iluminacion/reportes",

@@ -72,7 +72,11 @@ function Empresa() {
 		instrumento: InstrumentoType
 	}
 	return (
-		<span className="text-amber-600">{`${reporteConRelaciones?.empresa.razonSocial.toUpperCase()} - ${reporte?.finishedAt?.toLocaleDateString("it-IT")}`}</span>
+		<span className="text-amber-600">
+			{reporteConRelaciones?.empresa?.razonSocial
+				? `${reporteConRelaciones.empresa.razonSocial.toUpperCase()} - ${reporte?.finishedAt?.toLocaleDateString("it-IT")}`
+				: reporte?.title}
+		</span>
 	)
 }
 
@@ -108,6 +112,19 @@ function PDF() {
 
 	if (!reporte)
 		return <span className="text-red-500">Reporte no encontrado</span>
+
+	if (
+		!reporteConRelaciones.empresa ||
+		!reporteConRelaciones.tecnico ||
+		!reporteConRelaciones.instrumento
+	) {
+		return (
+			<p className="max-w-md text-center text-sm text-foreground-soft">
+				No se pueden generar los datos del informe (empresa, técnico o
+				instrumento) sin conexión. Conectate a internet y volvé a intentar.
+			</p>
+		)
+	}
 
 	return (
 		<ClientComponent
