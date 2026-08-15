@@ -2,14 +2,23 @@ import type { ReporteIluminacionType } from "../../../db/reportes/iluminacion/sc
 import type { EmpresaType } from "../../../db/empresas/schema"
 import type { TecnicoType } from "../../../db/tecnicos/schema"
 import type { InstrumentoType } from "../../../db/instrumentos/schema"
-import { getEmpresaLocal } from "../../../indexed-db/empresas/empresas-local-db"
-import { getInstrumentoLocal } from "../../../indexed-db/instrumentos/instrumentos-local-db"
+import {
+	getEmpresaLocal,
+	saveEmpresasLocal,
+} from "../../../indexed-db/empresas/empresas-local-db"
+import {
+	getInstrumentoLocal,
+	saveInstrumentosLocal,
+} from "../../../indexed-db/instrumentos/instrumentos-local-db"
 import {
 	getReporteLocal,
 	getReportesLocal,
 	saveReportesLocal,
 } from "../../../indexed-db/reportes/iluminacion/reportes-local-db"
-import { getTecnicoByIdLocal } from "../../../indexed-db/tecnicos/tecnico-local-db"
+import {
+	getTecnicoByIdLocal,
+	saveTecnicoLocal,
+} from "../../../indexed-db/tecnicos/tecnico-local-db"
 import { getReporteServer } from "../../../server/reportes/iluminacion/get-reporte-server"
 import { getReportesServer } from "../../../server/reportes/iluminacion/get-reportes-server"
 
@@ -59,11 +68,43 @@ export const reportesRepository = {
 				getTecnicoByIdLocal(reporteL.tecnicoId),
 				getInstrumentoLocal(reporteL.instrumentoId),
 			])
+
+			if (empresa && tecnico && instrumento) {
+				return {
+					...reporteL,
+					empresa,
+					tecnico,
+					instrumento,
+				}
+			}
+
+			// Falta alguna relación en caché: sanar desde el server cuando hay conexión
+			console.warn(
+				"[IndexedDB] Relación faltante en caché, sanando desde server:",
+				{ empresa: !!empresa, tecnico: !!tecnico, instrumento: !!instrumento }
+			)
+			const reporteR = await getReporteServer({ data: { id } })
+
+			if (reporteR) {
+				const {
+					empresa: e,
+					tecnico: t,
+					instrumento: i,
+					...base
+				} = reporteR
+				await saveReportesLocal([base])
+				if (e) await saveEmpresasLocal([e])
+				if (t) await saveTecnicoLocal(t)
+				if (i) await saveInstrumentosLocal([i])
+				return reporteR
+			}
+
+			// Sin conexión: devolver lo que hay (relación puede ser null)
 			return {
 				...reporteL,
-				empresa: empresa ?? null,
-				tecnico: tecnico ?? null,
-				instrumento: instrumento ?? null,
+				empresa,
+				tecnico,
+				instrumento,
 			}
 		}
 
