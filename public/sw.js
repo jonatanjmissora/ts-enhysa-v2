@@ -1,19 +1,17 @@
-const CACHE_STATIC = "app-static-v1"
-const CACHE_PAGES = "app-pages-v1"
+const SW_VERSION = "v2"
+const CACHE_STATIC = `app-static-${SW_VERSION}`
+const CACHE_PAGES = `app-pages-${SW_VERSION}`
 
 const PRECACHE_URLS = [
 	"/",
+	"/landing",
+	"/login",
 	"/offline.html",
 	"/manifest.json",
 	"/logo192.png",
 	"/logo512.png",
 	"/working-on-it.webp",
 	"/favicon.ico",
-	"/iluminacion",
-	"/iluminacion/reportes",
-	"/perfil/tecnicos",
-	"/perfil/empresas",
-	"/perfil/instrumentos",
 ]
 
 self.addEventListener("install", event => {
@@ -21,7 +19,7 @@ self.addEventListener("install", event => {
 		caches
 			.open(CACHE_STATIC)
 			.then(cache => cache.addAll(PRECACHE_URLS))
-			.catch(() => {})
+			.catch(err => console.error("[SW] precache failed", err))
 	)
 	self.skipWaiting()
 })
@@ -31,7 +29,7 @@ self.addEventListener("activate", event => {
 		caches.keys().then(keys =>
 			Promise.all(
 				keys
-					.filter(k => k !== CACHE_STATIC && k !== CACHE_PAGES)
+					.filter(k => !k.startsWith("app-static-") && !k.startsWith("app-pages-"))
 					.map(k => caches.delete(k))
 			)
 		)

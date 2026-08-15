@@ -449,9 +449,28 @@ Estado: **implementada**. Se usa **Dexie** (no `idb`) en `indexed-db/database.ts
 * [x] Navegación → `networkFirstWithOffline`.
 * [x] Mantener `SKIP_WAITING`.
 * [x] Crear `public/offline.html`.
-* [x] Precache `/`, `/offline.html`, `/manifest.json`, logos y favicon.
+* [x] Precache `/`, `/landing`, `/login`, `/offline.html`, `/manifest.json`, logos y favicon.
 * [x] Validar instalación PWA.
 * [x] Probar navegación offline.
+
+## Precache público: `/landing` y `/login`
+
+Se identificó que las rutas públicas `_with-header` (`/landing`, `/login`) **sí se pueden precachear** porque devuelven 200 OK sin sesión. Fueron agregadas a `PRECACHE_URLS` en `public/sw.js` junto con `/` y `/offline.html`.
+
+Rutas protegidas (`/iluminacion`, `/reportes`, `/perfil/*`) **no** se incluyen en precache porque `cache.addAll()` requiere respuestas `ok` y esas rutas devuelven 302/403 cuando no hay sesión. Esas rutas se cachean dinámicamente con `networkFirstWithOffline` una vez que el usuario las visita autenticado.
+
+## Versión de caches
+
+Los nombres de caches en `sw.js` usan un prefijo versionado (`SW_VERSION`):
+
+```text
+app-static-${SW_VERSION}
+app-pages-${SW_VERSION}
+```
+
+Al modificar `SW_VERSION`, el SW crea caches nuevos y el evento `activate` elimina caches viejos automáticamente. Esto evita que el navegador mantenga versiones obsoletas en `waiting` y permite ver la precarga actualizada tras un hard refresh.
+
+El `activate` limpia cualquier cache que no empiece con `app-static-` ni `app-pages-`, cubriendo también versiones previas si se reintrodujera el esquema de nombres antiguo.
 
 ---
 
@@ -852,7 +871,7 @@ Mutex para evitar sincronizaciones simultáneas.
 
 # 8. Orden de ejecución recomendado
 
-> **Estado:** Fase 0 implementada; Fase 1 completa para lectura (cache-first en todas las queries: `tecnico`, `empresas`, `instrumentos`, `reportes` lista + individual, `areas`, `localizadas`); rutas precacheadas en SW (`/iluminacion`, `/iluminacion/reportes`, `/perfil/tecnicos`, `/perfil/empresas`, `/perfil/instrumentos`). Pendientes: `networkMode` para lecturas, y Fases 2/4/5 (mutaciones).
+> **Estado:** Fase 0 implementada; Fase 1 completa para lectura (cache-first en todas las queries: `tecnico`, `empresas`, `instrumentos`, `reportes` lista + individual, `areas`, `localizadas`); rutas precacheadas en SW (`/`, `/landing`, `/login`, `/offline.html`, `/manifest.json`, logos y favicon). Rutas protegidas se cachean dinámicamente al navegar. Pendientes: `networkMode` para lecturas, y Fases 2/4/5 (mutaciones).
 
 1. **Fase 0** — Service Worker + `offline.html`. ✅ implementada
 2. **Fase 1** — IndexedDB + caches + sesión local. ✅ lectura completa implementada
