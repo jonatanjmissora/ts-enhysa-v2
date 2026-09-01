@@ -90,11 +90,11 @@ import { ValorRequeridoField } from "#/components/reportes/iluminacion/valor-req
 import { reporteQueryOptions } from "../../../../../../../../../queries/reportes/iluminacion/reportes-query"
 
 function EditArea({ id, area }: { id: string; area: AreaIluminacionType }) {
-	const { data: reporte } = useSuspenseQuery(reporteQueryOptions({ id }))
+	// const { data: reporte } = useSuspenseQuery(reporteQueryOptions({ id }))
 	const [planoFiles, setPlanoFiles] = useState<string[]>(area.imagenes || [])
 	const navigate = Route.useNavigate()
-	let returnWhere = "medicion"
-	if (reporte?.finishedAt) returnWhere = "medicion2"
+	const returnWhere = "medicion/areas/$areaId/puntos"
+	// if (reporte?.finishedAt) returnWhere = "medicion/areas/$areaId/puntos"
 
 	const { mutateAsync: updateArea, isPending, error } = useUpdateArea()
 
@@ -125,7 +125,7 @@ function EditArea({ id, area }: { id: string; area: AreaIluminacionType }) {
 				console.error("Error al actualizar area", error)
 				return
 			}
-			console.log("Area actualizada exitosamente")
+			console.log("Area actualizada exitosamente", returnWhere)
 			navigate({
 				to: `/iluminacion/reportes/$id/${returnWhere}`,
 				params: {

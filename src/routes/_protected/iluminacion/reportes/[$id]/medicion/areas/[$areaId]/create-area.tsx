@@ -89,8 +89,8 @@ function CreateArea() {
 	// Pass medicionTipo where needed (example: include in navigation or API calls)
 	const { mutateAsync: createArea, isPending, error } = useCreateArea()
 
-	let returnWhere = "medicion/areas/$areaId/puntos"
-	if (reporte?.finishedAt) returnWhere = "medicion2"
+	const returnWhere = "medicion/areas/$areaId/puntos"
+	// if (reporte?.finishedAt) returnWhere = "medicion2"
 
 	const form = useForm({
 		defaultValues: defaultAreaData,
