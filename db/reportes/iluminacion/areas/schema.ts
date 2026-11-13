@@ -4,7 +4,14 @@ import {
 	ILUMINACION_TIPO,
 	VALORES_REQUERIDOS,
 } from "@/lib/constants"
-import { integer, pgTable, text, timestamp, numeric } from "drizzle-orm/pg-core"
+import {
+	integer,
+	pgTable,
+	text,
+	timestamp,
+	numeric,
+	uuid,
+} from "drizzle-orm/pg-core"
 import { user } from "../../../users/schema"
 import { reportes_iluminacion } from "../schema"
 
@@ -49,7 +56,7 @@ export const areas_iluminacion = pgTable("areas_iluminacion", {
 
 	timestamps: timestamp("timestamps").array().notNull(),
 
-	userId: text("userId")
+	userId: uuid("userId")
 		.notNull()
 		.references(() => user.id, { onDelete: "cascade" }),
 })

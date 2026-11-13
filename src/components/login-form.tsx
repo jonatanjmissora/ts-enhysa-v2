@@ -67,21 +67,6 @@ export function LoginForm({
 		},
 	})
 
-	const signIn = async () => {
-		setLoading(true)
-
-		try {
-			await authClient.signIn.social({
-				provider: "google",
-				callbackURL: "/",
-			})
-		} catch (_err) {
-			// error ANTES de redirigir
-			setLoading(false)
-			console.error("No se pudo iniciar sesión con Google")
-		}
-	}
-
 	return (
 		<div className={cn("w-90 relative", className)} {...props}>
 			<div className="w-11/12 mx-auto">
@@ -102,22 +87,6 @@ export function LoginForm({
 						}}
 					>
 						<FieldGroup className="gap-5">
-							<Field>
-								<Button variant="outline" type="button" onClick={signIn}>
-									{loading ? (
-										"Iniciando..."
-									) : (
-										<div className="flex items-center gap-2">
-											<img
-												src="/google-icon-logo.svg"
-												alt="Google"
-												className="h-5"
-											/>{" "}
-											Google
-										</div>
-									)}
-								</Button>
-							</Field>
 							<DemoButton />
 							<FieldSeparator className="hidden sm:block">
 								<span className="text-foreground/75 bg-accent">

@@ -1,5 +1,5 @@
 import { user } from "../users/schema"
-import { pgTable, text, index } from "drizzle-orm/pg-core"
+import { pgTable, text, index, uuid } from "drizzle-orm/pg-core"
 
 export const empresas = pgTable(
 	"empresas",
@@ -22,7 +22,7 @@ export const empresas = pgTable(
 
 		logo: text("logo").notNull(),
 
-		userId: text("userId")
+		userId: uuid("userId")
 			.notNull()
 			.references(() => user.id, { onDelete: "cascade" }),
 	},

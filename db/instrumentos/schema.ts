@@ -1,4 +1,4 @@
-import { pgTable, text, timestamp } from "drizzle-orm/pg-core"
+import { pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core"
 import { user } from "../users/schema"
 
 export const instrumentos = pgTable("instrumentos", {
@@ -18,7 +18,7 @@ export const instrumentos = pgTable("instrumentos", {
 
 	imagenes: text("imagenes").array().notNull(),
 
-	userId: text("userId")
+	userId: uuid("userId")
 		.notNull()
 		.references(() => user.id, { onDelete: "cascade" }),
 })

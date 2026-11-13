@@ -37,7 +37,6 @@ export function RegisterForm({
 	setActiveForm: (form: "login" | "register") => void
 }) {
 	const router = useRouter()
-	const [loading, setLoading] = useState(false)
 	const [showPassword, setShowPassword] = useState(false)
 
 	const form = useForm({
@@ -70,21 +69,6 @@ export function RegisterForm({
 		},
 	})
 
-	const signIn = async () => {
-		setLoading(true)
-
-		try {
-			await authClient.signIn.social({
-				provider: "google",
-				callbackURL: "/",
-			})
-		} catch (_err) {
-			// error ANTES de redirigir
-			setLoading(false)
-			console.error("No se pudo iniciar sesión con Google")
-		}
-	}
-
 	return (
 		<div className={cn("w-90 relative", className)} {...props}>
 			{/*<div className="absolute top-4 left-4 right-4">
@@ -96,7 +80,7 @@ export function RegisterForm({
 						Bienvenido a la app
 					</CardTitle>
 					<CardDescription className="hidden sm:block text-foreground/75">
-						Ingresa con una cuenta de Google
+						Creá tu cuenta
 					</CardDescription>
 				</CardHeader>
 				<CardContent className="p-0 sm:px-4">
@@ -108,22 +92,6 @@ export function RegisterForm({
 						}}
 					>
 						<FieldGroup className="gap-5">
-							<Field>
-								<Button variant="outline" type="button" onClick={signIn}>
-									{loading ? (
-										"Iniciando..."
-									) : (
-										<div className="flex items-center gap-2">
-											<img
-												src="/google-icon-logo.svg"
-												alt="Google"
-												className="h-5"
-											/>{" "}
-											Google
-										</div>
-									)}
-								</Button>
-							</Field>
 							<FieldSeparator className="hidden sm:block">
 								<span className="text-foreground/75 bg-accent">
 									O continua con

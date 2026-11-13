@@ -1,9 +1,9 @@
-import { pgTable, text, timestamp } from "drizzle-orm/pg-core"
+import { pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core"
 import { user } from "../users/schema"
 
 export const pendingPayments = pgTable("pending_payments", {
 	preferenceId: text("preference_id").primaryKey(),
-	userId: text("user_id")
+	userId: uuid("user_id")
 		.notNull()
 		.references(() => user.id, { onDelete: "cascade" }),
 	planId: text("plan_id").notNull(),

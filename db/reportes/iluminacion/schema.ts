@@ -1,4 +1,4 @@
-import { pgTable, text, timestamp, boolean } from "drizzle-orm/pg-core"
+import { pgTable, text, timestamp, boolean, uuid } from "drizzle-orm/pg-core"
 import { user } from "../../users/schema"
 import { tecnicos } from "../../tecnicos/schema"
 import { empresas } from "../../empresas/schema"
@@ -33,7 +33,7 @@ export const reportes_iluminacion = pgTable("reportes_iluminacion", {
 
 	recomendacion: text("recomendacion").default("").notNull(),
 
-	userId: text("user_id")
+	userId: uuid("user_id")
 		.notNull()
 		.references(() => user.id, { onDelete: "cascade" }),
 

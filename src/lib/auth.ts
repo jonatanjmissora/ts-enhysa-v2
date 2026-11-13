@@ -1,9 +1,11 @@
 import { betterAuth } from "better-auth"
 import { tanstackStartCookies } from "better-auth/tanstack-start"
+import { bearer } from "better-auth/plugins"
 import { drizzleAdapter } from "better-auth/adapters/drizzle"
 import { drizzle } from "drizzle-orm/node-postgres"
 import pg from "pg"
 import * as schema from "../../db/schema"
+import { verifyPasswordCompat } from "./password-compat"
 
 // Get base URL from environment variables
 const baseURL = process.env.BETTER_AUTH_BASE_URL
@@ -15,29 +17,33 @@ interface AuthOptions {
 	baseURL?: string
 	emailAndPassword: {
 		enabled: boolean
+		password?: {
+			verify: (data: { hash: string; password: string }) => Promise<boolean>
+		}
+	}
+	advanced?: {
+		database?: {
+			generateId?: "uuid"
+		}
 	}
 	plugins: any[]
 	database?: any
-	socialProviders?: {
-		google: {
-			clientId: string
-			clientSecret: string
-		}
-	}
 }
 
 const authOptions: AuthOptions = {
 	baseURL,
-	socialProviders: {
-		google: {
-			clientId: process.env.GOOGLE_CLIENT_ID as string,
-			clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
-		},
-	},
 	emailAndPassword: {
 		enabled: true,
+		password: {
+			verify: verifyPasswordCompat,
+		},
 	},
-	plugins: [tanstackStartCookies()],
+	advanced: {
+		database: {
+			generateId: "uuid",
+		},
+	},
+	plugins: [tanstackStartCookies(), bearer()],
 }
 
 // Only add database configuration if DATABASE_URL is available
@@ -45,7 +51,11 @@ if (databaseUrl) {
 	try {
 		const pool = new pg.Pool({
 			connectionString: databaseUrl,
-			ssl: databaseUrl.includes("sslmode=require") || databaseUrl.includes("sslmode=verify-full") ? { rejectUnauthorized: false } : false,
+			ssl:
+				databaseUrl.includes("sslmode=require") ||
+				databaseUrl.includes("sslmode=verify-full")
+					? { rejectUnauthorized: false }
+					: false,
 		})
 		const db = drizzle(pool, { schema })
 
@@ -74,4 +84,3 @@ if (databaseUrl) {
 }
 
 export const auth = betterAuth(authOptions)
-
