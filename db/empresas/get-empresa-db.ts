@@ -1,6 +1,6 @@
 import { delay } from "@/lib/utils"
 import { db } from ".."
-import { eq, and } from "drizzle-orm"
+import { eq, and, isNull } from "drizzle-orm"
 import { empresas } from "./schema"
 
 export async function getEmpresaDB(id: string, userId: string) {
@@ -9,7 +9,13 @@ export async function getEmpresaDB(id: string, userId: string) {
 		return await db
 			.select()
 			.from(empresas)
-			.where(and(eq(empresas.id, id), eq(empresas.userId, userId)))
+			.where(
+				and(
+					eq(empresas.id, id),
+					eq(empresas.userId, userId),
+					isNull(empresas.deletedAt)
+				)
+			)
 			.limit(1)
 			.then(rows => rows[0] ?? null)
 	} catch (error) {

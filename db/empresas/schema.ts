@@ -1,14 +1,14 @@
 import { user } from "../users/schema"
-import { pgTable, text, index, uuid } from "drizzle-orm/pg-core"
+import { pgTable, text, index, uuid, timestamp } from "drizzle-orm/pg-core"
 
 export const empresas = pgTable(
-	"empresas",
+	"expo_empresas",
 	{
 		id: text("id").primaryKey(),
 
 		cuit: text("cuit").notNull(),
 
-		razonSocial: text("razonSocial").notNull(),
+		razonSocial: text("razon_social").notNull(),
 
 		direccion: text("direccion").notNull(),
 
@@ -16,19 +16,24 @@ export const empresas = pgTable(
 
 		provincia: text("provincia").notNull(),
 
-		codigoPostal: text("codigoPostal").notNull(),
+		codigoPostal: text("codigo_postal").notNull(),
 
 		horarios: text("horarios").notNull(),
 
 		logo: text("logo").notNull(),
 
-		userId: uuid("userId")
+		deletedAt: timestamp("deleted_at"),
+
+		updatedAt: timestamp("updated_at")
+			.defaultNow()
+			.$onUpdate(() => /* @__PURE__ */ new Date())
+			.notNull(),
+
+		userId: uuid("user_id")
 			.notNull()
 			.references(() => user.id, { onDelete: "cascade" }),
 	},
-	table => ({
-		userIdx: index("items_user_idx").on(table.userId, table.userId),
-	})
+	table => [index("idx_expo_empresas_user").on(table.userId)]
 )
 
 export type EmpresaType = typeof empresas.$inferSelect

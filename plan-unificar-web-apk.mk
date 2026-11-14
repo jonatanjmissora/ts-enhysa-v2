@@ -1,5 +1,11 @@
 # Plan de unificación web + APK
 
+## Nomenclatura
+
+- **web** = `ts-enhysa-v2`
+- **apk** = `expo-enhysa`
+- **backend** = `expo-enhysa-backend`
+
 > Estado: **Etapa 1 ejecutada en base**. Falta deploy de web + backend y pruebas de login. Etapas 2–5 propuestas.
 > Base de datos única: Neon `ep-crimson-flower-acxbl088` / `neondb`.
 > Decisión confirmada: **Better Auth en ambas apps** (la APK se adapta vía backend proxy).
@@ -22,8 +28,10 @@
   - Tablas viejas eliminadas: `"user"`, `account`, `session`, `verification`, `user_credits`, `expo_password_reset_tokens`, `_unify_map`.
 - [x] Código web actualizado: Better Auth sobre tablas `expo_*`, `bearer()`, `generateId: "uuid"`, sin Google, verificación compatible con hashes de la APK, demo adaptado.
 - [x] Código backend APK actualizado: login/register/me/logout proxy a Better Auth; `getSessionUser` valida contra la web; reset deshabilitado; `ensureSchema` ya no crea tablas de identidad.
-- [ ] Deploy de código web + backend APK.
-- [ ] Pruebas de login web/APK y Expo Go.
+- [x] Deploy de código web + backend APK.
+- [x] Pruebas de login web/APK y Expo Go: mismo `user.id` y restore completo de datos.
+- [x] Fix de routing del catch-all `api/auth/[...action].ts` (Vercel no poblaba `req.query.action`).
+- [x] Logs temporales de debug eliminados.
 
 ## Uso de branches
 
@@ -383,13 +391,20 @@ for (const [email, userId] of [
 - [x] Los 2 testers tienen cuenta `credential` en `expo_accounts`.
 - [x] Tablas viejas eliminadas y filas de negocio repuntadas.
 - [x] `expo_user_credits` fusionado por `max`.
-- [ ] Web: login con email/contraseña de ambos testers.
-- [ ] Web: `getSession().user.id` devuelve el UUID de `expo_users`.
-- [ ] APK: login por el backend proxy; `me` devuelve el mismo UUID.
+- [x] Web: login con email/contraseña de ambos testers.
+- [x] Web: `getSession().user.id` devuelve el UUID de `expo_users`.
+- [x] APK/Expo Go: login por el backend proxy; `me` devuelve el mismo UUID.
+- [x] APK/Expo Go: restore completo de datos de la nube.
 - [ ] APK: logout y re-login.
 - [ ] Demo: se crea y loguea en web; el APK lo rechaza.
 - [ ] Google: botón eliminado y login por Google deshabilitado.
 - [ ] No quedan filas huérfanas en tablas de negocio.
+
+## Pendientes menores detectados
+
+- `password/forgot` y `password/reset` tienen dos segmentos y el catch-all de Vercel solo matchea uno; hoy devuelven 404 de Vercel. Están deshabilitados en Etapa 1.
+- Al reimplementar el reset con Better Auth, usar rutas de un solo segmento o funciones separadas.
+- Al resetear contraseña habrá que actualizar el hash local de la app para que el login offline siga funcionando con la nueva contraseña.
 
 ## 1.13 Pruebas con Expo Go
 
@@ -468,11 +483,40 @@ Notas:
 # Decisiones resueltas
 
 - Créditos: **max**.
-- Contraseña de testers: **se mantiene la de la APK**.
-- Alcance Etapa 1: **solo usuarios, cuentas, sesiones y créditos**. Tablas de negocio solo se repuntan, sin cambiar esquema.
+- Contraseña de testers: **se mantiene la de la APK** y se validó el login web/APK.
+- Alcance Etapa 1: **usuarios, cuentas, sesiones y créditos**. Tablas de negocio solo se repuntaron; la migración a `expo_*` queda para Etapas 3 y 4.
 - Branch de trabajo: **production**. El branch nuevo es solo backup.
+- Cutover de Etapa 1 ejecutado y probado.
+
+# Incidente de imágenes (UploadThing)
+
+- Causa: el soft delete en `api/sync/[entity].ts` borraba el binario remoto inmediatamente (`utapi.deleteFiles`).
+- Fix aplicado: el binario ya **no** se borra en soft delete; se borra recién en el purge real de tombstones (30 días).
+- Nuevo endpoint `GET /images-health` (protegido con `API_TOKEN`):
+  - Sin `?fix=1`: reporta imágenes cuyo binario da 404.
+  - Con `?fix=1`: marca `deleted_at` y limpia referencias en `expo_tecnicos`, `expo_empresas`, `expo_instrumentos`, `expo_areas_iluminacion` y `expo_localizadas_iluminacion`.
+- Escaneo actual: 38 imágenes no eliminadas, **34 con binario 404**. El dataset web conserva sus URLs (200); las perdidas son del dataset APK.
+- No se ejecutó `?fix=1`: si algún dispositivo todavía tiene los archivos locales, conviene re-subirlos antes de limpiar referencias.
+- APK: `components/ImageViewer.tsx` ahora muestra un placeholder (**"Archivo no disponible"**) cuando el archivo local no existe/está vacío o cuando la URL remota falla. Aplica a técnico, empresa, instrumentos, áreas y localizadas porque todos usan `ImageViewer`.
+
+# Etapa 3 (empresas) — avance
+
+- [x] Filas web insertadas en `expo_empresas` (1 fila: Ragazzi) sin colisiones de `id`.
+- [x] `expo_empresas` quedó con 3 filas: Edioff, Ragazzi (jonatan) y CGPBB (martin).
+- [x] `logo`: la fila web conserva la URL de UploadThing. La APK acepta URL o `imageId` en ese campo.
+- [x] Drizzle web (`db/empresas/schema.ts`) apunta a `expo_empresas`, con `deleted_at` y `updated_at`.
+- [x] Listados (`getEmpresasDB`) y detalle (`getEmpresaDB`) filtran `deleted_at IS NULL`.
+- [x] `createEmpresaDB` inserta `updated_at`/`deleted_at`; `useUpdateEmpresa` acepta `UpdateEmpresaType`.
+- [x] FK de `reportes_iluminacion.empresa_id` cambiada de `empresas` a `expo_empresas`.
+- [x] Verificado: 0 reportes web sin empresa en `expo_empresas`; los 2 reportes de Ragazzi resuelven bien.
+- [x] `pnpm build` de web pasa.
+- [ ] Deploy de web y verificación de PDFs de Ragazzi.
+- [ ] Eliminar la tabla `empresas` (solo después del deploy y verificación).
+- Nota: `deleteEmpresaDB` sigue haciendo hard delete (comportamiento actual). Alinear a soft delete queda para una etapa posterior.
 
 # Pendiente
 
-1. Confirmación explícita para el cutover destructivo de Etapa 1 (recrear `expo_sessions`, repuntar filas, borrar usuarios, retirar tablas web viejas).
-2. Pasar las contraseñas de los 2 testers por variables de entorno locales al ejecutar el script (no por chat).
+1. Decidir si se corre `/images-health?fix=1` o si se re-suben primero las imágenes desde un dispositivo.
+2. `password/forgot` y `password/reset` siguen deshabilitados; sus rutas de dos segmentos dan 404 de Vercel.
+3. Deploy de web para empresas y, luego, drop de `empresas`.
+4. Etapas 2 y 4–5.

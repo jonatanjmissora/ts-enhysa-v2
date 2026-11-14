@@ -75,7 +75,18 @@ export function EditEmpresaForm({
 	} = useUpdateEmpresa()
 
 	const form = useForm({
-		defaultValues: { ...empresa },
+		defaultValues: {
+			cuit: empresa.cuit,
+			razonSocial: empresa.razonSocial,
+			direccion: empresa.direccion,
+			localidad: empresa.localidad,
+			provincia: empresa.provincia,
+			codigoPostal: empresa.codigoPostal,
+			horarios: empresa.horarios,
+			logo: empresa.logo,
+			id: empresa.id,
+			userId: empresa.userId,
+		},
 		validators: {
 			onSubmit: updateEmpresaValidator,
 		},
