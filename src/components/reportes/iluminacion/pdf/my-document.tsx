@@ -31,10 +31,31 @@ import type { LocalizadaIluminacionType } from "../../../../../db/reportes/ilumi
 import { useUnlockReporte } from "../../../../../queries/reportes/iluminacion/use-unlock-reporte"
 import { authClient } from "#/lib/auth-client"
 import { isDemoUserEmail } from "@/lib/demo-user"
+import { usePdfImages, type PdfImageData } from "../../../../lib/pdf-images"
 
 type ReactPdfComponents = Pick<typeof import("react-pdf"), "Document" | "Page">
 
-export function MyDocument({
+type MyDocumentProps = PdfImageData & {
+	reporte: ReporteIluminacionType
+	credits: number | undefined
+}
+
+export function MyDocument(props: MyDocumentProps) {
+	const normalized = usePdfImages(props)
+
+	if (!normalized) {
+		return (
+			<Loading
+				text="generando pdf..."
+				className="scale-50 justify-start  max-h-[50svh]"
+			/>
+		)
+	}
+
+	return <MyDocumentReady {...props} {...normalized} />
+}
+
+function MyDocumentReady({
 	reporte,
 	localizadas,
 	areas,
@@ -42,15 +63,7 @@ export function MyDocument({
 	empresa,
 	instrumento,
 	credits,
-}: {
-	reporte: ReporteIluminacionType
-	localizadas: LocalizadaIluminacionType[]
-	areas: AreaIluminacionType[]
-	tecnico: TecnicoType
-	empresa: EmpresaType
-	instrumento: InstrumentoType
-	credits: number | undefined
-}) {
+}: MyDocumentProps) {
 	const showWatermark = !reporte.creditConsumed
 	const unlockMutation = useUnlockReporte()
 	const { data: session } = authClient.useSession()
