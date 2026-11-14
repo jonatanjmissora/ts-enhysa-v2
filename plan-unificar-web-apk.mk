@@ -513,6 +513,8 @@ Notas:
 - [x] Soft delete en web: `deleteEmpresaDB` setea `deleted_at`/`updated_at` (ya no borra la fila). `getEmpresasDB`/`getEmpresaDB` filtran activas y `updateEmpresaDB` rechaza eliminadas. La APK recibe el tombstone por sync.
 - [x] Imagen rota en web: componente `ImageWithFallback` con placeholder **"Archivo no disponible"**. Aplicado a empresas, técnicos, instrumentos, áreas/localizadas y al resumen de informe.
 - [x] Rotación EXIF en PDF web: `src/lib/pdf-images.ts` normaliza las imágenes por canvas antes de `usePDF` (bakea orientación EXIF y las pasa como data URL), aplicado en `my-document.tsx` y `my-document-reducida.tsx`.
+- [x] Normalización en la **subida web**: `src/lib/normalize-image-file.ts` + `onBeforeUploadBegin` en `upload-button.tsx`. Ahora las imágenes nuevas de web se orientan, redimensionan (máx. 3000 px) y re-encodean a JPEG antes de UploadThing, igual que la APK.
+- [ ] Las imágenes web ya subidas antes de este cambio conservan EXIF; el normalizador del PDF las cubre. Migrarlas o re-subirlas cuando se pueda.
 - [ ] Deploy de web y verificación de PDFs de Ragazzi.
 - [ ] Eliminar la tabla `empresas` (solo después del deploy y verificación).
 - Nota: los PDFs siguen obteniendo la empresa por relación (`getReporteDB`), así que un soft delete no rompe el PDF de un informe histórico. En la UI, un selector puede no mostrar la empresa eliminada.

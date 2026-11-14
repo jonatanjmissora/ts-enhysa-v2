@@ -3,6 +3,7 @@ import { UploadDropzone } from "@uploadthing/react"
 import type { OurFileRouter, OurFilesRouter } from "../../server/uploadthing"
 import { CloudUpload, X } from "lucide-react"
 import { deleteUploadthingFile } from "../../server/upload-file-delete"
+import { normalizeImageFiles } from "#/lib/normalize-image-file"
 
 interface FileDropzoneProps {
 	text?: string
@@ -85,8 +86,8 @@ export function FileDropzone({
 								return "Cargando..."
 							},
 						}}
-						onBeforeUploadBegin={files => {
-							return files.filter(file => {
+						onBeforeUploadBegin={async files => {
+							const allowed = files.filter(file => {
 								const extension = file.name.split(".").pop()?.toLowerCase()
 								const isAllowed = ["jpg", "jpeg", "png"].includes(
 									extension || ""
@@ -98,6 +99,7 @@ export function FileDropzone({
 								}
 								return isAllowed
 							})
+							return await normalizeImageFiles(allowed)
 						}}
 						onClientUploadComplete={res => {
 							setError("")
@@ -281,18 +283,19 @@ export function ImageUploader({ onUploaded }: FilesDropzoneProps) {
 		<div className="flex flex-col items-center gap-6 w-full">
 			<UploadDropzone<OurFilesRouter, "mixedUploader">
 				endpoint="mixedUploader"
-				onBeforeUploadBegin={files => {
-					return files.filter(file => {
-						const extension = file.name.split(".").pop()?.toLowerCase()
-						const isAllowed = ["jpg", "jpeg", "png"].includes(extension || "")
-						if (!isAllowed) {
-							alert(
-								"No es una extension valida. Solo se permiten archivos jpg, jpeg y png"
-							)
-						}
-						return isAllowed
-					})
-				}}
+					onBeforeUploadBegin={async files => {
+						const allowed = files.filter(file => {
+							const extension = file.name.split(".").pop()?.toLowerCase()
+							const isAllowed = ["jpg", "jpeg", "png"].includes(extension || "")
+							if (!isAllowed) {
+								alert(
+									"No es una extension valida. Solo se permiten archivos jpg, jpeg y png"
+								)
+							}
+							return isAllowed
+						})
+						return await normalizeImageFiles(allowed)
+					}}
 				onClientUploadComplete={res => {
 					if (res) {
 						const urls = res.map(file => ({
