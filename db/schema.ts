@@ -1,6 +1,9 @@
 // Users / Better Auth
 export * from "./users/schema"
 
+// Images (UploadThing registry)
+export * from "./images/schema"
+
 // Tecnicos
 export * from "./tecnicos/schema"
 

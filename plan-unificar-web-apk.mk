@@ -515,13 +515,37 @@ Notas:
 - [x] Rotación EXIF en PDF web: `src/lib/pdf-images.ts` normaliza las imágenes por canvas antes de `usePDF` (bakea orientación EXIF y las pasa como data URL), aplicado en `my-document.tsx` y `my-document-reducida.tsx`.
 - [x] Normalización en la **subida web**: `src/lib/normalize-image-file.ts` + `onBeforeUploadBegin` en `upload-button.tsx`. Ahora las imágenes nuevas de web se orientan, redimensionan (máx. 3000 px) y re-encodean a JPEG antes de UploadThing, igual que la APK.
 - [ ] Las imágenes web ya subidas antes de este cambio conservan EXIF; el normalizador del PDF las cubre. Migrarlas o re-subirlas cuando se pueda.
+- [x] Web ahora comparte el modelo de imágenes de la APK:
+  - `db/images/schema.ts` (`expo_images`) + server functions `create/get/delete`.
+  - Al subir desde web se crea la fila en `expo_images` y las entidades guardan el **imageId**.
+  - `ImageWithFallback` resuelve **URL o imageId** para mostrar (incluye el logo subido desde APK).
+  - `pdf-images.ts` resuelve `imageId → remote_url` antes de normalizar el PDF.
+  - `width/height` de las imágenes web se completan para que el restore de la APK no falle por `NOT NULL`.
+  - Los valores legacy que siguen siendo URL se siguen mostrando/guardando igual.
+- [ ] Migrar los imageId/URL legacy de web a `expo_images` (opcional; se pueden re-subir).
 - [ ] Deploy de web y verificación de PDFs de Ragazzi.
 - [ ] Eliminar la tabla `empresas` (solo después del deploy y verificación).
 - Nota: los PDFs siguen obteniendo la empresa por relación (`getReporteDB`), así que un soft delete no rompe el PDF de un informe histórico. En la UI, un selector puede no mostrar la empresa eliminada.
+
+# Etapa 3 (instrumentos) — avance
+
+- [x] Fila web insertada en `expo_instrumentos` (Luxometro). `expo_instrumentos` quedó con 3 filas.
+- [x] Conversión de tipos: `fecha_calibracion` timestamp → texto ISO; `imagen_calibracion`/`imagenes` text[] → JSON text.
+- [x] Drizzle web (`db/instrumentos/schema.ts`) apunta a `expo_instrumentos`:
+  - `fechaCalibracion` con `customType` que mapea texto ISO ↔ `Date` (evita el `+0000` de `timestamp`).
+  - `imagenesCalibracion`/`imagenes` con `json().$type<string[]>()`.
+  - `deleted_at`/`updated_at`.
+- [x] Listados/detalle filtran `deleted_at IS NULL`; `create` setea `updated_at`/`deleted_at`; `delete` es soft delete; `update` rechaza eliminados.
+- [x] FK de `reportes_iluminacion.instrumento_id` cambiada a `expo_instrumentos`.
+- [x] Verificado: 0 reportes sin instrumento en `expo_instrumentos`.
+- [x] `pnpm build` de web pasa.
+- [ ] Deploy de web y verificación de PDFs de Luxometro.
+- [ ] Eliminar la tabla `instrumentos` (solo después del deploy y verificación).
+- Nota: las imágenes de instrumentos creados en APK se guardan como `imageId`; la web las muestra con el placeholder "Archivo no disponible" hasta resolver el id contra `expo_images` (o hasta re-subirlas como URL).
 
 # Pendiente
 
 1. Decidir si se corre `/images-health?fix=1` o si se re-suben primero las imágenes desde un dispositivo.
 2. `password/forgot` y `password/reset` siguen deshabilitados; sus rutas de dos segmentos dan 404 de Vercel.
-3. Deploy de web para empresas y, luego, drop de `empresas`.
+3. Deploy de web para empresas/instrumentos y, luego, drop de `empresas` e `instrumentos`.
 4. Etapas 2 y 4–5.

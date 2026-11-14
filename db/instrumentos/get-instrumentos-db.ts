@@ -1,6 +1,6 @@
 import { db } from ".."
 import { instrumentos } from "./schema"
-import { eq, asc } from "drizzle-orm"
+import { and, eq, asc, isNull } from "drizzle-orm"
 import { delay } from "@/lib/utils"
 
 export async function getInstrumentosDB(userId: string) {
@@ -9,7 +9,7 @@ export async function getInstrumentosDB(userId: string) {
 		return await db
 			.select()
 			.from(instrumentos)
-			.where(eq(instrumentos.userId, userId))
+			.where(and(eq(instrumentos.userId, userId), isNull(instrumentos.deletedAt)))
 			.orderBy(asc(instrumentos.nombre))
 	} catch (error) {
 		console.error(

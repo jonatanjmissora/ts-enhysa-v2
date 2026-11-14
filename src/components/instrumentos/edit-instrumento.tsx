@@ -90,7 +90,17 @@ export function EditInstrumentoForm({
 	} = useUpdateInstrumento()
 
 	const form = useForm({
-		defaultValues: { ...instrumento },
+		defaultValues: {
+			nombre: instrumento.nombre,
+			marca: instrumento.marca,
+			modelo: instrumento.modelo,
+			serie: instrumento.serie,
+			fechaCalibracion: instrumento.fechaCalibracion,
+			imagenesCalibracion: instrumento.imagenesCalibracion,
+			imagenes: instrumento.imagenes,
+			id: instrumento.id,
+			userId: instrumento.userId,
+		},
 		validators: {
 			onSubmit: updateInstrumentoValidator,
 		},

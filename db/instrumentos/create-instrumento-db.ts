@@ -1,11 +1,21 @@
 import { delay } from "@/lib/utils"
 import { db } from ".."
-import { instrumentos, type InstrumentoType } from "./schema"
+import type { InstrumentoFormType } from "./instrumento-validator"
+import { instrumentos } from "./schema"
 
-export async function createInstrumentoDB(newInstrumento: InstrumentoType) {
+export async function createInstrumentoDB(
+	newInstrumento: InstrumentoFormType & { id: string; userId: string }
+) {
 	try {
 		await delay()
-		return await db.insert(instrumentos).values(newInstrumento).returning()
+		return await db
+			.insert(instrumentos)
+			.values({
+				...newInstrumento,
+				deletedAt: null,
+				updatedAt: new Date(),
+			})
+			.returning()
 	} catch (error) {
 		console.error(
 			"ERROR insertando instrumental:",

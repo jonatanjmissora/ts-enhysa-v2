@@ -3,7 +3,69 @@ import { UploadDropzone } from "@uploadthing/react"
 import type { OurFileRouter, OurFilesRouter } from "../../server/uploadthing"
 import { CloudUpload, X } from "lucide-react"
 import { deleteUploadthingFile } from "../../server/upload-file-delete"
-import { normalizeImageFiles } from "#/lib/normalize-image-file"
+import { createImageServer } from "../../server/images/create-image-server"
+import { deleteImageServer } from "../../server/images/delete-image-server"
+import {
+	getNormalizedImageDimensions,
+	normalizeImageFiles,
+} from "#/lib/normalize-image-file"
+import { isImageId } from "#/lib/image-value"
+import { ImageWithFallback } from "./ui/image-with-fallback"
+
+type UploadedFile = {
+	key: string
+	ufsUrl: string
+	name: string
+	size: number
+	type: string
+}
+
+function loadRemoteImageDimensions(
+	url: string
+): Promise<{ width: number; height: number }> {
+	return new Promise(resolve => {
+		const image = new Image()
+		image.crossOrigin = "anonymous"
+		image.onload = () =>
+			resolve({ width: image.naturalWidth, height: image.naturalHeight })
+		image.onerror = () => resolve({ width: 0, height: 0 })
+		image.src = url
+	})
+}
+
+async function registerUploadedImage(file: UploadedFile): Promise<string> {
+	try {
+		const dimensions =
+			getNormalizedImageDimensions(file.name) ??
+			(await loadRemoteImageDimensions(file.ufsUrl))
+
+		const result = await createImageServer({
+			data: {
+				key: file.key,
+				url: file.ufsUrl,
+				name: file.name,
+				mimeType: file.type,
+				size: file.size,
+				width: dimensions.width,
+				height: dimensions.height,
+			},
+		})
+		return result.id
+	} catch (error) {
+		console.error("[upload] no se pudo registrar la imagen:", error)
+		return file.ufsUrl
+	}
+}
+
+async function removeImageValue(value: string): Promise<void> {
+	if (isImageId(value)) {
+		await deleteImageServer({ data: { id: value } })
+		return
+	}
+
+	const fileKey = value.split("/").pop()
+	if (fileKey) await deleteUploadthingFile({ data: { fileKey } })
+}
 
 interface FileDropzoneProps {
 	text?: string
@@ -26,11 +88,10 @@ export function FileDropzone({
 	const [error, setError] = useState<string>("")
 
 	const deleteImage = async () => {
-		const fileKey = file.split("/").pop()
-		if (!fileKey) return
-		const res = await deleteUploadthingFile({ data: { fileKey } })
-		if (!res.success) {
-			console.log("Error al eliminar archivo")
+		try {
+			await removeImageValue(file)
+		} catch (error) {
+			console.error("Error al eliminar archivo", error)
 			alert("Error al eliminar archivo")
 			return
 		}
@@ -53,7 +114,7 @@ export function FileDropzone({
 							</a>
 						) : (
 							<>
-								<img
+								<ImageWithFallback
 									src={file}
 									alt=""
 									className="object-contain w-full h-full border border-foreground/10"
@@ -101,13 +162,13 @@ export function FileDropzone({
 							})
 							return await normalizeImageFiles(allowed)
 						}}
-						onClientUploadComplete={res => {
+						onClientUploadComplete={async res => {
 							setError("")
-							if (res) {
-								const url = res[0]?.ufsUrl
-								if (url) setFile(url)
-								if (onUploaded) onUploaded(url)
-							}
+							const uploaded = res?.[0]
+							if (!uploaded) return
+							const value = await registerUploadedImage(uploaded)
+							setFile(value)
+							if (onUploaded) onUploaded(value)
 						}}
 						onUploadError={error => {
 							if (error.message === "Invalid config: FileSizeMismatch")
@@ -140,11 +201,10 @@ export function FilesDropzone({
 	const [error, setError] = useState<string>("")
 
 	const deleteImage = async (file: string) => {
-		const fileKey = file.split("/").pop()
-		if (!fileKey) return
-		const res = await deleteUploadthingFile({ data: { fileKey } })
-		if (!res.success) {
-			console.log("Error al eliminar archivo")
+		try {
+			await removeImageValue(file)
+		} catch (error) {
+			console.error("Error al eliminar archivo", error)
 			alert("Error al eliminar archivo")
 			return
 		}
@@ -188,16 +248,17 @@ export function FilesDropzone({
 								return isAllowed
 							})
 						}}
-						onClientUploadComplete={res => {
+						onClientUploadComplete={async res => {
 							setError("")
-							if (res) {
-								const urls = res.map(x => x.ufsUrl)
-								setFiles(prev => {
-									const newFiles = [...prev, ...urls]
-									if (onUploaded) onUploaded(newFiles)
-									return newFiles
-								})
-							}
+							if (!res) return
+							const values = await Promise.all(
+								res.map(uploaded => registerUploadedImage(uploaded))
+							)
+							setFiles(prev => {
+								const newFiles = [...prev, ...values]
+								if (onUploaded) onUploaded(newFiles)
+								return newFiles
+							})
 						}}
 						onUploadError={error => {
 							if (error.message === "Invalid config: FileSizeMismatch")
@@ -255,7 +316,7 @@ function FilesPreview({
 
 					return (
 						<div className="relative w-full h-20 " key={url}>
-							<img
+							<ImageWithFallback
 								src={url}
 								alt=""
 								className="h-full w-full object-contain rounded border border-foreground/10"
@@ -277,7 +338,7 @@ function FilesPreview({
 }
 
 export function ImageUploader({ onUploaded }: FilesDropzoneProps) {
-	const [images, setImages] = useState<{ url: string; name: string }[]>([])
+	const [images, setImages] = useState<{ value: string; name: string }[]>([])
 
 	return (
 		<div className="flex flex-col items-center gap-6 w-full">
@@ -296,15 +357,16 @@ export function ImageUploader({ onUploaded }: FilesDropzoneProps) {
 						})
 						return await normalizeImageFiles(allowed)
 					}}
-				onClientUploadComplete={res => {
-					if (res) {
-						const urls = res.map(file => ({
-							url: file.ufsUrl,
+				onClientUploadComplete={async res => {
+					if (!res) return
+					const values = await Promise.all(
+						res.map(async file => ({
+							value: await registerUploadedImage(file),
 							name: file.name,
 						}))
-						setImages(prev => [...prev, ...urls])
-						if (onUploaded) onUploaded(urls.map(u => u.url))
-					}
+					)
+					setImages(prev => [...prev, ...values])
+					if (onUploaded) onUploaded(values.map(item => item.value))
 				}}
 				onUploadError={error => {
 					alert(error.message)
@@ -323,7 +385,7 @@ export function ImageUploader({ onUploaded }: FilesDropzoneProps) {
 function ImagesPreview2({
 	images,
 }: {
-	images: { url: string; name: string }[]
+	images: { value: string; name: string }[]
 }) {
 	return (
 		<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 w-full">
@@ -332,8 +394,8 @@ function ImagesPreview2({
 					key={i}
 					className="relative aspect-square rounded-xl overflow-hidden border border-foreground/10 group hover:scale-[1.02] transition-all duration-300"
 				>
-					<img
-						src={img.url}
+					<ImageWithFallback
+						src={img.value}
 						alt={img.name}
 						className="w-full h-full object-cover"
 					/>

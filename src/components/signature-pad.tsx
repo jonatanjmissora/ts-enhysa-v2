@@ -3,13 +3,15 @@ import { generateReactHelpers } from "@uploadthing/react"
 import type { OurFileRouter } from "../../server/uploadthing"
 import { Eraser, Check, Loader, Pen, Upload, X } from "lucide-react"
 import { FileDropzone } from "./upload-button"
+import { ImageWithFallback } from "@/components/ui/image-with-fallback"
+import { createImageServer } from "../../server/images/create-image-server"
 import { Button } from "@/components/ui/button"
 
 const { useUploadThing } = generateReactHelpers<OurFileRouter>()
 
 interface SignaturePadProps {
 	defaultValue?: string
-	onUploaded?: (url: string) => void
+	onUploaded?: (value: string) => void
 }
 
 export function SignaturePad({ defaultValue, onUploaded }: SignaturePadProps) {
@@ -17,9 +19,9 @@ export function SignaturePad({ defaultValue, onUploaded }: SignaturePadProps) {
 	const [mode, setMode] = useState<"draw" | "upload" | null>("upload")
 
 	const handleChange = useCallback(
-		(url: string) => {
-			setFirmaUrl(url)
-			onUploaded?.(url)
+		(value: string) => {
+			setFirmaUrl(value)
+			onUploaded?.(value)
 		},
 		[onUploaded]
 	)
@@ -27,7 +29,7 @@ export function SignaturePad({ defaultValue, onUploaded }: SignaturePadProps) {
 	if (firmaUrl) {
 		return (
 			<div className="w-full relative bg-white/75 rounded">
-				<img
+				<ImageWithFallback
 					src={firmaUrl}
 					alt="Firma"
 					className="object-contain w-full h-20"
@@ -86,7 +88,7 @@ function DrawingPad({
 	onUploaded,
 	setMode,
 }: {
-	onUploaded: (url: string) => void
+	onUploaded: (value: string) => void
 	setMode: (mode: "draw" | "upload" | null) => void
 }) {
 	const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -95,10 +97,29 @@ function DrawingPad({
 	const [isUploading, setIsUploading] = useState(false)
 
 	const { startUpload } = useUploadThing("imageUploader", {
-		onClientUploadComplete: res => {
+		onClientUploadComplete: async res => {
 			setIsUploading(false)
-			const url = res[0]?.ufsUrl
-			if (url) onUploaded(url)
+			const uploaded = res?.[0]
+			if (!uploaded) return
+
+			try {
+				const canvas = canvasRef.current
+				const created = await createImageServer({
+					data: {
+						key: uploaded.key,
+						url: uploaded.ufsUrl,
+						name: uploaded.name,
+						mimeType: uploaded.type,
+						size: uploaded.size,
+						width: canvas?.width ?? 0,
+						height: canvas?.height ?? 0,
+					},
+				})
+				onUploaded(created.id)
+			} catch (error) {
+				console.error("[signature] no se pudo registrar la imagen:", error)
+				if (uploaded.ufsUrl) onUploaded(uploaded.ufsUrl)
+			}
 		},
 		onUploadError: () => {
 			setIsUploading(false)

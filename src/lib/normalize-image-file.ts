@@ -1,6 +1,18 @@
 export const MAX_IMAGE_DIMENSION = 3000
 export const JPEG_QUALITY = 0.88
 
+const normalizedDimensions = new Map<
+	string,
+	{ width: number; height: number }
+>()
+
+/** Dimensiones de una imagen normalizada, por nombre de archivo. */
+export function getNormalizedImageDimensions(
+	name: string
+): { width: number; height: number } | undefined {
+	return normalizedDimensions.get(name)
+}
+
 type LoadedImage = {
 	source: CanvasImageSource
 	width: number
@@ -96,7 +108,13 @@ export async function normalizeImageFile(file: File): Promise<File> {
 		const blob = await canvasToBlob(canvas, "image/jpeg", JPEG_QUALITY)
 		if (!blob) return file
 
-		const name = `${file.name.replace(/\.[^.]+$/, "")}.jpg`
+		const token =
+			typeof crypto !== "undefined" && "randomUUID" in crypto
+				? crypto.randomUUID().slice(0, 8)
+				: Math.random().toString(36).slice(2, 10)
+		const name = `${file.name.replace(/\.[^.]+$/, "")}-${token}.jpg`
+		normalizedDimensions.set(name, { width, height })
+
 		return new File([blob], name, {
 			type: "image/jpeg",
 			lastModified: Date.now(),

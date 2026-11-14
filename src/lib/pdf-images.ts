@@ -1,4 +1,6 @@
 import { useEffect, useRef, useState } from "react"
+import { getImageUrlsServer } from "../../server/images/get-image-url-server"
+import { isImageId } from "./image-value"
 import type { EmpresaType } from "../../db/empresas/schema"
 import type { TecnicoType } from "../../db/tecnicos/schema"
 import type { InstrumentoType } from "../../db/instrumentos/schema"
@@ -79,20 +81,10 @@ async function normalizeImage(src: string): Promise<string> {
 	return promise
 }
 
-export async function normalizePdfImages(
-	data: PdfImageData
-): Promise<PdfImageData> {
-	const urls = uniqueUrls(data)
-	const resolved = new Map<string, string>()
-
-	await Promise.all(
-		urls.map(async url => {
-			resolved.set(url, await normalizeImage(url))
-		})
-	)
-
-	const map = (url: string) => resolved.get(url) ?? url
-
+function mapImageValues(
+	data: PdfImageData,
+	map: (value: string) => string
+): PdfImageData {
 	return {
 		...data,
 		empresa: {
@@ -121,6 +113,37 @@ export async function normalizePdfImages(
 			imagenes: (localizada.imagenes ?? []).map(map),
 		})),
 	}
+}
+
+export async function normalizePdfImages(
+	data: PdfImageData
+): Promise<PdfImageData> {
+	const rawUrls = uniqueUrls(data)
+	const ids = rawUrls.filter(isImageId)
+
+	let idUrls: Record<string, string> = {}
+	if (ids.length > 0) {
+		try {
+			idUrls = await getImageUrlsServer({ data: { ids } })
+		} catch {
+			idUrls = {}
+		}
+	}
+
+	const withUrls = mapImageValues(data, value =>
+		isImageId(value) ? (idUrls[value] ?? value) : value
+	)
+
+	const urls = uniqueUrls(withUrls)
+	const resolved = new Map<string, string>()
+
+	await Promise.all(
+		urls.map(async url => {
+			resolved.set(url, await normalizeImage(url))
+		})
+	)
+
+	return mapImageValues(withUrls, value => resolved.get(value) ?? value)
 }
 
 export function usePdfImages(data: PdfImageData): PdfImageData | null {
