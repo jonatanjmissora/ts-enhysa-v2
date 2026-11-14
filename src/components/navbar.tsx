@@ -9,6 +9,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { authClient } from "@/lib/auth-client"
 import { getUserInfo } from "@/lib/utils"
+import { ImageWithFallback } from "@/components/ui/image-with-fallback"
 import { Link, useLoaderData, useNavigate } from "@tanstack/react-router"
 import { LogOut, Shield } from "lucide-react"
 import { useState, useEffect } from "react"
@@ -132,10 +133,10 @@ function User({ setIsOpen }: { setIsOpen: (open: boolean) => void }) {
 			>
 				<div className="bg-accent flex gap-3 justify-start items-center">
 					{avatar ? (
-						<img
+						<ImageWithFallback
 							src={avatar}
 							alt="User avatar"
-							className="size-12 sm:size-10 2xl:size-14 rounded-full"
+							className="size-12 sm:size-10 2xl:size-14 rounded-full object-cover"
 						/>
 					) : (
 						<div className="bg-green-600 p-2 rounded-full">

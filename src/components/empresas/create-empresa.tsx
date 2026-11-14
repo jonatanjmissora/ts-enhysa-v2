@@ -305,14 +305,9 @@ const EmpresaForm = ({ setOpen }: { setOpen: (open: boolean) => void }) => {
 								<Field data-invalid={isInvalid} className="relative gap-1">
 									<FieldLabel htmlFor={field.name}>Logo Empresarial</FieldLabel>
 									<FileDropzone
-										text="Imágen Logo"
+										text="Imagen Logo"
 										defaultValue={logoFile}
-										onUploaded={url => {
-											// console.log("URL matricula", url)
-											if (url.length > 0 && url !== logoFile) {
-												setLogoFile(url)
-											} else setLogoFile("")
-										}}
+										onUploaded={setLogoFile}
 									/>
 									{isInvalid && (
 										<FieldError

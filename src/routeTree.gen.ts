@@ -27,6 +27,7 @@ import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 import { Route as WithHeaderTeoriaTerminosDeUsoRouteImport } from './routes/_with-header/teoria/terminos-de-uso'
 import { Route as WithHeaderTeoriaPresupuestoRouteImport } from './routes/_with-header/teoria/presupuesto'
 import { Route as WithHeaderTeoriaPoliticasDePrivacidadRouteImport } from './routes/_with-header/teoria/politicas-de-privacidad'
+import { Route as ProtectedPerfilCuentaRouteImport } from './routes/_protected/perfil/cuenta'
 import { Route as ProtectedPerfilTecnicosIndexRouteImport } from './routes/_protected/perfil/tecnicos/index'
 import { Route as ProtectedPerfilInstrumentosIndexRouteImport } from './routes/_protected/perfil/instrumentos/index'
 import { Route as ProtectedPerfilEmpresasIndexRouteImport } from './routes/_protected/perfil/empresas/index'
@@ -143,6 +144,11 @@ const WithHeaderTeoriaPoliticasDePrivacidadRoute =
     path: '/teoria/politicas-de-privacidad',
     getParentRoute: () => WithHeaderRouteRoute,
   } as any)
+const ProtectedPerfilCuentaRoute = ProtectedPerfilCuentaRouteImport.update({
+  id: '/cuenta',
+  path: '/cuenta',
+  getParentRoute: () => ProtectedPerfilRouteRoute,
+} as any)
 const ProtectedPerfilTecnicosIndexRoute =
   ProtectedPerfilTecnicosIndexRouteImport.update({
     id: '/tecnicos/',
@@ -311,6 +317,7 @@ export interface FileRoutesByFullPath {
   '/landing': typeof WithHeaderLandingRoute
   '/login': typeof WithHeaderLoginRoute
   '/api/uploadthing': typeof ApiUploadthingRoute
+  '/perfil/cuenta': typeof ProtectedPerfilCuentaRoute
   '/teoria/politicas-de-privacidad': typeof WithHeaderTeoriaPoliticasDePrivacidadRoute
   '/teoria/presupuesto': typeof WithHeaderTeoriaPresupuestoRoute
   '/teoria/terminos-de-uso': typeof WithHeaderTeoriaTerminosDeUsoRoute
@@ -352,6 +359,7 @@ export interface FileRoutesByTo {
   '/landing': typeof WithHeaderLandingRoute
   '/login': typeof WithHeaderLoginRoute
   '/api/uploadthing': typeof ApiUploadthingRoute
+  '/perfil/cuenta': typeof ProtectedPerfilCuentaRoute
   '/teoria/politicas-de-privacidad': typeof WithHeaderTeoriaPoliticasDePrivacidadRoute
   '/teoria/presupuesto': typeof WithHeaderTeoriaPresupuestoRoute
   '/teoria/terminos-de-uso': typeof WithHeaderTeoriaTerminosDeUsoRoute
@@ -396,6 +404,7 @@ export interface FileRoutesById {
   '/_with-header/login': typeof WithHeaderLoginRoute
   '/api/uploadthing': typeof ApiUploadthingRoute
   '/_protected/': typeof ProtectedIndexRoute
+  '/_protected/perfil/cuenta': typeof ProtectedPerfilCuentaRoute
   '/_with-header/teoria/politicas-de-privacidad': typeof WithHeaderTeoriaPoliticasDePrivacidadRoute
   '/_with-header/teoria/presupuesto': typeof WithHeaderTeoriaPresupuestoRoute
   '/_with-header/teoria/terminos-de-uso': typeof WithHeaderTeoriaTerminosDeUsoRoute
@@ -439,6 +448,7 @@ export interface FileRouteTypes {
     | '/landing'
     | '/login'
     | '/api/uploadthing'
+    | '/perfil/cuenta'
     | '/teoria/politicas-de-privacidad'
     | '/teoria/presupuesto'
     | '/teoria/terminos-de-uso'
@@ -480,6 +490,7 @@ export interface FileRouteTypes {
     | '/landing'
     | '/login'
     | '/api/uploadthing'
+    | '/perfil/cuenta'
     | '/teoria/politicas-de-privacidad'
     | '/teoria/presupuesto'
     | '/teoria/terminos-de-uso'
@@ -523,6 +534,7 @@ export interface FileRouteTypes {
     | '/_with-header/login'
     | '/api/uploadthing'
     | '/_protected/'
+    | '/_protected/perfil/cuenta'
     | '/_with-header/teoria/politicas-de-privacidad'
     | '/_with-header/teoria/presupuesto'
     | '/_with-header/teoria/terminos-de-uso'
@@ -692,6 +704,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof WithHeaderTeoriaPoliticasDePrivacidadRouteImport
       parentRoute: typeof WithHeaderRouteRoute
     }
+    '/_protected/perfil/cuenta': {
+      id: '/_protected/perfil/cuenta'
+      path: '/cuenta'
+      fullPath: '/perfil/cuenta'
+      preLoaderRoute: typeof ProtectedPerfilCuentaRouteImport
+      parentRoute: typeof ProtectedPerfilRouteRoute
+    }
     '/_protected/perfil/tecnicos/': {
       id: '/_protected/perfil/tecnicos/'
       path: '/tecnicos'
@@ -857,6 +876,7 @@ declare module '@tanstack/react-router' {
 }
 
 interface ProtectedPerfilRouteRouteChildren {
+  ProtectedPerfilCuentaRoute: typeof ProtectedPerfilCuentaRoute
   ProtectedPerfilTecnicosEditarRoute: typeof ProtectedPerfilTecnicosEditarRoute
   ProtectedPerfilEmpresasIndexRoute: typeof ProtectedPerfilEmpresasIndexRoute
   ProtectedPerfilInstrumentosIndexRoute: typeof ProtectedPerfilInstrumentosIndexRoute
@@ -866,6 +886,7 @@ interface ProtectedPerfilRouteRouteChildren {
 }
 
 const ProtectedPerfilRouteRouteChildren: ProtectedPerfilRouteRouteChildren = {
+  ProtectedPerfilCuentaRoute: ProtectedPerfilCuentaRoute,
   ProtectedPerfilTecnicosEditarRoute: ProtectedPerfilTecnicosEditarRoute,
   ProtectedPerfilEmpresasIndexRoute: ProtectedPerfilEmpresasIndexRoute,
   ProtectedPerfilInstrumentosIndexRoute: ProtectedPerfilInstrumentosIndexRoute,

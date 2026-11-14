@@ -1,7 +1,7 @@
 import { createFileRoute, Link, Outlet } from "@tanstack/react-router"
 import { tecnicoQueryOptions } from "../../../../queries/tecnico/tecnico-query"
 import Title from "#/components/title"
-import { Cpu, UserRound, Warehouse } from "lucide-react"
+import { CircleUserRound, Cpu, UserRound, Warehouse } from "lucide-react"
 import BackChevron from "#/components/back-chevron"
 
 export const Route = createFileRoute("/_protected/perfil")({
@@ -52,6 +52,17 @@ function RouteComponent() {
 				>
 					<Cpu className="size-10" />
 					Instrumentos
+				</Link>
+				<Link
+					to="/perfil/cuenta"
+					activeProps={{
+						className:
+							"bg-accent/50 ring-[1px] ring-foreground/25 text-teal-700",
+					}}
+					className="flex-1 h-20 flex flex-col gap-2 items-center justify-center text-sm rounded-lg"
+				>
+					<CircleUserRound className="size-10" />
+					Cuenta
 				</Link>
 			</nav>
 			<Outlet />

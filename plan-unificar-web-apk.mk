@@ -522,6 +522,13 @@ Notas:
   - `pdf-images.ts` resuelve `imageId → remote_url` antes de normalizar el PDF.
   - `width/height` de las imágenes web se completan para que el restore de la APK no falle por `NOT NULL`.
   - Los valores legacy que siguen siendo URL se siguen mostrando/guardando igual.
+- [x] Imagen de usuario (`expo_users.user_image`):
+  - La APK la guarda como `imageId` y crea su fila en `expo_images`; el restore de `images` la descarga con `downloadMissingImages`.
+  - Se detectó que el `user_image` de jonatan apuntaba a `d59bfcbd-...`, una imagen soft-deleted. Se reactivó la fila (`deleted_at = null`) y su URL responde 200.
+  - Web: `header-user.tsx` y `navbar.tsx` ahora usan `ImageWithFallback`, así resuelven URL o `imageId`.
+  - APK: al cambiar el avatar ya no se borra la imagen anterior (`persistImage` en vez de `commitImage`), para que un PATCH fallido a la nube no deje `user_image` apuntando a una imagen eliminada.
+  - Web: nueva ruta `/perfil/cuenta` con subida de avatar. Usa `FileDropzone` (crea `expo_images` y devuelve `imageId`), `updateUserImageServer` valida propiedad/estado y actualiza `expo_users.user_image`; luego `refetch()` + `router.invalidate()`.
+  - Pendiente futuro: cola de sync para el `user_image` de la nube cuando se cambia offline (hoy queda el avatar anterior válido).
 - [ ] Migrar los imageId/URL legacy de web a `expo_images` (opcional; se pueden re-subir).
 - [ ] Deploy de web y verificación de PDFs de Ragazzi.
 - [ ] Eliminar la tabla `empresas` (solo después del deploy y verificación).
