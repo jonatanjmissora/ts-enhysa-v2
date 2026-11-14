@@ -2,7 +2,7 @@ import { delay } from "@/lib/utils"
 import type { UpdateEmpresaType } from "./empresa-validator"
 import { db } from ".."
 import { empresas } from "./schema"
-import { eq } from "drizzle-orm"
+import { and, eq, isNull } from "drizzle-orm"
 
 export async function updateEmpresaDB(updatedEmpresa: UpdateEmpresaType) {
 	try {
@@ -10,7 +10,13 @@ export async function updateEmpresaDB(updatedEmpresa: UpdateEmpresaType) {
 		const result = await db
 			.update(empresas)
 			.set(updatedEmpresa)
-			.where(eq(empresas.id, updatedEmpresa.id))
+			.where(
+				and(
+					eq(empresas.id, updatedEmpresa.id),
+					eq(empresas.userId, updatedEmpresa.userId),
+					isNull(empresas.deletedAt)
+				)
+			)
 			.returning()
 
 		return result[0]

@@ -14,6 +14,7 @@ import {
 	DropdownMenuTrigger,
 } from "#/components/ui/dropdown-menu"
 import { Button } from "#/components/ui/button"
+import { ImageWithFallback } from "#/components/ui/image-with-fallback"
 import { Ellipsis } from "lucide-react"
 import DeleteReporte from "#/components/reportes/iluminacion/delete-reporte"
 import { empresasQueryOptions } from "../../../../../../../queries/empresas/empresas-query"
@@ -92,7 +93,7 @@ function General() {
 				{empresa.logo && (
 					<div className="col-span-2 mt-10">
 						<div className="h-20 w-full flex items-center justify-center">
-							<img
+							<ImageWithFallback
 								src={empresa.logo}
 								alt="logo"
 								className="h-full w-full object-contain"
@@ -130,7 +131,7 @@ function General() {
 							{instrumento.imagenes.map(url => {
 								return (
 									<div className="relative w-full h-20 " key={url}>
-										<img
+										<ImageWithFallback
 											src={url}
 											alt=""
 											className="h-full w-full object-contain rounded border border-foreground/10"

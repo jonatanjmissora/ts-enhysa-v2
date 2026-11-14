@@ -13,6 +13,7 @@ import {
 	DropdownMenuTrigger,
 } from "#/components/ui/dropdown-menu"
 import { Label } from "#/components/ui/label"
+import { ImageWithFallback } from "#/components/ui/image-with-fallback"
 import { sortedByName } from "#/lib/utils"
 import { useSuspenseQuery } from "@tanstack/react-query"
 import { Link } from "@tanstack/react-router"
@@ -175,7 +176,7 @@ function Localizada({
 						{localizada.imagenes.map(url => {
 							return (
 								<div className="relative w-full h-20 " key={url}>
-									<img
+									<ImageWithFallback
 										src={url}
 										alt=""
 										className="h-full w-full object-contain rounded border border-foreground/10"

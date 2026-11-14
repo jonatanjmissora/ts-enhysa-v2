@@ -18,6 +18,7 @@ import {
 	DropdownMenuTrigger,
 } from "../ui/dropdown-menu"
 import { Button } from "../ui/button"
+import { ImageWithFallback } from "../ui/image-with-fallback"
 import { Ellipsis, Pencil } from "lucide-react"
 import { useState } from "react"
 import DeleteEmpresa from "./delete-empresa"
@@ -165,9 +166,9 @@ function Empresa({ empresa }: { empresa: EmpresaType }) {
 					<Label className="tracking-wider text-amber-700">Logo</Label>
 					{empresa.logo ? (
 						<div className="w-full h-20 min-h-9 flex items-center justify-center">
-							<img
+							<ImageWithFallback
 								src={empresa.logo}
-								alt="Imágen Logo"
+								alt="Imagen Logo"
 								className="w-full h-full object-contain object-center"
 							/>
 						</div>

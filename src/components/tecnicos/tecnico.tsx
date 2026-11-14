@@ -12,6 +12,7 @@ import {
 	DropdownMenuTrigger,
 } from "../ui/dropdown-menu"
 import { Button } from "../ui/button"
+import { ImageWithFallback } from "../ui/image-with-fallback"
 import { Ellipsis, Pencil } from "lucide-react"
 import useScrollTop from "#/hooks/scroll-top"
 import { Link, useLoaderData } from "@tanstack/react-router"
@@ -113,7 +114,7 @@ function HayTecnico({ tecnico }: { tecnico: TecnicoType }) {
 					</Label>
 					{tecnico.matriculaImg ? (
 						<div className="w-full h-20 min-h-9 flex items-center justify-center">
-							<img
+							<ImageWithFallback
 								src={tecnico.matriculaImg}
 								alt="matricula"
 								className="w-full h-full object-contain object-center"
@@ -130,7 +131,7 @@ function HayTecnico({ tecnico }: { tecnico: TecnicoType }) {
 					<Label className="tracking-wider text-amber-700">Firma Digital</Label>
 					{tecnico.firmaImg ? (
 						<div className="w-full h-20 min-h-9 flex items-center justify-center">
-							<img
+							<ImageWithFallback
 								src={tecnico.firmaImg}
 								alt="Firma digital"
 								className="w-max h-full object-contain object-center bg-white"
@@ -147,7 +148,7 @@ function HayTecnico({ tecnico }: { tecnico: TecnicoType }) {
 					<Label className="tracking-wider text-amber-700">Empresa Logo</Label>
 					{tecnico.empresaLogo ? (
 						<div className="w-full h-20 min-h-9 flex items-center justify-center">
-							<img
+							<ImageWithFallback
 								src={tecnico.empresaLogo}
 								alt="Empresa logo"
 								className="w-max h-full object-contain object-center bg-white"

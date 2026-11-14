@@ -7,7 +7,8 @@ export async function deleteEmpresaDB(id: string, userId: string) {
 	try {
 		await delay()
 		return await db
-			.delete(empresas)
+			.update(empresas)
+			.set({ deletedAt: new Date(), updatedAt: new Date() })
 			.where(and(eq(empresas.id, id), eq(empresas.userId, userId)))
 			.returning()
 	} catch (error) {

@@ -7,6 +7,7 @@ import {
 import type { InstrumentoType } from "../../../db/instrumentos/schema"
 import { Label } from "../ui/label"
 import { Input } from "../ui/input"
+import { ImageWithFallback } from "../ui/image-with-fallback"
 import { useSuspenseQuery } from "@tanstack/react-query"
 import { instrumentosQueryOptions } from "../../../queries/instrumentos/instrumentos-query"
 import { CreateInstrumento } from "./create-instrumento"
@@ -143,7 +144,7 @@ function Instrumento({ instrumento }: { instrumento: InstrumentoType }) {
 									key={imagen}
 									className="w-full h-20 min-h-9 flex items-center justify-center"
 								>
-									<img
+									<ImageWithFallback
 										src={imagen}
 										alt="Imagen del Certificado"
 										className="w-full h-full object-contain object-center"
@@ -169,7 +170,7 @@ function Instrumento({ instrumento }: { instrumento: InstrumentoType }) {
 									key={imagen}
 									className="w-full h-20 min-h-9 flex items-center justify-center"
 								>
-									<img
+									<ImageWithFallback
 										src={imagen}
 										alt="Imagen del instrumento"
 										className="w-full h-full object-contain object-center"

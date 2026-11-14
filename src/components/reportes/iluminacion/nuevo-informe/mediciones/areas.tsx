@@ -12,6 +12,7 @@ import {
 import { sortedByName } from "#/lib/utils"
 import type { AreaIluminacionType } from "../../../../../../db/reportes/iluminacion/areas/schema"
 import { Label } from "#/components/ui/label"
+import { ImageWithFallback } from "#/components/ui/image-with-fallback"
 import { lazy, Suspense, useState } from "react"
 import {
 	DropdownMenu,
@@ -245,7 +246,7 @@ function Area({ area, id }: { area: AreaIluminacionType; id: string }) {
 						{area.imagenes.map(url => {
 							return (
 								<div className="relative w-full h-20 " key={url}>
-									<img
+									<ImageWithFallback
 										src={url}
 										alt=""
 										className="h-full w-full object-contain rounded border border-foreground/10"
