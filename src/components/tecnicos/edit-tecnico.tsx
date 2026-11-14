@@ -339,14 +339,9 @@ export function EditTecnicoForm({
 						<div className="flex flex-col gap-1">
 							<Label>Matrícula Digital</Label>
 							<FileDropzone
-								text="Imágen Matrícula"
+								text="Imagen Matrícula"
 								defaultValue={tecnico.matriculaImg}
-								onUploaded={url => {
-									// console.log("URL matricula", url)
-									if (url.length > 0 && url !== matriculaFile) {
-										setMatriculaFile(url)
-									} else setMatriculaFile("")
-								}}
+								onUploaded={setMatriculaFile}
 							/>
 						</div>
 
@@ -355,11 +350,7 @@ export function EditTecnicoForm({
 							<div className="bg-background rounded">
 								<SignaturePad
 									defaultValue={tecnico.firmaImg}
-									onUploaded={url => {
-										if (url.length > 0 && url !== firmaFile) {
-											setFirmaFile(url)
-										} else setFirmaFile("")
-									}}
+									onUploaded={setFirmaFile}
 								/>
 							</div>
 						</div>
@@ -370,14 +361,9 @@ export function EditTecnicoForm({
 								className={`${empresaLogoFile ? "bg-white/75" : ""} rounded`}
 							>
 								<FileDropzone
-									text="Imágen Empresa Logo"
+									text="Imagen Empresa Logo"
 									defaultValue={tecnico.empresaLogo}
-									onUploaded={url => {
-										// console.log("URL", url)
-										if (url.length > 0 && url !== empresaLogoFile) {
-											setEmpresaLogoFile(url)
-										} else setEmpresaLogoFile("")
-									}}
+									onUploaded={setEmpresaLogoFile}
 								/>
 							</div>
 						</div>

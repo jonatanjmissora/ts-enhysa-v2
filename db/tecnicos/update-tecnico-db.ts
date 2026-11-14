@@ -2,7 +2,7 @@ import { delay } from "@/lib/utils"
 import type { UpdateTecnicoType } from "./tecnico-validator"
 import { db } from ".."
 import { tecnicos } from "../tecnicos/schema"
-import { eq } from "drizzle-orm"
+import { and, eq, isNull } from "drizzle-orm"
 
 export async function updateTecnicoDB(updatedTecnico: UpdateTecnicoType) {
 	try {
@@ -14,7 +14,13 @@ export async function updateTecnicoDB(updatedTecnico: UpdateTecnicoType) {
 		const result = await db
 			.update(tecnicos)
 			.set(payload)
-			.where(eq(tecnicos.id, updatedTecnico.id))
+			.where(
+				and(
+					eq(tecnicos.id, updatedTecnico.id),
+					eq(tecnicos.userId, updatedTecnico.userId),
+					isNull(tecnicos.deletedAt)
+				)
+			)
 			.returning()
 
 		return result[0]

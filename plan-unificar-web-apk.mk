@@ -550,6 +550,20 @@ Notas:
 - [ ] Eliminar la tabla `instrumentos` (solo después del deploy y verificación).
 - Nota: las imágenes de instrumentos creados en APK se guardan como `imageId`; la web las muestra con el placeholder "Archivo no disponible" hasta resolver el id contra `expo_images` (o hasta re-subirlas como URL).
 
+# Etapa 3 (técnicos) — avance
+
+- [x] Fila web insertada en `expo_tecnicos` (JONATAN MISSORA). `expo_tecnicos` quedó con 3 filas.
+- [x] Drizzle web (`db/tecnicos/schema.ts`) apunta a `expo_tecnicos`, con `deleted_at`/`updated_at` y columnas `matricula_img`/`firma_img`/`empresa_logo`.
+- [x] `getTecnicoDB` filtra `deleted_at` y ordena por `updated_at DESC` (la web muestra un solo técnico por el `limit(1)` existente).
+- [x] `createTecnicoDB` setea `updated_at`/`deleted_at`; `updateTecnicoDB` filtra por usuario y no eliminado.
+- [x] FK de `reportes_iluminacion.tecnico_id` cambiada a `expo_tecnicos`.
+- [x] Verificado: 0 reportes sin técnico en `expo_tecnicos`.
+- [x] `pnpm build` de web pasa.
+- [ ] Deploy de web y verificación de PDFs con JONATAN.
+- [ ] Eliminar la tabla `tecnicos` (solo después del deploy y verificación).
+- Nota: la web tiene un único técnico (`limit(1)`); si querés ver/administrar los 3, hay que cambiar esa UI a lista.
+- Nota: no hay `deleteTecnicoDB` en web; el soft delete de técnicos no está expuesto todavía.
+
 # Pendiente
 
 1. Decidir si se corre `/images-health?fix=1` o si se re-suben primero las imágenes desde un dispositivo.

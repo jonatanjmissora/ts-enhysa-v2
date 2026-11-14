@@ -1,30 +1,48 @@
-import { pgTable, text, integer, uuid } from "drizzle-orm/pg-core"
+import {
+	pgTable,
+	text,
+	integer,
+	uuid,
+	timestamp,
+	index,
+} from "drizzle-orm/pg-core"
 import { user } from "../users/schema"
 
-export const tecnicos = pgTable("tecnicos", {
-	id: text("id").primaryKey(),
+export const tecnicos = pgTable(
+	"expo_tecnicos",
+	{
+		id: text("id").primaryKey(),
 
-	nombre: text("nombre").notNull(),
+		nombre: text("nombre").notNull(),
 
-	telefono: text("telefono").notNull(),
+		telefono: text("telefono").notNull(),
 
-	localidad: text("localidad").notNull(),
+		localidad: text("localidad").notNull(),
 
-	cargo: text("cargo").notNull(),
+		cargo: text("cargo").notNull(),
 
-	matricula: text("matricula").notNull(),
+		matricula: text("matricula").notNull(),
 
-	matriculaImg: text("matriculaImg").notNull(),
+		matriculaImg: text("matricula_img").notNull(),
 
-	firmaImg: text("firmaImg").notNull(),
+		firmaImg: text("firma_img").notNull(),
 
-	empresaLogo: text("empresaLogo").notNull(),
+		empresaLogo: text("empresa_logo").notNull(),
 
-	dni: integer("dni"),
+		dni: integer("dni"),
 
-	userId: uuid("userId")
-		.notNull()
-		.references(() => user.id, { onDelete: "cascade" }),
-})
+		deletedAt: timestamp("deleted_at"),
+
+		updatedAt: timestamp("updated_at")
+			.defaultNow()
+			.$onUpdate(() => /* @__PURE__ */ new Date())
+			.notNull(),
+
+		userId: uuid("user_id")
+			.notNull()
+			.references(() => user.id, { onDelete: "cascade" }),
+	},
+	table => [index("idx_expo_tecnicos_user").on(table.userId)]
+)
 
 export type TecnicoType = typeof tecnicos.$inferSelect
