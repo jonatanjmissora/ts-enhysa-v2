@@ -13,7 +13,7 @@ function RouteComponent() {
 			<Suspense
 				fallback={
 					<Loading
-						text="cargando técnico..."
+						text="cargando técnicos..."
 						className="scale-50 justify-start  max-h-[50svh] "
 					/>
 				}

@@ -1,39 +1,67 @@
 import { useSuspenseQuery } from "@tanstack/react-query"
-import { tecnicoQueryOptions } from "../../../queries/tecnico/tecnico-query"
+import { tecnicosQueryOptions } from "../../../queries/tecnico/tecnicos-query"
 import type { TecnicoType } from "../../../db/tecnicos/schema"
 import CreateTecnico from "./create-tecnico"
+import EditTecnico from "./edit-tecnico"
 import { Label } from "../ui/label"
 import { Input } from "../ui/input"
-import { useState } from "react"
 import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuGroup,
-	DropdownMenuTrigger,
-} from "../ui/dropdown-menu"
-import { Button } from "../ui/button"
+	Accordion,
+	AccordionContent,
+	AccordionItem,
+	AccordionTrigger,
+} from "../ui/accordion"
 import { ImageWithFallback } from "../ui/image-with-fallback"
-import { Ellipsis, Pencil } from "lucide-react"
 import useScrollTop from "#/hooks/scroll-top"
-import { Link, useLoaderData } from "@tanstack/react-router"
 
-export default function Tecnico() {
-	const { session } = useLoaderData({ from: "__root__" })
-	const { data: tecnico } = useSuspenseQuery(
-		tecnicoQueryOptions(session?.user?.id ?? "")
-	)
-	const tecnicoData = Array.isArray(tecnico) ? (tecnico[0] ?? null) : tecnico
-	if (!tecnicoData) return <TecnicoVacio />
-	return <HayTecnico tecnico={tecnicoData} />
+export default function Tecnicos() {
+	const { data: tecnicos } = useSuspenseQuery(tecnicosQueryOptions)
+
+	if (!tecnicos || tecnicos.length === 0) return <TecnicosVacios />
+
+	return <HayTecnicos tecnicos={tecnicos} />
 }
 
-function HayTecnico({ tecnico }: { tecnico: TecnicoType }) {
+function HayTecnicos({ tecnicos }: { tecnicos: TecnicoType[] }) {
 	useScrollTop()
 
 	return (
-		<div className="w-5/6 mx-auto my-12 mb-80 relative pt-10">
-			<div className="absolute top-0 left-6">
-				<TecnicoDropdownMenu />
+		<div className="w-full flex flex-col gap-2">
+			<Accordion
+				type="single"
+				collapsible
+				defaultValue=""
+				className="flex flex-col gap-2 w-11/12 mx-auto py-20"
+			>
+				{tecnicos.map(tecnico => (
+					<AccordionItem
+						key={tecnico.id}
+						value={tecnico.id}
+						className="border-b border-foreground/10 last:border-b-0 py-2"
+					>
+						<AccordionTrigger className="flex px-5 w-11/12 sm:w-full flex-wrap items-center bg-accent ring-[1px] dark:ring-foreground/10 ring-foreground/50">
+							<div className="flex items-center gap-2 text-sm tracking-wider w-60 sm:w-max truncate">
+								{tecnico.nombre.toUpperCase()} - {tecnico.matricula}
+							</div>
+						</AccordionTrigger>
+						<AccordionContent>
+							<Tecnico tecnico={tecnico} />
+						</AccordionContent>
+					</AccordionItem>
+				))}
+			</Accordion>
+			<div className="w-5/6 mx-auto flex justify-end mb-80">
+				<CreateTecnico />
+			</div>
+		</div>
+	)
+}
+
+function Tecnico({ tecnico }: { tecnico: TecnicoType }) {
+	return (
+		<div className="bg-accent sm:bg-background py-20 flex items-center justify-center flex-col relative">
+			<div className="absolute top-10 left-6">
+				<EditTecnico tecnico={tecnico} />
 			</div>
 			<div className="grid-cols-1 grid sm:grid-cols-2 gap-8 w-5/6 my-10 mx-auto">
 				<div className="flex flex-col gap-1">
@@ -165,7 +193,7 @@ function HayTecnico({ tecnico }: { tecnico: TecnicoType }) {
 	)
 }
 
-function TecnicoVacio() {
+function TecnicosVacios() {
 	return (
 		<div className="w-5/6 h-[30svh] flex flex-col gap-8 items-center justify-center mx-auto my-12">
 			<span className="text-sm font-medium text-gray-500 italic">
@@ -173,30 +201,5 @@ function TecnicoVacio() {
 			</span>
 			<CreateTecnico />
 		</div>
-	)
-}
-
-function TecnicoDropdownMenu() {
-	const [isMenuOpen, setIsMenuOpen] = useState(false)
-	return (
-		<DropdownMenu open={isMenuOpen} onOpenChange={setIsMenuOpen}>
-			<DropdownMenuTrigger asChild>
-				<Button variant="ghost" className="cursor-pointer">
-					<Ellipsis className="size-7 text-foreground-soft" />
-				</Button>
-			</DropdownMenuTrigger>
-			<DropdownMenuContent className="" align="end">
-				<DropdownMenuGroup className="flex flex-col gap-4 p-6">
-					<Link
-						to="/perfil/tecnicos/editar"
-						onClick={() => setIsMenuOpen(false)}
-						className="w-40 p-5 flex items-center gap-2 rounded-md ring-[1px] ring-foreground/20 hover:bg-accent"
-					>
-						<Pencil size={14} className="text-foreground-soft" />
-						Editar
-					</Link>
-				</DropdownMenuGroup>
-			</DropdownMenuContent>
-		</DropdownMenu>
 	)
 }

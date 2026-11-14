@@ -1,5 +1,4 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query"
-import type { TecnicoType } from "../../db/tecnicos/schema"
 import { updateTecnicoServer } from "../../server/tecnico/update-tecnico-server"
 
 export function useUpdateTecnico() {
@@ -7,8 +6,9 @@ export function useUpdateTecnico() {
 
 	return useMutation({
 		mutationFn: updateTecnicoServer,
-		onSuccess: data => {
-			queryClient.setQueryData<TecnicoType>(["tecnico"], data)
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: ["tecnico"] })
+			queryClient.invalidateQueries({ queryKey: ["tecnicos"] })
 		},
 	})
 }

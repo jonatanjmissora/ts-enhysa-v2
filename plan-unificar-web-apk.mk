@@ -554,14 +554,18 @@ Notas:
 
 - [x] Fila web insertada en `expo_tecnicos` (JONATAN MISSORA). `expo_tecnicos` quedó con 3 filas.
 - [x] Drizzle web (`db/tecnicos/schema.ts`) apunta a `expo_tecnicos`, con `deleted_at`/`updated_at` y columnas `matricula_img`/`firma_img`/`empresa_logo`.
-- [x] `getTecnicoDB` filtra `deleted_at` y ordena por `updated_at DESC` (la web muestra un solo técnico por el `limit(1)` existente).
+- [x] `getTecnicoDB` filtra `deleted_at` y ordena por `updated_at DESC` (se mantiene para la creación de reportes).
 - [x] `createTecnicoDB` setea `updated_at`/`deleted_at`; `updateTecnicoDB` filtra por usuario y no eliminado.
 - [x] FK de `reportes_iluminacion.tecnico_id` cambiada a `expo_tecnicos`.
 - [x] Verificado: 0 reportes sin técnico en `expo_tecnicos`.
+- [x] `/perfil/tecnicos` ahora es una lista en acordeón de todos los técnicos activos:
+  - `getTecnicosDB` + `getTecnicosServer` + `tecnicosQueryOptions`.
+  - `tecnico.tsx` lista, muestra detalle en cada acordeón y usa `EditTecnico` inline; `CreateTecnico` al final.
+  - Los hooks de crear/editar invalidan `["tecnico"]` y `["tecnicos"]`.
 - [x] `pnpm build` de web pasa.
 - [ ] Deploy de web y verificación de PDFs con JONATAN.
 - [ ] Eliminar la tabla `tecnicos` (solo después del deploy y verificación).
-- Nota: la web tiene un único técnico (`limit(1)`); si querés ver/administrar los 3, hay que cambiar esa UI a lista.
+- Nota: la ruta vieja `/perfil/tecnicos/editar` quedó sin uso; se puede eliminar en la limpieza.
 - Nota: no hay `deleteTecnicoDB` en web; el soft delete de técnicos no está expuesto todavía.
 
 # Pendiente

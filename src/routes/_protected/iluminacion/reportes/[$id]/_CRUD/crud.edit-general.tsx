@@ -8,6 +8,8 @@ import { Suspense } from "react"
 import { reporteQueryOptions } from "../../../../../../../queries/reportes/iluminacion/reportes-query"
 import { empresasQueryOptions } from "../../../../../../../queries/empresas/empresas-query"
 import { instrumentosQueryOptions } from "../../../../../../../queries/instrumentos/instrumentos-query"
+import { tecnicosQueryOptions } from "../../../../../../../queries/tecnico/tecnicos-query"
+import { sortedByName } from "#/lib/utils"
 import { useUpdateReporte } from "../../../../../../../queries/reportes/iluminacion/use-update-reporte"
 import { useForm } from "@tanstack/react-form"
 import { reporteNuevoFormValidator } from "../../../../../../../db/reportes/iluminacion/reporte-validator"
@@ -17,7 +19,7 @@ import {
 	FieldGroup,
 	FieldLabel,
 } from "#/components/ui/field"
-import { ChevronRight, Loader, Warehouse } from "lucide-react"
+import { ChevronRight, Loader, UserRound, Warehouse } from "lucide-react"
 import {
 	Select,
 	SelectContent,
@@ -77,6 +79,7 @@ function EditReporteGeneral() {
 	const { data: reporte } = useSuspenseQuery(reporteQueryOptions({ id }))
 	const { data: empresas } = useSuspenseQuery(empresasQueryOptions)
 	const { data: instrumentos } = useSuspenseQuery(instrumentosQueryOptions)
+	const { data: tecnicos } = useSuspenseQuery(tecnicosQueryOptions)
 	const navigate = useNavigate()
 
 	const { mutateAsync: editarReporte, isPending, error } = useUpdateReporte()
@@ -88,18 +91,20 @@ function EditReporteGeneral() {
 		defaultValues: {
 			empresaId: reporte?.empresaId || "",
 			instrumentoId: reporte?.instrumentoId || "",
+			tecnicoId: reporte?.tecnicoId || "",
 			clima: reporte?.clima || ["despejado", "10", "10"],
 		},
 		validators: {
 			onSubmit: reporteNuevoFormValidator,
 		},
 		onSubmit: async ({ value }) => {
-			if (!empresas || !instrumentos || !reporte) return
+			if (!empresas || !instrumentos || !tecnicos?.length || !reporte) return
 
 			const newReport = {
 				...reporte,
 				empresaId: value.empresaId,
 				instrumentoId: value.instrumentoId,
+				tecnicoId: value.tecnicoId,
 				clima: value.clima,
 			}
 
@@ -110,6 +115,7 @@ function EditReporteGeneral() {
 			if (
 				reporte.empresaId === value.empresaId &&
 				reporte.instrumentoId === value.instrumentoId &&
+				reporte.tecnicoId === value.tecnicoId &&
 				reporte.clima[0] === value.clima[0] &&
 				reporte.clima[1] === value.clima[1] &&
 				reporte.clima[2] === value.clima[2]
@@ -188,6 +194,64 @@ function EditReporteGeneral() {
 												>
 													{empresa.razonSocial.toUpperCase()} -{" "}
 													{empresa.direccion.toUpperCase()}
+												</SelectItem>
+											))}
+										</SelectGroup>
+									</SelectContent>
+								</Select>
+
+								{isInvalid && (
+									<FieldError
+										errors={field.state.meta.errors}
+										className="text-xs 2xl:text-sm absolute -bottom-4 left-0 text-right"
+									/>
+								)}
+							</Field>
+						)
+					}}
+				/>
+
+				<form.Field
+					name="tecnicoId"
+					children={field => {
+						const isInvalid =
+							field.state.meta.isTouched && !field.state.meta.isValid
+
+						return (
+							<Field data-invalid={isInvalid} className="relative gap-1">
+								<FieldLabel
+									htmlFor={field.name}
+									className="flex items-center gap-3 textL"
+								>
+									<UserRound className="size-6" /> Técnico responsable
+								</FieldLabel>
+
+								<Select
+									value={field.state.value || ""}
+									onValueChange={value => field.handleChange(value)}
+								>
+									<SelectTrigger
+										id={field.name}
+										name={field.name}
+										onBlur={field.handleBlur}
+										aria-invalid={isInvalid}
+										className="w-full justify-end"
+									>
+										<SelectValue placeholder="Seleccione Técnico" />
+									</SelectTrigger>
+
+									<SelectContent position="popper">
+										<SelectGroup>
+											<SelectLabel>Técnicos</SelectLabel>
+
+											{sortedByName(tecnicos)?.map(tecnico => (
+												<SelectItem
+													key={tecnico.id}
+													value={tecnico.id}
+													className="justify-center"
+												>
+													{tecnico.nombre.toUpperCase()} -{" "}
+													{tecnico.matricula}
 												</SelectItem>
 											))}
 										</SelectGroup>

@@ -94,6 +94,7 @@ export const checkReporteGeneralDifferences = (
 	return (
 		formValues.empresaId === reporte.empresaId &&
 		formValues.instrumentoId === reporte.instrumentoId &&
+		formValues.tecnicoId === reporte.tecnicoId &&
 		JSON.stringify(formValues.clima) === JSON.stringify(reporte.clima)
 	)
 }

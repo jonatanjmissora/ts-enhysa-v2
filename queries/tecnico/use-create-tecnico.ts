@@ -8,6 +8,7 @@ export function useCreateTecnico() {
 		mutationFn: createTecnicoServer,
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ["tecnico"] })
+			queryClient.invalidateQueries({ queryKey: ["tecnicos"] })
 		},
 	})
 }

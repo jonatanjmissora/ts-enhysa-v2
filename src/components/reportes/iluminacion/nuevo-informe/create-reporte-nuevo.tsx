@@ -9,7 +9,7 @@ import {
 	FieldGroup,
 	FieldLabel,
 } from "#/components/ui/field"
-import { ChevronRight, Cpu, Loader, Warehouse } from "lucide-react"
+import { ChevronRight, Cpu, Loader, UserRound, Warehouse } from "lucide-react"
 import {
 	Select,
 	SelectContent,
@@ -22,7 +22,7 @@ import {
 import { useSuspenseQuery } from "@tanstack/react-query"
 import { empresasQueryOptions } from "../../../../../queries/empresas/empresas-query"
 import { instrumentosQueryOptions } from "../../../../../queries/instrumentos/instrumentos-query"
-import { tecnicoQueryOptions } from "../../../../../queries/tecnico/tecnico-query"
+import { tecnicosQueryOptions } from "../../../../../queries/tecnico/tecnicos-query"
 import { Suspense } from "react"
 import {
 	ESTADO,
@@ -57,7 +57,7 @@ export default function CreateReporteNuevo() {
 
 function ReporteNuevoForm() {
 	useScrollTop()
-	const { data: tecnico } = useSuspenseQuery(tecnicoQueryOptions)
+	const { data: tecnicos } = useSuspenseQuery(tecnicosQueryOptions)
 	const { data: empresas } = useSuspenseQuery(empresasQueryOptions)
 	const { data: instrumentos } = useSuspenseQuery(instrumentosQueryOptions)
 	const navigate = useNavigate()
@@ -68,22 +68,20 @@ function ReporteNuevoForm() {
 		error,
 	} = useCreateReporteNuevo()
 	const form = useForm({
-		defaultValues: defaultReporteData,
+		defaultValues: {
+			...defaultReporteData,
+			tecnicoId: tecnicos[0]?.id ?? "",
+		},
 		validators: {
 			onSubmit: reporteNuevoFormValidator,
 		},
 		onSubmit: async ({ value }) => {
-			if (!tecnico || !empresas || !instrumentos) return
-			const tecnicoData = Array.isArray(tecnico)
-				? (tecnico[0] ?? null)
-				: tecnico
-			if (!tecnicoData) return
+			if (!tecnicos?.length || !empresas || !instrumentos) return
 
 			const title = getTitle(value.empresaId, empresas)
 
 			const newReport = {
 				...value,
-				tecnicoId: tecnicoData.id,
 				title,
 			}
 			const result = await createReporteNuevo({ data: newReport })
@@ -99,7 +97,7 @@ function ReporteNuevoForm() {
 			})
 		},
 	})
-	if (!tecnico || !empresas?.length || !instrumentos?.length)
+	if (!tecnicos?.length || !empresas?.length || !instrumentos?.length)
 		return (
 			<article className="w-full flex flex-col justify-center items-center min-h-[30svh] gap-10">
 				<span className="text-foreground-soft text-sm italic text-center w-5/6 mx-auto">
@@ -164,6 +162,64 @@ function ReporteNuevoForm() {
 												>
 													{empresa.razonSocial.toUpperCase()} -{" "}
 													{empresa.direccion.toUpperCase()}
+												</SelectItem>
+											))}
+										</SelectGroup>
+									</SelectContent>
+								</Select>
+
+								{isInvalid && (
+									<FieldError
+										errors={field.state.meta.errors}
+										className="text-xs 2xl:text-sm absolute -bottom-4 left-0 text-right"
+									/>
+								)}
+							</Field>
+						)
+					}}
+				/>
+
+				<form.Field
+					name="tecnicoId"
+					children={field => {
+						const isInvalid =
+							field.state.meta.isTouched && !field.state.meta.isValid
+
+						return (
+							<Field data-invalid={isInvalid} className="relative gap-1">
+								<FieldLabel
+									htmlFor={field.name}
+									className="flex items-center gap-3 textL"
+								>
+									<UserRound className="size-6" /> Técnico responsable
+								</FieldLabel>
+
+								<Select
+									value={field.state.value || ""}
+									onValueChange={value => field.handleChange(value)}
+								>
+									<SelectTrigger
+										id={field.name}
+										name={field.name}
+										onBlur={field.handleBlur}
+										aria-invalid={isInvalid}
+										className="w-full justify-end"
+									>
+										<SelectValue placeholder="Seleccione Técnico" />
+									</SelectTrigger>
+
+									<SelectContent position="popper">
+										<SelectGroup>
+											<SelectLabel>Técnicos</SelectLabel>
+
+											{sortedByName(tecnicos)?.map(tecnico => (
+												<SelectItem
+													key={tecnico.id}
+													value={tecnico.id}
+													className="justify-center"
+												>
+													{tecnico.nombre.toUpperCase()} -{" "}
+													{tecnico.matricula}
 												</SelectItem>
 											))}
 										</SelectGroup>
